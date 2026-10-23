@@ -19,6 +19,7 @@ import { Route as AcademiesNewRouteImport } from './routes/academies.new'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
+import { Route as ASlugLevelsRouteImport } from './routes/a.$slug.levels'
 import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
 import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
@@ -74,6 +75,11 @@ const ASlugGroupsRoute = ASlugGroupsRouteImport.update({
   path: '/groups',
   getParentRoute: () => ASlugRoute,
 } as any)
+const ASlugLevelsRoute = ASlugLevelsRouteImport.update({
+  id: '/levels',
+  path: '/levels',
+  getParentRoute: () => ASlugRoute,
+} as any)
 const ASlugStudentsRoute = ASlugStudentsRouteImport.update({
   id: '/students',
   path: '/students',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/academies/new'
     | '/invite/$token'
     | '/a/$slug/groups'
+    | '/a/$slug/levels'
     | '/a/$slug/students'
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/academies/new'
     | '/invite/$token'
     | '/a/$slug/groups'
+    | '/a/$slug/levels'
     | '/a/$slug/students'
     | '/a/$slug'
     | '/a/$slug/assignments/$id'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/academies/new'
     | '/invite/$token'
     | '/a/$slug/groups'
+    | '/a/$slug/levels'
     | '/a/$slug/students'
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
@@ -276,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ASlugGroupsRouteImport
       parentRoute: typeof ASlugRoute
     }
+    '/a/$slug/levels': {
+      id: '/a/$slug/levels'
+      path: '/levels'
+      fullPath: '/a/$slug/levels'
+      preLoaderRoute: typeof ASlugLevelsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
     '/a/$slug/students': {
       id: '/a/$slug/students'
       path: '/students'
@@ -309,6 +328,7 @@ declare module '@tanstack/react-router' {
 
 interface ASlugRouteChildren {
   ASlugGroupsRoute: typeof ASlugGroupsRoute
+  ASlugLevelsRoute: typeof ASlugLevelsRoute
   ASlugStudentsRoute: typeof ASlugStudentsRoute
   ASlugIndexRoute: typeof ASlugIndexRoute
   ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
@@ -318,6 +338,7 @@ interface ASlugRouteChildren {
 
 const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugGroupsRoute: ASlugGroupsRoute,
+  ASlugLevelsRoute: ASlugLevelsRoute,
   ASlugStudentsRoute: ASlugStudentsRoute,
   ASlugIndexRoute: ASlugIndexRoute,
   ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,

@@ -3,15 +3,18 @@ import {
   useCreateGroup,
   useCreateStudent,
   useGroups,
+  useLeaderboard,
+  useLevels,
   useMembers,
   useMyAcademies,
   useProgress,
   useSession,
 } from '@erpchess/api/react';
-import { academyRoles, isStaff } from '@erpchess/domain';
+import { academyRoles, isStaff, type Period, periodRange, periods } from '@erpchess/domain';
+import type { TranslationKey } from '@erpchess/i18n';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
@@ -45,6 +48,9 @@ export default function AcademyScreen() {
     >
       <Stack.Screen options={{ title: academy.name }} />
       <Muted>{t(`role.${academy.role}`)}</Muted>
+      {academy.role === 'student' && <MyLevel academyId={academy.id} userId={session?.user.id} />}
+
+      <LeaderboardCard academyId={academy.id} userId={session?.user.id} />
 
       <AssignmentsCard academyId={academy.id} slug={academy.slug} staff={staff} />
 
@@ -275,6 +281,96 @@ function AssignmentsCard({
             </Pressable>
           );
         })
+      )}
+    </Card>
+  );
+}
+
+function MyLevel({ academyId, userId }: { academyId: string; userId?: string }) {
+  const { t } = useT();
+  const members = useMembers(academyId);
+  const levels = useLevels(academyId);
+  const levelId = members.data?.find((m) => m.profile.id === userId)?.levelId;
+  const level = levels.data?.find((l) => l.id === levelId);
+  if (!level) return null;
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+      <Text style={styles.hint}>{t('students.level')}:</Text>
+      <Text
+        style={{
+          color: colors.textOnPrimary,
+          backgroundColor: level.color,
+          borderRadius: radius.sm,
+          paddingHorizontal: spacing.xs,
+          overflow: 'hidden',
+        }}
+      >
+        {level.name}
+      </Text>
+    </View>
+  );
+}
+
+const PERIOD_LABEL: Record<Period, TranslationKey> = {
+  week: 'dashboard.week',
+  month: 'dashboard.month',
+  sixMonths: 'dashboard.sixMonths',
+};
+
+function LeaderboardCard({ academyId, userId }: { academyId: string; userId?: string }) {
+  const { t } = useT();
+  const [period, setPeriod] = useState<Period>('week');
+  const { from, to } = useMemo(() => periodRange(period), [period]);
+  const board = useLeaderboard(academyId, from, to);
+  const ranked = board.data?.filter((r) => r.points > 0).slice(0, 10) ?? [];
+
+  return (
+    <Card title={t('dashboard.leaderboard')}>
+      <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+        {periods.map((p) => {
+          const active = period === p;
+          return (
+            <Pressable
+              key={p}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: active }}
+              onPress={() => setPeriod(p)}
+              style={{
+                paddingHorizontal: spacing.sm,
+                paddingVertical: spacing.xs,
+                borderRadius: radius.full,
+                backgroundColor: active ? colors.primary : 'transparent',
+              }}
+            >
+              <Text style={{ color: active ? colors.textOnPrimary : colors.textMuted }}>
+                {t(PERIOD_LABEL[p])}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      {board.isPending ? (
+        <Spinner />
+      ) : board.error ? (
+        <ErrorText error={board.error} />
+      ) : ranked.length === 0 ? (
+        <Muted>{t('dashboard.empty')}</Muted>
+      ) : (
+        ranked.map((row, i) => (
+          <View
+            key={row.studentId}
+            style={[
+              styles.row,
+              row.studentId === userId ? { backgroundColor: `${colors.yellow}33` } : null,
+            ]}
+          >
+            <Text style={[styles.text, { width: 28, fontWeight: '700' }]}>{i + 1}</Text>
+            <Text style={[styles.text, { flex: 1 }]}>{row.displayName}</Text>
+            <Text style={[styles.text, { fontWeight: '700', color: colors.primary }]}>
+              {t('dashboard.points', { count: row.points })}
+            </Text>
+          </View>
+        ))
       )}
     </Card>
   );
