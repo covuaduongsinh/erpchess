@@ -55,6 +55,20 @@ describe('luật cờ', () => {
   });
 });
 
+describe('isValidFen: thế cờ phải có thể xảy ra', () => {
+  it('từ chối thế mà bên KHÔNG đi đang bị chiếu (làm engine crash khi phân tích)', () => {
+    // Tượng c3 chiếu vua h8 theo đường chéo dài, nhưng lại tới lượt Trắng
+    expect(isValidFen('7k/8/6K1/8/8/2B5/8/5B2 w - - 0 1')).toBe(false);
+    // Cùng thế nhưng tới lượt Đen thì hợp lệ (Đen đang bị chiếu)
+    expect(isValidFen('7k/8/6K1/8/8/2B5/8/5B2 b - - 0 1')).toBe(true);
+  });
+
+  it('từ chối thế thiếu vua hoặc thừa vua', () => {
+    expect(isValidFen('8/8/8/8/8/8/8/4K3 w - - 0 1')).toBe(false);
+    expect(isValidFen('k7/8/8/8/8/8/8/KK6 w - - 0 1')).toBe(false);
+  });
+});
+
 describe('tiện ích hiển thị', () => {
   it('sanLine: đổi PV dạng UCI sang SAN, dừng ở nước không hợp lệ', async () => {
     const { sanLine } = await import('../src/rules');

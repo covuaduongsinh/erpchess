@@ -9,8 +9,17 @@ export type GameStatus = 'checkmate' | 'stalemate' | 'draw' | 'ongoing';
 
 const UCI_RE = /^([a-h][1-8])([a-h][1-8])([qrbn])?$/;
 
+/**
+ * FEN đúng cú pháp VÀ là thế có thể xảy ra. validateFen của chess.js không kiểm việc bên
+ * không đi đang bị chiếu; thế như vậy làm engine (Arasan) thử "ăn vua" và crash.
+ */
 export function isValidFen(fen: string): boolean {
-  return validateFen(fen).ok;
+  if (!validateFen(fen).ok) return false;
+  const chess = new Chess(fen);
+  const mover = chess.turn();
+  const opponent = mover === 'w' ? 'b' : 'w';
+  const [opponentKing] = chess.findPiece({ type: 'k', color: opponent });
+  return opponentKing !== undefined && !chess.isAttacked(opponentKing, mover);
 }
 
 export function sideToMove(fen: string): Color {

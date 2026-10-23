@@ -1,0 +1,197 @@
+[
+  {
+    "title": "Chiếu hết hàng cuối",
+    "fen": "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+    "themes": ["mateIn1", "backRankMate"],
+    "rating": 500
+  },
+  {
+    "title": "Hậu chiếu hết có vua yểm trợ",
+    "fen": "7k/8/6K1/8/8/8/8/6Q1 w - - 0 1",
+    "themes": ["mateIn1", "queenMate"],
+    "rating": 550
+  },
+  {
+    "title": "Chiếu hết ngạt thở",
+    "fen": "6rk/6pp/7N/8/8/8/8/6K1 w - - 0 1",
+    "themes": ["mateIn1", "smotheredMate"],
+    "rating": 700
+  },
+  {
+    "title": "Chiếu hết kiểu Học trò",
+    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+    "themes": ["mateIn1", "opening"],
+    "rating": 450
+  },
+  {
+    "title": "Chiếu hết kiểu Kẻ ngốc",
+    "fen": "rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2",
+    "themes": ["mateIn1", "opening"],
+    "rating": 400
+  },
+  {
+    "title": "Xe chiếu hết, vua yểm trợ",
+    "fen": "1k6/8/1K6/8/8/8/8/7R w - - 0 1",
+    "themes": ["mateIn1", "endgame"],
+    "rating": 450
+  },
+  {
+    "title": "Mã nĩa vua và xe",
+    "fen": "r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1",
+    "themes": ["fork", "knight"],
+    "rating": 700,
+    "plies": 3
+  },
+  {
+    "title": "Mã nĩa vua và hậu",
+    "fen": "4k3/8/2q5/8/3N4/8/8/4K3 w - - 0 1",
+    "themes": ["fork", "knight"],
+    "rating": 750,
+    "plies": 3
+  },
+  {
+    "title": "Tốt nĩa hai quân",
+    "fen": "4k3/8/8/2n1b3/8/3P4/8/4K3 w - - 0 1",
+    "themes": ["fork", "pawn"],
+    "rating": 650,
+    "plies": 3
+  },
+  {
+    "title": "Tượng xiên vua và xe",
+    "fen": "6k1/8/8/8/8/2r5/8/4K1B1 w - - 0 1",
+    "themes": ["skewer", "bishop"],
+    "rating": 800,
+    "plies": 3
+  },
+  {
+    "title": "Xe xiên vua để ăn hậu",
+    "fen": "3q4/8/8/3k4/8/8/8/R5K1 w - - 0 1",
+    "themes": ["skewer", "rook"],
+    "rating": 800,
+    "plies": 3
+  },
+  {
+    "title": "Ghim tuyệt đối thắng hậu",
+    "fen": "4k3/4q3/8/8/8/8/8/4RK2 w - - 0 1",
+    "themes": ["pin", "rook"],
+    "rating": 600,
+    "plies": 1
+  },
+  {
+    "title": "Ăn quân không được bảo vệ",
+    "fen": "4k3/8/8/3n4/8/8/8/3QK3 w - - 0 1",
+    "themes": ["hangingPiece"],
+    "rating": 400,
+    "plies": 1
+  },
+  {
+    "title": "Chiếu hết hai xe (máy cày)",
+    "fen": "6k1/8/8/8/8/8/R7/1R4K1 w - - 0 1",
+    "themes": ["mateIn2", "endgame"],
+    "rating": 650
+  },
+  {
+    "title": "Hậu và xe chiếu hết",
+    "fen": "6k1/5p1p/6p1/8/8/8/5PPP/3QR1K1 w - - 0 1",
+    "themes": ["mateIn2", "backRankMate"],
+    "rating": 900
+  },
+  {
+    "title": "Chiếu hết Anastasia",
+    "fen": "5r1k/4Nppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+    "themes": ["mateIn2"],
+    "rating": 1100
+  },
+  {
+    "title": "Mã chiếu hết ngạt thở (xe và hậu gần đó)",
+    "fen": "r5rk/6pp/7N/8/8/8/1Q4PP/6K1 w - - 0 1",
+    "themes": ["mateIn2", "smotheredMate"],
+    "rating": 1200
+  },
+  {
+    "title": "Tốt phong cấp",
+    "fen": "8/4P1k1/8/8/8/8/8/4K3 w - - 0 1",
+    "themes": ["promotion", "endgame"],
+    "rating": 450,
+    "plies": 1
+  },
+  {
+    "title": "Phong cấp thành mã chiếu",
+    "fen": "3q1k2/4P3/5K2/8/8/8/8/8 w - - 0 1",
+    "themes": ["promotion", "underPromotion"],
+    "rating": 1300,
+    "plies": 1
+  },
+  {
+    "title": "Xe chiếu hết hành lang",
+    "fen": "7k/6pp/8/8/8/8/8/R5K1 w - - 0 1",
+    "themes": ["mateIn1", "backRankMate"],
+    "rating": 400
+  },
+  {
+    "title": "Tàn cuộc xe: ăn tốt thắng chất",
+    "fen": "8/8/4k3/8/3pK3/8/3R4/3r4 w - - 0 1",
+    "themes": ["endgame", "exchange"],
+    "rating": 1000,
+    "plies": 3
+  },
+  {
+    "title": "Nĩa hậu ăn xe",
+    "fen": "r5k1/5ppp/8/8/8/8/5PPP/2Q3K1 w - - 0 1",
+    "themes": ["fork", "queen"],
+    "rating": 700,
+    "plies": 1
+  },
+  {
+    "title": "Chiếu đôi",
+    "fen": "4k3/8/8/8/1b6/8/4R3/4K1N1 w - - 0 1",
+    "themes": ["discoveredAttack"],
+    "rating": 1000,
+    "plies": 3
+  },
+  {
+    "title": "Tấn công phát hiện ăn hậu",
+    "fen": "3qk3/8/8/3N4/8/8/8/3RK3 w - - 0 1",
+    "themes": ["discoveredAttack", "knight"],
+    "rating": 950,
+    "plies": 3
+  },
+  {
+    "title": "Chiếu hết hai tượng",
+    "fen": "7k/8/6K1/8/8/8/2B5/5B2 w - - 0 1",
+    "themes": ["mateIn2", "endgame"],
+    "rating": 900
+  },
+  {
+    "title": "Hậu chiếu hết ở cạnh bàn",
+    "fen": "k7/8/1K6/8/8/8/8/7Q w - - 0 1",
+    "themes": ["mateIn1", "queenMate"],
+    "rating": 450
+  },
+  {
+    "title": "Hậu chiếu hết hàng cuối",
+    "fen": "6k1/5ppp/8/6N1/8/8/5PPP/3Q2K1 w - - 0 1",
+    "themes": ["mateIn2"],
+    "rating": 1000
+  },
+  {
+    "title": "Hai xe chiếu hết hàng cuối",
+    "fen": "3r2k1/5ppp/8/8/8/8/5PPP/3RR1K1 w - - 0 1",
+    "themes": ["backRankMate"],
+    "rating": 850,
+    "plies": 3
+  },
+  {
+    "title": "Tượng chiếu hết ở góc",
+    "fen": "7k/7p/6PK/8/8/8/8/2B5 w - - 0 1",
+    "themes": ["mateIn1", "bishop"],
+    "rating": 700
+  },
+  {
+    "title": "Ăn quân thắng chất",
+    "fen": "4k3/8/3b4/8/8/8/1Q6/4K3 w - - 0 1",
+    "themes": ["fork", "queen"],
+    "rating": 600,
+    "plies": 3
+  }
+]
