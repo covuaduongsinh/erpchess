@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EngineRouteImport } from './routes/engine'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ASlugRouteImport } from './routes/a.$slug'
@@ -22,6 +23,11 @@ import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EngineRoute = EngineRouteImport.update({
+  id: '/engine',
+  path: '/engine',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -67,6 +73,7 @@ const ASlugStudentsRoute = ASlugStudentsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/academies/new': typeof AcademiesNewRoute
@@ -89,6 +97,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
@@ -102,6 +111,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/engine'
     | '/login'
     | '/signup'
     | '/a/$slug'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/engine'
     | '/login'
     | '/signup'
     | '/academies/new'
@@ -123,6 +134,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/engine'
     | '/login'
     | '/signup'
     | '/a/$slug'
@@ -135,6 +147,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EngineRoute: typeof EngineRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   ASlugRoute: typeof ASlugRouteWithChildren
@@ -149,6 +162,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/engine': {
+      id: '/engine'
+      path: '/engine'
+      fullPath: '/engine'
+      preLoaderRoute: typeof EngineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -226,6 +246,7 @@ const ASlugRouteWithChildren = ASlugRoute._addFileChildren(ASlugRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EngineRoute: EngineRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   ASlugRoute: ASlugRouteWithChildren,

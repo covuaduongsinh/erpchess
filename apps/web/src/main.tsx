@@ -1,3 +1,8 @@
+// Tự host Roboto: trang bật COEP require-corp nên không nạp font từ Google Fonts được
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 import { ErpProvider } from '@erpchess/api/react';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
