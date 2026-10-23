@@ -12,6 +12,7 @@ const srcDir = resolve(here, '../../packages/chess-core/src');
 const TARGETS = [
   { fn: 'submit-attempt', files: ['rules.ts', 'puzzle.ts'] },
   { fn: 'submit-activity', files: ['rules.ts', 'puzzle.ts', 'capture.ts'] },
+  { fn: 'quiz-answer', files: ['rules.ts', 'puzzle.ts', 'capture.ts'] },
 ];
 const pkg = JSON.parse(
   readFileSync(resolve(here, '../../packages/chess-core/package.json'), 'utf8'),

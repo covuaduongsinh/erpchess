@@ -781,6 +781,224 @@ export type Database = {
           },
         ]
       }
+      quiz_attempts: {
+        Row: {
+          answers: Json
+          finished_at: string | null
+          id: string
+          item_id: string
+          score: number
+          solved: boolean
+          state: Json
+          student_id: string
+          time_ms: number
+          tries: number
+          updated_at: string
+        }
+        Insert: {
+          answers?: Json
+          finished_at?: string | null
+          id?: string
+          item_id: string
+          score?: number
+          solved?: boolean
+          state?: Json
+          student_id: string
+          time_ms?: number
+          tries?: number
+          updated_at?: string
+        }
+        Update: {
+          answers?: Json
+          finished_at?: string | null
+          id?: string
+          item_id?: string
+          score?: number
+          solved?: boolean
+          state?: Json
+          student_id?: string
+          time_ms?: number
+          tries?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_attempts_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_items: {
+        Row: {
+          id: string
+          kind: string
+          max_attempts: number | null
+          payload: Json
+          points: number
+          position: number
+          quiz_id: string
+          source_activity_id: string | null
+          title: string
+          wrong_penalty: number
+        }
+        Insert: {
+          id?: string
+          kind: string
+          max_attempts?: number | null
+          payload: Json
+          points?: number
+          position: number
+          quiz_id: string
+          source_activity_id?: string | null
+          title?: string
+          wrong_penalty?: number
+        }
+        Update: {
+          id?: string
+          kind?: string
+          max_attempts?: number | null
+          payload?: Json
+          points?: number
+          position?: number
+          quiz_id?: string
+          source_activity_id?: string | null
+          title?: string
+          wrong_penalty?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_items_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_items_source_activity_id_fkey"
+            columns: ["source_activity_id"]
+            isOneToOne: false
+            referencedRelation: "study_activities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_targets: {
+        Row: {
+          group_id: string | null
+          id: string
+          quiz_id: string
+          student_id: string | null
+        }
+        Insert: {
+          group_id?: string | null
+          id?: string
+          quiz_id: string
+          student_id?: string | null
+        }
+        Update: {
+          group_id?: string | null
+          id?: string
+          quiz_id?: string
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_targets_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_targets_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_targets_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quizzes: {
+        Row: {
+          academy_id: string
+          auto: boolean
+          created_at: string
+          created_by: string | null
+          due_at: string | null
+          id: string
+          level_id: string | null
+          open_to_all: boolean
+          starts_at: string | null
+          title: string
+          topics: string[]
+        }
+        Insert: {
+          academy_id: string
+          auto?: boolean
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          level_id?: string | null
+          open_to_all?: boolean
+          starts_at?: string | null
+          title: string
+          topics?: string[]
+        }
+        Update: {
+          academy_id?: string
+          auto?: boolean
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          level_id?: string | null
+          open_to_all?: boolean
+          starts_at?: string | null
+          title?: string
+          topics?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quizzes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quizzes_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "levels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ratings: {
         Row: {
           academy_id: string
@@ -1038,6 +1256,34 @@ export type Database = {
           },
         ]
       }
+      quiz_progress: {
+        Row: {
+          last_activity: string | null
+          quiz_id: string | null
+          score: number | null
+          solved_items: number | null
+          student_id: string | null
+          time_ms: number | null
+          total_items: number | null
+          tries: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_items_quiz_id_fkey"
+            columns: ["quiz_id"]
+            isOneToOne: false
+            referencedRelation: "quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       study_progress: {
         Row: {
           completed: number | null
@@ -1153,6 +1399,40 @@ export type Database = {
           fen: string
           moves: string[]
           puzzle_id: string
+        }[]
+      }
+      quiz_item_for_student: {
+        Args: { p_item: string; p_student: string }
+        Returns: {
+          due_at: string
+          kind: string
+          max_attempts: number
+          payload: Json
+          points: number
+          starts_at: string
+          wrong_penalty: number
+        }[]
+      }
+      quiz_items_for_student: {
+        Args: { p_quiz: string }
+        Returns: {
+          id: string
+          item_position: number
+          kind: string
+          max_attempts: number
+          payload: Json
+          points: number
+          title: string
+        }[]
+      }
+      quiz_leaderboard: {
+        Args: { p_quiz: string }
+        Returns: {
+          display_name: string
+          score: number
+          solved: number
+          student_id: string
+          time_ms: number
         }[]
       }
       set_student_level: {

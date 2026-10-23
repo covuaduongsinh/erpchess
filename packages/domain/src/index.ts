@@ -97,5 +97,6 @@ export * from './admin';
 export * from './csv';
 export * from './markdown';
 export * from './periods';
+export * from './quiz';
 export * from './study';
 export * from './video';
