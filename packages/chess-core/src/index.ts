@@ -1,4 +1,13 @@
 export { type BlindMode, hiddenSquares } from './blind';
+export {
+  type CaptureGrade,
+  type CaptureMove,
+  captureDests,
+  captureTargets,
+  gradeCapture,
+  playCaptureMove,
+  solveCapture,
+} from './capture';
 export { type GameResult, glicko2Update, newRating, type Rating } from './glicko2';
 export { PgnError, parsePgn, toPgn } from './pgn';
 export {

@@ -63,7 +63,8 @@ type Result = { data: unknown; error: { message: string; code?: string } | null 
 /** Kiểu `data` của nhánh thành công (nhánh có `error: null`). */
 type Success<R extends Result> = Extract<R, { error: null }>['data'];
 
-function unwrap<R extends Result>(res: R): Success<R> {
+/** Trả `data` hoặc ném `ApiError` mang mã lỗi của Supabase. */
+export function unwrap<R extends Result>(res: R): Success<R> {
   if (res.error) throw new ApiError(res.error.message, res.error.code);
   return res.data as Success<R>;
 }
