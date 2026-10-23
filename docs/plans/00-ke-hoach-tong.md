@@ -106,6 +106,11 @@ Mỗi giai đoạn có file kế hoạch con `docs/plans/NN-<ten>.md`, viết ng
 4. **Viết đặc tả:** `rea/spec/*.md`, một file mỗi tính năng — mô tả hành vi, trạng thái, edge case bằng lời của mình. Lưu evidence bằng `export_evidence_bundle` vào `rea/evidence/`.
 5. **Lập sổ cái:** từ các claim trong đặc tả, dựng `build_reconstruction_obligation_ledger` (`rea/ledger.json`). Ban đầu mọi claim đều **mở**.
 
+**Kết quả (2026-10-23):**
+- Khảo sát qua phiên Chrome đã đăng nhập của chủ dự án, chỉ đọc. Kết quả ghi trong [`rea/spec/`](../../rea/spec/).
+- Sổ cái văn bản [`rea/ledger.md`](../../rea/ledger.md): 59 claim.
+- Sổ cái REA chính thức (`ledger.json`) chờ khi có Chrome mở CDP để REA tự ghi evidence.
+
 ### Giai đoạn 1 — Nền móng monorepo
 
 - **Khung:** pnpm + Turborepo, TypeScript strict, Biome, Vitest, Changesets. CI GitHub Actions chạy lint, typecheck, test và build cả 4 app.
@@ -147,34 +152,86 @@ Mỗi giai đoạn có file kế hoạch con `docs/plans/NN-<ten>.md`, viết ng
   - Cho học viện: tổng quan.
   - Cho phụ huynh: bản tóm tắt.
 
-### Giai đoạn 5 — Lớp học trực tiếp
+> **Cập nhật 2026-10-23 sau khảo sát REA.** Lộ trình từ Giai đoạn 5 được sắp lại theo bản đồ tính năng thật trong [`rea/spec/`](../../rea/spec/). Mỗi claim được theo dõi ở [`rea/ledger.md`](../../rea/ledger.md). Thứ tự dưới đây ưu tiên những gì các giai đoạn sau dựa vào:
+> - Level và Batch đứng trước Quiz và Exercise.
+> - Study là nguồn nội dung cho Quiz, Khoá học và Lớp học.
 
-- **Phòng học:** bàn cờ đồng bộ qua Realtime Broadcast. HLV điều khiển, có thể trao quyền đi quân cho học viên. Có mũi tên, tô ô, engine bật/tắt, ẩn quân, chat.
-- **Video/âm thanh:** LiveKit; Edge Function cấp token.
-- **Sau buổi học:** ghi lại `session_events` để xem lại và xuất PGN có biến.
+### Giai đoạn 5 — Quản trị mở rộng I
 
-### Giai đoạn 6 — Đấu cờ và giải đấu
+- **Level:** lộ trình theo khoảng rating, tạo từ mẫu, điều kiện lên cấp.
+- **Batch:** cùng cấp độ, cùng HLV, có lịch tuần.
+- **Rating nội bộ:** classical/rapid/blitz, tính bằng Glicko-2 trong `chess-core`.
+- **Học viên:** nhập/xuất CSV, đếm ghế.
+- **Dashboard:** thẻ số liệu, bảng xếp hạng tuần/tháng/6 tháng.
+- **Thông tin học viện:** Branding (tên, mô tả, logo, mạng xã hội) và Location.
 
-- **Ván cờ:** đánh với bot từ thế cờ HLV dựng, có "cờ mù". Ván 1-1 giữa học viên có đồng hồ, server xác thực nước đi qua Edge Function hoặc RPC.
-- **Giải đấu:** Swiss và vòng tròn; ghép cặp theo Dutch rule (thư viện hoặc tự cài, có test), bảng xếp hạng realtime.
+### Giai đoạn 6 — Study và CSDL ván
 
-### Giai đoạn 7 — Khoá học, giáo trình, chứng chỉ
+- **Study:** chuỗi hoạt động gồm puzzle, trắc nghiệm, bắt quân, giải thích, đánh máy, video, xem ván. Có ba phạm vi (của tôi, công khai, chia sẻ), có Collections.
+- **Trình dựng 2 bước.** Chỉ lưu nháp khi đã có nội dung.
+- **Database:** tải PGN, danh sách ván, trình xem ván, đồng bộ Lichess.
+- **Nhập nội dung:** nhập study Lichess, chuyển PGN thành puzzle.
+- **Chấm phía server** cho puzzle, trắc nghiệm, bắt quân. Mở rộng `submit-attempt`.
 
-- **Trình soạn khoá học:** cấp độ, bài học, 7 dạng hoạt động (puzzle, bắt quân, đánh máy, trắc nghiệm, bài giải thích, video, xem ván). Video lưu trên Supabase Storage hoặc CDN.
-- **Thi chứng chỉ:** giới hạn giờ, giám sát webcam tuỳ chọn. Chứng chỉ PDF có mã xác minh công khai tại `apps/site/verify/[code]`.
-- **Gamification:** XP, chuỗi ngày học, huy hiệu.
+### Giai đoạn 7 — Quiz, Exercise, Practice
 
-### Giai đoạn 8 — Thanh toán và vận hành học viện
+- **Quiz:** lấy hoạt động từ Study; riêng tư/công khai; mở cho tất cả hoặc chọn người; có lịch và hạn; bảng xếp hạng; góc nhìn học viên.
+- **Quiz tự động** theo Level.
+- **Exercise:** tách Exercise (dùng lại được) khỏi lần giao; dùng lại báo cáo của Giai đoạn 4.
+- **Practice:** chương luyện thế cờ, luyện với engine.
 
-- **Học phí:** hoá đơn, thu học phí và gói thuê bao cho HLV/học viện qua Stripe (quốc tế) và PayOS hoặc VNPay (Việt Nam). Webhook xử lý bằng Edge Function.
-- **Bán hàng:** form lead nhúng vào website học viện, bán khoá học/webinar.
-- **Phụ huynh:** bản cập nhật định kỳ và nhắc giữ chân học viên.
+### Giai đoạn 8 — Lớp học trực tiếp và Calendar
 
-### Giai đoạn 9 — Phát hành
+- **Lớp online:**
+  - Bàn cờ đồng bộ qua Realtime Broadcast.
+  - Presence, chat.
+  - HLV trao quyền đi quân; mũi tên, tô ô; bật/tắt engine.
+- **Video:** LiveKit, 3 chế độ; Edge Function cấp token.
+- **Lớp offline:** điểm danh.
+- **Lịch:** lặp lại, Calendar với lịch trống của HLV.
+- **Danh sách lớp:** lọc ngày, xuất CSV.
+- **Xem lại buổi học** từ `classroom_events`.
 
-- **Web và site:** deploy lên Vercel.
+### Giai đoạn 9 — Game Area và Simul
+
+- **Ván 1–1:** có đồng hồ, server xác thực nước đi.
+- **HLV ghép cặp;** hiện học viên online và ván đang diễn ra.
+- **Đánh máy** theo mức (Arasan, `UCI_Elo`).
+- **Simul.**
+- **Ván xong** cập nhật rating nội bộ.
+
+### Giai đoạn 10 — Giải đấu
+
+- **Thể thức:** Swiss (Dutch), Quad, Swiss đồng đội, vòng tròn.
+- **Thiết lập:** số vòng, thời gian, FEN tuỳ chỉnh, công khai/mời.
+- **Điều khiển:** thủ công, tự hoàn tất vòng, tự lên lịch, lặp lại.
+- **Hiển thị:** bảng xếp hạng realtime; xem dạng danh sách, bảng, lịch.
+
+### Giai đoạn 11 — Khoá học và chứng chỉ
+
+- **Khoá học:** gồm các Study theo cấp độ; theo dõi tiến độ; XP, chuỗi ngày học.
+- **Chứng chỉ:** có mã xác minh công khai tại `apps/site/verify/[code]`.
+
+### Giai đoạn 12 — Vận hành học viện
+
+- **Học phí:** gói (đa tiền tệ, mẫu), giảm giá, hoá đơn kèm link thanh toán.
+- **Thanh toán:** VietQR/PayOS cho VN, Stripe cho quốc tế; webhook qua Edge Function.
+- **Nhắc và thông báo:**
+  - Nhắc đóng phí.
+  - Email qua Resend, Expo push, Web Push; có nhật ký gửi.
+- **Bán hàng:** Lead và lớp học thử.
+- **Chat** theo Group, Batch, HLV, học viên.
+
+### Giai đoạn 13 — Báo cáo và hồ sơ
+
+- **Báo cáo theo học viên:** gom bài tập, quiz, lớp, ván, giải; xuất CSV.
+- **Hồ sơ:** ngôn ngữ, múi giờ, ký hiệu nước đi.
+
+### Giai đoạn 14 — Phát hành
+
+- **Web và site:** Vercel.
 - **Desktop:** Tauri bundle MSI/DMG/AppImage, ký số, `tauri-plugin-updater`.
-- **Mobile:** EAS Build/Submit, OTA bằng EAS Update.
+- **Mobile:** EAS Build/Submit, EAS Update.
 - **Giám sát:** Sentry trên cả 4 app.
 
 ---
