@@ -15,6 +15,7 @@ import {
 } from './classrooms';
 import { createErpClient } from './client';
 import { fetchGroups, fetchMyAcademies, signInStudent, signInWithEmail } from './queries';
+import { ClassroomRoom, emptySnapshot, type RoomChat, type RoomSnapshot } from './room';
 
 const env: Record<string, string | undefined> =
   (globalThis as { process?: { env: Record<string, string | undefined> } }).process?.env ?? {};
@@ -119,6 +120,108 @@ describe.skipIf(!ready)('Giai đoạn 8 trên Supabase thật', () => {
       ]);
     } finally {
       for (const id of ids) await deleteClassroom(owner, id);
+    }
+  });
+
+  it('phòng học Realtime: HLV đi quân, học viên nhận; chat; người ngoài bị chặn', {
+    timeout: 120_000,
+  }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const group = (await fetchGroups(owner, academy.id)).find((g) => g.name === env.GROUP_NAME);
+    if (!group) throw new Error('không thấy lớp');
+    const startsAt = new Date(Date.now() + 3600_000).toISOString();
+    const [open] = await createClassrooms(owner, user.id, {
+      academyId: academy.id,
+      title: 'Tích hợp GĐ8 — phòng',
+      startsAt,
+      groupIds: [group.id],
+    });
+    const [closed] = await createClassrooms(owner, user.id, {
+      academyId: academy.id,
+      title: 'Tích hợp GĐ8 — phòng kín',
+      startsAt,
+    });
+    if (!open || !closed) throw new Error('thiếu lớp');
+    const student = newClient();
+    const { user: su } = await signInStudent(
+      student,
+      env.STUDENT_USERNAME ?? '',
+      env.STUDENT_PIN ?? '',
+    );
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const until = async (cond: () => boolean, ms = 8000) => {
+      for (let t = 0; t < ms && !cond(); t += 100) await wait(100);
+      return cond();
+    };
+
+    const ownerChats: RoomChat[] = [];
+    let studentSnap: RoomSnapshot | null = null;
+    const coachRoom = new ClassroomRoom(
+      owner,
+      open.id,
+      { userId: user.id, name: 'HLV' },
+      true,
+      emptySnapshot(),
+      {
+        onChat: (m) => ownerChats.push(m),
+      },
+    );
+    const studentRoom = new ClassroomRoom(
+      student,
+      open.id,
+      { userId: su.id, name: 'HV' },
+      false,
+      emptySnapshot(),
+      {
+        onSnapshot: (s) => {
+          studentSnap = s;
+        },
+      },
+    );
+    const outsider = new ClassroomRoom(
+      student,
+      closed.id,
+      { userId: su.id, name: 'HV' },
+      false,
+      emptySnapshot(),
+    );
+    try {
+      await coachRoom.connect();
+      await studentRoom.connect();
+      // Học viên xin đồng bộ khi vào phòng → nhận ảnh chụp ban đầu
+      expect(await until(() => studentSnap !== null)).toBe(true);
+
+      expect(coachRoom.move('e2e4')).toBe(true);
+      expect(coachRoom.move('e2e5')).toBe(false);
+      expect(await until(() => (studentSnap as RoomSnapshot | null)?.ply === 1)).toBe(true);
+      expect((studentSnap as RoomSnapshot | null)?.lastMove).toEqual(['e2', 'e4']);
+
+      // Học viên chưa được trao quyền: xin đi quân bị bỏ qua; trao quyền rồi thì được
+      await studentRoom.requestMove('e7e5');
+      await wait(1500);
+      expect(coachRoom.snapshot.ply).toBe(1);
+      coachRoom.setController(su.id);
+      expect(await until(() => (studentSnap as RoomSnapshot | null)?.controller === su.id)).toBe(
+        true,
+      );
+      await studentRoom.requestMove('e7e5');
+      expect(await until(() => coachRoom.snapshot.ply === 2)).toBe(true);
+
+      await studentRoom.chat('Chào thầy');
+      expect(await until(() => ownerChats.some((m) => m.text === 'Chào thầy'))).toBe(true);
+
+      await expect(outsider.connect()).rejects.toBeTruthy();
+    } finally {
+      await outsider.disconnect().catch(() => undefined);
+      await studentRoom.disconnect();
+      await coachRoom.disconnect();
+      await deleteClassroom(owner, open.id);
+      await deleteClassroom(owner, closed.id);
     }
   });
 });

@@ -13,7 +13,7 @@ import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
 
-export const Route = createFileRoute('/a/$slug/classes/$id')({
+export const Route = createFileRoute('/a/$slug/classes/$id/')({
   component: ClassroomPage,
 });
 
@@ -58,8 +58,27 @@ function ClassroomPage() {
           {c.is_public && ` · ${t('classroom.public')}`}
           {c.series_id && ` · ${t('classroom.series')}`}
         </p>
-        {c.kind === 'online' && <p className="text-sm">{t('classroom.roomSoon')}</p>}
-        {!staff && <JoinPanel classroomId={c.id} />}
+        <div className="flex flex-wrap gap-2">
+          {c.kind === 'online' && (
+            <Link
+              to="/a/$slug/classes/$id/room"
+              params={{ slug: academy.slug, id: c.id }}
+              className="rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
+            >
+              {t('classroom.enterRoom')}
+            </Link>
+          )}
+          {c.kind === 'online' && (
+            <Link
+              to="/a/$slug/classes/$id/replay"
+              params={{ slug: academy.slug, id: c.id }}
+              className="rounded-md px-4 py-2 font-medium text-primary hover:bg-primary/10"
+            >
+              {t('classroom.replay')}
+            </Link>
+          )}
+        </div>
+        {!staff && c.kind === 'offline' && <JoinPanel classroomId={c.id} />}
         {staff && (
           <div className="flex flex-wrap gap-2">
             <Button

@@ -509,8 +509,13 @@ function ClassesCard({ academyId }: { academyId: string }) {
             | 'excused'
             | undefined;
           return (
-            <View key={c.id} style={styles.row}>
-              <Text style={[styles.text, { flex: 1 }]}>
+            <Pressable
+              key={c.id}
+              accessibilityRole="link"
+              onPress={() => router.push({ pathname: '/classes/[id]', params: { id: c.id } })}
+              style={styles.row}
+            >
+              <Text style={[styles.text, { flex: 1, color: colors.primary }]}>
                 {c.title} ·{' '}
                 {new Date(c.starts_at).toLocaleString(i18n.language, {
                   dateStyle: 'short',
@@ -518,7 +523,7 @@ function ClassesCard({ academyId }: { academyId: string }) {
                 })}
               </Text>
               {mine && <Text style={styles.hint}>{t(`classroom.status_${mine}`)}</Text>}
-            </View>
+            </Pressable>
           );
         })
       )}
