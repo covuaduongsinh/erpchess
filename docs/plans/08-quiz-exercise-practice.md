@@ -146,6 +146,7 @@ Kế hoạch con ghi vào `docs/plans/08-quiz-exercise-practice.md`. Chia 3 PR, 
     - quiz quá hạn trả `quiz_closed`.
 
 ### PR 7b (2026-10-24)
+
 - **Web:**
   - Tab "Quiz": lọc Đang mở / Sắp mở / Đã đóng.
   - Trang tạo quiz: lấy câu từ học liệu (thêm từng câu hoặc cả học liệu) hoặc từ thư viện puzzle; mở cho cả học viện hoặc giao lớp/học viên; giờ mở và hạn chót.
