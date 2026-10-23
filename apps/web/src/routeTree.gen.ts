@@ -18,6 +18,7 @@ import { Route as ASlugRouteImport } from './routes/a.$slug'
 import { Route as AcademiesNewRouteImport } from './routes/academies.new'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
+import { Route as ASlugCalendarRouteImport } from './routes/a.$slug.calendar'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
 import { Route as ASlugLevelsRouteImport } from './routes/a.$slug.levels'
@@ -25,6 +26,8 @@ import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
 import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
 import { Route as ASlugAssignmentsNewRouteImport } from './routes/a.$slug.assignments.new'
+import { Route as ASlugClassesIndexRouteImport } from './routes/a.$slug.classes.index'
+import { Route as ASlugClassesIdRouteImport } from './routes/a.$slug.classes.$id'
 import { Route as ASlugPracticeIndexRouteImport } from './routes/a.$slug.practice.index'
 import { Route as ASlugPracticeIdRouteImport } from './routes/a.$slug.practice.$id'
 import { Route as ASlugQuizzesIndexRouteImport } from './routes/a.$slug.quizzes.index'
@@ -80,6 +83,11 @@ const ASlugIndexRoute = ASlugIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ASlugRoute,
 } as any)
+const ASlugCalendarRoute = ASlugCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => ASlugRoute,
+} as any)
 const ASlugDatabaseRoute = ASlugDatabaseRouteImport.update({
   id: '/database',
   path: '/database',
@@ -113,6 +121,16 @@ const ASlugAssignmentsIdRoute = ASlugAssignmentsIdRouteImport.update({
 const ASlugAssignmentsNewRoute = ASlugAssignmentsNewRouteImport.update({
   id: '/assignments/new',
   path: '/assignments/new',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugClassesIndexRoute = ASlugClassesIndexRouteImport.update({
+  id: '/classes/',
+  path: '/classes/',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugClassesIdRoute = ASlugClassesIdRouteImport.update({
+  id: '/classes/$id',
+  path: '/classes/$id',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugPracticeIndexRoute = ASlugPracticeIndexRouteImport.update({
@@ -170,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
@@ -177,11 +196,13 @@ export interface FileRoutesByFullPath {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/classes/$id': typeof ASlugClassesIdRoute
   '/a/$slug/practice/$id': typeof ASlugPracticeIdRoute
   '/a/$slug/quizzes/$id': typeof ASlugQuizzesIdRoute
   '/a/$slug/quizzes/new': typeof ASlugQuizzesNewRoute
   '/a/$slug/studies/new': typeof ASlugStudiesNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/classes/': typeof ASlugClassesIndexRoute
   '/a/$slug/practice/': typeof ASlugPracticeIndexRoute
   '/a/$slug/quizzes/': typeof ASlugQuizzesIndexRoute
   '/a/$slug/studies/': typeof ASlugStudiesIndexRoute
@@ -196,6 +217,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
@@ -203,11 +225,13 @@ export interface FileRoutesByTo {
   '/a/$slug': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/classes/$id': typeof ASlugClassesIdRoute
   '/a/$slug/practice/$id': typeof ASlugPracticeIdRoute
   '/a/$slug/quizzes/$id': typeof ASlugQuizzesIdRoute
   '/a/$slug/quizzes/new': typeof ASlugQuizzesNewRoute
   '/a/$slug/studies/new': typeof ASlugStudiesNewRoute
   '/a/$slug/assignments': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/classes': typeof ASlugClassesIndexRoute
   '/a/$slug/practice': typeof ASlugPracticeIndexRoute
   '/a/$slug/quizzes': typeof ASlugQuizzesIndexRoute
   '/a/$slug/studies': typeof ASlugStudiesIndexRoute
@@ -224,6 +248,7 @@ export interface FileRoutesById {
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
@@ -231,11 +256,13 @@ export interface FileRoutesById {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/classes/$id': typeof ASlugClassesIdRoute
   '/a/$slug/practice/$id': typeof ASlugPracticeIdRoute
   '/a/$slug/quizzes/$id': typeof ASlugQuizzesIdRoute
   '/a/$slug/quizzes/new': typeof ASlugQuizzesNewRoute
   '/a/$slug/studies/new': typeof ASlugStudiesNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/classes/': typeof ASlugClassesIndexRoute
   '/a/$slug/practice/': typeof ASlugPracticeIndexRoute
   '/a/$slug/quizzes/': typeof ASlugQuizzesIndexRoute
   '/a/$slug/studies/': typeof ASlugStudiesIndexRoute
@@ -253,6 +280,7 @@ export interface FileRouteTypes {
     | '/a/$slug'
     | '/academies/new'
     | '/invite/$token'
+    | '/a/$slug/calendar'
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/levels'
@@ -260,11 +288,13 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/classes/$id'
     | '/a/$slug/practice/$id'
     | '/a/$slug/quizzes/$id'
     | '/a/$slug/quizzes/new'
     | '/a/$slug/studies/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/classes/'
     | '/a/$slug/practice/'
     | '/a/$slug/quizzes/'
     | '/a/$slug/studies/'
@@ -279,6 +309,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/academies/new'
     | '/invite/$token'
+    | '/a/$slug/calendar'
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/levels'
@@ -286,11 +317,13 @@ export interface FileRouteTypes {
     | '/a/$slug'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/classes/$id'
     | '/a/$slug/practice/$id'
     | '/a/$slug/quizzes/$id'
     | '/a/$slug/quizzes/new'
     | '/a/$slug/studies/new'
     | '/a/$slug/assignments'
+    | '/a/$slug/classes'
     | '/a/$slug/practice'
     | '/a/$slug/quizzes'
     | '/a/$slug/studies'
@@ -306,6 +339,7 @@ export interface FileRouteTypes {
     | '/a/$slug'
     | '/academies/new'
     | '/invite/$token'
+    | '/a/$slug/calendar'
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/levels'
@@ -313,11 +347,13 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/classes/$id'
     | '/a/$slug/practice/$id'
     | '/a/$slug/quizzes/$id'
     | '/a/$slug/quizzes/new'
     | '/a/$slug/studies/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/classes/'
     | '/a/$slug/practice/'
     | '/a/$slug/quizzes/'
     | '/a/$slug/studies/'
@@ -401,6 +437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ASlugIndexRouteImport
       parentRoute: typeof ASlugRoute
     }
+    '/a/$slug/calendar': {
+      id: '/a/$slug/calendar'
+      path: '/calendar'
+      fullPath: '/a/$slug/calendar'
+      preLoaderRoute: typeof ASlugCalendarRouteImport
+      parentRoute: typeof ASlugRoute
+    }
     '/a/$slug/database': {
       id: '/a/$slug/database'
       path: '/database'
@@ -448,6 +491,20 @@ declare module '@tanstack/react-router' {
       path: '/assignments/new'
       fullPath: '/a/$slug/assignments/new'
       preLoaderRoute: typeof ASlugAssignmentsNewRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/classes/': {
+      id: '/a/$slug/classes/'
+      path: '/classes'
+      fullPath: '/a/$slug/classes/'
+      preLoaderRoute: typeof ASlugClassesIndexRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/classes/$id': {
+      id: '/a/$slug/classes/$id'
+      path: '/classes/$id'
+      fullPath: '/a/$slug/classes/$id'
+      preLoaderRoute: typeof ASlugClassesIdRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/practice/': {
@@ -517,6 +574,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ASlugRouteChildren {
+  ASlugCalendarRoute: typeof ASlugCalendarRoute
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
   ASlugGroupsRoute: typeof ASlugGroupsRoute
   ASlugLevelsRoute: typeof ASlugLevelsRoute
@@ -524,11 +582,13 @@ interface ASlugRouteChildren {
   ASlugIndexRoute: typeof ASlugIndexRoute
   ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
   ASlugAssignmentsNewRoute: typeof ASlugAssignmentsNewRoute
+  ASlugClassesIdRoute: typeof ASlugClassesIdRoute
   ASlugPracticeIdRoute: typeof ASlugPracticeIdRoute
   ASlugQuizzesIdRoute: typeof ASlugQuizzesIdRoute
   ASlugQuizzesNewRoute: typeof ASlugQuizzesNewRoute
   ASlugStudiesNewRoute: typeof ASlugStudiesNewRoute
   ASlugAssignmentsIndexRoute: typeof ASlugAssignmentsIndexRoute
+  ASlugClassesIndexRoute: typeof ASlugClassesIndexRoute
   ASlugPracticeIndexRoute: typeof ASlugPracticeIndexRoute
   ASlugQuizzesIndexRoute: typeof ASlugQuizzesIndexRoute
   ASlugStudiesIndexRoute: typeof ASlugStudiesIndexRoute
@@ -537,6 +597,7 @@ interface ASlugRouteChildren {
 }
 
 const ASlugRouteChildren: ASlugRouteChildren = {
+  ASlugCalendarRoute: ASlugCalendarRoute,
   ASlugDatabaseRoute: ASlugDatabaseRoute,
   ASlugGroupsRoute: ASlugGroupsRoute,
   ASlugLevelsRoute: ASlugLevelsRoute,
@@ -544,11 +605,13 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugIndexRoute: ASlugIndexRoute,
   ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,
   ASlugAssignmentsNewRoute: ASlugAssignmentsNewRoute,
+  ASlugClassesIdRoute: ASlugClassesIdRoute,
   ASlugPracticeIdRoute: ASlugPracticeIdRoute,
   ASlugQuizzesIdRoute: ASlugQuizzesIdRoute,
   ASlugQuizzesNewRoute: ASlugQuizzesNewRoute,
   ASlugStudiesNewRoute: ASlugStudiesNewRoute,
   ASlugAssignmentsIndexRoute: ASlugAssignmentsIndexRoute,
+  ASlugClassesIndexRoute: ASlugClassesIndexRoute,
   ASlugPracticeIndexRoute: ASlugPracticeIndexRoute,
   ASlugQuizzesIndexRoute: ASlugQuizzesIndexRoute,
   ASlugStudiesIndexRoute: ASlugStudiesIndexRoute,

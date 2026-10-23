@@ -1,3 +1,4 @@
+export * from './classrooms';
 export { type ClientOptions, createErpClient, type ErpClient } from './client';
 export type { Database, Enums, Tables, TablesInsert } from './database.types';
 export * from './databases';

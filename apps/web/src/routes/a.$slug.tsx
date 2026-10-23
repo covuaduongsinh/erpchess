@@ -30,9 +30,11 @@ function AcademyLayout({ session }: { session: Session }) {
     { to: '/a/$slug/assignments', label: t('assignments.title'), exact: false },
     { to: '/a/$slug/studies', label: t('studies.title'), exact: false },
     { to: '/a/$slug/quizzes', label: t('quiz.title'), exact: false },
+    { to: '/a/$slug/classes', label: t('classroom.title'), exact: false },
     { to: '/a/$slug/practice', label: t('practice.title'), exact: false },
     ...(isStaff(academy.role)
       ? [
+          { to: '/a/$slug/calendar', label: t('calendar.title'), exact: false },
           { to: '/a/$slug/students', label: t('students.title'), exact: false },
           { to: '/a/$slug/levels', label: t('levels.title'), exact: false },
           { to: '/a/$slug/database', label: t('database.title'), exact: false },

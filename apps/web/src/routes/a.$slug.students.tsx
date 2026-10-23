@@ -24,6 +24,7 @@ import { type FormEvent, useState } from 'react';
 import { InviteLink } from '../components/InviteLink';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
+import { downloadCsv } from '../lib/download';
 import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/students')({
@@ -204,13 +205,7 @@ function ExportButton({ students }: { students: Member[] }) {
             ?.rating,
         })),
       );
-      // BOM để Excel nhận đúng tiếng Việt
-      const url = URL.createObjectURL(new Blob(['﻿', csv], { type: 'text/csv;charset=utf-8' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `hoc-vien-${academy.slug}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadCsv(`hoc-vien-${academy.slug}.csv`, csv);
     } catch (err) {
       setError(err);
     }

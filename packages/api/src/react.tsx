@@ -4,6 +4,8 @@ import { playMove } from '@erpchess/chess-core';
 import type {
   AcademyProfileInput,
   ActivityInput,
+  AttendanceStatus,
+  ClassroomInput,
   ExerciseInput,
   LevelInput,
   PracticePositionInput,
@@ -29,6 +31,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
 import * as databases from './databases';
 import * as practice from './practice';
@@ -932,4 +935,162 @@ export function usePracticeMutations(academyId: string, userId: string) {
       onSuccess: () => qc.invalidateQueries({ queryKey: ['practice-results'] }),
     }),
   };
+}
+
+// ── Lớp học (Giai đoạn 8) ──
+
+export const classroomKeys = {
+  all: (academyId: string) => ['classrooms', academyId] as const,
+  list: (academyId: string, from: Date, to: Date, createdBy?: string) =>
+    ['classrooms', academyId, from.getTime(), to.getTime(), createdBy ?? ''] as const,
+  detail: (id: string) => ['classroom', id] as const,
+  roster: (id: string) => ['classroom-roster', id] as const,
+  events: (id: string) => ['classroom-events', id] as const,
+  availability: (academyId: string) => ['coach-availability', academyId] as const,
+  calendar: (academyId: string) => ['calendar', academyId] as const,
+};
+
+export function useClassrooms(
+  academyId: string | undefined,
+  range: { from: Date; to: Date; createdBy?: string },
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: classroomKeys.list(academyId ?? '', range.from, range.to, range.createdBy),
+    queryFn: () => classrooms.fetchClassrooms(client, academyId ?? '', range),
+    enabled: !!academyId,
+  });
+}
+
+export function useClassroom(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: classroomKeys.detail(id ?? ''),
+    queryFn: () => classrooms.fetchClassroom(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function useClassroomRoster(classroom: classrooms.ClassroomSummary | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: classroomKeys.roster(classroom?.id ?? ''),
+    queryFn: () =>
+      classrooms.fetchClassroomRoster(client, classroom as classrooms.ClassroomSummary),
+    enabled: !!classroom,
+  });
+}
+
+export function useClassroomEvents(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: classroomKeys.events(id ?? ''),
+    queryFn: () => classrooms.fetchClassroomEvents(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function useClassroomMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = (id?: string) => {
+    void qc.invalidateQueries({ queryKey: classroomKeys.all(academyId) });
+    void qc.invalidateQueries({ queryKey: classroomKeys.calendar(academyId) });
+    if (id) void qc.invalidateQueries({ queryKey: classroomKeys.detail(id) });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (input: Omit<ClassroomInput, 'academyId'>) =>
+        classrooms.createClassrooms(client, userId, { ...input, academyId }),
+      onSuccess: () => refresh(),
+    }),
+    update: useMutation({
+      mutationFn: (v: { id: string; patch: Parameters<typeof classrooms.updateClassroom>[2] }) =>
+        classrooms.updateClassroom(client, v.id, v.patch),
+      onSuccess: (_, v) => refresh(v.id),
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => classrooms.deleteClassroom(client, id),
+      onSuccess: () => refresh(),
+    }),
+    removeUpcomingSeries: useMutation({
+      mutationFn: (seriesId: string) => classrooms.deleteUpcomingInSeries(client, seriesId),
+      onSuccess: () => refresh(),
+    }),
+    setAttendance: useMutation({
+      mutationFn: (v: {
+        classroomId: string;
+        studentId: string;
+        status: AttendanceStatus;
+        note?: string;
+      }) => classrooms.setAttendance(client, v.classroomId, v.studentId, v.status, v.note),
+      onSuccess: (_, v) => refresh(v.classroomId),
+    }),
+  };
+}
+
+export function useJoinClassroom(classroomId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => classrooms.joinClassroom(client, classroomId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: classroomKeys.detail(classroomId) }),
+  });
+}
+
+export function useCoachAvailability(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: classroomKeys.availability(academyId ?? ''),
+    queryFn: () => classrooms.fetchAvailability(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useCalendarEvents(academyId: string | undefined, from: Date, to: Date) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: [...classroomKeys.calendar(academyId ?? ''), from.getTime(), to.getTime()],
+    queryFn: () => classrooms.fetchCalendarEvents(client, academyId ?? '', from, to),
+    enabled: !!academyId,
+  });
+}
+
+export function useCalendarMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refreshCalendar = () =>
+    qc.invalidateQueries({ queryKey: classroomKeys.calendar(academyId) });
+  const refreshAvailability = () =>
+    qc.invalidateQueries({ queryKey: classroomKeys.availability(academyId) });
+  return {
+    addEvent: useMutation({
+      mutationFn: (e: Parameters<typeof classrooms.createCalendarEvent>[3]) =>
+        classrooms.createCalendarEvent(client, userId, academyId, e),
+      onSuccess: refreshCalendar,
+    }),
+    removeEvent: useMutation({
+      mutationFn: (id: string) => classrooms.deleteCalendarEvent(client, id),
+      onSuccess: refreshCalendar,
+    }),
+    addAvailability: useMutation({
+      mutationFn: (slot: Parameters<typeof classrooms.addAvailability>[2]) =>
+        classrooms.addAvailability(client, academyId, slot),
+      onSuccess: refreshAvailability,
+    }),
+    removeAvailability: useMutation({
+      mutationFn: (id: string) => classrooms.deleteAvailability(client, id),
+      onSuccess: refreshAvailability,
+    }),
+  };
+}
+
+/** Mọi cặp lớp–học viên của học viện (lọc Calendar theo học viên). */
+export function useGroupMemberships(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['group-memberships', academyId ?? ''],
+    queryFn: () => api.fetchGroupMemberships(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
 }

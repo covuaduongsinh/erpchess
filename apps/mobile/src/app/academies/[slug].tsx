@@ -1,5 +1,6 @@
 import {
   useAssignments,
+  useClassrooms,
   useCreateGroup,
   useCreateStudent,
   useGroups,
@@ -65,6 +66,7 @@ export default function AcademyScreen() {
       <AssignmentsCard academyId={academy.id} slug={academy.slug} staff={staff} />
 
       <QuizzesCard academyId={academy.id} />
+      <ClassesCard academyId={academy.id} />
       <PracticeCard academyId={academy.id} />
 
       <StudiesCard academyId={academy.id} userId={session?.user.id} />
@@ -478,6 +480,49 @@ function PracticeCard({ academyId }: { academyId: string }) {
       )}
       <Muted>{t('practice.webOnly')}</Muted>
       <ErrorText error={chapters.error} />
+    </Card>
+  );
+}
+
+/** Buổi học trong 30 ngày tới; học viên thấy trạng thái điểm danh của mình. */
+function ClassesCard({ academyId }: { academyId: string }) {
+  const { t, i18n } = useT();
+  const [range] = useState(() => {
+    const from = new Date();
+    from.setHours(from.getHours() - 3);
+    return { from, to: new Date(from.getTime() + 30 * 86_400_000) };
+  });
+  const classes = useClassrooms(academyId, range);
+  const { session } = useSession();
+  return (
+    <Card title={t('classroom.upcoming')}>
+      {classes.isPending ? (
+        <Spinner />
+      ) : (classes.data?.length ?? 0) === 0 ? (
+        <Muted>{t('classroom.noUpcoming')}</Muted>
+      ) : (
+        classes.data?.slice(0, 10).map((c) => {
+          const mine = c.attendance.find((a) => a.student_id === session?.user.id)?.status as
+            | 'present'
+            | 'late'
+            | 'absent'
+            | 'excused'
+            | undefined;
+          return (
+            <View key={c.id} style={styles.row}>
+              <Text style={[styles.text, { flex: 1 }]}>
+                {c.title} ·{' '}
+                {new Date(c.starts_at).toLocaleString(i18n.language, {
+                  dateStyle: 'short',
+                  timeStyle: 'short',
+                })}
+              </Text>
+              {mine && <Text style={styles.hint}>{t(`classroom.status_${mine}`)}</Text>}
+            </View>
+          );
+        })
+      )}
+      <ErrorText error={classes.error} />
     </Card>
   );
 }

@@ -245,17 +245,17 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "assignments_exercise_id_fkey"
-            columns: ["exercise_id"]
-            isOneToOne: false
-            referencedRelation: "exercises"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "assignments_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
             referencedColumns: ["id"]
           },
         ]
@@ -308,6 +308,326 @@ export type Database = {
           {
             foreignKeyName: "attempts_student_id_fkey"
             columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calendar_events: {
+        Row: {
+          academy_id: string
+          classroom_id: string | null
+          coach_id: string | null
+          created_at: string
+          created_by: string | null
+          ends_at: string
+          id: string
+          kind: string
+          starts_at: string
+          title: string
+        }
+        Insert: {
+          academy_id: string
+          classroom_id?: string | null
+          coach_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          ends_at: string
+          id?: string
+          kind: string
+          starts_at: string
+          title: string
+        }
+        Update: {
+          academy_id?: string
+          classroom_id?: string | null
+          coach_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string
+          id?: string
+          kind?: string
+          starts_at?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_events_classroom_id_fkey"
+            columns: ["classroom_id"]
+            isOneToOne: true
+            referencedRelation: "classrooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_events_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classroom_attendance: {
+        Row: {
+          classroom_id: string
+          joined_at: string | null
+          note: string
+          status: string
+          student_id: string
+          updated_at: string
+        }
+        Insert: {
+          classroom_id: string
+          joined_at?: string | null
+          note?: string
+          status: string
+          student_id: string
+          updated_at?: string
+        }
+        Update: {
+          classroom_id?: string
+          joined_at?: string | null
+          note?: string
+          status?: string
+          student_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classroom_attendance_classroom_id_fkey"
+            columns: ["classroom_id"]
+            isOneToOne: false
+            referencedRelation: "classrooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classroom_attendance_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classroom_events: {
+        Row: {
+          actor_id: string | null
+          at: string
+          classroom_id: string
+          id: number
+          kind: string
+          payload: Json
+        }
+        Insert: {
+          actor_id?: string | null
+          at?: string
+          classroom_id: string
+          id?: never
+          kind: string
+          payload?: Json
+        }
+        Update: {
+          actor_id?: string | null
+          at?: string
+          classroom_id?: string
+          id?: never
+          kind?: string
+          payload?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classroom_events_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classroom_events_classroom_id_fkey"
+            columns: ["classroom_id"]
+            isOneToOne: false
+            referencedRelation: "classrooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classroom_targets: {
+        Row: {
+          classroom_id: string
+          group_id: string | null
+          id: string
+          student_id: string | null
+        }
+        Insert: {
+          classroom_id: string
+          group_id?: string | null
+          id?: string
+          student_id?: string | null
+        }
+        Update: {
+          classroom_id?: string
+          group_id?: string | null
+          id?: string
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classroom_targets_classroom_id_fkey"
+            columns: ["classroom_id"]
+            isOneToOne: false
+            referencedRelation: "classrooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classroom_targets_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classroom_targets_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classrooms: {
+        Row: {
+          academy_id: string
+          coach_id: string | null
+          created_at: string
+          created_by: string | null
+          ended_at: string | null
+          group_id: string | null
+          id: string
+          is_public: boolean
+          kind: string
+          minutes: number
+          series_id: string | null
+          starts_at: string
+          state: Json
+          title: string
+          video_mode: string
+        }
+        Insert: {
+          academy_id: string
+          coach_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          ended_at?: string | null
+          group_id?: string | null
+          id?: string
+          is_public?: boolean
+          kind?: string
+          minutes?: number
+          series_id?: string | null
+          starts_at: string
+          state?: Json
+          title?: string
+          video_mode?: string
+        }
+        Update: {
+          academy_id?: string
+          coach_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          ended_at?: string | null
+          group_id?: string | null
+          id?: string
+          is_public?: boolean
+          kind?: string
+          minutes?: number
+          series_id?: string | null
+          starts_at?: string
+          state?: Json
+          title?: string
+          video_mode?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classrooms_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classrooms_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classrooms_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classrooms_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coach_availability: {
+        Row: {
+          academy_id: string
+          coach_id: string
+          day: number
+          id: string
+          minutes: number
+          start: string
+        }
+        Insert: {
+          academy_id: string
+          coach_id: string
+          day: number
+          id?: string
+          minutes: number
+          start: string
+        }
+        Update: {
+          academy_id?: string
+          coach_id?: string
+          day?: number
+          id?: string
+          minutes?: number
+          start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coach_availability_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coach_availability_coach_id_fkey"
+            columns: ["coach_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1573,6 +1893,7 @@ export type Database = {
           wrong_penalty: number
         }[]
       }
+      classroom_join: { Args: { p_classroom: string }; Returns: string }
       create_academy: {
         Args: { p_name: string; p_slug: string }
         Returns: {
