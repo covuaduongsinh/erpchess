@@ -3,6 +3,7 @@ import type {
   AcademyProfileInput,
   ActivityInput,
   LevelInput,
+  QuizInput,
   RatingCategory,
   StudentCsvRow,
   StudyInput,
@@ -19,6 +20,7 @@ import { createContext, type ReactNode, use, useEffect, useState } from 'react';
 import type { ErpClient } from './client';
 import * as databases from './databases';
 import * as api from './queries';
+import * as quizzes from './quizzes';
 import type { StudyScope } from './studies';
 import * as studies from './studies';
 
@@ -643,5 +645,108 @@ export function useGamePgn(gameId: string | undefined) {
     queryFn: () => databases.fetchGamePgn(client, gameId ?? ''),
     enabled: !!gameId,
     staleTime: Number.POSITIVE_INFINITY,
+  });
+}
+
+// ── Quiz (Giai đoạn 7) ──
+
+export const quizKeys = {
+  list: (academyId: string) => ['quizzes', academyId] as const,
+  detail: (id: string) => ['quiz', id] as const,
+  questions: (id: string) => ['quiz-questions', id] as const,
+  items: (id: string) => ['quiz-items', id] as const,
+  attempts: (quizId: string, studentId?: string) =>
+    ['quiz-attempts', quizId, studentId ?? 'all'] as const,
+  leaderboard: (id: string) => ['quiz-leaderboard', id] as const,
+};
+
+export function useQuizzes(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: quizKeys.list(academyId ?? ''),
+    queryFn: () => quizzes.fetchQuizzes(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useQuiz(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: quizKeys.detail(id ?? ''),
+    queryFn: () => quizzes.fetchQuiz(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function useQuizQuestions(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: quizKeys.questions(id ?? ''),
+    queryFn: () => quizzes.fetchQuizQuestions(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+/** Câu hỏi kèm đáp án — chỉ dùng cho staff (RLS chặn học viên). */
+export function useQuizItems(id: string | undefined, enabled = true) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: quizKeys.items(id ?? ''),
+    queryFn: () => quizzes.fetchQuizItems(client, id ?? ''),
+    enabled: !!id && enabled,
+  });
+}
+
+export function useQuizAttempts(
+  quizId: string | undefined,
+  itemIds: readonly string[],
+  studentId?: string,
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: [...quizKeys.attempts(quizId ?? '', studentId), itemIds.length],
+    queryFn: () => quizzes.fetchQuizAttempts(client, itemIds, studentId),
+    enabled: !!quizId && itemIds.length > 0,
+  });
+}
+
+export function useQuizLeaderboard(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: quizKeys.leaderboard(id ?? ''),
+    queryFn: () => quizzes.fetchQuizLeaderboard(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function useQuizMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return {
+    create: useMutation({
+      mutationFn: (input: Omit<QuizInput, 'academyId'>) =>
+        quizzes.createQuiz(client, userId, { ...input, academyId }),
+      onSuccess: () => qc.invalidateQueries({ queryKey: quizKeys.list(academyId) }),
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => quizzes.deleteQuiz(client, id),
+      onSuccess: () => qc.invalidateQueries({ queryKey: quizKeys.list(academyId) }),
+    }),
+  };
+}
+
+/** Trả lời một câu; làm mới lần làm và bảng xếp hạng của quiz. */
+export function useAnswerQuiz(quizId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { itemId: string; answer: quizzes.QuizAnswer; ms?: number }) =>
+      quizzes.answerQuizItem(client, v.itemId, v.answer, v.ms),
+    onSuccess: (r) => {
+      if (r.solved || !r.ok) {
+        void qc.invalidateQueries({ queryKey: ['quiz-attempts', quizId] });
+        void qc.invalidateQueries({ queryKey: quizKeys.leaderboard(quizId) });
+      }
+    },
   });
 }
