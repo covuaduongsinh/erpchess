@@ -10,6 +10,7 @@ import {
   fetchClassroom,
   fetchClassroomRoster,
   fetchClassrooms,
+  fetchVideoToken,
   joinClassroom,
   setAttendance,
 } from './classrooms';
@@ -222,6 +223,46 @@ describe.skipIf(!ready)('Giai đoạn 8 trên Supabase thật', () => {
       await coachRoom.disconnect();
       await deleteClassroom(owner, open.id);
       await deleteClassroom(owner, closed.id);
+    }
+  });
+
+  it('token video LiveKit: chỉ người xem được lớp online', { timeout: 60_000 }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const startsAt = new Date(Date.now() + 3600_000).toISOString();
+    const [online] = await createClassrooms(owner, user.id, {
+      academyId: academy.id,
+      title: 'Tích hợp GĐ8 — video',
+      startsAt,
+    });
+    const [offline] = await createClassrooms(owner, user.id, {
+      academyId: academy.id,
+      title: 'Tích hợp GĐ8 — offline',
+      kind: 'offline',
+      startsAt,
+    });
+    if (!online || !offline) throw new Error('thiếu lớp');
+    try {
+      // Chưa cấu hình LiveKit thì báo rõ; đã cấu hình thì HLV nhận token quản trị
+      const res = await fetchVideoToken(owner, online.id).catch((e: { code?: string }) => e.code);
+      if (typeof res === 'string') expect(res).toBe('video_not_configured');
+      else expect(res).toMatchObject({ runner: true, mode: 'performance' });
+
+      await expect(fetchVideoToken(owner, offline.id)).rejects.toMatchObject({
+        code: 'not_online',
+      });
+      const student = newClient();
+      await signInStudent(student, env.STUDENT_USERNAME ?? '', env.STUDENT_PIN ?? '');
+      await expect(fetchVideoToken(student, online.id)).rejects.toMatchObject({
+        code: 'forbidden',
+      });
+    } finally {
+      await deleteClassroom(owner, online.id);
+      await deleteClassroom(owner, offline.id);
     }
   });
 });
