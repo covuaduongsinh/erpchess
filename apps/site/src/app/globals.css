@@ -3,8 +3,7 @@
 
 body {
   @apply bg-bg text-text antialiased;
-  /* next/font tự host Roboto qua biến --font-roboto */
-  font-family: var(--font-roboto), var(--font-sans);
+  font-family: var(--font-sans);
 }
 
 /* Họa tiết ô cờ của bộ nhận diện Dương Sinh */

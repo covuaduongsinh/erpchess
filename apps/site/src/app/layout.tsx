@@ -1,14 +1,12 @@
+// Tự host Roboto (cùng cách với apps/web): build không phụ thuộc mạng tới Google Fonts
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 import { vi } from '@erpchess/i18n';
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
 import type { ReactNode } from 'react';
 import './globals.css';
-
-const roboto = Roboto({
-  subsets: ['latin', 'vietnamese'],
-  weight: ['300', '400', '500', '700', '900'],
-  variable: '--font-roboto',
-});
 
 export const metadata: Metadata = {
   title: vi.app.name,
@@ -17,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="vi" className={roboto.variable}>
+    <html lang="vi">
       <body>{children}</body>
     </html>
   );
