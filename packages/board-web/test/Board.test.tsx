@@ -163,3 +163,29 @@ describe('Board', () => {
     expect(a1.getAttribute('y')).toBe('0');
   });
 });
+
+describe('Board trên thế cờ không có vua (hoạt động bắt quân)', () => {
+  it('đi được nước thường và hỏi phong cấp khi tốt lên hàng cuối', () => {
+    const onMove = vi.fn();
+    const fen = '1p6/P7/8/8/8/8/8/R3p3 w - - 0 1';
+    const dests = new Map([
+      ['a1', ['e1']],
+      ['a7', ['b8']],
+    ]);
+    const { container } = render(
+      <Board fen={fen} movable={{ color: 'w', dests }} onMove={onMove} label="bàn" />,
+    );
+    for (const sq of ['a1', 'e1']) {
+      fireEvent.pointerDown(square(container, sq), { button: 0, pointerId: 1 });
+      fireEvent.pointerUp(square(container, sq), { button: 0, pointerId: 1 });
+    }
+    expect(onMove).toHaveBeenCalledWith('a1', 'e1');
+    for (const sq of ['a7', 'b8']) {
+      fireEvent.pointerDown(square(container, sq), { button: 0, pointerId: 1 });
+      fireEvent.pointerUp(square(container, sq), { button: 0, pointerId: 1 });
+    }
+    // Hiện bảng chọn quân phong cấp thay vì gọi onMove ngay
+    expect(onMove).toHaveBeenCalledTimes(1);
+    expect(screen.getAllByRole('button').length).toBeGreaterThanOrEqual(4);
+  });
+});

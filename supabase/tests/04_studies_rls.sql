@@ -68,7 +68,7 @@ $$, '23514', null, 'loại hoạt động lạ bị chặn');
 select pg_temp.login('00000000-0000-0000-0000-0000000000a7');
 select is((select count(*)::int from studies where academy_id is not null), 1, 'coach khác chỉ thấy study học viện, không thấy study riêng');
 select is(
-  (select count(*)::int from study_activities), 1, 'coach khác đọc hoạt động của study học viện');
+  (select count(*)::int from study_activities where study_id::text like '60000000-%'), 1, 'coach khác đọc hoạt động của study học viện');
 update studies set title = 'Sửa trộm' where id = '60000000-0000-0000-0000-000000000002';
 select is((select title from studies where id = '60000000-0000-0000-0000-000000000002'), 'Học viện', 'coach khác không sửa được study của người khác');
 select throws_ok($$
@@ -83,7 +83,8 @@ select is((select title from studies where id = '60000000-0000-0000-0000-0000000
 
 -- ── Học viên ──
 select pg_temp.login('00000000-0000-0000-0000-0000000000a3');
-select is((select count(*)::int from studies), 2, 'học viên thấy study học viện và thư viện chung');
+-- Chỉ đếm study của bài test (thư viện chung thật có thể đã có dữ liệu)
+select is((select count(*)::int from studies where id::text like '60000000-%'), 2, 'học viên thấy study học viện và thư viện chung');
 select throws_ok($$
   insert into activity_attempts (activity_id, student_id, solved, score)
   values ('61000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-0000000000a3', true, 999)
@@ -95,7 +96,7 @@ $$, '42501', null, 'học viên không tạo study');
 
 -- ── Học viện khác ──
 select pg_temp.login('00000000-0000-0000-0000-0000000000b1');
-select is((select count(*)::int from studies), 1, 'học viện B chỉ thấy thư viện chung');
+select is((select count(*)::int from studies where id::text like '60000000-%'), 1, 'học viện B chỉ thấy thư viện chung');
 
 -- ── Hàm chấm bài (service role) ──
 select pg_temp.logout();

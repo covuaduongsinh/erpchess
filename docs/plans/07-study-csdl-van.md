@@ -215,3 +215,22 @@ Kế hoạch con sẽ ghi vào `docs/plans/07-study-csdl-van.md`. Chia 4 PR, m�
   - Thử trên Chrome bằng tài khoản chủ dự án: tạo "Học liệu mẫu (Claude)", thêm puzzle từ thư viện, bắt quân, trắc nghiệm, đổi thứ tự, bị chặn khi lưu bàn trống.
   - Phát hiện khi thử: hai nút "Lưu" dễ nhầm, nên đã đổi nút trong trình soạn thành "Lưu hoạt động".
 - **Để sau:** tạo puzzle từ một thế trong CSDL ván; tạo hoạt động "Xem ván" trực tiếp từ CSDL (hiện phải dán PGN).
+
+### PR 6d (2026-10-24)
+
+- **Web: trình học** `/a/$slug/studies/$id`:
+  - Thanh tiến độ, danh sách hoạt động có dấu ✓, điểm và số lượt còn lại.
+  - 7 loại hoạt động: puzzle, trắc nghiệm, bắt quân, giải thích (Markdown), video (YouTube/Vimeo nhúng trong iframe có sandbox, hoặc tệp trong Storage), xem ván, đánh với máy Arasan theo mức Elo.
+- **Mobile:**
+  - Thẻ "Học liệu" ở màn học viện; màn `studies/[id]` cùng các loại hoạt động.
+  - Video mở bằng `expo-web-browser`. "Đánh với máy" báo chỉ dùng được trên web/desktop, vì engine mobile thuộc bước 7.
+- **domain:** `videoEmbed` chỉ nhận https và id hợp lệ.
+- **Thư viện chung:** `supabase/seed/studies.json` gồm 5 học liệu tự soạn, 19 hoạt động; được kiểm bằng `seed-studies.test.ts`; sinh SQL bằng `studies-to-sql.mjs`; đã nạp lên cloud.
+- **Sửa lỗi phát hiện khi thử trên Chrome:**
+  - Bàn cờ (web và mobile) gọi chess.js để hỏi phong cấp, nên với thế không có vua thì nước đi bị huỷ, chặn mọi bài bắt quân. Đã chuyển sang `isPromotionMove` (xét theo quân và hàng) và thêm test.
+  - Test nội dung bắt được một thế cờ sai trong học liệu tự soạn (xe đang chiếu vua bên không đi).
+- **Kiểm chứng:**
+  - Trên Chrome: trắc nghiệm sai rồi đúng (+10 điểm); bắt quân 2 nước (+10 điểm, server chấm); thư viện chung hiển thị đúng.
+  - pgTAP 04: 21/21 sau khi đã có dữ liệu thư viện.
+  - Test toàn repo xanh.
+- **Để sau:** engine trên mobile; ẩn đáp án khỏi học viên (Giai đoạn 7, Quiz); tạo puzzle từ thế cờ trong CSDL ván.

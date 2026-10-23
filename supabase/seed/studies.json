@@ -1,0 +1,163 @@
+[
+  {
+    "slug": "ban-co-va-toa-do",
+    "title": "Bàn cờ và toạ độ",
+    "description": "Làm quen bàn cờ 64 ô và cách gọi tên từng ô.",
+    "activities": [
+      {
+        "kind": "explanation",
+        "title": "Bàn cờ",
+        "points": 0,
+        "payload": {
+          "body": "# Bàn cờ\nBàn cờ có **64 ô** xen kẽ sáng và tối, xếp thành 8 hàng và 8 cột.\n\n- Các **cột** đánh chữ từ *a* đến *h*, tính từ trái sang phải phía Trắng.\n- Các **hàng** đánh số từ *1* đến *8*, hàng 1 ở gần Trắng.\n- Tên một ô gồm chữ cột rồi số hàng, ví dụ **e4**.\n\nĐặt bàn sao cho ô ở góc dưới bên phải mỗi người là ô sáng."
+        }
+      },
+      {
+        "kind": "mcq",
+        "title": "Số ô",
+        "payload": {
+          "question": "Bàn cờ có bao nhiêu ô?",
+          "options": ["32", "64", "81", "100"],
+          "correct": 1
+        }
+      },
+      {
+        "kind": "mcq",
+        "title": "Đặt bàn",
+        "payload": {
+          "question": "Ô ở góc dưới bên phải của mỗi người chơi có màu gì?",
+          "options": ["Sáng", "Tối"],
+          "correct": 0
+        }
+      },
+      {
+        "kind": "mcq",
+        "title": "Gọi tên ô",
+        "payload": {
+          "question": "Xe trắng đang đứng ở ô nào?",
+          "fen": "4k3/8/8/8/3R4/8/8/4K3 w - - 0 1",
+          "options": ["d4", "e4", "d5", "4d"],
+          "correct": 0
+        }
+      }
+    ]
+  },
+  {
+    "slug": "xe-bat-quan",
+    "title": "Xe bắt quân",
+    "description": "Xe đi thẳng theo hàng và cột. Hãy dùng xe bắt hết quân đen.",
+    "activities": [
+      {
+        "kind": "explanation",
+        "title": "Cách đi của xe",
+        "points": 0,
+        "payload": {
+          "body": "# Xe\nXe đi **thẳng** theo hàng ngang hoặc cột dọc, bao nhiêu ô cũng được, miễn là không có quân nào chắn đường.\n\nXe bắt quân bằng cách đi vào đúng ô của quân đối phương."
+        }
+      },
+      {
+        "kind": "capture",
+        "title": "Hai tốt",
+        "payload": { "fen": "8/8/8/p3p3/8/8/8/R7 w - - 0 1" }
+      },
+      {
+        "kind": "capture",
+        "title": "Đổi hướng",
+        "payload": { "fen": "8/1p6/8/8/5p2/8/8/1R6 w - - 0 1" }
+      },
+      {
+        "kind": "capture",
+        "title": "Lên rồi sang",
+        "payload": { "fen": "3p4/8/8/8/8/8/3R2p1/8 w - - 0 1" }
+      }
+    ]
+  },
+  {
+    "slug": "tuong-bat-quan",
+    "title": "Tượng bắt quân",
+    "description": "Tượng đi chéo và không bao giờ đổi màu ô.",
+    "activities": [
+      {
+        "kind": "explanation",
+        "title": "Cách đi của tượng",
+        "points": 0,
+        "payload": {
+          "body": "# Tượng\nTượng đi theo **đường chéo**, bao nhiêu ô cũng được nếu không bị chắn.\n\nVì luôn đi chéo nên tượng ở ô tối mãi mãi chỉ đi trên ô tối, tượng ở ô sáng chỉ đi trên ô sáng."
+        }
+      },
+      {
+        "kind": "capture",
+        "title": "Một nước",
+        "payload": { "fen": "8/8/8/8/8/2p5/8/B7 w - - 0 1" }
+      },
+      {
+        "kind": "capture",
+        "title": "Hai đường chéo",
+        "payload": { "fen": "8/6p1/8/8/3p4/8/8/B7 w - - 0 1" }
+      },
+      {
+        "kind": "capture",
+        "title": "Ba quân",
+        "payload": { "fen": "8/8/8/4p3/8/2p5/8/2B5 w - - 0 1" }
+      }
+    ]
+  },
+  {
+    "slug": "chieu-het-1-nuoc",
+    "title": "Chiếu hết 1 nước",
+    "description": "Tìm nước chiếu hết ngay lập tức.",
+    "activities": [
+      {
+        "kind": "explanation",
+        "title": "Chiếu hết là gì?",
+        "points": 0,
+        "payload": {
+          "body": "# Chiếu hết\nVua bị **chiếu** khi đang bị quân đối phương tấn công.\n\nNếu vua bị chiếu mà không thể:\n- chạy sang ô an toàn,\n- chặn đường chiếu,\n- bắt quân đang chiếu,\n\nthì đó là **chiếu hết** và ván cờ kết thúc."
+        }
+      },
+      {
+        "kind": "puzzle",
+        "title": "Hàng cuối",
+        "payload": { "fen": "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1", "moves": ["d1d8"] }
+      },
+      {
+        "kind": "puzzle",
+        "title": "Hành lang",
+        "payload": { "fen": "7k/6pp/8/8/8/8/8/R5K1 w - - 0 1", "moves": ["a1a8"] }
+      },
+      {
+        "kind": "puzzle",
+        "title": "Hậu ở hàng cuối",
+        "payload": { "fen": "6k1/5ppp/8/6N1/8/8/5PPP/3Q2K1 w - - 0 1", "moves": ["d1d8"] }
+      },
+      {
+        "kind": "puzzle",
+        "title": "Ngạt thở",
+        "payload": { "fen": "6rk/6pp/7N/8/8/8/8/6K1 w - - 0 1", "moves": ["h6f7"] }
+      }
+    ]
+  },
+  {
+    "slug": "van-mau-bay-o-f7",
+    "title": "Ván mẫu: bẫy ô f7",
+    "description": "Một ván ngắn cho thấy vì sao phải bảo vệ ô f7 ngay từ khai cuộc.",
+    "activities": [
+      {
+        "kind": "game",
+        "title": "Ván 4 nước",
+        "payload": {
+          "pgn": "[Event \"Ván mẫu ERPChess\"]\n[White \"Trắng\"]\n[Black \"Đen\"]\n[Result \"1-0\"]\n\n1. e4 e5 2. Bc4 { Tượng nhắm thẳng vào f7, ô chỉ có vua đen bảo vệ. } Nc6 3. Qh5 { Hậu cũng nhắm f7 và cả tốt e5. } Nf6?? { Đen phát triển quân nhưng quên mối đe doạ. Nên đi 3... g6 hoặc 3... Qe7. } (3... g6 4. Qf3 Nf6 { Đen chặn được và phát triển quân. }) 4. Qxf7# { Hậu được tượng c4 bảo vệ nên vua đen không bắt được. } 1-0"
+        }
+      },
+      {
+        "kind": "mcq",
+        "title": "Rút kinh nghiệm",
+        "payload": {
+          "question": "Sau 1. e4 e5 2. Bc4 Nc6 3. Qh5, nước nào giúp Đen tránh bị chiếu hết?",
+          "options": ["3... Nf6", "3... g6", "3... a6", "3... Nd4"],
+          "correct": 1
+        }
+      }
+    ]
+  }
+]
