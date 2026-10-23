@@ -29,14 +29,22 @@ function AcademyLayout({ session }: { session: Session }) {
     { to: '/a/$slug/groups', label: t('groups.title'), exact: false },
     { to: '/a/$slug/assignments', label: t('assignments.title'), exact: false },
     ...(isStaff(academy.role)
-      ? [{ to: '/a/$slug/students', label: t('students.title'), exact: false }]
+      ? [
+          { to: '/a/$slug/students', label: t('students.title'), exact: false },
+          { to: '/a/$slug/levels', label: t('levels.title'), exact: false },
+        ]
       : []),
   ] as const;
 
   return (
     <AcademyContext value={{ academy, session }}>
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold text-primary">{academy.name}</h1>
+        <h1 className="flex items-center gap-3 text-3xl font-bold text-primary">
+          {academy.logo_url && (
+            <img src={academy.logo_url} alt="" className="size-10 rounded-md object-contain" />
+          )}
+          {academy.name}
+        </h1>
         <p className="text-sm text-text-muted">{t(`role.${academy.role}`)}</p>
       </div>
       <nav className="flex gap-1 border-b border-text-muted/20">

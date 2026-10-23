@@ -3,16 +3,27 @@
  * các hàm ở đây chỉ gói lời gọi và ném lỗi khi Supabase trả lỗi.
  */
 import {
+  type AcademyProfileInput,
   type AcademyRole,
+  academyProfileSchema,
   type CreateAcademyInput,
   type CreateAssignmentInput,
   type CreateStudentInput,
   createAcademySchema,
   createAssignmentSchema,
   createStudentSchema,
+  type GroupKind,
   groupNameSchema,
+  initialRatingSchema,
+  type LevelInput,
+  levelSchema,
+  levelTemplate,
   pinSchema,
+  type RatingCategory,
+  type ScheduleSlot,
   type SignUpInput,
+  type StudentCsvRow,
+  scheduleSchema,
   signUpSchema,
   usernameSchema,
 } from '@erpchess/domain';
@@ -24,7 +35,7 @@ export type Academy = Tables<'academies'>;
 export type Group = Tables<'groups'>;
 export type Profile = Tables<'profiles'>;
 export type MyAcademy = Academy & { role: AcademyRole };
-export type Member = { role: AcademyRole; profile: Profile };
+export type Member = { role: AcademyRole; levelId: string | null; profile: Profile };
 export type GroupWithCount = Group & { studentCount: number };
 export type PuzzleRow = Tables<'puzzles'>;
 export type Assignment = Tables<'assignments'>;
@@ -117,11 +128,13 @@ export async function fetchMembers(client: ErpClient, academyId: string): Promis
   const rows = unwrap(
     await client
       .from('memberships')
-      .select('role, profile:profiles(*)')
+      .select('role, level_id, profile:profiles(*)')
       .eq('academy_id', academyId)
       .order('created_at'),
   );
-  return rows.flatMap((r) => (r.profile ? [{ role: r.role, profile: r.profile }] : []));
+  return rows.flatMap((r) =>
+    r.profile ? [{ role: r.role, levelId: r.level_id, profile: r.profile }] : [],
+  );
 }
 
 // ── Lớp học ──
@@ -395,4 +408,258 @@ export async function submitAttempt(
   }
   if (!data) throw new ApiError('Không nhận được phản hồi');
   return data;
+}
+
+// ── Quản trị học viện (Giai đoạn 5) ──
+
+export type Level = Tables<'levels'>;
+export type RatingRow = Tables<'ratings'>;
+export type LeaderboardRow = {
+  studentId: string;
+  displayName: string;
+  avatarUrl: string | null;
+  points: number;
+  solved: number;
+  tries: number;
+};
+export type AcademyStats = {
+  students: number;
+  staff: number;
+  groups: number;
+  batches: number;
+  assignments: number;
+  attemptsWeek: number;
+};
+
+function levelRow(input: LevelInput) {
+  const v = levelSchema.parse(input);
+  return {
+    name: v.name,
+    min_rating: v.minRating,
+    max_rating: v.maxRating,
+    color: v.color,
+    criteria: v.criteria,
+  };
+}
+
+export async function fetchLevels(client: ErpClient, academyId: string): Promise<Level[]> {
+  return unwrap(
+    await client.from('levels').select('*').eq('academy_id', academyId).order('position'),
+  );
+}
+
+export async function createLevel(
+  client: ErpClient,
+  academyId: string,
+  input: LevelInput,
+  position: number,
+): Promise<Level> {
+  return unwrap(
+    await client
+      .from('levels')
+      .insert({ academy_id: academyId, position, ...levelRow(input) })
+      .select()
+      .single(),
+  );
+}
+
+/** Tạo lộ trình mẫu, nối tiếp sau các cấp đã có. */
+export async function createLevelsFromTemplate(
+  client: ErpClient,
+  academyId: string,
+  startPosition = 0,
+): Promise<Level[]> {
+  return unwrap(
+    await client
+      .from('levels')
+      .insert(
+        levelTemplate.map((l, i) => ({
+          academy_id: academyId,
+          position: startPosition + i,
+          ...levelRow(l),
+        })),
+      )
+      .select(),
+  );
+}
+
+export async function updateLevel(client: ErpClient, id: string, input: LevelInput) {
+  unwrap(await client.from('levels').update(levelRow(input)).eq('id', id));
+}
+
+export async function deleteLevel(client: ErpClient, id: string) {
+  unwrap(await client.from('levels').delete().eq('id', id));
+}
+
+export async function setStudentLevel(
+  client: ErpClient,
+  academyId: string,
+  studentId: string,
+  levelId: string | null,
+) {
+  unwrap(
+    await client.rpc('set_student_level', {
+      p_academy: academyId,
+      p_student: studentId,
+      // Hàm SQL nhận null để gỡ cấp; kiểu sinh tự động không thể hiện tham số nullable
+      p_level: levelId as string,
+    }),
+  );
+}
+
+export type GroupPatch = {
+  name?: string;
+  kind?: GroupKind;
+  levelId?: string | null;
+  schedule?: ScheduleSlot[];
+};
+
+export async function updateGroup(client: ErpClient, id: string, patch: GroupPatch) {
+  unwrap(
+    await client
+      .from('groups')
+      .update({
+        ...(patch.name !== undefined ? { name: groupNameSchema.parse(patch.name) } : {}),
+        ...(patch.kind !== undefined ? { kind: patch.kind } : {}),
+        ...(patch.levelId !== undefined ? { level_id: patch.levelId } : {}),
+        ...(patch.schedule !== undefined ? { schedule: scheduleSchema.parse(patch.schedule) } : {}),
+      })
+      .eq('id', id),
+  );
+}
+
+export async function deleteGroup(client: ErpClient, id: string) {
+  unwrap(await client.from('groups').delete().eq('id', id));
+}
+
+export async function fetchRatings(client: ErpClient, academyId: string): Promise<RatingRow[]> {
+  return unwrap(await client.from('ratings').select('*').eq('academy_id', academyId));
+}
+
+/** HLV đặt rating ban đầu (hoặc chỉnh tay); RD đặt lại 350 vì chưa có ván nào kiểm chứng. */
+export async function setInitialRating(
+  client: ErpClient,
+  academyId: string,
+  studentId: string,
+  category: RatingCategory,
+  rating: number,
+) {
+  unwrap(
+    await client.from('ratings').upsert({
+      academy_id: academyId,
+      student_id: studentId,
+      category,
+      rating: initialRatingSchema.parse(rating),
+      rd: 350,
+      updated_at: new Date().toISOString(),
+    }),
+  );
+}
+
+export async function fetchLeaderboard(
+  client: ErpClient,
+  academyId: string,
+  from: Date,
+  to: Date,
+): Promise<LeaderboardRow[]> {
+  const rows = unwrap(
+    await client.rpc('academy_leaderboard', {
+      p_academy: academyId,
+      p_from: from.toISOString(),
+      p_to: to.toISOString(),
+    }),
+  );
+  return rows.map((r) => ({
+    studentId: r.student_id,
+    displayName: r.display_name,
+    avatarUrl: r.avatar_url,
+    points: r.points,
+    solved: r.solved,
+    tries: r.tries,
+  }));
+}
+
+/** Số liệu tổng quan; chỉ staff nhận được dữ liệu (người khác nhận `null`). */
+export async function fetchAcademyStats(
+  client: ErpClient,
+  academyId: string,
+): Promise<AcademyStats | null> {
+  const [row] = unwrap(await client.rpc('academy_stats', { p_academy: academyId }));
+  if (!row) return null;
+  return {
+    students: row.students,
+    staff: row.staff,
+    groups: row.groups,
+    batches: row.batches,
+    assignments: row.assignments,
+    attemptsWeek: row.attempts_week,
+  };
+}
+
+export async function updateAcademyProfile(
+  client: ErpClient,
+  academyId: string,
+  input: AcademyProfileInput,
+) {
+  const v = academyProfileSchema.parse(input);
+  const socials = Object.fromEntries(Object.entries(v.socials).filter(([, url]) => url));
+  unwrap(
+    await client
+      .from('academies')
+      .update({ name: v.name, description: v.description, logo_url: v.logoUrl, socials })
+      .eq('id', academyId),
+  );
+}
+
+export type ImportResult = { username: string; ok: boolean; error?: string };
+
+/**
+ * Tạo lần lượt các học viên từ CSV (Edge Function `create-student` mỗi người một lần). Lớp ghi theo tên;
+ * tên không khớp lớp nào thì học viên vẫn được tạo nhưng không vào lớp. Lỗi của một dòng không dừng cả lô.
+ */
+export async function importStudents(
+  client: ErpClient,
+  academyId: string,
+  rows: readonly StudentCsvRow[],
+  groups: readonly Pick<Group, 'id' | 'name'>[],
+  onProgress?: (done: number) => void,
+): Promise<ImportResult[]> {
+  const byName = new Map(groups.map((g) => [g.name.trim().toLowerCase(), g.id]));
+  const results: ImportResult[] = [];
+  for (const row of rows) {
+    try {
+      await createStudent(client, {
+        academyId,
+        displayName: row.displayName,
+        username: row.username,
+        pin: row.pin,
+        groupId: row.group ? byName.get(row.group.trim().toLowerCase()) : undefined,
+      });
+      results.push({ username: row.username, ok: true });
+    } catch (err) {
+      // Lỗi kiểm tra dữ liệu (Zod) trả mã của trường sai, lỗi server trả mã từ Edge Function
+      const issue = (err as { issues?: { message: string }[] }).issues?.[0];
+      const error =
+        err instanceof ApiError
+          ? (err.code ?? err.message)
+          : (issue?.message ?? (err instanceof Error ? err.message : String(err)));
+      results.push({ username: row.username, ok: false, error });
+    }
+    onProgress?.(results.length);
+  }
+  return results;
+}
+
+/** Mọi cặp lớp–học viên của học viện (dùng khi xuất CSV). */
+export async function fetchGroupMemberships(
+  client: ErpClient,
+  academyId: string,
+): Promise<{ groupId: string; studentId: string }[]> {
+  const rows = unwrap(
+    await client
+      .from('group_members')
+      .select('group_id, student_id, groups!inner(academy_id)')
+      .eq('groups.academy_id', academyId),
+  );
+  return rows.map((r) => ({ groupId: r.group_id, studentId: r.student_id }));
 }

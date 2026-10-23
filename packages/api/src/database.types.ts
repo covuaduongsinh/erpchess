@@ -21,23 +21,32 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          description: string
           id: string
+          logo_url: string | null
           name: string
           slug: string
+          socials: Json
         }
         Insert: {
           created_at?: string
           created_by?: string | null
+          description?: string
           id?: string
+          logo_url?: string | null
           name: string
           slug: string
+          socials?: Json
         }
         Update: {
           created_at?: string
           created_by?: string | null
+          description?: string
           id?: string
+          logo_url?: string | null
           name?: string
           slug?: string
+          socials?: Json
         }
         Relationships: [
           {
@@ -280,21 +289,30 @@ export type Database = {
           coach_id: string | null
           created_at: string
           id: string
+          kind: string
+          level_id: string | null
           name: string
+          schedule: Json
         }
         Insert: {
           academy_id: string
           coach_id?: string | null
           created_at?: string
           id?: string
+          kind?: string
+          level_id?: string | null
           name: string
+          schedule?: Json
         }
         Update: {
           academy_id?: string
           coach_id?: string | null
           created_at?: string
           id?: string
+          kind?: string
+          level_id?: string | null
           name?: string
+          schedule?: Json
         }
         Relationships: [
           {
@@ -309,6 +327,13 @@ export type Database = {
             columns: ["coach_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "groups_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "levels"
             referencedColumns: ["id"]
           },
         ]
@@ -384,22 +409,69 @@ export type Database = {
           },
         ]
       }
+      levels: {
+        Row: {
+          academy_id: string
+          color: string
+          created_at: string
+          criteria: Json
+          id: string
+          max_rating: number | null
+          min_rating: number
+          name: string
+          position: number
+        }
+        Insert: {
+          academy_id: string
+          color?: string
+          created_at?: string
+          criteria?: Json
+          id?: string
+          max_rating?: number | null
+          min_rating?: number
+          name: string
+          position: number
+        }
+        Update: {
+          academy_id?: string
+          color?: string
+          created_at?: string
+          criteria?: Json
+          id?: string
+          max_rating?: number | null
+          min_rating?: number
+          name?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "levels_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memberships: {
         Row: {
           academy_id: string
           created_at: string
+          level_id: string | null
           role: Database["public"]["Enums"]["academy_role"]
           user_id: string
         }
         Insert: {
           academy_id: string
           created_at?: string
+          level_id?: string | null
           role: Database["public"]["Enums"]["academy_role"]
           user_id: string
         }
         Update: {
           academy_id?: string
           created_at?: string
+          level_id?: string | null
           role?: Database["public"]["Enums"]["academy_role"]
           user_id?: string
         }
@@ -409,6 +481,13 @@ export type Database = {
             columns: ["academy_id"]
             isOneToOne: false
             referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "levels"
             referencedColumns: ["id"]
           },
           {
@@ -544,6 +623,54 @@ export type Database = {
           },
         ]
       }
+      ratings: {
+        Row: {
+          academy_id: string
+          category: string
+          games: number
+          rating: number
+          rd: number
+          student_id: string
+          updated_at: string
+          vol: number
+        }
+        Insert: {
+          academy_id: string
+          category: string
+          games?: number
+          rating?: number
+          rd?: number
+          student_id: string
+          updated_at?: string
+          vol?: number
+        }
+        Update: {
+          academy_id?: string
+          category?: string
+          games?: number
+          rating?: number
+          rd?: number
+          student_id?: string
+          updated_at?: string
+          vol?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ratings_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       assignment_progress: {
@@ -569,15 +696,40 @@ export type Database = {
       }
     }
     Functions: {
+      academy_leaderboard: {
+        Args: { p_academy: string; p_from: string; p_to: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          points: number
+          solved: number
+          student_id: string
+          tries: number
+        }[]
+      }
+      academy_stats: {
+        Args: { p_academy: string }
+        Returns: {
+          assignments: number
+          attempts_week: number
+          batches: number
+          groups: number
+          staff: number
+          students: number
+        }[]
+      }
       accept_invitation: { Args: { p_token: string }; Returns: string }
       create_academy: {
         Args: { p_name: string; p_slug: string }
         Returns: {
           created_at: string
           created_by: string | null
+          description: string
           id: string
+          logo_url: string | null
           name: string
           slug: string
+          socials: Json
         }
         SetofOptions: {
           from: "*"
@@ -620,6 +772,10 @@ export type Database = {
           moves: string[]
           puzzle_id: string
         }[]
+      }
+      set_student_level: {
+        Args: { p_academy: string; p_level: string; p_student: string }
+        Returns: undefined
       }
     }
     Enums: {

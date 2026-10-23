@@ -1,9 +1,25 @@
-import { useCreateInvitation, useMembers } from '@erpchess/api/react';
-import { academyRoles } from '@erpchess/domain';
+import {
+  useAcademyStats,
+  useCreateInvitation,
+  useLeaderboard,
+  useMembers,
+  useUpdateAcademyProfile,
+} from '@erpchess/api/react';
+import {
+  academyRoles,
+  isStaff,
+  type Period,
+  periodRange,
+  periods,
+  socialKeys,
+} from '@erpchess/domain';
+import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute } from '@tanstack/react-router';
+import { type FormEvent, useMemo, useState } from 'react';
 import { InviteLink } from '../components/InviteLink';
-import { Button, Card, ErrorText, Spinner } from '../components/ui';
+import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
+
 import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/')({
@@ -11,59 +27,240 @@ export const Route = createFileRoute('/a/$slug/')({
 });
 
 function OverviewPage() {
+  const { academy } = useAcademy();
+  const staff = isStaff(academy.role);
+
+  return (
+    <div className="flex flex-col gap-6">
+      {academy.description && <p className="whitespace-pre-line">{academy.description}</p>}
+      {staff && <StatsRow />}
+      <div className="grid gap-6 md:grid-cols-2">
+        <LeaderboardCard />
+        <MembersCard />
+        {academy.role === 'owner' && <InviteCoachCard />}
+        {academy.role === 'owner' && <BrandingCard />}
+      </div>
+    </div>
+  );
+}
+
+function StatsRow() {
+  const { t } = useT();
+  const { academy } = useAcademy();
+  const stats = useAcademyStats(academy.id);
+  if (stats.isPending) return <Spinner />;
+  if (stats.error) return <ErrorText error={stats.error} />;
+  if (!stats.data) return null;
+  const items: [TranslationKey, number][] = [
+    ['dashboard.students', stats.data.students],
+    ['dashboard.staff', stats.data.staff],
+    ['dashboard.groups', stats.data.groups],
+    ['dashboard.batches', stats.data.batches],
+    ['dashboard.assignments', stats.data.assignments],
+    ['dashboard.attemptsWeek', stats.data.attemptsWeek],
+  ];
+  return (
+    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {items.map(([key, value]) => (
+        <div key={key} className="flex flex-col gap-1 rounded-lg bg-white p-4 shadow-sm">
+          <dt className="text-xs font-bold tracking-[0.05em] text-text-muted uppercase">
+            {t(key)}
+          </dt>
+          <dd className="text-2xl font-bold text-primary">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+const PERIOD_LABEL: Record<Period, TranslationKey> = {
+  week: 'dashboard.week',
+  month: 'dashboard.month',
+  sixMonths: 'dashboard.sixMonths',
+};
+
+function LeaderboardCard() {
+  const { t } = useT();
+  const { academy, session } = useAcademy();
+  const [period, setPeriod] = useState<Period>('week');
+  // Tính một lần cho mỗi lựa chọn để khoá truy vấn ổn định giữa các lần render
+  const { from, to } = useMemo(() => periodRange(period), [period]);
+  const board = useLeaderboard(academy.id, from, to);
+  const ranked = board.data?.filter((r) => r.points > 0) ?? [];
+
+  return (
+    <Card title={t('dashboard.leaderboard')}>
+      <div role="tablist" className="flex gap-1">
+        {periods.map((p) => (
+          <button
+            key={p}
+            type="button"
+            role="tab"
+            aria-selected={period === p}
+            onClick={() => setPeriod(p)}
+            className="rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary"
+          >
+            {t(PERIOD_LABEL[p])}
+          </button>
+        ))}
+      </div>
+      {board.isPending ? (
+        <Spinner />
+      ) : board.error ? (
+        <ErrorText error={board.error} />
+      ) : ranked.length === 0 ? (
+        <p className="text-text-muted">{t('dashboard.empty')}</p>
+      ) : (
+        <ol className="flex flex-col gap-1">
+          {ranked.slice(0, 10).map((row, i) => (
+            <li
+              key={row.studentId}
+              className={`flex items-center gap-3 rounded-md px-3 py-2 ${
+                row.studentId === session.user.id ? 'bg-yellow/20' : ''
+              }`}
+            >
+              <span
+                className={`flex size-7 items-center justify-center rounded-full text-sm font-bold ${
+                  i < 3 ? 'bg-orange text-white' : 'bg-bg text-text-muted'
+                }`}
+              >
+                {i + 1}
+              </span>
+              <span className="flex-1 font-medium">{row.displayName}</span>
+              <span className="text-sm text-text-muted">
+                {t('dashboard.solved', { count: row.solved })}
+              </span>
+              <span className="w-20 text-right font-bold text-primary">
+                {t('dashboard.points', { count: row.points })}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+      <p className="text-xs text-text-muted">{t('dashboard.rule')}</p>
+    </Card>
+  );
+}
+
+function MembersCard() {
   const { t } = useT();
   const { academy } = useAcademy();
   const members = useMembers(academy.id);
+  return (
+    <Card title={t('academy.members')}>
+      {members.isPending ? (
+        <Spinner />
+      ) : members.error ? (
+        <ErrorText error={members.error} />
+      ) : (
+        <dl className="flex flex-col gap-3">
+          {academyRoles.map((role) => {
+            const list = members.data.filter((m) => m.role === role);
+            if (list.length === 0) return null;
+            return (
+              <div key={role}>
+                <dt className="text-xs font-bold tracking-[0.05em] text-text-muted uppercase">
+                  {t(`role.${role}`)} ({list.length})
+                </dt>
+                <dd>
+                  {list.map((m) => (
+                    <p key={m.profile.id}>
+                      {m.profile.display_name}
+                      {m.profile.username && (
+                        <span className="text-text-muted"> · @{m.profile.username}</span>
+                      )}
+                    </p>
+                  ))}
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
+      )}
+    </Card>
+  );
+}
+
+function InviteCoachCard() {
+  const { t } = useT();
+  const { academy } = useAcademy();
   const invite = useCreateInvitation(academy.id);
+  return (
+    <Card title={t('academy.inviteCoach')}>
+      <Button
+        variant="cta"
+        className="self-start"
+        disabled={invite.isPending}
+        onClick={() => invite.mutate({ role: 'coach' })}
+      >
+        {t('academy.inviteCoach')}
+      </Button>
+      <ErrorText error={invite.error} />
+      {invite.data && <InviteLink token={invite.data.token} />}
+    </Card>
+  );
+}
+
+function BrandingCard() {
+  const { t } = useT();
+  const { academy } = useAcademy();
+  const update = useUpdateAcademyProfile(academy.id);
+  const socials = (academy.socials ?? {}) as Partial<Record<(typeof socialKeys)[number], string>>;
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const text = (name: string) => String(form.get(name) ?? '');
+    update.mutate({
+      name: text('name'),
+      description: text('description'),
+      logoUrl: text('logoUrl'),
+      socials: Object.fromEntries(socialKeys.map((k) => [k, text(k)])),
+    });
+  }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card title={t('academy.members')}>
-        {members.isPending ? (
-          <Spinner />
-        ) : members.error ? (
-          <ErrorText error={members.error} />
-        ) : (
-          <dl className="flex flex-col gap-3">
-            {academyRoles.map((role) => {
-              const list = members.data.filter((m) => m.role === role);
-              if (list.length === 0) return null;
-              return (
-                <div key={role}>
-                  <dt className="text-xs font-bold tracking-[0.05em] text-text-muted uppercase">
-                    {t(`role.${role}`)} ({list.length})
-                  </dt>
-                  <dd>
-                    {list.map((m) => (
-                      <p key={m.profile.id}>
-                        {m.profile.display_name}
-                        {m.profile.username && (
-                          <span className="text-text-muted"> · @{m.profile.username}</span>
-                        )}
-                      </p>
-                    ))}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+    <Card title={t('branding.title')}>
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+        <Field label={t('academy.name')} name="name" defaultValue={academy.name} required />
+        <label className="flex flex-col gap-1 text-sm">
+          <span className="font-medium">{t('branding.description')}</span>
+          <textarea
+            name="description"
+            rows={3}
+            maxLength={2000}
+            defaultValue={academy.description}
+            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base"
+          />
+        </label>
+        <Field
+          label={t('branding.logoUrl')}
+          name="logoUrl"
+          type="url"
+          defaultValue={academy.logo_url ?? ''}
+        />
+        <fieldset className="grid gap-3 sm:grid-cols-2">
+          <legend className="mb-2 text-sm font-medium">{t('branding.socials')}</legend>
+          {socialKeys.map((k) => (
+            <Field
+              key={k}
+              label={t(`branding.${k}`)}
+              name={k}
+              type="url"
+              defaultValue={socials[k] ?? ''}
+            />
+          ))}
+        </fieldset>
+        <ErrorText error={update.error} />
+        {update.isSuccess && (
+          <p role="status" className="text-sm text-green">
+            {t('branding.saved')}
+          </p>
         )}
-      </Card>
-
-      {academy.role === 'owner' && (
-        <Card title={t('academy.inviteCoach')}>
-          <Button
-            variant="cta"
-            className="self-start"
-            disabled={invite.isPending}
-            onClick={() => invite.mutate({ role: 'coach' })}
-          >
-            {t('academy.inviteCoach')}
-          </Button>
-          <ErrorText error={invite.error} />
-          {invite.data && <InviteLink token={invite.data.token} />}
-        </Card>
-      )}
-    </div>
+        <Button type="submit" variant="cta" className="self-start" disabled={update.isPending}>
+          {t('common.save')}
+        </Button>
+      </form>
+    </Card>
   );
 }

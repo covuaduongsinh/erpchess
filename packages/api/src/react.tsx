@@ -1,4 +1,10 @@
 /** Hook React dùng chung cho web/desktop (react-dom) và mobile (react-native). */
+import type {
+  AcademyProfileInput,
+  LevelInput,
+  RatingCategory,
+  StudentCsvRow,
+} from '@erpchess/domain';
 import type { Session } from '@supabase/supabase-js';
 import {
   QueryClient,
@@ -68,6 +74,11 @@ export const queryKeys = {
     ['attempts', assignmentId, studentId ?? 'all'] as const,
   progress: (filter: { assignmentId?: string; academyId?: string }) =>
     ['progress', filter.assignmentId ?? '', filter.academyId ?? ''] as const,
+  levels: (academyId: string) => ['levels', academyId] as const,
+  ratings: (academyId: string) => ['ratings', academyId] as const,
+  leaderboard: (academyId: string, from: string, to: string) =>
+    ['leaderboard', academyId, from, to] as const,
+  stats: (academyId: string) => ['stats', academyId] as const,
 };
 
 export function useMyAcademies(userId: string | undefined) {
@@ -262,4 +273,153 @@ export function useSubmitAttempt(assignmentId: string) {
       void qc.invalidateQueries({ queryKey: ['progress'] });
     },
   });
+}
+
+// ── Quản trị học viện (Giai đoạn 5) ──
+
+export function useLevels(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.levels(academyId ?? ''),
+    queryFn: () => api.fetchLevels(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+/** Tạo, sửa, xoá cấp độ, tạo lộ trình mẫu; mọi thao tác làm mới danh sách cấp. */
+export function useLevelMutations(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const onSuccess = () => qc.invalidateQueries({ queryKey: queryKeys.levels(academyId) });
+  return {
+    create: useMutation({
+      mutationFn: ({ input, position }: { input: LevelInput; position: number }) =>
+        api.createLevel(client, academyId, input, position),
+      onSuccess,
+    }),
+    fromTemplate: useMutation({
+      mutationFn: (startPosition: number) =>
+        api.createLevelsFromTemplate(client, academyId, startPosition),
+      onSuccess,
+    }),
+    update: useMutation({
+      mutationFn: ({ id, input }: { id: string; input: LevelInput }) =>
+        api.updateLevel(client, id, input),
+      onSuccess,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => api.deleteLevel(client, id),
+      onSuccess: () => {
+        void onSuccess();
+        void qc.invalidateQueries({ queryKey: queryKeys.members(academyId) });
+        void qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) });
+      },
+    }),
+  };
+}
+
+export function useSetStudentLevel(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ studentId, levelId }: { studentId: string; levelId: string | null }) =>
+      api.setStudentLevel(client, academyId, studentId, levelId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.members(academyId) }),
+  });
+}
+
+export function useUpdateGroup(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, patch }: { id: string; patch: api.GroupPatch }) =>
+      api.updateGroup(client, id, patch),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) }),
+  });
+}
+
+export function useDeleteGroup(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.deleteGroup(client, id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) }),
+  });
+}
+
+export function useRatings(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.ratings(academyId ?? ''),
+    queryFn: () => api.fetchRatings(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useSetInitialRating(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      studentId,
+      category,
+      rating,
+    }: {
+      studentId: string;
+      category: RatingCategory;
+      rating: number;
+    }) => api.setInitialRating(client, academyId, studentId, category, rating),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.ratings(academyId) }),
+  });
+}
+
+export function useLeaderboard(academyId: string | undefined, from: Date, to: Date) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.leaderboard(academyId ?? '', from.toISOString(), to.toISOString()),
+    queryFn: () => api.fetchLeaderboard(client, academyId ?? '', from, to),
+    enabled: !!academyId,
+  });
+}
+
+export function useAcademyStats(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.stats(academyId ?? ''),
+    queryFn: () => api.fetchAcademyStats(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useUpdateAcademyProfile(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: AcademyProfileInput) => api.updateAcademyProfile(client, academyId, input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+/** Nhập học viên từ CSV; `progress` là số dòng đã xử lý để hiện thanh tiến độ. */
+export function useImportStudents(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const [progress, setProgress] = useState(0);
+  const mutation = useMutation({
+    mutationFn: ({
+      rows,
+      groups,
+    }: {
+      rows: readonly StudentCsvRow[];
+      groups: readonly { id: string; name: string }[];
+    }) => {
+      setProgress(0);
+      return api.importStudents(client, academyId, rows, groups, setProgress);
+    },
+    onSettled: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.members(academyId) });
+      void qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) });
+    },
+  });
+  return { ...mutation, progress };
 }
