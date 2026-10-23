@@ -18,7 +18,8 @@
       "!**/assets",
       "!**/database.types.ts",
       "!vendor",
-      "!packages/board-web/src/pieces"
+      "!packages/board-web/src/pieces",
+      "!**/_shared/chess-core"
     ]
   },
   "formatter": {

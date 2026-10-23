@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions;
 
-select plan(19);
+select plan(20);
 
 insert into auth.users (id, email, raw_user_meta_data) values
   ('00000000-0000-0000-0000-0000000000a1', 'owner.a@test.local', '{"display_name":"Owner A"}'),
@@ -78,6 +78,12 @@ select throws_ok($$
   insert into assignment_items (assignment_id, position, puzzle_id)
   values ('40000000-0000-0000-0000-000000000001', 1, '30000000-0000-0000-0000-0000000000b1')
 $$, '42501', null, 'không dùng được puzzle riêng của học viện khác');
+
+-- Client dùng insert(...).select() = INSERT … RETURNING: policy SELECT phải thấy dòng vừa thêm
+select lives_ok($$
+  insert into assignments (academy_id, title)
+  values ('10000000-0000-0000-0000-00000000000a', 'Bài 2') returning id
+$$, 'coach tạo bài tập kèm RETURNING (như supabase-js .insert().select())');
 
 -- ── Học viên ──
 select pg_temp.login('00000000-0000-0000-0000-0000000000a3');

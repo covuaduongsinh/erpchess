@@ -22,6 +22,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      - name: Mã chess-core chép sang Edge Function phải khớp bản gốc
+        run: node supabase/functions/sync-shared.mjs --check
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
