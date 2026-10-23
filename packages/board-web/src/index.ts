@@ -6,7 +6,9 @@ export {
   type Drawings,
   type Highlight,
 } from './Board';
+export { BoardEditor, type BoardEditorLabels } from './BoardEditor';
 export {
+  boardToFen,
   moveFocus,
   type Orientation,
   type PieceCode,

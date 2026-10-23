@@ -201,3 +201,17 @@ Kế hoạch con sẽ ghi vào `docs/plans/07-study-csdl-van.md`. Chia 4 PR, m�
   - `phase6.integration.test.ts` (2 test) đạt trên cloud: nhập 3 ván thì bỏ 1 ván hỏng; tìm theo tên giải; học viên không thấy CSDL riêng.
   - Thử trên Chrome bằng tài khoản chủ dự án: nhập 50 ván Lichess, không ván nào lỗi; xem ván và đi nước bằng phím. Sau đó đã xoá CSDL thử.
 - **Để sau:** tạo puzzle trực tiếp từ một thế trong ván (làm cùng trình soạn ở PR 6c); đồng bộ Chess.com; Masterbase.
+
+### PR 6c (2026-10-24)
+
+- **board-web:** `BoardEditor` gồm bảng quân, tẩy, thế ban đầu, xoá bàn, lượt đi, lật bàn; `boardToFen` tự suy ra quyền nhập thành.
+- **domain:** `parseMarkdown` chỉ trả cấu trúc dữ liệu, không sinh HTML thô, nên an toàn trước XSS; web và mobile dùng chung.
+- **Web:**
+  - Tab "Học liệu": danh sách theo phạm vi Của tôi / Học viện / Thư viện chung, tìm kiếm, bộ sưu tập.
+  - Trang tạo học liệu chỉ hỏi thông tin cơ bản, không lưu nháp rỗng.
+  - Trình soạn: danh sách hoạt động có đổi thứ tự, form theo 7 loại. Kiểm tra trước khi lưu: FEN hợp lệ; lời giải đúng luật và số nước lẻ; bài bắt quân phải giải được trong 40 nước; PGN đọc được. Video dán link hoặc tải lên Storage.
+- **Kiểm chứng:**
+  - Test: `BoardEditor`, `boardToFen`, `ActivityEditor`, `parseMarkdown`.
+  - Thử trên Chrome bằng tài khoản chủ dự án: tạo "Học liệu mẫu (Claude)", thêm puzzle từ thư viện, bắt quân, trắc nghiệm, đổi thứ tự, bị chặn khi lưu bàn trống.
+  - Phát hiện khi thử: hai nút "Lưu" dễ nhầm, nên đã đổi nút trong trình soạn thành "Lưu hoạt động".
+- **Để sau:** tạo puzzle từ một thế trong CSDL ván; tạo hoạt động "Xem ván" trực tiếp từ CSDL (hiện phải dán PGN).
