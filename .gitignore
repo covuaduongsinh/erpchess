@@ -30,3 +30,4 @@ packages/engine/wasm/.obj/
 
 # Log UCI thật dùng làm dữ liệu test (đã thay đường dẫn máy)
 !packages/engine/test/fixtures/*.log
+apps/web/public/engine/

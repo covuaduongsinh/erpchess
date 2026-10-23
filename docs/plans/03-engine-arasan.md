@@ -198,3 +198,45 @@ interface EngineAdapter {
 - **Header COOP/COEP:** `apps/web` cần `Cross-Origin-Opener-Policy: same-origin` và `Cross-Origin-Embedder-Policy: require-corp` (hoặc `credentialless`) để có SharedArrayBuffer. Phải kiểm tương thích với Supabase, Google Fonts, LiveKit.
 - **File NNUE:** tải file 25 MB (brotli khoảng 11 MB) từ Supabase Storage hoặc CDN, cache trong Cache API/OPFS, có thanh tiến độ.
 - **Đo lại tốc độ:** nps trên Chrome thật và khi đa luồng (`Threads` 2–4).
+
+## Kết quả bước 5 — Engine trong app web (2026-10-23)
+
+### Đã làm
+
+- **`@erpchess/engine/web`:**
+  - `engineSupport()`: kiểm WASM SIMD, `crossOriginIsolated`, SharedArrayBuffer; chọn số luồng = số nhân − 1, tối đa 4.
+  - `loadNetwork()`: tải NNUE có báo tiến độ, cache trong Cache Storage `erpchess-engine-v1`.
+  - `createBrowserEngine()`: nạp module Emscripten rồi gọi `UciEngine.init` (đặt NNUE file, Threads, Hash 64 MB).
+  - Bỏ Web Worker riêng: `main()` của engine đã chạy trên pthread, luồng UI không bị chặn.
+- **`apps/web`:**
+  - **COOP/COEP:** đặt `same-origin` / `require-corp` cho dev và preview (`vite.config.ts`) và production (`vercel.json`).
+  - **Font:** tự host Roboto qua `@fontsource/roboto` (COEP chặn Google Fonts dạng no-cors).
+  - **Tài nguyên engine:** script `engine:assets` chép `arasan-*.mjs/.wasm` cùng file NNUE vào `public/engine/` (gitignore).
+  - **Hook `useEngine()`:** dùng chung một engine cho cả app.
+  - **Trang `/engine` (phòng thử engine):** phân tích MultiPV 1–5, Dừng, bot theo các mức Elo.
+- **`apps/desktop`:** `tauri.conf.json` thêm `app.security.headers` (COOP/COEP) cho bản build.
+- **`apps/site`:** đổi sang `@fontsource/roboto`. `next/font/google` làm build CI hỏng vì phụ thuộc mạng.
+
+### Kiểm chứng trên Chrome thật (bản `vite preview`, máy Pentium G6405 2 nhân / 4 luồng)
+
+| Kiểm tra                          | Kết quả                                                                                                                                      |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Header                            | Server trả đúng COOP/COEP; `.wasm` phục vụ dạng `application/wasm`                                                                           |
+| Tải NNUE lần đầu                  | Thanh tiến độ hiển thị (vite preview nén nên chỉ hiện số MB đã tải)                                                                          |
+| Khởi động engine                  | "Arasan 26.1 · 3 luồng": `crossOriginIsolated`, SharedArrayBuffer và pthreads đều hoạt động                                                  |
+| Phân tích thế khởi đầu, MultiPV 3 | Độ sâu 18 sau khoảng 6 giây với khoảng **402k nps**; độ sâu 20 với khoảng 424k nps. 3 phương án e2e4 / c2c4 / d2d4 với +0,50 / +0,46 / +0,42 |
+| Nút Dừng                          | Dừng ngay, nút trở về "Phân tích"                                                                                                            |
+| Bot Elo 1000                      | Chọn `d2d3`, một nước thụ động đúng trình độ thấp                                                                                            |
+| Tải lại trang                     | Engine sẵn sàng ngay, NNUE lấy từ Cache Storage                                                                                              |
+| Console                           | Không có lỗi                                                                                                                                 |
+| Trang khác dưới COEP              | Đăng nhập Supabase và trang lớp học vẫn chạy bình thường                                                                                     |
+
+Ghi chú về tốc độ: đa luồng trên trình duyệt đạt khoảng 400k nps, gấp khoảng 4,8 lần mức 1 luồng đo trong Node (83k). Trên máy có nhiều nhân hơn, tốc độ sẽ cao hơn.
+
+### Chưa làm hoặc còn mở
+
+- **Desktop:** engine chưa được thử trong app Tauri đã build; mới thêm header và kiểm bằng `cargo check`. WebView2 dùng nhân Chromium nên dự kiến hoạt động như Chrome.
+- **Trình duyệt khác:** chưa thử Safari và Firefox.
+- **Kích thước bundle:** Vite cảnh báo bundle chính lớn hơn 500 kB, cần tách chunk thêm (Supabase, i18n).
+- **NNUE production:** chưa đưa file lên Supabase Storage hoặc CDN. Đặt `VITE_ENGINE_NETWORK_URL` khi deploy và bật nén brotli phía CDN.
+- **Bước 6:** sidecar native cho desktop (nhanh hơn WASM). **Bước 7:** module mobile.
