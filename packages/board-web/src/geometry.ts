@@ -85,3 +85,33 @@ export function moveFocus(square: string, key: string, orientation: Orientation)
   const r = Math.min(7, Math.max(0, row + d.row));
   return gridToSquare(c, r, orientation);
 }
+
+/**
+ * Ghép map ô → quân thành FEN. Quyền nhập thành suy ra từ vua/xe còn ở ô gốc; không có bắt tốt qua
+ * đường. Dùng cho trình dựng thế cờ.
+ */
+export function boardToFen(pieces: ReadonlyMap<string, PieceCode>, side: 'w' | 'b'): string {
+  const rows: string[] = [];
+  for (let rank = 8; rank >= 1; rank--) {
+    let row = '';
+    let empty = 0;
+    for (const file of FILES) {
+      const code = pieces.get(`${file}${rank}`);
+      if (!code) {
+        empty++;
+        continue;
+      }
+      if (empty) row += empty;
+      empty = 0;
+      row += code[0] === 'w' ? code[1] : code[1]?.toLowerCase();
+    }
+    rows.push(empty ? row + empty : row);
+  }
+  const at = (sq: string, code: PieceCode) => pieces.get(sq) === code;
+  let castling = '';
+  if (at('e1', 'wK') && at('h1', 'wR')) castling += 'K';
+  if (at('e1', 'wK') && at('a1', 'wR')) castling += 'Q';
+  if (at('e8', 'bK') && at('h8', 'bR')) castling += 'k';
+  if (at('e8', 'bK') && at('a8', 'bR')) castling += 'q';
+  return `${rows.join('/')} ${side} ${castling || '-'} - 0 1`;
+}

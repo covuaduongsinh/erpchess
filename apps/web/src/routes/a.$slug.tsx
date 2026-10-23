@@ -28,6 +28,7 @@ function AcademyLayout({ session }: { session: Session }) {
     { to: '/a/$slug', label: t('academy.overview'), exact: true },
     { to: '/a/$slug/groups', label: t('groups.title'), exact: false },
     { to: '/a/$slug/assignments', label: t('assignments.title'), exact: false },
+    { to: '/a/$slug/studies', label: t('studies.title'), exact: false },
     ...(isStaff(academy.role)
       ? [
           { to: '/a/$slug/students', label: t('students.title'), exact: false },
