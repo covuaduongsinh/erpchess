@@ -5,5 +5,6 @@ export * from './databases';
 export * from './practice';
 export * from './queries';
 export * from './quizzes';
+export * from './room';
 export { isStudentEmail, STUDENT_EMAIL_DOMAIN, studentEmail } from './student';
 export * from './studies';

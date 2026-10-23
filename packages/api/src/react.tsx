@@ -38,6 +38,14 @@ import * as practice from './practice';
 import * as api from './queries';
 import { ApiError } from './queries';
 import * as quizzes from './quizzes';
+import {
+  ClassroomRoom,
+  type RoomChat,
+  type RoomPeer,
+  type RoomSnapshot,
+  type RoomStatus,
+  snapshotFromState,
+} from './room';
 import type { StudyScope } from './studies';
 import * as studies from './studies';
 
@@ -1093,4 +1101,72 @@ export function useGroupMemberships(academyId: string | undefined) {
     queryFn: () => api.fetchGroupMemberships(client, academyId ?? ''),
     enabled: !!academyId,
   });
+}
+
+/**
+ * Phòng học trực tuyến: kết nối hai kênh Realtime của lớp, trả ảnh chụp bàn cờ, chat, người trong
+ * phòng. `runner` (HLV phụ trách / owner) điều khiển bàn cờ; người khác chỉ theo dõi.
+ */
+export function useClassroomRoom(
+  classroom: classrooms.ClassroomSummary | undefined,
+  me: { userId: string; name: string } | undefined,
+  runner: boolean,
+) {
+  const client = useErpClient();
+  const [room, setRoom] = useState<ClassroomRoom | null>(null);
+  const [snapshot, setSnapshot] = useState<RoomSnapshot | null>(null);
+  const [chat, setChat] = useState<RoomChat[]>([]);
+  const [peers, setPeers] = useState<RoomPeer[]>([]);
+  const [status, setStatus] = useState<RoomStatus>('connecting');
+  const [error, setError] = useState<unknown>(null);
+  const classroomId = classroom?.id;
+  // Ảnh chụp ban đầu chỉ đọc khi vào phòng; sau đó bàn cờ đi theo kênh Realtime
+  const previous = useRef<Promise<unknown>>(Promise.resolve());
+  const initialState = useRef(classroom?.state);
+  initialState.current ??= classroom?.state;
+  const userId = me?.userId;
+  const name = me?.name;
+
+  useEffect(() => {
+    if (!classroomId || !userId) return;
+    let alive = true;
+    const r = new ClassroomRoom(
+      client,
+      classroomId,
+      { userId, name: name ?? '' },
+      runner,
+      snapshotFromState(initialState.current),
+      {
+        onSnapshot: (s) => alive && setSnapshot(s),
+        onChat: (m) => alive && setChat((c) => (c.some((x) => x.id === m.id) ? c : [...c, m])),
+        onPeers: (p) => alive && setPeers(p),
+        onStatus: (s) => alive && setStatus(s),
+      },
+    );
+    setRoom(r);
+    setSnapshot(r.snapshot);
+    void classrooms
+      .fetchClassroomEvents(client, classroomId)
+      .then((events) => {
+        if (!alive) return;
+        setChat(
+          events
+            .filter((e) => e.kind === 'chat')
+            .map((e) => e.payload as unknown as RoomChat)
+            .filter((m) => typeof m?.text === 'string'),
+        );
+      })
+      .catch(() => undefined);
+    // Kênh cùng topic: phải đợi lần ngắt trước (StrictMode, đổi tên) xong mới vào lại, nếu không
+    // removeChannel của lần trước sẽ gỡ luôn kênh mới
+    void previous.current
+      .then(() => (alive ? r.connect() : undefined))
+      .catch((err) => alive && setError(err));
+    return () => {
+      alive = false;
+      previous.current = r.disconnect().catch(() => undefined);
+    };
+  }, [client, classroomId, userId, name, runner]);
+
+  return { room, snapshot, chat, peers, status, error };
 }

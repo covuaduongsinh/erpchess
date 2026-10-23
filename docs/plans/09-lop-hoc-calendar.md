@@ -94,3 +94,16 @@ Kế hoạch con ghi vào `docs/plans/09-lop-hoc-calendar.md`. Chia 3 PR, mỗi 
   - pgTAP `07_classrooms_rls.sql`: 22/22 trên cloud.
   - `phase8.integration.test.ts` đạt: chuỗi 4 buổi chung `series_id`, 5 sự kiện Calendar, học viên chỉ thấy buổi được giao, `classroom_join` → `present` / `null`, staff sửa điểm danh.
   - Chrome: tạo "Lớp mẫu (Claude)" offline lặp 2 tuần (không giao cho ai), xem chi tiết, Calendar hiện 18:00–19:30; khai lịch trống thứ Hai 17:00–20:00 rồi tìm HLV trống (18:30 bận vì trùng lớp; 19:30 + 30 phút còn trống), sau đó gỡ khung giờ thử.
+
+### PR 8b (2026-10-25)
+
+- **Migration `…0013_classroom_realtime.sql`:** policy trên `realtime.messages`. Realtime chỉ kiểm quyền khi vào kênh (không theo từng tin) nên tách hai kênh riêng tư:
+  - `classroom:<id>`: chat, xin đi quân, xin đồng bộ, presence — ai xem được lớp đều gửi được.
+  - `classroom:<id>:board`: ảnh chụp bàn cờ — chỉ HLV phụ trách / owner gửi được.
+- **`packages/api/src/room.ts`:** `ClassroomRoom` (HLV kiểm nước bằng chess-core rồi phát ảnh chụp; lùi nước, đặt FEN, trao quyền đi quân, mũi tên/tô ô, bật engine; ghi `classrooms.state` giãn nhịp và `classroom_events`), `replayAt` (có test). Hook `useClassroomRoom` đợi lần ngắt kết nối trước xong mới vào lại (tránh `removeChannel` gỡ nhầm kênh mới khi React chạy effect hai lần).
+- **Web:** `/classes/$id/room` (bàn cờ, công cụ HLV, người trong phòng, chat, engine dùng lại `EngineLines`; học viên vào phòng tự điểm danh) và `/classes/$id/replay`.
+- **Mobile:** màn `classes/[id]`: lớp offline tự điểm danh; lớp online theo dõi bàn cờ, đi quân khi được trao quyền, chat. Mũi tên chỉ hiện trên web.
+- **Kiểm chứng:**
+  - pgTAP `08_classroom_realtime.sql`: 8/8 (học viên không gửi được lên kênh bàn cờ, người ngoài lớp không nghe/gửi được, topic sai bị từ chối).
+  - `phase8.integration.test.ts` thêm test hai client trên cloud: học viên nhận nước của HLV, xin đi quân bị bỏ qua khi chưa được trao quyền và được chấp nhận sau khi trao, chat tới HLV, phòng không được giao thì không vào được.
+  - Chrome: "Phòng mẫu (Claude)" (không giao ai) — đi e4, chat, bật engine (độ sâu 14), xem lại 2 bước, vào lại phòng thì bàn cờ khôi phục từ `classrooms.state`.

@@ -49,7 +49,7 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | quiz.auto              | Quiz tự động theo cấp độ                                          | 7   | 🟡         | Tạo theo cấp độ bằng tay (`pickAutoQuizPuzzles`); tự chạy theo lịch ở Giai đoạn 12                      |
 | quiz.leaderboard       | Bảng xếp hạng quiz, góc nhìn học viên                             | 7   | ✅         | `quiz_leaderboard`, góc nhìn học viên web + mobile, điểm quiz vào bảng xếp hạng học viện                |
 | practice.chapters      | Chương luyện thế cờ riêng tư/công khai                            | 7   | ✅         | `practice_chapters`/`positions`/`results`, luyện với máy trên web; mobile chỉ xem                       |
-| class.live             | Lớp online: bàn cờ đồng bộ, HLV điều khiển, chat                  | 8   | ⬜         |                                                                                                         |
+| class.live             | Lớp online: bàn cờ đồng bộ, HLV điều khiển, chat                  | 8   | ✅         | Realtime riêng tư 2 kênh, HLV là nguồn sự thật, trao quyền, mũi tên, engine, chat, xem lại              |
 | class.video            | Video/âm thanh, 3 chế độ                                          | 8   | ⬜         |                                                                                                         |
 | class.offline          | Lớp offline: điểm danh                                            | 8   | ✅         | `classrooms` kind offline, `classroom_attendance`, `classroom_join` tự ghi có mặt/đi muộn               |
 | class.schedule         | Lịch lặp lại; Calendar với lịch trống của HLV                     | 8   | ✅         | Chuỗi lặp theo lịch Batch/tự chọn (`expandSchedule`), `/calendar` + `coach_availability`, tìm HLV trống |
@@ -74,4 +74,4 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | ops.whatsapp           | Thông báo WhatsApp                                                | —   | ⛔         | Thay bằng email/push; Zalo OA để sau                                                                    |
 | ops.razorpay           | Razorpay                                                          | —   | ⛔         | Thị trường Ấn Độ                                                                                        |
 
-**Tổng kết:** 59 claim, gồm 29 đã đóng, 10 một phần, 18 mở, 2 ngoài phạm vi.
+**Tổng kết:** 59 claim, gồm 30 đã đóng, 10 một phần, 17 mở, 2 ngoài phạm vi.
