@@ -1,14 +1,16 @@
 import {
+  useAssignments,
   useCreateGroup,
   useCreateStudent,
   useGroups,
   useMembers,
   useMyAcademies,
+  useProgress,
   useSession,
 } from '@erpchess/api/react';
 import { academyRoles, isStaff } from '@erpchess/domain';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
@@ -43,6 +45,8 @@ export default function AcademyScreen() {
     >
       <Stack.Screen options={{ title: academy.name }} />
       <Muted>{t(`role.${academy.role}`)}</Muted>
+
+      <AssignmentsCard academyId={academy.id} slug={academy.slug} staff={staff} />
 
       <Card title={t('groups.title')}>
         {groups.isPending ? (
@@ -210,6 +214,68 @@ function CreateStudentForm({
           )
         }
       />
+    </Card>
+  );
+}
+
+function AssignmentsCard({
+  academyId,
+  slug,
+  staff,
+}: {
+  academyId: string;
+  slug: string;
+  staff: boolean;
+}) {
+  const { t } = useT();
+  const assignments = useAssignments(academyId);
+  const progress = useProgress({ academyId });
+
+  return (
+    <Card title={t('assignments.title')}>
+      {assignments.isPending ? (
+        <Spinner />
+      ) : assignments.error ? (
+        <ErrorText error={assignments.error} />
+      ) : assignments.data.length === 0 ? (
+        <Muted>{staff ? t('assignments.none') : t('assignments.noneStudent')}</Muted>
+      ) : (
+        assignments.data.map((a) => {
+          // RLS: học viên chỉ thấy dòng của mình, phụ huynh thấy của con
+          const rows = progress.data?.filter((p) => p.assignmentId === a.id) ?? [];
+          const done = rows.filter((r) => r.totalItems > 0 && r.solvedItems === r.totalItems);
+          const mine = !staff && rows.length === 1 ? rows[0] : undefined;
+          return (
+            <Pressable
+              key={a.id}
+              accessibilityRole="link"
+              onPress={() =>
+                router.push({ pathname: '/assignments/[id]', params: { id: a.id, slug } })
+              }
+              style={styles.row}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.text, { fontWeight: '500', color: colors.primary }]}>
+                  {a.title}
+                </Text>
+                <Muted>{t('assignments.puzzleCount', { count: a.itemCount })}</Muted>
+              </View>
+              <Text style={styles.hint}>
+                {staff
+                  ? `${t('assignments.done')}: ${done.length}/${rows.length}`
+                  : mine
+                    ? mine.solvedItems === mine.totalItems
+                      ? t('assignments.done')
+                      : t('assignments.progress', {
+                          solved: mine.solvedItems,
+                          total: mine.totalItems,
+                        })
+                    : ''}
+              </Text>
+            </Pressable>
+          );
+        })
+      )}
     </Card>
   );
 }

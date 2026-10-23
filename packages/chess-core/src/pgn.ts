@@ -2,7 +2,7 @@
  * Đọc/ghi PGN có biến lồng nhau, chú thích ({…} và ;), NAG ($n và !, ?, !!, ??, !?, ?!).
  * chess.js chỉ đọc được nhánh chính nên phần này tự viết, dùng GameTree để kiểm luật đi.
  */
-import { START_FEN } from './rules';
+import { isValidFen, START_FEN } from './rules';
 import { GameTree, type MoveNode, type TreeNode } from './tree';
 
 const SUFFIX_NAGS: Record<string, number> = { '!': 1, '?': 2, '!!': 3, '??': 4, '!?': 5, '?!': 6 };
@@ -102,6 +102,7 @@ type GameState = {
 
 function startGame(tags: Record<string, string>): GameState {
   const fen = tags.FEN?.trim() || START_FEN;
+  if (!isValidFen(fen)) throw new PgnError(`FEN trong PGN không hợp lệ: ${fen}`);
   const tree = new GameTree(fen);
   tree.headers = { ...tags };
   return { tree, cursor: tree.root, stack: [] };

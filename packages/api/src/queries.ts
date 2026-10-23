@@ -5,8 +5,10 @@
 import {
   type AcademyRole,
   type CreateAcademyInput,
+  type CreateAssignmentInput,
   type CreateStudentInput,
   createAcademySchema,
+  createAssignmentSchema,
   createStudentSchema,
   groupNameSchema,
   pinSchema,
@@ -24,6 +26,27 @@ export type Profile = Tables<'profiles'>;
 export type MyAcademy = Academy & { role: AcademyRole };
 export type Member = { role: AcademyRole; profile: Profile };
 export type GroupWithCount = Group & { studentCount: number };
+export type PuzzleRow = Tables<'puzzles'>;
+export type Assignment = Tables<'assignments'>;
+export type AssignmentSummary = Assignment & {
+  itemCount: number;
+  targets: { group_id: string | null; student_id: string | null }[];
+};
+export type AssignmentItem = { id: string; position: number; puzzle: PuzzleRow };
+export type AssignmentDetail = Assignment & { items: AssignmentItem[] };
+export type AttemptSummary = Pick<
+  Tables<'attempts'>,
+  'item_id' | 'student_id' | 'solved' | 'tries' | 'time_ms' | 'moves' | 'updated_at'
+>;
+export type ProgressRow = {
+  assignmentId: string;
+  studentId: string;
+  totalItems: number;
+  solvedItems: number;
+  tries: number;
+  timeMs: number;
+  lastActivity: string | null;
+};
 
 type Result = { data: unknown; error: { message: string; code?: string } | null };
 /** Kiểu `data` của nhánh thành công (nhánh có `error: null`). */
@@ -206,4 +229,170 @@ export async function createInvitation(
 
 export async function acceptInvitation(client: ErpClient, token: string): Promise<string> {
   return unwrap(await client.rpc('accept_invitation', { p_token: token }));
+}
+
+// ── Puzzle ──
+
+/** Thư viện chung (academy_id null) cộng puzzle riêng của học viện. */
+export async function fetchPuzzles(client: ErpClient, academyId: string): Promise<PuzzleRow[]> {
+  return unwrap(
+    await client
+      .from('puzzles')
+      .select('*')
+      .or(`academy_id.is.null,academy_id.eq.${academyId}`)
+      .order('rating')
+      .order('title'),
+  );
+}
+
+// ── Bài tập ──
+
+/** Bài tập người dùng được xem trong học viện (RLS lọc: staff thấy hết, học viên thấy bài được giao). */
+export async function fetchAssignments(
+  client: ErpClient,
+  academyId: string,
+): Promise<AssignmentSummary[]> {
+  const rows = unwrap(
+    await client
+      .from('assignments')
+      .select('*, assignment_items(count), assignment_targets(group_id, student_id)')
+      .eq('academy_id', academyId)
+      .order('created_at', { ascending: false }),
+  );
+  return rows.map(({ assignment_items, assignment_targets, ...a }) => ({
+    ...a,
+    itemCount: assignment_items[0]?.count ?? 0,
+    targets: assignment_targets,
+  }));
+}
+
+export async function fetchAssignment(client: ErpClient, id: string): Promise<AssignmentDetail> {
+  const row = unwrap(
+    await client
+      .from('assignments')
+      .select('*, assignment_items(id, position, puzzle:puzzles(*))')
+      .eq('id', id)
+      .single(),
+  );
+  const { assignment_items, ...a } = row;
+  return {
+    ...a,
+    items: assignment_items
+      .flatMap((i) => (i.puzzle ? [{ id: i.id, position: i.position, puzzle: i.puzzle }] : []))
+      .sort((x, y) => x.position - y.position),
+  };
+}
+
+/**
+ * Tạo bài tập kèm đối tượng giao và danh sách puzzle. PostgREST không có transaction nhiều bảng,
+ * nên nếu bước sau lỗi thì xoá bài vừa tạo (cascade) để không để lại bài dở dang.
+ */
+export async function createAssignment(
+  client: ErpClient,
+  input: CreateAssignmentInput,
+): Promise<Assignment> {
+  const v = createAssignmentSchema.parse(input);
+  const assignment = unwrap(
+    await client
+      .from('assignments')
+      .insert({
+        academy_id: v.academyId,
+        title: v.title,
+        instructions: v.instructions || null,
+        due_at: v.dueAt ?? null,
+      })
+      .select()
+      .single(),
+  );
+  try {
+    unwrap(
+      await client
+        .from('assignment_targets')
+        .insert([
+          ...v.groupIds.map((group_id) => ({ assignment_id: assignment.id, group_id })),
+          ...v.studentIds.map((student_id) => ({ assignment_id: assignment.id, student_id })),
+        ]),
+    );
+    unwrap(
+      await client.from('assignment_items').insert(
+        v.puzzleIds.map((puzzle_id, position) => ({
+          assignment_id: assignment.id,
+          position,
+          puzzle_id,
+        })),
+      ),
+    );
+  } catch (err) {
+    await client.from('assignments').delete().eq('id', assignment.id);
+    throw err;
+  }
+  return assignment;
+}
+
+export async function deleteAssignment(client: ErpClient, id: string) {
+  unwrap(await client.from('assignments').delete().eq('id', id));
+}
+
+/** Các lần làm bài của một bài tập; truyền `studentId` để chỉ lấy của một học viên. */
+export async function fetchAttempts(
+  client: ErpClient,
+  itemIds: string[],
+  studentId?: string,
+): Promise<AttemptSummary[]> {
+  if (itemIds.length === 0) return [];
+  let q = client
+    .from('attempts')
+    .select('item_id, student_id, solved, tries, time_ms, moves, updated_at')
+    .in('item_id', itemIds);
+  if (studentId) q = q.eq('student_id', studentId);
+  return unwrap(await q);
+}
+
+export async function fetchProgress(
+  client: ErpClient,
+  filter: { assignmentId?: string; academyId?: string },
+): Promise<ProgressRow[]> {
+  let q = client.from('assignment_progress').select('*');
+  if (filter.assignmentId) q = q.eq('assignment_id', filter.assignmentId);
+  if (filter.academyId) q = q.eq('academy_id', filter.academyId);
+  const rows = unwrap(await q);
+  return rows.flatMap((r) =>
+    r.assignment_id && r.student_id
+      ? [
+          {
+            assignmentId: r.assignment_id,
+            studentId: r.student_id,
+            totalItems: r.total_items ?? 0,
+            solvedItems: r.solved_items ?? 0,
+            tries: r.tries ?? 0,
+            timeMs: Number(r.time_ms ?? 0),
+            lastActivity: r.last_activity,
+          },
+        ]
+      : [],
+  );
+}
+
+export type SubmitAttemptResult = {
+  solved: boolean;
+  solvedThisTry: boolean;
+  tries: number;
+  results: { uci: string; ok: boolean }[];
+};
+
+/** Nộp một lượt thử; server (Edge Function `submit-attempt`) chấm lại và lưu. */
+export async function submitAttempt(
+  client: ErpClient,
+  itemId: string,
+  moves: { uci: string; ms: number }[],
+): Promise<SubmitAttemptResult> {
+  const { data, error } = await client.functions.invoke<SubmitAttemptResult>('submit-attempt', {
+    body: { itemId, moves },
+  });
+  if (error) {
+    const payload = await readErrorBody(error);
+    throw new ApiError(payload?.message ?? payload?.error ?? error.message, payload?.error);
+  }
+  if (!data) throw new ApiError('Không nhận được phản hồi');
+  return data;
 }

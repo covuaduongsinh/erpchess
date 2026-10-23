@@ -1,0 +1,106 @@
+[
+  {
+    "title": "Chiếu hết hàng cuối",
+    "fen": "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+    "moves": ["d1d8"],
+    "themes": ["backRankMate", "mateIn1"],
+    "rating": 500,
+    "eval": "#1"
+  },
+  {
+    "title": "Chiếu hết ngạt thở",
+    "fen": "6rk/6pp/7N/8/8/8/8/6K1 w - - 0 1",
+    "moves": ["h6f7"],
+    "themes": ["smotheredMate", "mateIn1"],
+    "rating": 700,
+    "eval": "#1"
+  },
+  {
+    "title": "Chiếu hết kiểu Học trò",
+    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+    "moves": ["h5f7"],
+    "themes": ["opening", "mateIn1"],
+    "rating": 450,
+    "eval": "#1"
+  },
+  {
+    "title": "Chiếu hết kiểu Kẻ ngốc",
+    "fen": "rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2",
+    "moves": ["d8h4"],
+    "themes": ["opening", "mateIn1"],
+    "rating": 400,
+    "eval": "#1"
+  },
+  {
+    "title": "Xe chiếu hết, vua yểm trợ",
+    "fen": "1k6/8/1K6/8/8/8/8/7R w - - 0 1",
+    "moves": ["h1h8"],
+    "themes": ["endgame", "mateIn1"],
+    "rating": 450,
+    "eval": "#1"
+  },
+  {
+    "title": "Xe xiên vua để ăn hậu",
+    "fen": "3q4/8/8/3k4/8/8/8/R5K1 w - - 0 1",
+    "moves": ["a1d1", "d5e6", "d1d8"],
+    "themes": ["skewer", "rook"],
+    "rating": 800,
+    "eval": "3052cp"
+  },
+  {
+    "title": "Hậu và xe chiếu hết",
+    "fen": "6k1/5p1p/6p1/8/8/8/5PPP/3QR1K1 w - - 0 1",
+    "moves": ["d1d4", "f7f6", "e1e7", "g6g5", "d4d8"],
+    "themes": ["backRankMate", "mateIn3"],
+    "rating": 900,
+    "eval": "#3"
+  },
+  {
+    "title": "Mã chiếu hết ngạt thở (xe và hậu gần đó)",
+    "fen": "r5rk/6pp/7N/8/8/8/1Q4PP/6K1 w - - 0 1",
+    "moves": ["h6f7"],
+    "themes": ["smotheredMate", "mateIn1"],
+    "rating": 1200,
+    "eval": "#1"
+  },
+  {
+    "title": "Tốt phong cấp",
+    "fen": "8/4P1k1/8/8/8/8/8/4K3 w - - 0 1",
+    "moves": ["e7e8q"],
+    "themes": ["promotion", "endgame"],
+    "rating": 450,
+    "eval": "4566cp"
+  },
+  {
+    "title": "Xe chiếu hết hành lang",
+    "fen": "7k/6pp/8/8/8/8/8/R5K1 w - - 0 1",
+    "moves": ["a1a8"],
+    "themes": ["backRankMate", "mateIn1"],
+    "rating": 400,
+    "eval": "#1"
+  },
+  {
+    "title": "Ăn xe không được bảo vệ (tàn cuộc)",
+    "fen": "8/8/4k3/8/3pK3/8/3R4/3r4 w - - 0 1",
+    "moves": ["d2d1", "e6d6", "d1d4"],
+    "themes": ["hangingPiece", "endgame"],
+    "rating": 1000,
+    "eval": "3048cp"
+  },
+  {
+    "title": "Hậu chiếu hết hàng cuối",
+    "fen": "6k1/5ppp/8/6N1/8/8/5PPP/3Q2K1 w - - 0 1",
+    "moves": ["d1d8"],
+    "themes": ["mateIn1"],
+    "rating": 1000,
+    "eval": "#1"
+  },
+  {
+    "title": "Hai xe chiếu hết hàng cuối",
+    "fen": "3r2k1/5ppp/8/8/8/8/5PPP/3RR1K1 w - - 0 1",
+    "moves": ["d1d8"],
+    "themes": ["backRankMate", "mateIn1"],
+    "rating": 850,
+    "eval": "#1"
+  }
+]

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   academySlugSchema,
+  createAssignmentSchema,
   createStudentSchema,
   isStaff,
   pinSchema,
@@ -49,5 +50,24 @@ describe('domain', () => {
     expect(isStaff('coach')).toBe(true);
     expect(isStaff('student')).toBe(false);
     expect(isStaff(null)).toBe(false);
+  });
+
+  it('createAssignmentSchema cần puzzle và đối tượng giao', () => {
+    const base = {
+      academyId: '10000000-0000-4000-8000-00000000000a',
+      title: ' Bài 1 ',
+      puzzleIds: ['30000000-0000-4000-8000-000000000001'],
+    };
+    const ok = createAssignmentSchema.parse({
+      ...base,
+      groupIds: ['20000000-0000-4000-8000-0000000000a1'],
+      dueAt: '2026-10-30T10:00:00.000Z',
+    });
+    expect(ok.title).toBe('Bài 1');
+    expect(ok.studentIds).toEqual([]);
+    expect(() => createAssignmentSchema.parse(base)).toThrow(/targets/);
+    expect(() =>
+      createAssignmentSchema.parse({ ...base, puzzleIds: [], studentIds: [base.academyId] }),
+    ).toThrow(/puzzles/);
   });
 });

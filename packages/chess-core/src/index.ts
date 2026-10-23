@@ -8,6 +8,13 @@ export {
   puzzleSideToMove,
 } from './puzzle';
 export {
+  type PuzzleSession,
+  playPuzzleMove,
+  retryPuzzleSession,
+  type SessionMove,
+  startPuzzleSession,
+} from './puzzle-session';
+export {
   type Color,
   type GameStatus,
   gameStatus,

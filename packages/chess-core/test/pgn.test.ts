@@ -56,6 +56,14 @@ d5 1/2-1/2
     expect(games[1]?.mainline().map((n) => n.san)).toEqual(['e4', 'Kd7']);
   });
 
+  it('từ chối tag FEN là thế bất hợp lệ (bên không đi đang bị chiếu)', () => {
+    expect(() =>
+      parsePgn(`[FEN "7k/8/6K1/8/8/2B5/8/5B2 w - - 0 1"]
+
+1. Bg7+ *`),
+    ).toThrow(/FEN/);
+  });
+
   it('báo lỗi rõ khi có nước không hợp lệ', () => {
     expect(() => parsePgn('1. e4 e5 2. Ke3')).toThrow(/Ke3/);
   });

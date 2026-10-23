@@ -20,6 +20,9 @@ import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
 import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
+import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
+import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
+import { Route as ASlugAssignmentsNewRouteImport } from './routes/a.$slug.assignments.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,6 +79,21 @@ const ASlugStudentsRoute = ASlugStudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => ASlugRoute,
 } as any)
+const ASlugAssignmentsIndexRoute = ASlugAssignmentsIndexRouteImport.update({
+  id: '/assignments/',
+  path: '/assignments/',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugAssignmentsIdRoute = ASlugAssignmentsIdRouteImport.update({
+  id: '/assignments/$id',
+  path: '/assignments/$id',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugAssignmentsNewRoute = ASlugAssignmentsNewRouteImport.update({
+  id: '/assignments/new',
+  path: '/assignments/new',
+  getParentRoute: () => ASlugRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +107,9 @@ export interface FileRoutesByFullPath {
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
+  '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
+  '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -101,6 +122,9 @@ export interface FileRoutesByTo {
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug': typeof ASlugIndexRoute
+  '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
+  '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/assignments': typeof ASlugAssignmentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -115,6 +139,9 @@ export interface FileRoutesById {
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
+  '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
+  '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -130,6 +157,9 @@ export interface FileRouteTypes {
     | '/a/$slug/groups'
     | '/a/$slug/students'
     | '/a/$slug/'
+    | '/a/$slug/assignments/$id'
+    | '/a/$slug/assignments/new'
+    | '/a/$slug/assignments/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,6 +172,9 @@ export interface FileRouteTypes {
     | '/a/$slug/groups'
     | '/a/$slug/students'
     | '/a/$slug'
+    | '/a/$slug/assignments/$id'
+    | '/a/$slug/assignments/new'
+    | '/a/$slug/assignments'
   id:
     | '__root__'
     | '/'
@@ -155,6 +188,9 @@ export interface FileRouteTypes {
     | '/a/$slug/groups'
     | '/a/$slug/students'
     | '/a/$slug/'
+    | '/a/$slug/assignments/$id'
+    | '/a/$slug/assignments/new'
+    | '/a/$slug/assignments/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -247,6 +283,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ASlugStudentsRouteImport
       parentRoute: typeof ASlugRoute
     }
+    '/a/$slug/assignments/': {
+      id: '/a/$slug/assignments/'
+      path: '/assignments'
+      fullPath: '/a/$slug/assignments/'
+      preLoaderRoute: typeof ASlugAssignmentsIndexRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/assignments/$id': {
+      id: '/a/$slug/assignments/$id'
+      path: '/assignments/$id'
+      fullPath: '/a/$slug/assignments/$id'
+      preLoaderRoute: typeof ASlugAssignmentsIdRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/assignments/new': {
+      id: '/a/$slug/assignments/new'
+      path: '/assignments/new'
+      fullPath: '/a/$slug/assignments/new'
+      preLoaderRoute: typeof ASlugAssignmentsNewRouteImport
+      parentRoute: typeof ASlugRoute
+    }
   }
 }
 
@@ -254,12 +311,18 @@ interface ASlugRouteChildren {
   ASlugGroupsRoute: typeof ASlugGroupsRoute
   ASlugStudentsRoute: typeof ASlugStudentsRoute
   ASlugIndexRoute: typeof ASlugIndexRoute
+  ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
+  ASlugAssignmentsNewRoute: typeof ASlugAssignmentsNewRoute
+  ASlugAssignmentsIndexRoute: typeof ASlugAssignmentsIndexRoute
 }
 
 const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugGroupsRoute: ASlugGroupsRoute,
   ASlugStudentsRoute: ASlugStudentsRoute,
   ASlugIndexRoute: ASlugIndexRoute,
+  ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,
+  ASlugAssignmentsNewRoute: ASlugAssignmentsNewRoute,
+  ASlugAssignmentsIndexRoute: ASlugAssignmentsIndexRoute,
 }
 
 const ASlugRouteWithChildren = ASlugRoute._addFileChildren(ASlugRouteChildren)
