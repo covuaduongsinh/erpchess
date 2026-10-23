@@ -63,7 +63,15 @@ export function ActivityPlayer({ studyId, activity, attempt }: Props) {
         <Mcq
           payload={activity.payload}
           disabled={solved || locked || submit.isPending}
-          result={submit.data}
+          feedback={
+            submit.data
+              ? submit.data.solvedThisTry
+                ? 'right'
+                : submit.data.solved
+                  ? null
+                  : 'wrong'
+              : null
+          }
           onChoose={(choice) => send({ choice })}
         />
       );
@@ -165,15 +173,16 @@ function Viewed({
   );
 }
 
-function Mcq({
+/** Trắc nghiệm; `feedback` là kết quả lần chọn gần nhất (đúng/sai), dùng chung cho Study và Quiz. */
+export function Mcq({
   payload,
   disabled,
-  result,
+  feedback,
   onChoose,
 }: {
-  payload: ActivityPayload<'mcq'>;
+  payload: { question: string; fen?: string; options: string[] };
   disabled: boolean;
-  result?: SubmitActivityResult;
+  feedback?: 'right' | 'wrong' | null;
   onChoose: (choice: number) => void;
 }) {
   const { t } = useT();
@@ -188,8 +197,8 @@ function Mcq({
       )}
       <div className="grid gap-2 sm:grid-cols-2">
         {payload.options.map((opt, i) => {
-          const wrong = result && picked === i && !result.solvedThisTry;
-          const right = result?.solvedThisTry && picked === i;
+          const wrong = feedback === 'wrong' && picked === i;
+          const right = feedback === 'right' && picked === i;
           return (
             <button
               // biome-ignore lint/suspicious/noArrayIndexKey: thứ tự phương án cố định
@@ -207,19 +216,18 @@ function Mcq({
           );
         })}
       </div>
-      {result && !result.solvedThisTry && !result.solved && (
-        <p className="font-medium text-danger">{t('puzzle.wrong')}</p>
-      )}
+      {feedback === 'wrong' && <p className="font-medium text-danger">{t('puzzle.wrong')}</p>}
     </div>
   );
 }
 
-function Capture({
+/** Bắt quân trên bàn không vua; gọi `onSolved` với chuỗi nước khi đã bắt hết. */
+export function Capture({
   payload,
   disabled,
   onSolved,
 }: {
-  payload: ActivityPayload<'capture'>;
+  payload: { fen: string };
   disabled: boolean;
   onSolved: (moves: string[]) => void;
 }) {

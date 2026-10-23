@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDuration, localInputToIso } from './format';
+import { formatDuration, formatRemaining, localInputToIso } from './format';
 
 describe('format', () => {
   it('formatDuration', () => {
@@ -13,5 +13,12 @@ describe('format', () => {
     expect(localInputToIso('')).toBeUndefined();
     expect(localInputToIso('không phải ngày')).toBeUndefined();
     expect(localInputToIso('2026-10-30T10:00')).toMatch(/^2026-10-30T\d\d:00:00\.000Z$/);
+  });
+
+  it('formatRemaining', () => {
+    expect(formatRemaining(-5)).toBe('0:00');
+    expect(formatRemaining(249_000)).toBe('4:09');
+    expect(formatRemaining(3_909_000)).toBe('1:05:09');
+    expect(formatRemaining(2 * 86_400_000 + 3_909_000)).toBe('2d 1:05:09');
   });
 });

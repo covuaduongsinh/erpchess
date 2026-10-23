@@ -1,4 +1,6 @@
 /** Hook React dùng chung cho web/desktop (react-dom) và mobile (react-native). */
+
+import { playMove } from '@erpchess/chess-core';
 import type {
   AcademyProfileInput,
   ActivityInput,
@@ -16,10 +18,19 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { createContext, type ReactNode, use, useEffect, useState } from 'react';
+import {
+  createContext,
+  type ReactNode,
+  use,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import type { ErpClient } from './client';
 import * as databases from './databases';
 import * as api from './queries';
+import { ApiError } from './queries';
 import * as quizzes from './quizzes';
 import type { StudyScope } from './studies';
 import * as studies from './studies';
@@ -749,4 +760,67 @@ export function useAnswerQuiz(quizId: string) {
       }
     },
   });
+}
+
+export type QuizPuzzleState = {
+  fen: string;
+  step: number;
+  status: 'playing' | 'waiting' | 'wrong' | 'solved';
+  lastMove?: readonly [string, string];
+};
+
+/**
+ * Puzzle trong quiz: client không có lời giải. Mỗi nước gửi lên `quiz-answer`; đúng thì server trả
+ * nước đáp để đi tiếp, sai thì hết lượt thử. Lệch bước (mở lại trang giữa chừng) thì bắt đầu lại.
+ */
+export function useQuizPuzzle(quizId: string, itemId: string, startFen: string, solved: boolean) {
+  const answer = useAnswerQuiz(quizId);
+  const [state, setState] = useState<QuizPuzzleState>({
+    fen: startFen,
+    step: 0,
+    status: solved ? 'solved' : 'playing',
+  });
+  const since = useRef(Date.now());
+
+  const retry = useCallback(() => {
+    since.current = Date.now();
+    setState({ fen: startFen, step: 0, status: 'playing' });
+  }, [startFen]);
+
+  const play = useCallback(
+    async (uci: string) => {
+      if (state.status !== 'playing') return;
+      const played = playMove(state.fen, uci);
+      if (!played) return;
+      const squares = [played.uci.slice(0, 2), played.uci.slice(2, 4)] as const;
+      setState((s) => ({ ...s, fen: played.fen, status: 'waiting', lastMove: squares }));
+      const ms = Date.now() - since.current;
+      since.current = Date.now();
+      try {
+        const r = await answer.mutateAsync({
+          itemId,
+          answer: { move: played.uci, step: state.step },
+          ms,
+        });
+        if (r.solved) setState((s) => ({ ...s, status: 'solved' }));
+        else if (!r.ok) setState((s) => ({ ...s, status: 'wrong' }));
+        else if (r.reply) {
+          const reply = playMove(played.fen, r.reply);
+          setState({
+            fen: reply?.fen ?? played.fen,
+            step: r.step ?? state.step + 2,
+            status: 'playing',
+            lastMove: reply ? [reply.uci.slice(0, 2), reply.uci.slice(2, 4)] : squares,
+          });
+        }
+      } catch (err) {
+        if (err instanceof ApiError && err.code === 'out_of_sync') retry();
+        else
+          setState((s) => ({ ...s, fen: state.fen, status: 'playing', lastMove: state.lastMove }));
+      }
+    },
+    [answer, itemId, retry, state],
+  );
+
+  return { state, play, retry, error: answer.error };
 }

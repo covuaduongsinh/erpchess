@@ -109,6 +109,14 @@ function StudyRow({ study }: { study: StudySummary }) {
         {editable && (
           <>
             <Link
+              to="/a/$slug/quizzes/new"
+              params={{ slug: academy.slug }}
+              search={{ studyId: study.id }}
+              className="rounded-md px-3 py-1 text-sm font-medium text-primary hover:bg-primary/10"
+            >
+              {t('quiz.fromThisStudy')}
+            </Link>
+            <Link
               to="/a/$slug/studies/$id/edit"
               params={{ slug: academy.slug, id: study.id }}
               className="rounded-md px-3 py-1 text-sm font-medium text-primary hover:bg-primary/10"

@@ -25,6 +25,9 @@ import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
 import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
 import { Route as ASlugAssignmentsNewRouteImport } from './routes/a.$slug.assignments.new'
+import { Route as ASlugQuizzesIndexRouteImport } from './routes/a.$slug.quizzes.index'
+import { Route as ASlugQuizzesIdRouteImport } from './routes/a.$slug.quizzes.$id'
+import { Route as ASlugQuizzesNewRouteImport } from './routes/a.$slug.quizzes.new'
 import { Route as ASlugStudiesIndexRouteImport } from './routes/a.$slug.studies.index'
 import { Route as ASlugStudiesNewRouteImport } from './routes/a.$slug.studies.new'
 import { Route as ASlugStudiesIdIndexRouteImport } from './routes/a.$slug.studies.$id.index'
@@ -110,6 +113,21 @@ const ASlugAssignmentsNewRoute = ASlugAssignmentsNewRouteImport.update({
   path: '/assignments/new',
   getParentRoute: () => ASlugRoute,
 } as any)
+const ASlugQuizzesIndexRoute = ASlugQuizzesIndexRouteImport.update({
+  id: '/quizzes/',
+  path: '/quizzes/',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugQuizzesIdRoute = ASlugQuizzesIdRouteImport.update({
+  id: '/quizzes/$id',
+  path: '/quizzes/$id',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugQuizzesNewRoute = ASlugQuizzesNewRouteImport.update({
+  id: '/quizzes/new',
+  path: '/quizzes/new',
+  getParentRoute: () => ASlugRoute,
+} as any)
 const ASlugStudiesIndexRoute = ASlugStudiesIndexRouteImport.update({
   id: '/studies/',
   path: '/studies/',
@@ -147,8 +165,11 @@ export interface FileRoutesByFullPath {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/quizzes/$id': typeof ASlugQuizzesIdRoute
+  '/a/$slug/quizzes/new': typeof ASlugQuizzesNewRoute
   '/a/$slug/studies/new': typeof ASlugStudiesNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/quizzes/': typeof ASlugQuizzesIndexRoute
   '/a/$slug/studies/': typeof ASlugStudiesIndexRoute
   '/a/$slug/studies/$id/edit': typeof ASlugStudiesIdEditRoute
   '/a/$slug/studies/$id/': typeof ASlugStudiesIdIndexRoute
@@ -168,8 +189,11 @@ export interface FileRoutesByTo {
   '/a/$slug': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/quizzes/$id': typeof ASlugQuizzesIdRoute
+  '/a/$slug/quizzes/new': typeof ASlugQuizzesNewRoute
   '/a/$slug/studies/new': typeof ASlugStudiesNewRoute
   '/a/$slug/assignments': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/quizzes': typeof ASlugQuizzesIndexRoute
   '/a/$slug/studies': typeof ASlugStudiesIndexRoute
   '/a/$slug/studies/$id/edit': typeof ASlugStudiesIdEditRoute
   '/a/$slug/studies/$id': typeof ASlugStudiesIdIndexRoute
@@ -191,8 +215,11 @@ export interface FileRoutesById {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/quizzes/$id': typeof ASlugQuizzesIdRoute
+  '/a/$slug/quizzes/new': typeof ASlugQuizzesNewRoute
   '/a/$slug/studies/new': typeof ASlugStudiesNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/quizzes/': typeof ASlugQuizzesIndexRoute
   '/a/$slug/studies/': typeof ASlugStudiesIndexRoute
   '/a/$slug/studies/$id/edit': typeof ASlugStudiesIdEditRoute
   '/a/$slug/studies/$id/': typeof ASlugStudiesIdIndexRoute
@@ -215,8 +242,11 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/quizzes/$id'
+    | '/a/$slug/quizzes/new'
     | '/a/$slug/studies/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/quizzes/'
     | '/a/$slug/studies/'
     | '/a/$slug/studies/$id/edit'
     | '/a/$slug/studies/$id/'
@@ -236,8 +266,11 @@ export interface FileRouteTypes {
     | '/a/$slug'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/quizzes/$id'
+    | '/a/$slug/quizzes/new'
     | '/a/$slug/studies/new'
     | '/a/$slug/assignments'
+    | '/a/$slug/quizzes'
     | '/a/$slug/studies'
     | '/a/$slug/studies/$id/edit'
     | '/a/$slug/studies/$id'
@@ -258,8 +291,11 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/quizzes/$id'
+    | '/a/$slug/quizzes/new'
     | '/a/$slug/studies/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/quizzes/'
     | '/a/$slug/studies/'
     | '/a/$slug/studies/$id/edit'
     | '/a/$slug/studies/$id/'
@@ -390,6 +426,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ASlugAssignmentsNewRouteImport
       parentRoute: typeof ASlugRoute
     }
+    '/a/$slug/quizzes/': {
+      id: '/a/$slug/quizzes/'
+      path: '/quizzes'
+      fullPath: '/a/$slug/quizzes/'
+      preLoaderRoute: typeof ASlugQuizzesIndexRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/quizzes/$id': {
+      id: '/a/$slug/quizzes/$id'
+      path: '/quizzes/$id'
+      fullPath: '/a/$slug/quizzes/$id'
+      preLoaderRoute: typeof ASlugQuizzesIdRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/quizzes/new': {
+      id: '/a/$slug/quizzes/new'
+      path: '/quizzes/new'
+      fullPath: '/a/$slug/quizzes/new'
+      preLoaderRoute: typeof ASlugQuizzesNewRouteImport
+      parentRoute: typeof ASlugRoute
+    }
     '/a/$slug/studies/': {
       id: '/a/$slug/studies/'
       path: '/studies'
@@ -429,8 +486,11 @@ interface ASlugRouteChildren {
   ASlugIndexRoute: typeof ASlugIndexRoute
   ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
   ASlugAssignmentsNewRoute: typeof ASlugAssignmentsNewRoute
+  ASlugQuizzesIdRoute: typeof ASlugQuizzesIdRoute
+  ASlugQuizzesNewRoute: typeof ASlugQuizzesNewRoute
   ASlugStudiesNewRoute: typeof ASlugStudiesNewRoute
   ASlugAssignmentsIndexRoute: typeof ASlugAssignmentsIndexRoute
+  ASlugQuizzesIndexRoute: typeof ASlugQuizzesIndexRoute
   ASlugStudiesIndexRoute: typeof ASlugStudiesIndexRoute
   ASlugStudiesIdEditRoute: typeof ASlugStudiesIdEditRoute
   ASlugStudiesIdIndexRoute: typeof ASlugStudiesIdIndexRoute
@@ -444,8 +504,11 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugIndexRoute: ASlugIndexRoute,
   ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,
   ASlugAssignmentsNewRoute: ASlugAssignmentsNewRoute,
+  ASlugQuizzesIdRoute: ASlugQuizzesIdRoute,
+  ASlugQuizzesNewRoute: ASlugQuizzesNewRoute,
   ASlugStudiesNewRoute: ASlugStudiesNewRoute,
   ASlugAssignmentsIndexRoute: ASlugAssignmentsIndexRoute,
+  ASlugQuizzesIndexRoute: ASlugQuizzesIndexRoute,
   ASlugStudiesIndexRoute: ASlugStudiesIndexRoute,
   ASlugStudiesIdEditRoute: ASlugStudiesIdEditRoute,
   ASlugStudiesIdIndexRoute: ASlugStudiesIdIndexRoute,
