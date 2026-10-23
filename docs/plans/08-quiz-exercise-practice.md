@@ -144,3 +144,19 @@ Kế hoạch con ghi vào `docs/plans/08-quiz-exercise-practice.md`. Chia 3 PR, 
     - trắc nghiệm 1 lượt bị chặn lần 2;
     - bảng xếp hạng 28 điểm;
     - quiz quá hạn trả `quiz_closed`.
+
+### PR 7b (2026-10-24)
+- **Web:**
+  - Tab "Quiz": lọc Đang mở / Sắp mở / Đã đóng.
+  - Trang tạo quiz: lấy câu từ học liệu (thêm từng câu hoặc cả học liệu) hoặc từ thư viện puzzle; mở cho cả học viện hoặc giao lớp/học viên; giờ mở và hạn chót.
+  - Trang quiz:
+    - HLV xem bảng kết quả học viên × câu, bảng xếp hạng, làm thử, xoá.
+    - Học viên làm bài có đếm ngược.
+  - Học liệu có nút "Tạo quiz".
+- **`useQuizPuzzle`** (api/react): bàn cờ đi theo kết quả chấm của server, tự bắt đầu lại khi lệch bước.
+- **Tách component dùng chung:** `PuzzlePicker`, `TargetPicker`, `Mcq`, `Capture`.
+- **Mobile:** thẻ "Quiz" ở màn học viện; màn `quizzes/[id]` làm bài (puzzle chấm từng nước ở server) kèm bảng xếp hạng.
+- **Bảng xếp hạng học viện** (migration `…0010`): cộng thêm điểm quiz.
+- **Kiểm chứng:**
+  - Chrome (tài khoản chủ dự án): tạo "Quiz mẫu (Claude)" từ học liệu mẫu (4 câu). Làm thử: đi sai thì server báo "Chưa đúng"; thử lại và đi Xe d8 chiếu hết thì đạt "Đã xong · 10 điểm".
+  - Test tích hợp phase5 và phase7 đạt trên cloud; toàn repo xanh.

@@ -8,10 +8,18 @@ import {
   useMembers,
   useMyAcademies,
   useProgress,
+  useQuizzes,
   useSession,
   useStudies,
 } from '@erpchess/api/react';
-import { academyRoles, isStaff, type Period, periodRange, periods } from '@erpchess/domain';
+import {
+  academyRoles,
+  isStaff,
+  type Period,
+  periodRange,
+  periods,
+  quizStatus,
+} from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
@@ -54,6 +62,8 @@ export default function AcademyScreen() {
       <LeaderboardCard academyId={academy.id} userId={session?.user.id} />
 
       <AssignmentsCard academyId={academy.id} slug={academy.slug} staff={staff} />
+
+      <QuizzesCard academyId={academy.id} />
 
       <StudiesCard academyId={academy.id} userId={session?.user.id} />
 
@@ -411,6 +421,36 @@ function StudiesCard({ academyId, userId }: { academyId: string; userId?: string
         ))
       )}
       <ErrorText error={academyStudies.error ?? publicStudies.error} />
+    </Card>
+  );
+}
+
+function QuizzesCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const quizzes = useQuizzes(academyId);
+  const list = (quizzes.data ?? []).filter((q) => quizStatus(q.starts_at, q.due_at) !== 'closed');
+  return (
+    <Card title={t('quiz.title')}>
+      {quizzes.isPending ? (
+        <Spinner />
+      ) : list.length === 0 ? (
+        <Muted>{t('quiz.none')}</Muted>
+      ) : (
+        list.map((q) => (
+          <Pressable
+            key={q.id}
+            accessibilityRole="link"
+            onPress={() => router.push({ pathname: '/quizzes/[id]', params: { id: q.id } })}
+            style={styles.row}
+          >
+            <Text style={[styles.text, { flex: 1, fontWeight: '500', color: colors.primary }]}>
+              {q.title}
+            </Text>
+            <Text style={styles.hint}>{t(`quiz.status_${quizStatus(q.starts_at, q.due_at)}`)}</Text>
+          </Pressable>
+        ))
+      )}
+      <ErrorText error={quizzes.error} />
     </Card>
   );
 }

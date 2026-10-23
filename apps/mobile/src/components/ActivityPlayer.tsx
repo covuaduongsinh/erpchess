@@ -10,7 +10,7 @@ import {
   playCaptureMove,
   sideToMove,
 } from '@erpchess/chess-core';
-import type { Activity, ActivityPayload } from '@erpchess/domain';
+import type { Activity } from '@erpchess/domain';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
 import * as WebBrowser from 'expo-web-browser';
 import { useMemo, useRef, useState } from 'react';
@@ -155,13 +155,14 @@ export function ActivityPlayer({
   );
 }
 
-function Mcq({
+/** Trắc nghiệm (dùng chung cho Study và Quiz). */
+export function Mcq({
   payload,
   disabled,
   wrong,
   onChoose,
 }: {
-  payload: ActivityPayload<'mcq'>;
+  payload: { question: string; fen?: string; options: string[] };
   disabled: boolean;
   wrong: boolean;
   onChoose: (choice: number) => void;
@@ -194,12 +195,13 @@ function Mcq({
   );
 }
 
-function Capture({
+/** Bắt quân (dùng chung cho Study và Quiz). */
+export function Capture({
   payload,
   disabled,
   onSolved,
 }: {
-  payload: ActivityPayload<'capture'>;
+  payload: { fen: string };
   disabled: boolean;
   onSolved: (moves: string[]) => void;
 }) {
