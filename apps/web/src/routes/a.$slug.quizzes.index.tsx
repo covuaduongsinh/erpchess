@@ -1,8 +1,9 @@
 import { useQuizzes } from '@erpchess/api/react';
 import { isStaff, type QuizStatus, quizStatus } from '@erpchess/domain';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { Card, ErrorText, Spinner } from '../components/ui';
+import { AutoQuiz } from '../components/quiz/AutoQuiz';
+import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -26,6 +27,23 @@ function QuizzesPage() {
   const staff = isStaff(academy.role);
   const quizzes = useQuizzes(academy.id);
   const [filter, setFilter] = useState<Filter>('all');
+  const [auto, setAuto] = useState(false);
+  const navigate = useNavigate();
+
+  if (auto) {
+    return (
+      <div className="flex max-w-xl flex-col gap-3">
+        <Button variant="ghost" className="self-start" onClick={() => setAuto(false)}>
+          ← {t('quiz.title')}
+        </Button>
+        <AutoQuiz
+          onDone={(id) =>
+            void navigate({ to: '/a/$slug/quizzes/$id', params: { slug: academy.slug, id } })
+          }
+        />
+      </div>
+    );
+  }
 
   return (
     <Card title={t('quiz.title')}>
@@ -45,11 +63,16 @@ function QuizzesPage() {
           ))}
         </div>
         {staff && (
+          <Button variant="ghost" className="ml-auto" onClick={() => setAuto(true)}>
+            {t('quiz.auto')}
+          </Button>
+        )}
+        {staff && (
           <Link
             to="/a/$slug/quizzes/new"
             params={{ slug: academy.slug }}
             search={{}}
-            className="ml-auto rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
+            className="rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
           >
             {t('quiz.create')}
           </Link>

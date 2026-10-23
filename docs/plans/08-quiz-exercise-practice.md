@@ -161,3 +161,18 @@ Kế hoạch con ghi vào `docs/plans/08-quiz-exercise-practice.md`. Chia 3 PR, 
 - **Kiểm chứng:**
   - Chrome (tài khoản chủ dự án): tạo "Quiz mẫu (Claude)" từ học liệu mẫu (4 câu). Làm thử: đi sai thì server báo "Chưa đúng"; thử lại và đi Xe d8 chiếu hết thì đạt "Đã xong · 10 điểm".
   - Test tích hợp phase5 và phase7 đạt trên cloud; toàn repo xanh.
+
+### PR 7c (2026-10-24)
+
+- **Migration `…0011_exercises_practice.sql`:**
+  - `exercises`, `exercise_items` (chỉ staff), `assignments.exercise_id`.
+  - `practice_chapters` (riêng tư hoặc chia sẻ), `practice_positions`, `practice_results` (học viên tự ghi khi đọc được chương).
+- **Web:**
+  - Bài tập có hai tab Đã giao / Exercise; Exercise soạn một lần, giao nhiều lần (chép puzzle sang `assignment_items`).
+  - Quiz tự động: chọn cấp độ, lấy ngẫu nhiên N puzzle trong khoảng rating (`pickAutoQuizPuzzles`), giao cho học viên ở cấp đó. Chưa chạy theo lịch (Giai đoạn 12).
+  - Tab "Luyện tập": tạo chương, thêm thế bằng `BoardEditor`, luyện với máy bằng `EngineGame`, HLV xem kết quả gần đây.
+- **Mobile:** thẻ "Luyện tập" liệt kê chương, ghi chú luyện trên web/desktop.
+- **Kiểm chứng:**
+  - pgTAP `06_exercises_practice_rls.sql`: 16/16 trên cloud.
+  - `phase7.integration.test.ts` (2 test) đạt trên cloud: Exercise giao 2 lần, học viên không đọc được Exercise, chương riêng tư bị chặn, kết quả luyện tập HLV đọc được.
+  - Chrome: tạo "Chương luyện mẫu (Claude)" với thế "Hậu chiếu hết (Claude)", chơi với máy, xin thua thì kết quả hiện ở bảng HLV; tạo "Exercise mẫu (Claude)" (chưa giao). Quiz tự động chỉ mở xem, không tạo để tránh giao bài cho học viên thật.

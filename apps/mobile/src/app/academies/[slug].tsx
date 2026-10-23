@@ -7,6 +7,7 @@ import {
   useLevels,
   useMembers,
   useMyAcademies,
+  usePracticeChapters,
   useProgress,
   useQuizzes,
   useSession,
@@ -64,6 +65,7 @@ export default function AcademyScreen() {
       <AssignmentsCard academyId={academy.id} slug={academy.slug} staff={staff} />
 
       <QuizzesCard academyId={academy.id} />
+      <PracticeCard academyId={academy.id} />
 
       <StudiesCard academyId={academy.id} userId={session?.user.id} />
 
@@ -451,6 +453,31 @@ function QuizzesCard({ academyId }: { academyId: string }) {
         ))
       )}
       <ErrorText error={quizzes.error} />
+    </Card>
+  );
+}
+
+/** Practice: chỉ liệt kê chương; luyện với máy dùng trên web/desktop (engine mobile ở bước sau). */
+function PracticeCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const chapters = usePracticeChapters(academyId);
+  if (!chapters.isPending && (chapters.data?.length ?? 0) === 0) return null;
+  return (
+    <Card title={t('practice.title')}>
+      {chapters.isPending ? (
+        <Spinner />
+      ) : (
+        chapters.data?.map((c) => (
+          <View key={c.id} style={styles.row}>
+            <Text style={[styles.text, { flex: 1 }]}>{c.title}</Text>
+            <Text style={styles.hint}>
+              {t('practice.positionCount', { count: c.positionCount })}
+            </Text>
+          </View>
+        ))
+      )}
+      <Muted>{t('practice.webOnly')}</Muted>
+      <ErrorText error={chapters.error} />
     </Card>
   );
 }

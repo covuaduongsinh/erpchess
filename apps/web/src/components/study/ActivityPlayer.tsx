@@ -313,7 +313,8 @@ function Video({ url }: { url: string }) {
 
 type EngineState = 'loading' | 'ready' | 'unavailable';
 
-function EngineGame({
+/** Đánh với máy Arasan từ một thế cờ; báo kết quả khi ván kết thúc hoặc xin thua. */
+export function EngineGame({
   payload,
   disabled,
   onFinish,

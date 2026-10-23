@@ -211,6 +211,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           due_at: string | null
+          exercise_id: string | null
           id: string
           instructions: string | null
           title: string
@@ -220,6 +221,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           due_at?: string | null
+          exercise_id?: string | null
           id?: string
           instructions?: string | null
           title: string
@@ -229,6 +231,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           due_at?: string | null
+          exercise_id?: string | null
           id?: string
           instructions?: string | null
           title?: string
@@ -239,6 +242,13 @@ export type Database = {
             columns: ["academy_id"]
             isOneToOne: false
             referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
             referencedColumns: ["id"]
           },
           {
@@ -362,6 +372,94 @@ export type Database = {
             columns: ["database_id"]
             isOneToOne: false
             referencedRelation: "game_databases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exercise_items: {
+        Row: {
+          exercise_id: string
+          position: number
+          puzzle_id: string
+        }
+        Insert: {
+          exercise_id: string
+          position: number
+          puzzle_id: string
+        }
+        Update: {
+          exercise_id?: string
+          position?: number
+          puzzle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_items_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_items_puzzle_id_fkey"
+            columns: ["puzzle_id"]
+            isOneToOne: false
+            referencedRelation: "puzzles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exercises: {
+        Row: {
+          academy_id: string
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          level_id: string | null
+          tags: string[]
+          title: string
+        }
+        Insert: {
+          academy_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          level_id?: string | null
+          tags?: string[]
+          title: string
+        }
+        Update: {
+          academy_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          level_id?: string | null
+          tags?: string[]
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercises_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercises_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercises_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "levels"
             referencedColumns: ["id"]
           },
         ]
@@ -693,6 +791,134 @@ export type Database = {
           },
           {
             foreignKeyName: "parent_links_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      practice_chapters: {
+        Row: {
+          academy_id: string
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          title: string
+          visibility: string
+        }
+        Insert: {
+          academy_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          title: string
+          visibility?: string
+        }
+        Update: {
+          academy_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          title?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "practice_chapters_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "practice_chapters_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      practice_positions: {
+        Row: {
+          chapter_id: string
+          elo: number | null
+          fen: string
+          goal: string
+          id: string
+          position: number
+          side: string
+          title: string
+        }
+        Insert: {
+          chapter_id: string
+          elo?: number | null
+          fen: string
+          goal?: string
+          id?: string
+          position: number
+          side: string
+          title?: string
+        }
+        Update: {
+          chapter_id?: string
+          elo?: number | null
+          fen?: string
+          goal?: string
+          id?: string
+          position?: number
+          side?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "practice_positions_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "practice_chapters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      practice_results: {
+        Row: {
+          created_at: string
+          id: string
+          moves: number
+          position_id: string
+          result: string
+          student_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          moves?: number
+          position_id: string
+          result: string
+          student_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          moves?: number
+          position_id?: string
+          result?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "practice_results_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "practice_positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "practice_results_student_id_fkey"
             columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "profiles"

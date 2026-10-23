@@ -4,7 +4,9 @@ import { playMove } from '@erpchess/chess-core';
 import type {
   AcademyProfileInput,
   ActivityInput,
+  ExerciseInput,
   LevelInput,
+  PracticePositionInput,
   QuizInput,
   RatingCategory,
   StudentCsvRow,
@@ -29,6 +31,7 @@ import {
 } from 'react';
 import type { ErpClient } from './client';
 import * as databases from './databases';
+import * as practice from './practice';
 import * as api from './queries';
 import { ApiError } from './queries';
 import * as quizzes from './quizzes';
@@ -823,4 +826,110 @@ export function useQuizPuzzle(quizId: string, itemId: string, startFen: string, 
   );
 
   return { state, play, retry, error: answer.error };
+}
+
+// ── Exercise, Practice (Giai đoạn 7c) ──
+
+export function useExercises(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['exercises', academyId ?? ''],
+    queryFn: () => practice.fetchExercises(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useExerciseMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => {
+    void qc.invalidateQueries({ queryKey: ['exercises', academyId] });
+    void qc.invalidateQueries({ queryKey: queryKeys.assignments(academyId) });
+    void qc.invalidateQueries({ queryKey: ['progress'] });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (input: Omit<ExerciseInput, 'academyId'>) =>
+        practice.createExercise(client, userId, { ...input, academyId }),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => practice.deleteExercise(client, id),
+      onSuccess: refresh,
+    }),
+    assign: useMutation({
+      mutationFn: (v: {
+        exercise: practice.ExerciseSummary;
+        dueAt?: string;
+        groupIds: string[];
+        studentIds: string[];
+      }) => practice.assignExercise(client, v.exercise, v),
+      onSuccess: refresh,
+    }),
+  };
+}
+
+export function usePracticeChapters(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['practice', academyId ?? ''],
+    queryFn: () => practice.fetchPracticeChapters(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function usePracticeChapter(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['practice-chapter', id ?? ''],
+    queryFn: () => practice.fetchPracticeChapter(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function usePracticeResults(positionIds: readonly string[]) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['practice-results', ...positionIds],
+    queryFn: () => practice.fetchPracticeResults(client, positionIds),
+    enabled: positionIds.length > 0,
+  });
+}
+
+export function usePracticeMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = (chapterId?: string) => {
+    void qc.invalidateQueries({ queryKey: ['practice', academyId] });
+    if (chapterId) void qc.invalidateQueries({ queryKey: ['practice-chapter', chapterId] });
+  };
+  return {
+    createChapter: useMutation({
+      mutationFn: (v: {
+        title: string;
+        description?: string;
+        visibility?: 'private' | 'academy';
+      }) => practice.createPracticeChapter(client, academyId, userId, v),
+      onSuccess: () => refresh(),
+    }),
+    deleteChapter: useMutation({
+      mutationFn: (id: string) => practice.deletePracticeChapter(client, id),
+      onSuccess: () => refresh(),
+    }),
+    addPosition: useMutation({
+      mutationFn: (v: { chapterId: string; input: PracticePositionInput; position: number }) =>
+        practice.addPracticePosition(client, v.chapterId, v.input, v.position),
+      onSuccess: (_, v) => refresh(v.chapterId),
+    }),
+    deletePosition: useMutation({
+      mutationFn: (v: { chapterId: string; id: string }) =>
+        practice.deletePracticePosition(client, v.id),
+      onSuccess: (_, v) => refresh(v.chapterId),
+    }),
+    recordResult: useMutation({
+      mutationFn: (v: { positionId: string; result: 'win' | 'draw' | 'loss'; moves: number }) =>
+        practice.recordPracticeResult(client, userId, v.positionId, v.result, v.moves),
+      onSuccess: () => qc.invalidateQueries({ queryKey: ['practice-results'] }),
+    }),
+  };
 }

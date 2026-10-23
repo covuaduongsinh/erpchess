@@ -18,6 +18,8 @@ export const quizInputSchema = z
     levelId: z.uuid().nullable().default(null),
     topics: z.array(z.string().trim().min(1).max(40)).max(20).default([]),
     openToAll: z.boolean().default(false),
+    /** Sinh tự động theo cấp độ */
+    auto: z.boolean().default(false),
     startsAt: z.iso.datetime({ offset: true }).nullable().default(null),
     dueAt: z.iso.datetime({ offset: true }).nullable().default(null),
     groupIds: z.array(z.uuid()).default([]),

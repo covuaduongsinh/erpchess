@@ -107,6 +107,7 @@ export async function createQuiz(
         level_id: v.levelId,
         topics: v.topics,
         open_to_all: v.openToAll,
+        auto: v.auto,
         starts_at: v.startsAt,
         due_at: v.dueAt,
         created_by: userId,

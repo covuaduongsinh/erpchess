@@ -2,6 +2,8 @@ import type { AssignmentSummary, ProgressRow } from '@erpchess/api';
 import { useAssignments, useProgress } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
+import { Exercises } from '../components/assign/Exercises';
 import { Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
@@ -17,9 +19,36 @@ function AssignmentsPage() {
   const staff = isStaff(academy.role);
   const assignments = useAssignments(academy.id);
   const progress = useProgress({ academyId: academy.id });
+  const [tab, setTab] = useState<'assigned' | 'exercises'>('assigned');
+
+  const tabs = staff && (
+    <div role="tablist" className="flex gap-1">
+      {(['assigned', 'exercises'] as const).map((k) => (
+        <button
+          key={k}
+          type="button"
+          role="tab"
+          aria-selected={tab === k}
+          onClick={() => setTab(k)}
+          className="rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary"
+        >
+          {k === 'assigned' ? t('exercise.tabAssigned') : t('exercise.title')}
+        </button>
+      ))}
+    </div>
+  );
+  if (staff && tab === 'exercises') {
+    return (
+      <div className="flex flex-col gap-4">
+        {tabs}
+        <Exercises />
+      </div>
+    );
+  }
 
   return (
     <Card title={t('assignments.title')}>
+      {tabs}
       {staff && (
         <Link
           to="/a/$slug/assignments/new"
