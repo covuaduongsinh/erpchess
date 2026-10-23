@@ -32,6 +32,7 @@ function AcademyLayout({ session }: { session: Session }) {
       ? [
           { to: '/a/$slug/students', label: t('students.title'), exact: false },
           { to: '/a/$slug/levels', label: t('levels.title'), exact: false },
+          { to: '/a/$slug/database', label: t('database.title'), exact: false },
         ]
       : []),
   ] as const;

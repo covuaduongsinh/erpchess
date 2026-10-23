@@ -58,6 +58,9 @@ export function ErrorText({ error }: { error: unknown }) {
   } else if (error instanceof Error) {
     const code = (error as { code?: string }).code;
     if (code === 'username_taken') message = t('students.usernameTaken');
+    else if (code === 'lichess_not_found') message = t('database.lichessNotFound');
+    else if (code === 'lichess_unreachable' || code === 'lichess_error')
+      message = t('database.lichessUnavailable');
     else if (code === '23505') message = t('academy.slugTaken');
     else if (/invalid login credentials/i.test(error.message))
       message = t('auth.invalidCredentials');

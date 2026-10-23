@@ -17,6 +17,7 @@ import {
 } from '@tanstack/react-query';
 import { createContext, type ReactNode, use, useEffect, useState } from 'react';
 import type { ErpClient } from './client';
+import * as databases from './databases';
 import * as api from './queries';
 import type { StudyScope } from './studies';
 import * as studies from './studies';
@@ -578,4 +579,69 @@ export function useCollectionMutations(academyId: string, userId: string) {
       onSuccess,
     }),
   };
+}
+
+// ── Kho ván (Giai đoạn 6b) ──
+
+export const databaseKeys = {
+  list: (academyId: string) => ['databases', academyId] as const,
+  games: (databaseId: string, search: string, page: number) =>
+    ['database-games', databaseId, search, page] as const,
+  pgn: (gameId: string) => ['game-pgn', gameId] as const,
+};
+
+export function useDatabases(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: databaseKeys.list(academyId ?? ''),
+    queryFn: () => databases.fetchDatabases(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useDatabaseMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  return {
+    create: useMutation({
+      mutationFn: (v: { name: string; visibility: 'private' | 'academy' }) =>
+        databases.createDatabase(client, academyId, userId, v.name, v.visibility),
+      onSuccess: () => qc.invalidateQueries({ queryKey: databaseKeys.list(academyId) }),
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => databases.deleteDatabase(client, id),
+      onSuccess: () => qc.invalidateQueries({ queryKey: databaseKeys.list(academyId) }),
+    }),
+    importPgn: useMutation({
+      mutationFn: (v: { databaseId: string; text: string }) => {
+        setProgress(null);
+        return databases.importPgn(client, v.databaseId, v.text, (done, total) =>
+          setProgress({ done, total }),
+        );
+      },
+      onSettled: (_, __, v) => qc.invalidateQueries({ queryKey: ['database-games', v.databaseId] }),
+    }),
+    progress,
+  };
+}
+
+export function useGames(databaseId: string | undefined, search: string, page: number) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: databaseKeys.games(databaseId ?? '', search, page),
+    queryFn: () => databases.searchGames(client, databaseId ?? '', { search, page }),
+    enabled: !!databaseId,
+    placeholderData: (prev) => prev,
+  });
+}
+
+export function useGamePgn(gameId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: databaseKeys.pgn(gameId ?? ''),
+    queryFn: () => databases.fetchGamePgn(client, gameId ?? ''),
+    enabled: !!gameId,
+    staleTime: Number.POSITIVE_INFINITY,
+  });
 }

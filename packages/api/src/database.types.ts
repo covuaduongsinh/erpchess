@@ -304,6 +304,110 @@ export type Database = {
           },
         ]
       }
+      database_games: {
+        Row: {
+          black: string
+          black_elo: number | null
+          created_at: string
+          database_id: string
+          date: string
+          eco: string
+          event: string
+          id: string
+          pgn: string
+          ply_count: number
+          result: string
+          site: string
+          start_fen: string | null
+          white: string
+          white_elo: number | null
+        }
+        Insert: {
+          black?: string
+          black_elo?: number | null
+          created_at?: string
+          database_id: string
+          date?: string
+          eco?: string
+          event?: string
+          id?: string
+          pgn: string
+          ply_count?: number
+          result?: string
+          site?: string
+          start_fen?: string | null
+          white?: string
+          white_elo?: number | null
+        }
+        Update: {
+          black?: string
+          black_elo?: number | null
+          created_at?: string
+          database_id?: string
+          date?: string
+          eco?: string
+          event?: string
+          id?: string
+          pgn?: string
+          ply_count?: number
+          result?: string
+          site?: string
+          start_fen?: string | null
+          white?: string
+          white_elo?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "database_games_database_id_fkey"
+            columns: ["database_id"]
+            isOneToOne: false
+            referencedRelation: "game_databases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      game_databases: {
+        Row: {
+          academy_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          visibility: string
+        }
+        Insert: {
+          academy_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          visibility?: string
+        }
+        Update: {
+          academy_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_databases_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_databases_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_members: {
         Row: {
           created_at: string

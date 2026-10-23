@@ -5,6 +5,14 @@
  */
 import { describe, expect, it } from 'vitest';
 import { createErpClient } from './client';
+import {
+  createDatabase,
+  deleteDatabase,
+  fetchDatabases,
+  fetchGamePgn,
+  importPgn,
+  searchGames,
+} from './databases';
 import { fetchMyAcademies, fetchPuzzles, signInStudent, signInWithEmail } from './queries';
 import {
   addActivity,
@@ -153,6 +161,55 @@ describe.skipIf(!ready)('Giai đoạn 6 trên Supabase thật', () => {
       expect(progress).toMatchObject({ totalActivities: 3, completed: 2, score: 26 });
     } finally {
       await deleteStudy(owner, study.id);
+    }
+  });
+
+  it('CSDL ván: nhập PGN (bỏ ván hỏng), tìm, đọc PGN; học viên không thấy CSDL riêng', {
+    timeout: 60_000,
+  }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const db = await createDatabase(owner, academy.id, user.id, 'Tích hợp GĐ6b');
+    try {
+      const result = await importPgn(
+        owner,
+        db.id,
+        `[White "Nguyễn An"]
+[Black "Trần Bình"]
+[Result "1-0"]
+
+1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qxf7# 1-0
+
+[White "Hỏng"]
+
+1. e4 e4 *
+
+[White "Lê Cường"]
+[Black "Nguyễn An"]
+[Event "Giải tháng 10"]
+[Result "1/2-1/2"]
+
+1. d4 d5 1/2-1/2`,
+      );
+      expect(result).toMatchObject({ imported: 2, failed: 1 });
+
+      const all = await searchGames(owner, db.id);
+      expect(all.total).toBe(2);
+      const found = await searchGames(owner, db.id, { search: 'tháng 10' });
+      expect(found.rows.map((g) => g.white)).toEqual(['Lê Cường']);
+      const pgn = await fetchGamePgn(owner, all.rows[0]?.id ?? '');
+      expect(pgn).toContain('Qxf7#');
+
+      const student = newClient();
+      await signInStudent(student, env.STUDENT_USERNAME ?? '', env.STUDENT_PIN ?? '');
+      expect((await fetchDatabases(student, academy.id)).some((d) => d.id === db.id)).toBe(false);
+      expect((await searchGames(student, db.id)).total).toBe(0);
+    } finally {
+      await deleteDatabase(owner, db.id);
     }
   });
 });
