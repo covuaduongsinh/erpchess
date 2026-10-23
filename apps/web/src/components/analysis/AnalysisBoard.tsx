@@ -8,10 +8,10 @@ import {
   sideToMove,
   toPgn,
 } from '@erpchess/chess-core';
+import { useGameTree } from '@erpchess/chess-core/react';
 import type { Score } from '@erpchess/engine';
 import type { TranslationKey } from '@erpchess/i18n';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useGameTree } from '../../lib/use-game-tree';
 import { useT } from '../../lib/use-t';
 import { Button, Card } from '../ui';
 import { EngineLines } from './EngineLines';

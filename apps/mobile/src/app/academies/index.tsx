@@ -61,6 +61,11 @@ export default function AcademiesScreen() {
           ))
         )}
       </Card>
+      <Button
+        variant="ghost"
+        title={t('analysis.title')}
+        onPress={() => router.push('/analysis')}
+      />
       {!isStudent && <CreateAcademyCard />}
     </ScrollView>
   );

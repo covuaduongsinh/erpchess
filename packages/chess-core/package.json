@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./react": "./src/react.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -17,6 +18,16 @@
   "devDependencies": {
     "@erpchess/config": "workspace:*",
     "typescript": "~6.0.3",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "@types/react": "~19.3.0",
+    "react": "19.3.0"
+  },
+  "peerDependencies": {
+    "react": "19.3.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   }
 }

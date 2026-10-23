@@ -25,6 +25,13 @@ export default function WelcomeScreen() {
         <Button variant="cta" title={t('auth.signIn')} onPress={() => router.push('/login')} />
         <Button variant="ghost" title={t('auth.signUp')} onPress={() => router.push('/signup')} />
       </View>
+      <View style={styles.actions}>
+        <Button
+          variant="ghost"
+          title={t('analysis.title')}
+          onPress={() => router.push('/analysis')}
+        />
+      </View>
       <Text style={styles.muted}>{t('home.platform', { platform: t('platform.mobile') })}</Text>
       <View style={styles.languages}>
         {languages.map((lng) => {
