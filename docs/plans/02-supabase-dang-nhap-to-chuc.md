@@ -90,3 +90,23 @@ Người dùng thao tác được trên cả 3 app (web, desktop, mobile):
 
 - Thanh toán (Giai đoạn 8).
 - Đăng nhập Google/Apple: chỉ cấu hình khi có client ID; mã đã hỗ trợ sẵn qua `signInWithOAuth`.
+
+## Kết quả triển khai (2026-10-23)
+
+- **Supabase:** project `erpchess-dev` (ref `eordwpktwokvmhymvcyd`, vùng ap-southeast-1). Đã áp migration `core_org` và deploy Edge Function `create-student`.
+- **pgTAP:** 22/22 qua trên cloud. Cách chạy qua MCP: ghi kết quả vào bảng tạm, rồi `raise exception` ở cuối để toàn bộ transaction rollback.
+- **Advisors security:** còn 3 cảnh báo `authenticated_security_definer_function_executable` cho 3 RPC công khai. Đây là chủ ý thiết kế: mỗi RPC tự kiểm quyền bên trong.
+- **Smoke E2E:** `packages/api/scripts/smoke-phase2.mjs` qua 9/9 bước.
+- **Thử trên trình duyệt** (bản build web, Chrome), các luồng đều chạy đúng:
+  - Chủ học viện đăng nhập, tạo học viện, tạo lớp, tạo học viên (qua Edge Function).
+  - Học viên đăng nhập bằng username + PIN và chỉ thấy lớp của mình.
+- **Lỗi đã sửa:** vào route cần đăng nhập khi chưa đăng nhập thì trang treo vì điều hướng vô hạn. Nguyên nhân là `<Navigate>` so sánh props theo tham chiếu, cộng với `useLocation` render lại trong lúc route `/login` đang tải. Đã sửa bằng điều hướng một lần trong `useEffect`, có test hồi quy `RequireSession.test.tsx`.
+- **Mobile:** đã có các màn hình đăng nhập (email/học viên), đăng ký, danh sách học viện, chi tiết học viện (lớp, thành viên, tạo lớp, tạo học viên). Phiên đăng nhập lưu bằng `expo-sqlite/localStorage`. Mới kiểm bằng `expo export --platform web`; **chưa chạy trên thiết bị hoặc emulator Android/iOS**.
+- **Tài khoản thử nghiệm trên dev:**
+  - Chủ học viện: `e2e.owner@erpchess.test`.
+  - Học viên: `minhan.test`.
+  - Học viện: "CLB Cờ vua Dương Sinh Thử nghiệm".
+- **Còn lại:**
+  - Bật hoặc tắt xác nhận email và cấu hình Site URL trong Auth của Supabase Dashboard.
+  - Kiểm luồng lời mời HLV/phụ huynh trên giao diện (RPC đã có test pgTAP).
+  - Chạy app mobile trên thiết bị thật.

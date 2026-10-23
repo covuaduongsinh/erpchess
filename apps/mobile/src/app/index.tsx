@@ -1,24 +1,31 @@
-import { languages, type TranslationKey } from '@erpchess/i18n';
+import { useSession } from '@erpchess/api/react';
+import { languages } from '@erpchess/i18n';
 import { colors, fontSize, radius, spacing } from '@erpchess/ui-tokens';
-import { useTranslation } from 'react-i18next';
+import { Redirect, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, Spinner } from '@/components/ui';
+import { useT } from '@/lib/use-t';
 
-export default function HomeScreen() {
-  const { t, i18n } = useTranslation();
-  const tk = (key: TranslationKey, opts?: Record<string, string>) => t(key, opts);
+export default function WelcomeScreen() {
+  const { t, i18n } = useT();
+  const { session, loading } = useSession();
+
+  if (loading) return <Spinner />;
+  if (session) return <Redirect href="/academies" />;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.slogan}>{tk('app.slogan')}</Text>
+      <Text style={styles.slogan}>{t('app.slogan')}</Text>
       <Text style={styles.title} accessibilityRole="header">
-        {tk('home.welcome')}
+        {t('home.welcome')}
       </Text>
-      <Text style={styles.description}>{tk('home.description')}</Text>
-      <Pressable style={styles.cta} accessibilityRole="button">
-        <Text style={styles.ctaText}>{tk('home.getStarted')}</Text>
-      </Pressable>
-      <Text style={styles.muted}>{tk('home.platform', { platform: tk('platform.mobile') })}</Text>
+      <Text style={styles.description}>{t('home.description')}</Text>
+      <View style={styles.actions}>
+        <Button variant="cta" title={t('auth.signIn')} onPress={() => router.push('/login')} />
+        <Button variant="ghost" title={t('auth.signUp')} onPress={() => router.push('/signup')} />
+      </View>
+      <Text style={styles.muted}>{t('home.platform', { platform: t('platform.mobile') })}</Text>
       <View style={styles.languages}>
         {languages.map((lng) => {
           const active = i18n.language === lng;
@@ -31,7 +38,7 @@ export default function HomeScreen() {
               style={[styles.lang, active && styles.langActive]}
             >
               <Text style={active ? styles.langTextActive : styles.muted}>
-                {tk(`language.${lng}`)}
+                {t(`language.${lng}`)}
               </Text>
             </Pressable>
           );
@@ -63,13 +70,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   description: { fontSize: fontSize.body, color: colors.textMuted, textAlign: 'center' },
-  cta: {
-    backgroundColor: colors.orange,
-    paddingVertical: spacing.sm + spacing.xs,
-    paddingHorizontal: spacing.lg,
-    borderRadius: radius.md,
-  },
-  ctaText: { color: colors.white, fontWeight: '700', fontSize: fontSize.body },
+  actions: { flexDirection: 'row', gap: spacing.sm },
   muted: { color: colors.textMuted, fontSize: fontSize.subtitle },
   languages: { flexDirection: 'row', gap: spacing.sm },
   lang: { paddingVertical: spacing.xs, paddingHorizontal: spacing.sm, borderRadius: radius.sm },
