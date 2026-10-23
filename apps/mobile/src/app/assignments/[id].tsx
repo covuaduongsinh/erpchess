@@ -160,9 +160,9 @@ function Report({
             <Text style={[styles.text, { flex: 1, fontWeight: '500' }]}>
               {names.get(row.studentId) ?? row.studentId.slice(0, 8)}
             </Text>
-            <Muted>
+            <Text style={styles.hint}>
               {`${t('assignments.progress', { solved: row.solvedItems, total: row.totalItems })} · ${row.tries} · ${formatDuration(row.timeMs)}`}
-            </Muted>
+            </Text>
           </View>
         ))
       )}

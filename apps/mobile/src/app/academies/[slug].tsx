@@ -260,7 +260,7 @@ function AssignmentsCard({
                 </Text>
                 <Muted>{t('assignments.puzzleCount', { count: a.itemCount })}</Muted>
               </View>
-              <Muted>
+              <Text style={styles.hint}>
                 {staff
                   ? `${t('assignments.done')}: ${done.length}/${rows.length}`
                   : mine
@@ -271,7 +271,7 @@ function AssignmentsCard({
                           total: mine.totalItems,
                         })
                     : ''}
-              </Muted>
+              </Text>
             </Pressable>
           );
         })
