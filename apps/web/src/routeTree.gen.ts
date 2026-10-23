@@ -10,33 +10,136 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ASlugRouteImport } from './routes/a.$slug'
+import { Route as AcademiesNewRouteImport } from './routes/academies.new'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
+import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
+import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ASlugRoute = ASlugRouteImport.update({
+  id: '/a/$slug',
+  path: '/a/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcademiesNewRoute = AcademiesNewRouteImport.update({
+  id: '/academies/new',
+  path: '/academies/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ASlugIndexRoute = ASlugIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugGroupsRoute = ASlugGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugStudentsRoute = ASlugStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => ASlugRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/a/$slug': typeof ASlugRouteWithChildren
+  '/academies/new': typeof AcademiesNewRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/students': typeof ASlugStudentsRoute
+  '/a/$slug/': typeof ASlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/academies/new': typeof AcademiesNewRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/students': typeof ASlugStudentsRoute
+  '/a/$slug': typeof ASlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/a/$slug': typeof ASlugRouteWithChildren
+  '/academies/new': typeof AcademiesNewRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/students': typeof ASlugStudentsRoute
+  '/a/$slug/': typeof ASlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/a/$slug'
+    | '/academies/new'
+    | '/invite/$token'
+    | '/a/$slug/groups'
+    | '/a/$slug/students'
+    | '/a/$slug/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/academies/new'
+    | '/invite/$token'
+    | '/a/$slug/groups'
+    | '/a/$slug/students'
+    | '/a/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/a/$slug'
+    | '/academies/new'
+    | '/invite/$token'
+    | '/a/$slug/groups'
+    | '/a/$slug/students'
+    | '/a/$slug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
+  ASlugRoute: typeof ASlugRouteWithChildren
+  AcademiesNewRoute: typeof AcademiesNewRoute
+  InviteTokenRoute: typeof InviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +151,86 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a/$slug': {
+      id: '/a/$slug'
+      path: '/a/$slug'
+      fullPath: '/a/$slug'
+      preLoaderRoute: typeof ASlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/academies/new': {
+      id: '/academies/new'
+      path: '/academies/new'
+      fullPath: '/academies/new'
+      preLoaderRoute: typeof AcademiesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a/$slug/': {
+      id: '/a/$slug/'
+      path: '/'
+      fullPath: '/a/$slug/'
+      preLoaderRoute: typeof ASlugIndexRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/groups': {
+      id: '/a/$slug/groups'
+      path: '/groups'
+      fullPath: '/a/$slug/groups'
+      preLoaderRoute: typeof ASlugGroupsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/students': {
+      id: '/a/$slug/students'
+      path: '/students'
+      fullPath: '/a/$slug/students'
+      preLoaderRoute: typeof ASlugStudentsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
   }
 }
 
+interface ASlugRouteChildren {
+  ASlugGroupsRoute: typeof ASlugGroupsRoute
+  ASlugStudentsRoute: typeof ASlugStudentsRoute
+  ASlugIndexRoute: typeof ASlugIndexRoute
+}
+
+const ASlugRouteChildren: ASlugRouteChildren = {
+  ASlugGroupsRoute: ASlugGroupsRoute,
+  ASlugStudentsRoute: ASlugStudentsRoute,
+  ASlugIndexRoute: ASlugIndexRoute,
+}
+
+const ASlugRouteWithChildren = ASlugRoute._addFileChildren(ASlugRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
+  ASlugRoute: ASlugRouteWithChildren,
+  AcademiesNewRoute: AcademiesNewRoute,
+  InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

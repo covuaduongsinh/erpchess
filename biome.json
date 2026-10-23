@@ -15,7 +15,8 @@
       "!**/expo-env.d.ts",
       "!**/next-env.d.ts",
       "!**/src-tauri",
-      "!**/assets"
+      "!**/assets",
+      "!**/database.types.ts"
     ]
   },
   "formatter": {
@@ -46,5 +47,17 @@
     "parser": {
       "tailwindDirectives": true
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["supabase/functions/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noUndeclaredEnvVars": "off"
+          }
+        }
+      }
+    }
+  ]
 }
