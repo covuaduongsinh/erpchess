@@ -44,11 +44,11 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | hw.exercise            | Exercise: tạo bài tập từ bài toán, tag chủ đề                     | 4   | ✅         | `a.$slug.assignments.new.tsx`                                                                      |
 | hw.assign              | Giao cho học viên/lớp, hạn nộp                                    | 4   | ✅         | `assignment_targets`                                                                               |
 | hw.report              | Báo cáo số lần thử, thời gian, tỉ lệ hoàn thành                   | 4   | ✅         | `assignment_progress`, `phase4.integration.test.ts`                                                |
-| hw.split               | Tách Exercise (dùng lại) khỏi lần giao                            | 7   | ⬜         |                                                                                                    |
-| quiz.core              | Quiz từ hoạt động study, riêng tư/công khai, lịch, hạn            | 7   | ⬜         |                                                                                                    |
-| quiz.auto              | Quiz tự động theo cấp độ                                          | 7   | ⬜         |                                                                                                    |
-| quiz.leaderboard       | Bảng xếp hạng quiz, góc nhìn học viên                             | 7   | ⬜         |                                                                                                    |
-| practice.chapters      | Chương luyện thế cờ riêng tư/công khai                            | 7   | ⬜         |                                                                                                    |
+| hw.split               | Tách Exercise (dùng lại) khỏi lần giao                            | 7   | ✅         | `exercises`, `assignments.exercise_id`; tab Exercise ở Bài tập; giao 2 lần trong test              |
+| quiz.core              | Quiz từ hoạt động study, riêng tư/công khai, lịch, hạn            | 7   | ✅         | `quizzes`, `quiz-answer` chấm từng nước ở server, đề giấu đáp án (`05_quizzes_rls.sql`)            |
+| quiz.auto              | Quiz tự động theo cấp độ                                          | 7   | 🟡         | Tạo theo cấp độ bằng tay (`pickAutoQuizPuzzles`); tự chạy theo lịch ở Giai đoạn 12                 |
+| quiz.leaderboard       | Bảng xếp hạng quiz, góc nhìn học viên                             | 7   | ✅         | `quiz_leaderboard`, góc nhìn học viên web + mobile, điểm quiz vào bảng xếp hạng học viện           |
+| practice.chapters      | Chương luyện thế cờ riêng tư/công khai                            | 7   | ✅         | `practice_chapters`/`positions`/`results`, luyện với máy trên web; mobile chỉ xem                  |
 | class.live             | Lớp online: bàn cờ đồng bộ, HLV điều khiển, chat                  | 8   | ⬜         |                                                                                                    |
 | class.video            | Video/âm thanh, 3 chế độ                                          | 8   | ⬜         |                                                                                                    |
 | class.offline          | Lớp offline: điểm danh                                            | 8   | ⬜         |                                                                                                    |
@@ -74,4 +74,4 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | ops.whatsapp           | Thông báo WhatsApp                                                | —   | ⛔         | Thay bằng email/push; Zalo OA để sau                                                               |
 | ops.razorpay           | Razorpay                                                          | —   | ⛔         | Thị trường Ấn Độ                                                                                   |
 
-**Tổng kết:** 59 claim, gồm 22 đã đóng, 9 một phần, 26 mở, 2 ngoài phạm vi.
+**Tổng kết:** 59 claim, gồm 26 đã đóng, 10 một phần, 21 mở, 2 ngoài phạm vi.

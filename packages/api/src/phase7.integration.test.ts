@@ -5,6 +5,20 @@
 import { describe, expect, it } from 'vitest';
 import { createErpClient } from './client';
 import {
+  addPracticePosition,
+  assignExercise,
+  createExercise,
+  createPracticeChapter,
+  deleteExercise,
+  deletePracticeChapter,
+  fetchExercises,
+  fetchPracticeChapter,
+  fetchPracticeResults,
+  recordPracticeResult,
+} from './practice';
+import {
+  deleteAssignment,
+  fetchAssignments,
   fetchGroups,
   fetchMyAcademies,
   fetchPuzzles,
@@ -143,6 +157,68 @@ describe.skipIf(!ready)('Giai đoạn 7 trên Supabase thật', () => {
     } finally {
       await deleteQuiz(owner, quiz.id);
       await deleteQuiz(owner, closed.id);
+    }
+  });
+
+  it('Exercise giao hai lần, Practice theo chế độ chia sẻ', { timeout: 120_000 }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const group = (await fetchGroups(owner, academy.id)).find((g) => g.name === env.GROUP_NAME);
+    if (!group) throw new Error('không thấy lớp');
+    const puzzles = (await fetchPuzzles(owner, academy.id)).slice(0, 2);
+    expect(puzzles).toHaveLength(2);
+
+    const ex = await createExercise(owner, user.id, {
+      academyId: academy.id,
+      title: 'Tích hợp GĐ7c',
+      tags: ['test'],
+      puzzleIds: puzzles.map((p) => p.id),
+    });
+    const shared = await createPracticeChapter(owner, academy.id, user.id, { title: 'GĐ7c chung' });
+    const hidden = await createPracticeChapter(owner, academy.id, user.id, {
+      title: 'GĐ7c riêng',
+      visibility: 'private',
+    });
+    const assignmentIds: string[] = [];
+    try {
+      const summary = (await fetchExercises(owner, academy.id)).find((e) => e.id === ex.id);
+      if (!summary) throw new Error('không thấy Exercise');
+      for (const _ of [1, 2]) {
+        const a = await assignExercise(owner, summary, { groupIds: [group.id], studentIds: [] });
+        assignmentIds.push(a.id);
+        expect(a.exercise_id).toBe(ex.id);
+      }
+      const after = (await fetchExercises(owner, academy.id)).find((e) => e.id === ex.id);
+      expect(after).toMatchObject({ assignedCount: 2, puzzleIds: puzzles.map((p) => p.id) });
+
+      const fen = '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1';
+      const pos = await addPracticePosition(owner, shared.id, { fen, side: 'w' }, 0);
+      await addPracticePosition(owner, hidden.id, { fen, side: 'w' }, 0);
+
+      const student = newClient();
+      const { user: su } = await signInStudent(
+        student,
+        env.STUDENT_USERNAME ?? '',
+        env.STUDENT_PIN ?? '',
+      );
+      const mine = await fetchAssignments(student, academy.id);
+      expect(assignmentIds.every((id) => mine.some((a) => a.id === id))).toBe(true);
+      expect((await student.from('exercises').select('id').eq('id', ex.id)).data ?? []).toEqual([]);
+
+      expect((await fetchPracticeChapter(student, shared.id)).positions).toHaveLength(1);
+      await expect(fetchPracticeChapter(student, hidden.id)).rejects.toBeTruthy();
+      await recordPracticeResult(student, su.id, pos.id, 'win', 14);
+      const results = await fetchPracticeResults(owner, [pos.id]);
+      expect(results).toEqual([expect.objectContaining({ student_id: su.id, result: 'win' })]);
+    } finally {
+      for (const id of assignmentIds) await deleteAssignment(owner, id);
+      await deleteExercise(owner, ex.id);
+      await deletePracticeChapter(owner, shared.id);
+      await deletePracticeChapter(owner, hidden.id);
     }
   });
 });
