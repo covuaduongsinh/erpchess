@@ -98,3 +98,4 @@ export * from './csv';
 export * from './markdown';
 export * from './periods';
 export * from './study';
+export * from './video';

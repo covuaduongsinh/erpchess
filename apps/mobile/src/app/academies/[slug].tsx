@@ -9,6 +9,7 @@ import {
   useMyAcademies,
   useProgress,
   useSession,
+  useStudies,
 } from '@erpchess/api/react';
 import { academyRoles, isStaff, type Period, periodRange, periods } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
@@ -53,6 +54,8 @@ export default function AcademyScreen() {
       <LeaderboardCard academyId={academy.id} userId={session?.user.id} />
 
       <AssignmentsCard academyId={academy.id} slug={academy.slug} staff={staff} />
+
+      <StudiesCard academyId={academy.id} userId={session?.user.id} />
 
       <Card title={t('groups.title')}>
         {groups.isPending ? (
@@ -372,6 +375,42 @@ function LeaderboardCard({ academyId, userId }: { academyId: string; userId?: st
           </View>
         ))
       )}
+    </Card>
+  );
+}
+
+function StudiesCard({ academyId, userId }: { academyId: string; userId?: string }) {
+  const { t } = useT();
+  const academyStudies = useStudies({ scope: 'academy', academyId, userId });
+  const publicStudies = useStudies({ scope: 'public', academyId, userId });
+  const list = [...(academyStudies.data ?? []), ...(publicStudies.data ?? [])].filter(
+    (s) => s.activityCount > 0,
+  );
+
+  return (
+    <Card title={t('studies.title')}>
+      {academyStudies.isPending ? (
+        <Spinner />
+      ) : list.length === 0 ? (
+        <Muted>{t('studies.none')}</Muted>
+      ) : (
+        list.map((s) => (
+          <Pressable
+            key={s.id}
+            accessibilityRole="link"
+            onPress={() => router.push({ pathname: '/studies/[id]', params: { id: s.id } })}
+            style={styles.row}
+          >
+            <Text style={[styles.text, { flex: 1, fontWeight: '500', color: colors.primary }]}>
+              {s.title}
+            </Text>
+            <Text style={styles.hint}>
+              {t('studies.activityCount', { count: s.activityCount })}
+            </Text>
+          </Pressable>
+        ))
+      )}
+      <ErrorText error={academyStudies.error ?? publicStudies.error} />
     </Card>
   );
 }

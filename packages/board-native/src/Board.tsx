@@ -5,6 +5,7 @@
  * Hình học bàn cờ dùng chung với bản web (@erpchess/board-web/geometry).
  */
 import {
+  isPromotionMove,
   type Orientation,
   type PieceCode,
   parseBoard,
@@ -13,7 +14,6 @@ import {
   squareColor,
   squareToGrid,
 } from '@erpchess/board-web/geometry';
-import { needsPromotion } from '@erpchess/chess-core';
 import { colors } from '@erpchess/ui-tokens';
 import { useMemo, useRef, useState } from 'react';
 import { type LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -69,7 +69,7 @@ export function Board({
   const tryMove = (from: string, to: string) => {
     if (!movable?.dests.get(from)?.includes(to)) return false;
     setSelected(null);
-    if (needsPromotion(fen, from, to)) setPromotion({ from, to });
+    if (isPromotionMove(pieces, from, to)) setPromotion({ from, to });
     else onMove?.(from, to);
     return true;
   };

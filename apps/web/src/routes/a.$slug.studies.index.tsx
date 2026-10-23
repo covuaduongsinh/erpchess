@@ -93,7 +93,13 @@ function StudyRow({ study }: { study: StudySummary }) {
   return (
     <li className="flex flex-wrap items-center justify-between gap-3 py-3">
       <div className="flex flex-col">
-        <span className="font-medium">{study.title}</span>
+        <Link
+          to="/a/$slug/studies/$id"
+          params={{ slug: academy.slug, id: study.id }}
+          className="font-medium text-primary hover:underline"
+        >
+          {study.title}
+        </Link>
         <span className="text-sm text-text-muted">
           {t('studies.activityCount', { count: study.activityCount })} ·{' '}
           {t(`studies.visibility_${study.visibility as 'private' | 'academy' | 'public'}`)}

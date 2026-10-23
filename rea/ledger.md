@@ -10,7 +10,7 @@ Mỗi dòng là một **claim**: một hành vi của Chesslang mà erpchess c�
 
 **Cột GĐ** là giai đoạn erpchess dự kiến làm claim đó.
 
-Cập nhật lần cuối: 2026-10-23, sau PR 6b.
+Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 
 | ID                     | Claim                                                             | GĐ  | Trạng thái | Bằng chứng trong erpchess                                                                          |
 | ---------------------- | ----------------------------------------------------------------- | --- | ---------- | -------------------------------------------------------------------------------------------------- |
@@ -31,16 +31,16 @@ Cập nhật lần cuối: 2026-10-23, sau PR 6b.
 | db.pgn-upload          | CSDL ván: tải PGN, danh sách ván, trình xem                       | 6   | ✅         | `game_databases`, `databases.ts` (`importPgn` theo lô, bỏ qua ván hỏng), trang `/a/$slug/database` |
 | db.sync                | Đồng bộ ván Lichess/Chess.com                                     | 6   | 🟡         | Nhập 50 ván gần nhất của người chơi Lichess; chưa đồng bộ tự động, chưa có Chess.com               |
 | db.masterbase          | Tìm ván cao thủ theo thế cờ, Elo, độ dài                          | 6   | ⬜         | Chỉ dùng dữ liệu có giấy phép mở                                                                   |
-| study.core             | Study = chuỗi hoạt động; của tôi/công khai/chia sẻ; nháp          | 6   | 🟡         | Bảng, RLS, API, chấm bài phía server (PR 6a); giao diện ở PR 6c–6d                                 |
-| study.activity.puzzle  | Hoạt động puzzle: thời gian, số lần thử, điểm, phạt               | 6   | 🟡         | `puzzle-session.ts`, `submit-attempt`                                                              |
-| study.activity.mcq     | Trắc nghiệm có thế cờ hoặc ảnh                                    | 6   | 🟡         | Chấm phía server; giao diện ở PR 6c–6d                                                             |
-| study.activity.capture | Bắt hết quân bằng một quân                                        | 6   | 🟡         | `capture.ts`, chấm phía server; giao diện ở PR 6c–6d                                               |
-| study.activity.explain | Giải thích có nhúng thế cờ                                        | 6   | ⬜         |                                                                                                    |
-| study.activity.engine  | Đánh với máy từ thế cờ                                            | 6   | ⬜         |                                                                                                    |
-| study.activity.video   | Video bài giảng                                                   | 6   | ⬜         |                                                                                                    |
-| study.activity.viewer  | Xem ván có chú thích                                              | 6   | ⬜         |                                                                                                    |
+| study.core             | Study = chuỗi hoạt động; của tôi/công khai/chia sẻ; nháp          | 6   | ✅         | Bảng/RLS, trình soạn (`a.$slug.studies.$id.edit.tsx`), trình học web + mobile, thư viện chung      |
+| study.activity.puzzle  | Hoạt động puzzle: thời gian, số lần thử, điểm, phạt               | 6   | ✅         | `PuzzleSolver` trong trình học, chấm qua `submit-activity`                                         |
+| study.activity.mcq     | Trắc nghiệm có thế cờ hoặc ảnh                                    | 6   | ✅         | Soạn và làm trên web/mobile, chấm phía server                                                      |
+| study.activity.capture | Bắt hết quân bằng một quân                                        | 6   | ✅         | `capture.ts`, `BoardEditor`, `solveCapture` khi soạn; sửa bàn cờ cho thế không vua                 |
+| study.activity.explain | Giải thích có nhúng thế cờ                                        | 6   | ✅         | Markdown an toàn (`parseMarkdown`) web + mobile                                                    |
+| study.activity.engine  | Đánh với máy từ thế cờ                                            | 6   | 🟡         | Web dùng Arasan theo Elo; kết quả do client tự báo; mobile chưa có engine                          |
+| study.activity.video   | Video bài giảng                                                   | 6   | ✅         | Link YouTube/Vimeo/https hoặc tải lên `study-media`                                                |
+| study.activity.viewer  | Xem ván có chú thích                                              | 6   | ✅         | `GameViewer` web, trình xem rút gọn trên mobile                                                    |
 | study.import           | Nhập study Lichess, PGN thành puzzle                              | 6   | 🟡         | Nhập study Lichess vào CSDL ván; chuyển thành hoạt động ở trình soạn (PR 6c)                       |
-| study.collections      | Collections                                                       | 6   | ⬜         |                                                                                                    |
+| study.collections      | Collections                                                       | 6   | ✅         | `study_collections`, thẻ Bộ sưu tập ở danh sách học liệu                                           |
 | hw.exercise            | Exercise: tạo bài tập từ bài toán, tag chủ đề                     | 4   | ✅         | `a.$slug.assignments.new.tsx`                                                                      |
 | hw.assign              | Giao cho học viên/lớp, hạn nộp                                    | 4   | ✅         | `assignment_targets`                                                                               |
 | hw.report              | Báo cáo số lần thử, thời gian, tỉ lệ hoàn thành                   | 4   | ✅         | `assignment_progress`, `phase4.integration.test.ts`                                                |
@@ -74,4 +74,4 @@ Cập nhật lần cuối: 2026-10-23, sau PR 6b.
 | ops.whatsapp           | Thông báo WhatsApp                                                | —   | ⛔         | Thay bằng email/push; Zalo OA để sau                                                               |
 | ops.razorpay           | Razorpay                                                          | —   | ⛔         | Thị trường Ấn Độ                                                                                   |
 
-**Tổng kết:** 59 claim, gồm 14 đã đóng, 12 một phần, 31 mở, 2 ngoài phạm vi.
+**Tổng kết:** 59 claim, gồm 22 đã đóng, 9 một phần, 26 mở, 2 ngoài phạm vi.

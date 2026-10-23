@@ -115,3 +115,16 @@ export function boardToFen(pieces: ReadonlyMap<string, PieceCode>, side: 'w' | '
   if (at('e8', 'bK') && at('a8', 'bR')) castling += 'q';
   return `${rows.join('/')} ${side} ${castling || '-'} - 0 1`;
 }
+
+/**
+ * Nước `from`→`to` có phải tốt lên hàng cuối (cần chọn quân phong cấp) không. Ô đích được giả định
+ * đã hợp lệ; không dùng chess.js để chạy được cả với thế không có vua (hoạt động bắt quân).
+ */
+export function isPromotionMove(
+  pieces: ReadonlyMap<string, PieceCode>,
+  from: string,
+  to: string,
+): boolean {
+  const piece = pieces.get(from);
+  return piece?.[1] === 'P' && to[1] === (piece[0] === 'w' ? '8' : '1');
+}

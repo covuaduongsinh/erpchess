@@ -5,7 +5,6 @@
  * - Bàn phím: Tab vào bàn, phím mũi tên chọn ô, Enter/Space để chọn/đi, Esc để huỷ.
  * Bàn cờ không giữ luật cờ: bên ngoài truyền `dests` (từ chess-core) và nhận `onMove`.
  */
-import { needsPromotion } from '@erpchess/chess-core';
 import { colors } from '@erpchess/ui-tokens';
 import {
   type KeyboardEvent,
@@ -17,6 +16,7 @@ import {
   useState,
 } from 'react';
 import {
+  isPromotionMove,
   moveFocus,
   type Orientation,
   type PieceCode,
@@ -106,14 +106,14 @@ export function Board({
     (from: string, to: string): boolean => {
       if (!movable?.dests.get(from)?.includes(to)) return false;
       setSelected(null);
-      if (needsPromotion(fen, from, to)) {
+      if (isPromotionMove(pieces, from, to)) {
         setPromotion({ from, to });
       } else {
         onMove?.(from, to);
       }
       return true;
     },
-    [fen, movable, onMove],
+    [pieces, movable, onMove],
   );
 
   /** Chọn ô: nếu đang chọn quân và ô là nước hợp lệ thì đi; nếu là quân mình thì chọn lại. */
