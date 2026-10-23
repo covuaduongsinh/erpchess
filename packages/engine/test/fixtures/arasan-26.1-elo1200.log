@@ -1,0 +1,41 @@
+> uci
+< Arasan 26.1 Copyright 1994-2026 by Jon Dart. All Rights Reserved.
+< id name Arasan 26.1
+< id author Jon Dart
+< option name Hash type spin default 32 min 4 max 64000
+< option name Ponder type check default false
+< option name Contempt type spin default 0 min -200 max 200
+< option name Use tablebases type check default false
+< option name SyzygyPath type string default syzygy
+< option name SyzygyUse50MoveRule type check default true
+< option name SyzygyProbeDepth type spin default 4 min 0 max 64
+< option name MultiPV type spin default 1 min 1 max 10
+< option name OwnBook type check default true
+< option name BookPath type string default <DIR>\book.bin
+< option name Book variety type spin default 50 min 0 max 100
+< option name Threads type spin default 1 min 1 max 512
+< option name Position learning type check default false
+< option name Learning file type string default <DIR>\arasan.lrn
+< option name UCI_LimitStrength type check default false
+< option name UCI_Elo type spin default 3450 min 1000 max 3450
+< option name NNUE file type string default arasanv8-20261005.nnue
+< option name Move overhead type spin default 30 min 0 max 1000
+< uciok
+> setoption name UCI_LimitStrength value true
+> setoption name UCI_Elo value 1200
+> isready
+< loaded network from file <DIR>\arasanv8-20261005.nnue
+< info string warning: opening book not found or invalid
+< info string warning: failed to load ECO database from <DIR>\chess-openings
+< readyok
+> position startpos
+> go movetime 1000
+< info string warning: opening book not found or invalid
+< info string warning: failed to load ECO database from <DIR>\chess-openings
+< info multipv 1 depth 1 score cp 32 time 0 nodes 0 hashfull 0 pv g1f3
+< info multipv 1 depth 1 score cp 125 time 0 nodes 0 hashfull 0 pv c2c4
+< info depth 1 currmove h2h3 currmovenumber 18
+< info depth 1 currmove h2h4 currmovenumber 19
+< info multipv 1 depth 1 score cp 125 time 833 nodes 21 nps 25 hashfull 0 pv c2c4
+< bestmove c2c4
+# 835 ms
