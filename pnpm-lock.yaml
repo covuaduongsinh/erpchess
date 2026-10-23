@@ -184,6 +184,12 @@ importers:
       '@erpchess/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@erpchess/board-web':
+        specifier: workspace:*
+        version: link:../../packages/board-web
+      '@erpchess/chess-core':
+        specifier: workspace:*
+        version: link:../../packages/chess-core
       '@erpchess/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -279,6 +285,59 @@ importers:
       react:
         specifier: 19.3.0
         version: 19.3.0
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 5.0.5
+        version: 5.0.5(@types/node@24.19.2)(jsdom@30.1.3)(vite@8.3.5(@types/node@24.19.2)(jiti@2.7.0)(terser@5.51.2))
+
+  packages/board-web:
+    dependencies:
+      '@erpchess/chess-core':
+        specifier: workspace:*
+        version: link:../chess-core
+      '@erpchess/ui-tokens':
+        specifier: workspace:*
+        version: link:../ui-tokens
+    devDependencies:
+      '@erpchess/config':
+        specifier: workspace:*
+        version: link:../config
+      '@testing-library/react':
+        specifier: ^16.3.3
+        version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@types/react':
+        specifier: ~19.3.0
+        version: 19.3.0
+      jsdom:
+        specifier: ^30.1.3
+        version: 30.1.3
+      react:
+        specifier: 19.3.0
+        version: 19.3.0
+      react-dom:
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vite:
+        specifier: 8.3.5
+        version: 8.3.5(@types/node@24.19.2)(jiti@2.7.0)(terser@5.51.2)
+      vitest:
+        specifier: 5.0.5
+        version: 5.0.5(@types/node@24.19.2)(jsdom@30.1.3)(vite@8.3.5(@types/node@24.19.2)(jiti@2.7.0)(terser@5.51.2))
+
+  packages/chess-core:
+    dependencies:
+      chess.js:
+        specifier: 1.4.0
+        version: 1.4.0
+    devDependencies:
+      '@erpchess/config':
+        specifier: workspace:*
+        version: link:../config
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -2349,6 +2408,9 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
+
+  chess.js@1.4.0:
+    resolution: {integrity: sha512-BBJgrrtKQOzFLonR0l+k64A98NLemPwNsCskwb+29bRwobUa4iTm51E1kwGPbWXAcfdDa18nad6vpPPKPWarqw==}
 
   chokidar@5.0.0:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
@@ -6381,6 +6443,8 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  chess.js@1.4.0: {}
 
   chokidar@5.0.0:
     dependencies:

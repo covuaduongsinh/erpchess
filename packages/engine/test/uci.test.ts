@@ -115,3 +115,15 @@ describe('điểm số', () => {
     expect(formatScore({ kind: 'mate', value: -2 })).toBe('#-2');
   });
 });
+
+describe('whiteWinPercent (thanh đánh giá)', () => {
+  it('cân bằng 50%, lợi thế lớn tiến gần 100%, chiếu hết là tuyệt đối', async () => {
+    const { whiteWinPercent } = await import('../src/uci');
+    expect(whiteWinPercent({ kind: 'cp', value: 0 })).toBe(50);
+    expect(whiteWinPercent({ kind: 'cp', value: 300 })).toBeGreaterThan(70);
+    expect(whiteWinPercent({ kind: 'cp', value: -300 })).toBeLessThan(30);
+    expect(whiteWinPercent({ kind: 'cp', value: 5000 })).toBeLessThanOrEqual(100);
+    expect(whiteWinPercent({ kind: 'mate', value: 3 })).toBe(100);
+    expect(whiteWinPercent({ kind: 'mate', value: -2 })).toBe(0);
+  });
+});

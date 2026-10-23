@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@erpchess/api": "workspace:*",
+    "@erpchess/board-web": "workspace:*",
+    "@erpchess/chess-core": "workspace:*",
     "@erpchess/domain": "workspace:*",
     "@erpchess/engine": "workspace:*",
     "@erpchess/i18n": "workspace:*",
