@@ -8,6 +8,7 @@ export {
   playCaptureMove,
   solveCapture,
 } from './capture';
+export { type GameSummary, gameSummary, splitPgn } from './games';
 export { type GameResult, glicko2Update, newRating, type Rating } from './glicko2';
 export { PgnError, parsePgn, toPgn } from './pgn';
 export {

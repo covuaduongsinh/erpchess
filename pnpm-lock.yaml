@@ -275,6 +275,9 @@ importers:
 
   packages/api:
     dependencies:
+      '@erpchess/chess-core':
+        specifier: workspace:*
+        version: link:../chess-core
       '@erpchess/domain':
         specifier: workspace:*
         version: link:../domain

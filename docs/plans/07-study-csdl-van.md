@@ -186,3 +186,18 @@ Kế hoạch con sẽ ghi vào `docs/plans/07-study-csdl-van.md`. Chia 4 PR, m�
   - pgTAP `04_studies_rls.sql`: 21/21 trên cloud.
   - `phase6.integration.test.ts` đạt trên cloud: phạt 4 điểm khi sai một lần, chặn lần thử thứ 3, bắt quân đúng, tiến độ 2/3 hoạt động với 26 điểm.
 - **Ghi chú:** bản Edge Function đã triển khai dùng bản chép `_shared` đã lược chú thích; logic giống hệt mã sinh bởi `sync-shared.mjs`.
+
+### PR 6b (2026-10-24)
+
+- **Migration `…000008_game_databases.sql`:** `game_databases` và `database_games` (index trigram để tìm ván); RLS kiểm trên cột của dòng nên `INSERT … RETURNING` chạy được.
+- **Chess-core:** `splitPgn` (tách ván, một ván hỏng không làm hỏng cả tệp) và `gameSummary`.
+- **API:**
+  - `databases.ts`: nhập PGN theo lô 200 ván, tìm ván có phân trang.
+  - Lichess: lấy ván của người chơi, PGN study công khai. Study chỉ nhận dạng link, vì mã 8 ký tự trùng dạng tên người chơi; lỗi này phát hiện khi chạy thử "thibault".
+- **Web:**
+  - Tab "CSDL ván": danh sách CSDL, nhập (tệp, dán, Lichess), danh sách ván, trình xem ván.
+  - `GameViewer` dùng chung: phím mũi tên, lật bàn, nút "Mở ở bàn phân tích".
+- **Kiểm chứng:**
+  - `phase6.integration.test.ts` (2 test) đạt trên cloud: nhập 3 ván thì bỏ 1 ván hỏng; tìm theo tên giải; học viên không thấy CSDL riêng.
+  - Thử trên Chrome bằng tài khoản chủ dự án: nhập 50 ván Lichess, không ván nào lỗi; xem ván và đi nước bằng phím. Sau đó đã xoá CSDL thử.
+- **Để sau:** tạo puzzle trực tiếp từ một thế trong ván (làm cùng trình soạn ở PR 6c); đồng bộ Chess.com; Masterbase.

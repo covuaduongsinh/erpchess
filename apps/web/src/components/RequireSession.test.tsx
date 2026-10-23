@@ -31,8 +31,9 @@ describe('RequireSession', () => {
       </I18nextProvider>,
     );
 
-    expect(await screen.findByRole('tab', { name: 'Học viên' })).toBeTruthy();
-    await waitFor(() => expect(router.state.location.pathname).toBe('/login'));
+    // Cây route nạp toàn bộ trang; khi chạy song song nhiều gói test máy chậm hơn mốc 1 giây mặc định
+    expect(await screen.findByRole('tab', { name: 'Học viên' }, { timeout: 5000 })).toBeTruthy();
+    await waitFor(() => expect(router.state.location.pathname).toBe('/login'), { timeout: 5000 });
     expect(router.state.location.search).toEqual({ redirect: '/a/hoc-vien-a/students' });
     // Không có điều hướng lồng nhau kiểu /login?redirect=/login?...
     await new Promise((r) => setTimeout(r, 50));
