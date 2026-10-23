@@ -32,7 +32,7 @@
 **Nguyên tắc pháp lý — clean-room:**
 - REA chỉ dùng để **quan sát hành vi, luồng UI và API công khai** từ tài khoản dùng thử hợp lệ của người dùng, rồi viết thành đặc tả tính năng. **Không** chép mã, asset hay văn bản của Chesslang.
 - Repo `ornicar/app.chesslang.com` theo GPL-3.0 nên **không** đưa code từ đó vào.
-- Thư viện GPL (chessground, Stockfish) cần quyết định riêng; xem mục Rủi ro.
+- Không dùng thư viện GPL (chessground, Stockfish). Engine là Arasan (MIT); xem mục Rủi ro.
 
 ---
 
@@ -47,7 +47,7 @@ erpchess/                      (pnpm workspaces + Turborepo)
 │  └─ mobile/     Expo (SDK mới nhất, New Architecture) + Expo Router + NativeWind
 ├─ packages/
 │  ├─ chess-core/   chess.js + PGN parse/serialize + chấm puzzle, cờ mù, luật variant (thuần TS, có test)
-│  ├─ engine/       interface EngineAdapter: web worker (Stockfish WASM) | Tauri sidecar | RN native
+│  ├─ engine/       interface EngineAdapter: web worker (Arasan WASM) | Tauri sidecar | RN native
 │  ├─ board-web/    bàn cờ SVG React (mũi tên, tô ô, ẩn quân, kéo thả) — dùng cho web + desktop
 │  ├─ board-native/ bàn cờ RN (react-native-skia + gesture-handler), cùng API props với board-web
 │  ├─ api/          supabase-js client, types sinh tự động, hook TanStack Query, kênh Realtime
@@ -129,11 +129,12 @@ Mỗi giai đoạn có file kế hoạch con `docs/plans/NN-<ten>.md`, viết ng
 - **`board-web` / `board-native`:**
   - Cùng interface `BoardProps`: kéo-thả và chạm, mũi tên, tô ô, phong cấp, lật bàn, đi lại nước, theme.
   - Chơi được trên 3 nền tảng.
-- **`engine`:**
-  - Web: Stockfish WASM trong worker.
-  - Desktop: sidecar Stockfish native qua Tauri.
-  - Mobile: module native hoặc WASM.
-  - Cả ba qua chung một `EngineAdapter` (UCI, multipv, giới hạn độ sâu và Elo).
+- **`engine` — dùng [Arasan](https://github.com/jdart1/arasan-chess) (MIT), chốt ngày 2026-10-23, thay cho Stockfish:**
+  - Web: tự biên dịch Arasan sang WASM bằng Emscripten (`emcmake`, CMake có sẵn, C++17, option `OLD` để tắt SIMD x86), chạy trong Web Worker.
+  - Desktop: sidecar Arasan native qua Tauri. Dùng bản build SIMD (AVX2/BMI2 hoặc NEON) theo máy.
+  - Mobile: module native Expo (C++ qua CMake/NDK cho Android, Xcode cho iOS, bật NEON).
+  - Cả ba qua chung một `EngineAdapter` (UCI, MultiPV, `UCI_LimitStrength` + `UCI_Elo` 1000–3450 cho bot nhiều trình độ).
+  - Chi tiết, rủi ro và các bước: [`03-engine-arasan.md`](03-engine-arasan.md).
 - **Màn hình:** Bàn phân tích, PGN Creator, Sharebox (tải lên và chia sẻ ván).
 
 ### Giai đoạn 4 — Bài tập, puzzle, báo cáo
@@ -192,10 +193,11 @@ Mỗi giai đoạn có file kế hoạch con `docs/plans/NN-<ten>.md`, viết ng
 
 ## Rủi ro và quyết định cần lưu ý
 
-- **Giấy phép GPL:**
-  - Stockfish (GPL-3) và chessground (GPL-3). Kế hoạch dùng bàn cờ **tự viết** (MIT) nên tránh được chessground.
-  - Stockfish nhúng trong app phân phối thì phải tuân GPL cho phần engine: tách module, ghi công, cung cấp source. Phương án thay thế là phân tích phía server.
-  - Cần chốt trước Giai đoạn 3.
+- **Giấy phép (đã chốt):**
+  - Engine dùng Arasan, giấy phép MIT. Thư viện Fathom (syzygy) cũng MIT. Nhúng vào app web, desktop, mobile chỉ cần giữ thông báo bản quyền, không có ràng buộc GPL.
+  - Bàn cờ **tự viết** (MIT), tránh chessground (GPL-3).
+  - Không dùng Stockfish.
+- **Engine Arasan:** chưa có bản WASM hay mobile dựng sẵn, phải tự biên dịch. File mạng NNUE khoảng 25 MB nên cần tải theo yêu cầu và cache. Xem [`03-engine-arasan.md`](03-engine-arasan.md).
 - **Pháp lý:** REA chỉ dùng trên tài khoản hợp lệ, không vượt cơ chế bảo vệ, không sao chép nội dung có bản quyền. Đặc tả viết lại bằng lời của mình.
 - **Môi trường REA trên Windows:** `recover_javascript_sources` cần Wakaru trên Linux nên không dùng được. Không cần thiết vì đi theo clean-room.
 - **Hạ tầng:** chi phí LiveKit và Supabase khi mở rộng; giới hạn Realtime của Supabase với giải đấu đông người. Theo dõi khi tải lớn.
