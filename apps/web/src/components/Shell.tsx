@@ -21,6 +21,9 @@ export function Shell({ children }: { children: ReactNode }) {
         <span className="hidden text-xs tracking-[0.05em] uppercase opacity-80 sm:inline">
           {t('app.slogan')}
         </span>
+        <Link to="/analysis" className="text-sm opacity-90 hover:opacity-100">
+          {t('analysis.title')}
+        </Link>
         <div className="ml-auto flex items-center gap-2 text-sm">
           {languages.map((lng) => (
             <button

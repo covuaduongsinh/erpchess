@@ -17,6 +17,7 @@ export {
   sideToMoveFromFen,
   toWhitePov,
   type UciOption,
+  whiteWinPercent,
 } from './uci';
 
 /** Các mức bot dùng cho học viên (Elo theo thang UCI_Elo của Arasan). */

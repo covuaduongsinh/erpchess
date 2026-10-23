@@ -13,11 +13,13 @@ export {
   gameStatus,
   inCheck,
   isValidFen,
+  kingSquare,
   legalDests,
   needsPromotion,
   type PlayedMove,
   playMove,
   START_FEN,
+  sanLine,
   sideToMove,
   toUci,
 } from './rules';

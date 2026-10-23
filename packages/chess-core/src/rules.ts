@@ -65,3 +65,27 @@ export function gameStatus(fen: string): GameStatus {
 export function inCheck(fen: string): boolean {
   return new Chess(fen).inCheck();
 }
+
+/** Đổi chuỗi nước UCI (vd. PV của engine) sang SAN; dừng ở nước đầu tiên không hợp lệ. */
+export function sanLine(fen: string, ucis: readonly string[]): string[] {
+  const out: string[] = [];
+  let current = fen;
+  for (const uci of ucis) {
+    const played = playMove(current, uci);
+    if (!played) break;
+    out.push(played.san);
+    current = played.fen;
+  }
+  return out;
+}
+
+/** Ô vua của bên đang đi (để tô khi bị chiếu). */
+export function kingSquare(fen: string): string | undefined {
+  const color = sideToMove(fen);
+  for (const row of new Chess(fen).board()) {
+    for (const cell of row) {
+      if (cell && cell.type === 'k' && cell.color === color) return cell.square;
+    }
+  }
+  return undefined;
+}

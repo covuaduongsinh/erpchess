@@ -127,3 +127,13 @@ export function formatScore(score: Score): string {
   const pawns = score.value / 100;
   return `${pawns > 0 ? '+' : ''}${pawns.toFixed(2)}`;
 }
+
+/**
+ * Xác suất thắng của Trắng (0–100) từ điểm theo góc nhìn Trắng, dùng cho thanh đánh giá.
+ * Đường cong logistic giống các trang cờ phổ biến: +3 tốt ≈ 77%.
+ */
+export function whiteWinPercent(score: Score): number {
+  if (score.kind === 'mate') return score.value > 0 ? 100 : 0;
+  const chances = 2 / (1 + Math.exp(-0.00368208 * score.value)) - 1;
+  return Math.round((50 + 50 * chances) * 10) / 10;
+}

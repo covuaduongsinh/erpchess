@@ -54,3 +54,22 @@ describe('luật cờ', () => {
     expect(gameStatus('4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toBe('draw');
   });
 });
+
+describe('tiện ích hiển thị', () => {
+  it('sanLine: đổi PV dạng UCI sang SAN, dừng ở nước không hợp lệ', async () => {
+    const { sanLine } = await import('../src/rules');
+    expect(sanLine(START_FEN, ['e2e4', 'e7e5', 'g1f3', 'b8c6'])).toEqual([
+      'e4',
+      'e5',
+      'Nf3',
+      'Nc6',
+    ]);
+    expect(sanLine(START_FEN, ['e2e4', 'e2e4'])).toEqual(['e4']);
+  });
+
+  it('kingSquare: ô vua của bên đang đi', async () => {
+    const { kingSquare } = await import('../src/rules');
+    expect(kingSquare(START_FEN)).toBe('e1');
+    expect(kingSquare('R5k1/5ppp/8/8/8/8/5PPP/6K1 b - - 1 1')).toBe('g8');
+  });
+});

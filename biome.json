@@ -17,7 +17,8 @@
       "!**/src-tauri",
       "!**/assets",
       "!**/database.types.ts",
-      "!vendor"
+      "!vendor",
+      "!packages/board-web/src/pieces"
     ]
   },
   "formatter": {

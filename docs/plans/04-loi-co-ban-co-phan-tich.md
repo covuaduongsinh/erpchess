@@ -51,3 +51,58 @@ Dựa trên chess.js 1.4.0 (BSD-2) cho luật đi và FEN. Phần tự viết:
 ## Ngoài phạm vi đợt này
 
 - Bàn cờ mobile (mục 4), PGN Creator/Sharebox lưu lên Supabase (sau khi có bảng `pgns` ở Giai đoạn 4).
+
+## Kết quả mục 1–2 (2026-10-23)
+
+### `packages/chess-core` — 30 test
+
+- **Luật đi:** `legalDests`, `playMove` (nhận cả UCI và SAN), `needsPromotion`, `gameStatus`, `inCheck`, `kingSquare`.
+- **Hiển thị:** `sanLine` đổi PV dạng UCI của engine sang SAN.
+- **Cây ván cờ `GameTree`:**
+  - Nhánh chính kèm các biến; đi lại nước đã có thì dùng lại node sẵn có.
+  - `path`, `next`, `parentOf`, `promoteVariation`, `deleteFrom`, chú thích, NAG.
+- **PGN:**
+  - Đọc được nhiều ván trong một file, biến lồng nhau, chú thích `{…}` và `;`, NAG và ký hiệu `!?`, FEN/SetUp. Báo lỗi rõ khi gặp nước sai.
+  - Ghi ngược lại; vòng parse → ghi → parse giữ nguyên cây (đã kiểm với ván Opera của Morphy).
+- **Puzzle:** `gradeMove` chấm từng bước. Nếu nước cuối là chiếu hết thì mọi cách chiếu hết khác đều được tính đúng. Phong cấp phải khớp đúng quân.
+- **Cờ mù:** `hiddenSquares` với các chế độ `all` / `white` / `black` / `pieces`.
+
+### `packages/board-web` — 13 test
+
+- **Bàn cờ:** SVG tự viết (MIT), dùng bộ quân **celtic của Maurizio Monge (MIT)** lấy từ repo Arasan, có kèm `LICENSE`.
+- **Đi quân:** kéo-thả hoặc bấm-bấm, hiện ô có thể đi, hộp chọn quân phong cấp.
+- **Vẽ:** chuột phải kéo để vẽ mũi tên, bấm tại chỗ để tô ô (Shift / Alt / Ctrl đổi màu).
+- **Bàn phím:** phím mũi tên di chuyển ô, Enter để chọn hoặc đi, Esc để huỷ. Có vùng `aria-live` đọc tên ô và quân.
+- **Hiển thị:** lật bàn, toạ độ, nước vừa đi, ô vua bị chiếu, chế độ cờ mù.
+
+### Trang `/analysis` — Bàn phân tích (web và desktop) — 3 test
+
+- **Bàn cờ và danh sách nước:** danh sách dạng cây, bấm vào nước nào thì nhảy tới nước đó.
+- **Chỉnh sửa:** viết chú thích, nâng biến lên nhánh chính, xoá từ một nước trở đi.
+- **Phím tắt:** ← → ↑ ↓ để đi qua lại, F để lật bàn.
+- **Nhập/xuất:** mở FEN hoặc PGN; sao chép PGN hoặc FEN; nhận tham số `?fen=` (có kiểm hợp lệ).
+- **Engine:** chỉ nạp khi bấm "Bật engine", để không tải NNUE 25 MB khi chưa cần.
+  - Hiện 3 phương án ở dạng SAN; bấm vào phương án thì đi nước đầu của nó.
+  - Thanh đánh giá: thẻ `<meter>` cho trình đọc màn hình, cùng một thanh để nhìn.
+
+### Kiểm trên Chrome thật
+
+- **Bấm-bấm và kéo-thả:** bốn nước 1.e4 e5 2.Nf3 Nc6 bằng kéo-thả đều thành công.
+- **Biến:** lùi một nước rồi đi 2…Bc5, biến hiển thị "(2…Bc5)".
+- **Engine:** bật lên thì có 3 phương án và thanh đánh giá. Đã **đối chiếu với Arasan native** trên cùng thế: Nxe5 +4,13 với cùng chuỗi nước, phương án 2–3 cũng khớp (c3, Nc3).
+
+### Lỗi tìm ra khi thử thật, đã sửa kèm test hồi quy
+
+- **Kéo-thả nhanh không đi được quân:** trạng thái kéo nằm trong React state, mà `pointermove`/`pointerup` tới trước khi React vẽ lại.
+  - Sửa: chuyển trạng thái kéo và vẽ sang `useRef`. Thả ở ô khác ô xuất phát thì tính là nước đi, không phụ thuộc `pointermove`.
+  - Test hồi quy gửi sự kiện DOM liên tiếp, không đợi React vẽ lại.
+
+### Ghi chú về công cụ thử
+
+- Lệnh chụp màn hình CDP của tiện ích Chrome bị treo trên trang `/analysis`. Trong khi đó trang vẫn vẽ bình thường (`requestAnimationFrame` chạy, DOM đúng, thao tác chuột thật vẫn hoạt động).
+- Vì vậy phần kiểm chứng ở trên dựa vào thao tác chuột thật cộng với đọc DOM.
+
+### Còn lại
+
+- **Mục 3:** thử engine trong app desktop đã build (`tauri build`). Cần người dùng mở app, vì không điều khiển được cửa sổ desktop từ đây.
+- **Mục 4:** bàn cờ mobile (`board-native`). **Mục 5:** engine mobile.
