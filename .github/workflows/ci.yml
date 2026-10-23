@@ -44,3 +44,30 @@ jobs:
       - name: Tạo thư mục frontend giả để cargo check
         run: mkdir -p apps/web/dist && echo '<!doctype html>' > apps/web/dist/index.html
       - run: cargo check --manifest-path apps/desktop/src-tauri/Cargo.toml
+
+  engine:
+    name: Arasan native + WASM (kết quả phải giống hệt nhau)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.13
+      - name: Build Arasan native (Linux, SSE4.2)
+        run: |
+          sudo apt-get install -y ninja-build
+          node packages/engine/scripts/build-native.mjs modern
+      - name: Build Arasan WASM (sse41)
+        run: bash packages/engine/wasm/build.sh sse41
+      - name: So WASM với native (perft + điểm NNUE)
+        run: node packages/engine/wasm/compare.mjs vendor/build/arasan-modern/arasanx-64-modern sse41
+      - name: Test engine với bản native và WASM thật
+        run: ARASAN_BIN=$PWD/vendor/build/arasan-modern/arasanx-64-modern pnpm --filter @erpchess/engine test

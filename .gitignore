@@ -25,3 +25,5 @@ apps/mobile/android/
 
 # Build engine cục bộ
 vendor/build/
+packages/engine/wasm/dist/
+packages/engine/wasm/.obj/

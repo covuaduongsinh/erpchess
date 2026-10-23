@@ -145,3 +145,56 @@ interface EngineAdapter {
 ### Việc kế tiếp
 
 - **Bước 4 (build WASM):** cần emsdk. Docker Desktop đã cài nhưng chưa chạy; WSL Ubuntu có sẵn. Dự kiến build trong WSL hoặc CI Linux để đỡ RAM máy Windows.
+
+## Kết quả bước 4 — Build WebAssembly (2026-10-23)
+
+### Môi trường và cách build
+
+- **Toolchain:** emsdk (Emscripten 6.0.13) cài trong WSL Ubuntu 24.04 (`~/emsdk`).
+- **Lệnh build:** `bash packages/engine/wasm/build.sh <sse41|sse2>`. Script gọi thẳng `em++`, không cần CMake; ra `packages/engine/wasm/dist/arasan-<biến thể>.{mjs,wasm}` (đã gitignore).
+- **Thay `input.cpp`:** `packages/engine/wasm/input_queue.cpp` thay cho `input.cpp` gốc: hàng đợi lệnh dùng mutex + condition_variable, export `erp_send()`. Không sửa dòng nào trong `vendor/arasan`.
+- **Cờ link:**
+  - `-pthread -sPROXY_TO_PTHREAD`: `main` chạy trên pthread riêng, được phép chặn khi chờ lệnh.
+  - Stack pthread 4 MB, bộ nhớ 256 MB và cho phép tăng tới 2 GB.
+  - `MODULARIZE` + ES module, `ENVIRONMENT=web,worker,node`.
+- **Kích thước:** `arasan-sse41.wasm` khoảng 750 KB, file JS khoảng 84 KB. File NNUE tải riêng.
+- **Không có biến thể "không SIMD":** mạng NNUE v8 bắt buộc SIMD (`SparseLinear` có `static_assert`). Emscripten dịch intrinsic SSE2/SSSE3/SSE4.1 sang WASM SIMD128, nên trình duyệt phải hỗ trợ WASM SIMD (Chrome 91+, Firefox 89+, Safari 16.4+).
+
+### Lỗi đã gặp và cách tìm ra (bài học)
+
+- **Triệu chứng:** bản WASM đầu tiên vẫn chạy và trả nước đi. Perft đúng, nhưng **điểm NNUE sai ở 7/8 thế cờ** (có thế đổi cả dấu), số node bench khác native, và tốc độ "nhanh" bất thường.
+- **Cách phát hiện:** bench chạy được không chứng minh gì về tính đúng. Lỗi chỉ lộ ra nhờ `compare.mjs`, script so điểm NNUE tĩnh với native.
+- **Khoanh vùng:**
+  1. Đối chiếu với bản GCC Linux độc lập: kết luận native đúng, WASM sai.
+  2. Loại lần lượt các giả thuyết: biến thể SSE, `_64BIT`, endian.
+  3. Build cả hai bên với `-DNNUE_TRACE` và diff output từng lớp: input lớp L1 khớp, output L1 lệch.
+  4. Lần ngược ra `NnzGroupScatter`, một object static dựng **trước `main`** bằng `BitUtils::firstOne`.
+- **Nguyên nhân gốc:** script build thiếu `-DUSE_INTRINSICS` (và `-DSMP_STATS`, `-fno-strict-aliasing`), là các cờ upstream luôn bật. Thiếu `USE_INTRINSICS`, `firstOne` tra `MagicTable64`; bảng này chỉ được điền trong `BitUtils::init()` ở đầu `main`, nên lúc dựng object static nó toàn số 0, kéo theo bảng scatter sai.
+- **Cách sửa:** dùng đúng bộ cờ của `CMakeLists.txt`/`Makefile` upstream. **Từ nay mọi build engine phải sao đủ cờ upstream.**
+
+### Kiểm chứng
+
+- **`compare.mjs` (native MSVC so với WASM):** perft 5 = 4.865.609, và điểm NNUE của 8 thế cờ (khai cuộc, trung cuộc phức tạp, tàn cuộc, thế có phong cấp) khớp **17/17 dòng** ở cả `sse41` lẫn `sse2`.
+- **Bench:** WASM duyệt **2.468.819 node, đúng bằng native**, nghĩa là tìm kiếm giống hệt từng bit. Tốc độ trong Node (V8):
+
+  | Bản                  | nps    |
+  | -------------------- | ------ |
+  | native MSVC `modern` | 95.439 |
+  | WASM `sse41`         | 83.468 |
+  | WASM `sse2`          | 86.988 |
+
+  Bản WASM đạt khoảng 90% tốc độ native. `sse41` không nhanh hơn `sse2` trên máy này, nên có thể chỉ cần phát hành một biến thể. Sẽ đo lại trên trình duyệt ở bước 5.
+- **Thời gian nạp:** module cộng ghi NNUE vào FS ảo mất 170–320 ms trong Node.
+- **`test/wasm.test.ts`** (chạy khi đã build dist) dùng `UciEngine` thông qua `src/wasm.ts` (`createWasmTransport`). Đã qua với cả `sse41` và `sse2`:
+  - Tìm ra chiếu hết.
+  - `stop` dừng `go infinite`, chứng minh lệnh đến được engine qua `checkInput` trong lúc tìm kiếm.
+  - MultiPV 2 đúng.
+  - Bot Elo 1200 chọn được nước.
+- **CI:** job `engine` mới build native Linux và WASM, rồi chạy `compare.mjs` cùng test tích hợp. Nếu cờ build lệch nhau thì CI fail ngay.
+
+### Việc kế tiếp (bước 5)
+
+- **Web Worker:** adapter cho `apps/web` (Vite) nạp `arasan-*.mjs`.
+- **Header COOP/COEP:** `apps/web` cần `Cross-Origin-Opener-Policy: same-origin` và `Cross-Origin-Embedder-Policy: require-corp` (hoặc `credentialless`) để có SharedArrayBuffer. Phải kiểm tương thích với Supabase, Google Fonts, LiveKit.
+- **File NNUE:** tải file 25 MB (brotli khoảng 11 MB) từ Supabase Storage hoặc CDN, cache trong Cache API/OPFS, có thanh tiến độ.
+- **Đo lại tốc độ:** nps trên Chrome thật và khi đa luồng (`Threads` 2–4).
