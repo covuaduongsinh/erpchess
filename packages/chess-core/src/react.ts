@@ -1,5 +1,15 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { GameTree, isValidFen, parsePgn, type TreeNode } from './index';
+import {
+  GameTree,
+  isValidFen,
+  type Puzzle,
+  type PuzzleSession,
+  parsePgn,
+  playPuzzleMove,
+  retryPuzzleSession,
+  startPuzzleSession,
+  type TreeNode,
+} from './index';
 
 /**
  * Giữ một GameTree (đối tượng có thể thay đổi) cùng nước đang xem.
@@ -79,4 +89,36 @@ export function useGameTree(initialFen?: string) {
     () => ({ tree, current, version, play, goTo, back, forward, toStart, toEnd, load, mutate }),
     [tree, current, version, play, goTo, back, forward, toStart, toEnd, load, mutate],
   );
+}
+
+/**
+ * Làm một puzzle: chấm ngay từng nước, đối phương tự đáp. `onTryEnd` được gọi đúng một lần
+ * mỗi khi lượt thử kết thúc (sai hoặc giải xong) — nơi gọi nộp `moves` lên server ở đây.
+ */
+export function usePuzzleSession(puzzle: Puzzle, onTryEnd?: (session: PuzzleSession) => void) {
+  const [session, setSession] = useState(() => startPuzzleSession(puzzle, Date.now()));
+  // Giữ bản mới nhất trong ref: hai nước đi liên tiếp trước khi React vẽ lại vẫn đúng
+  const latest = useRef(session);
+  const onTryEndRef = useRef(onTryEnd);
+  onTryEndRef.current = onTryEnd;
+
+  const play = useCallback(
+    (uci: string) => {
+      const prev = latest.current;
+      const next = playPuzzleMove(puzzle, prev, uci, Date.now());
+      if (next === prev) return;
+      latest.current = next;
+      setSession(next);
+      if (next.status !== 'playing') onTryEndRef.current?.(next);
+    },
+    [puzzle],
+  );
+
+  const retry = useCallback(() => {
+    const next = retryPuzzleSession(puzzle, Date.now());
+    latest.current = next;
+    setSession(next);
+  }, [puzzle]);
+
+  return { session, play, retry };
 }

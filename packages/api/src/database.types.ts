@@ -49,6 +49,198 @@ export type Database = {
           },
         ]
       }
+      assignment_items: {
+        Row: {
+          assignment_id: string
+          id: string
+          position: number
+          puzzle_id: string
+        }
+        Insert: {
+          assignment_id: string
+          id?: string
+          position: number
+          puzzle_id: string
+        }
+        Update: {
+          assignment_id?: string
+          id?: string
+          position?: number
+          puzzle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_items_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignment_progress"
+            referencedColumns: ["assignment_id"]
+          },
+          {
+            foreignKeyName: "assignment_items_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_items_puzzle_id_fkey"
+            columns: ["puzzle_id"]
+            isOneToOne: false
+            referencedRelation: "puzzles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignment_targets: {
+        Row: {
+          assignment_id: string
+          group_id: string | null
+          id: string
+          student_id: string | null
+        }
+        Insert: {
+          assignment_id: string
+          group_id?: string | null
+          id?: string
+          student_id?: string | null
+        }
+        Update: {
+          assignment_id?: string
+          group_id?: string | null
+          id?: string
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_targets_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignment_progress"
+            referencedColumns: ["assignment_id"]
+          },
+          {
+            foreignKeyName: "assignment_targets_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_targets_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_targets_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignments: {
+        Row: {
+          academy_id: string
+          created_at: string
+          created_by: string | null
+          due_at: string | null
+          id: string
+          instructions: string | null
+          title: string
+        }
+        Insert: {
+          academy_id: string
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          instructions?: string | null
+          title: string
+        }
+        Update: {
+          academy_id?: string
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          instructions?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attempts: {
+        Row: {
+          finished_at: string | null
+          id: string
+          item_id: string
+          moves: Json
+          solved: boolean
+          started_at: string
+          student_id: string
+          time_ms: number
+          tries: number
+          updated_at: string
+        }
+        Insert: {
+          finished_at?: string | null
+          id?: string
+          item_id: string
+          moves?: Json
+          solved?: boolean
+          started_at?: string
+          student_id: string
+          time_ms?: number
+          tries?: number
+          updated_at?: string
+        }
+        Update: {
+          finished_at?: string | null
+          id?: string
+          item_id?: string
+          moves?: Json
+          solved?: boolean
+          started_at?: string
+          student_id?: string
+          time_ms?: number
+          tries?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attempts_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "assignment_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attempts_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_members: {
         Row: {
           created_at: string
@@ -301,9 +493,80 @@ export type Database = {
         }
         Relationships: []
       }
+      puzzles: {
+        Row: {
+          academy_id: string | null
+          created_at: string
+          created_by: string | null
+          fen: string
+          id: string
+          moves: string[]
+          rating: number
+          themes: string[]
+          title: string
+        }
+        Insert: {
+          academy_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          fen: string
+          id?: string
+          moves: string[]
+          rating?: number
+          themes?: string[]
+          title: string
+        }
+        Update: {
+          academy_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          fen?: string
+          id?: string
+          moves?: string[]
+          rating?: number
+          themes?: string[]
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "puzzles_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "puzzles_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      assignment_progress: {
+        Row: {
+          academy_id: string | null
+          assignment_id: string | null
+          last_activity: string | null
+          solved_items: number | null
+          student_id: string | null
+          time_ms: number | null
+          total_items: number | null
+          tries: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: string }
@@ -349,6 +612,14 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      puzzle_for_student_item: {
+        Args: { p_item: string; p_student: string }
+        Returns: {
+          fen: string
+          moves: string[]
+          puzzle_id: string
+        }[]
       }
     }
     Enums: {

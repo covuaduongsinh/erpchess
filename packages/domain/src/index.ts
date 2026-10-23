@@ -73,3 +73,22 @@ export function slugify(input: string): string {
     .slice(0, 48)
     .replace(/-+$/g, '');
 }
+
+export const assignmentTitleSchema = z.string().trim().min(1, 'title').max(160, 'title');
+
+/** Một bài tập: ít nhất một puzzle, giao cho ít nhất một lớp hoặc một học viên. */
+export const createAssignmentSchema = z
+  .object({
+    academyId: z.uuid(),
+    title: assignmentTitleSchema,
+    instructions: z.string().trim().max(2000).optional(),
+    dueAt: z.iso.datetime({ offset: true }).optional(),
+    puzzleIds: z.array(z.uuid()).min(1, 'puzzles').max(100),
+    groupIds: z.array(z.uuid()).default([]),
+    studentIds: z.array(z.uuid()).default([]),
+  })
+  .refine((v) => v.groupIds.length + v.studentIds.length > 0, {
+    message: 'targets',
+    path: ['groupIds'],
+  });
+export type CreateAssignmentInput = z.input<typeof createAssignmentSchema>;

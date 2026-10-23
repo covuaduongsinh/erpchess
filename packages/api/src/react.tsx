@@ -61,6 +61,13 @@ export const queryKeys = {
   members: (academyId: string) => ['members', academyId] as const,
   groups: (academyId: string) => ['groups', academyId] as const,
   groupStudents: (groupId: string) => ['group-students', groupId] as const,
+  puzzles: (academyId: string) => ['puzzles', academyId] as const,
+  assignments: (academyId: string) => ['assignments', academyId] as const,
+  assignment: (id: string) => ['assignment', id] as const,
+  attempts: (assignmentId: string, studentId?: string) =>
+    ['attempts', assignmentId, studentId ?? 'all'] as const,
+  progress: (filter: { assignmentId?: string; academyId?: string }) =>
+    ['progress', filter.assignmentId ?? '', filter.academyId ?? ''] as const,
 };
 
 export function useMyAcademies(userId: string | undefined) {
@@ -168,5 +175,91 @@ export function useAcceptInvitation() {
   return useMutation({
     mutationFn: (token: string) => api.acceptInvitation(client, token),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+export function usePuzzles(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.puzzles(academyId ?? ''),
+    queryFn: () => api.fetchPuzzles(client, academyId ?? ''),
+    enabled: !!academyId,
+    staleTime: 5 * 60_000,
+  });
+}
+
+export function useAssignments(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.assignments(academyId ?? ''),
+    queryFn: () => api.fetchAssignments(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useAssignment(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.assignment(id ?? ''),
+    queryFn: () => api.fetchAssignment(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+/** Lần làm bài của một bài tập (cần danh sách item); `studentId` để lọc một học viên. */
+export function useAttempts(assignment: api.AssignmentDetail | undefined, studentId?: string) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.attempts(assignment?.id ?? '', studentId),
+    queryFn: () => api.fetchAttempts(client, assignment?.items.map((i) => i.id) ?? [], studentId),
+    enabled: !!assignment,
+  });
+}
+
+export function useProgress(filter: { assignmentId?: string; academyId?: string }) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.progress(filter),
+    queryFn: () => api.fetchProgress(client, filter),
+    enabled: !!(filter.assignmentId || filter.academyId),
+  });
+}
+
+export function useCreateAssignment(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: Omit<Parameters<typeof api.createAssignment>[1], 'academyId'>) =>
+      api.createAssignment(client, { ...input, academyId }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.assignments(academyId) });
+      void qc.invalidateQueries({ queryKey: ['progress'] });
+    },
+  });
+}
+
+export function useDeleteAssignment(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.deleteAssignment(client, id),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.assignments(academyId) });
+      void qc.invalidateQueries({ queryKey: ['progress'] });
+    },
+  });
+}
+
+/** Nộp một lượt thử rồi làm mới lần làm bài và báo cáo của bài tập đó. */
+export function useSubmitAttempt(assignmentId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ itemId, moves }: { itemId: string; moves: { uci: string; ms: number }[] }) =>
+      api.submitAttempt(client, itemId, moves),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['attempts', assignmentId] });
+      void qc.invalidateQueries({ queryKey: ['progress'] });
+    },
   });
 }

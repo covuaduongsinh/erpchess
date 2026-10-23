@@ -15,3 +15,10 @@ export function validationKey(message: string): TranslationKey | null {
     ? (`validation.${message}` as TranslationKey)
     : null;
 }
+
+/** Tên chủ đề puzzle đã dịch; chủ đề lạ thì hiện nguyên mã. */
+export function useThemeLabel() {
+  const { t, i18n } = useT();
+  return (theme: string) =>
+    i18n.exists(`theme.${theme}`) ? t(`theme.${theme}` as TranslationKey) : theme;
+}

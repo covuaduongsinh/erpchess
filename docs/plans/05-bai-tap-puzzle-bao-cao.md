@@ -56,3 +56,42 @@ Kế hoạch tổng: [00-ke-hoach-tong.md](00-ke-hoach-tong.md) · Nền tảng 
   2. Học viên `minhan.test` làm: sai 1 lần rồi đúng.
   3. HLV xem báo cáo thấy đúng số lần thử.
 - **Lint/typecheck/test/build** xanh; CI xanh.
+
+## Kết quả (2026-10-23)
+
+**Backend:**
+- **Migration:** `20261023000002`–`04`, gồm hai bản sửa RLS do smoke test phát hiện:
+  - Học viên/phụ huynh trước đó đọc được target của người khác.
+  - `INSERT … RETURNING` vào `assignments` bị chặn.
+- **Edge Function `submit-attempt`:** chấm lại bằng `gradeMove`, upsert `attempts` bằng service role. Client không có quyền ghi `attempts`.
+- **Kiểm chứng:**
+  - pgTAP `02_assignments_rls.sql`: 20/20.
+  - `scripts/smoke-phase4.mjs`: 14/14.
+- **Thư viện puzzle:** 13 puzzle đã kiểm bằng Arasan, seed lên cloud. Chưa đủ khoảng 30 như dự kiến — bổ sung sau.
+
+**Lõi dùng chung:**
+- `chess-core/puzzle-session.ts` là state machine thuần cho phiên làm bài: chấm ngay, đối phương tự đáp, tính giờ từng nước.
+- Hook `usePuzzleSession` nằm trong `chess-core/react`.
+
+**Gói `api`:**
+- Truy vấn: `fetchPuzzles`, `fetchAssignments`, `fetchAssignment`, `createAssignment` (tự xoá bài nếu bước sau lỗi), `deleteAssignment`, `fetchAttempts`, `fetchProgress`, `submitAttempt`.
+- Mỗi truy vấn có hook React tương ứng.
+- Test tích hợp `phase4.integration.test.ts` chạy trên Supabase thật khi có biến môi trường, CI bỏ qua. Đã đạt: tạo bài → học viên sai rồi đúng → báo cáo 1/2 câu, 2 lần thử, 5 giây.
+
+**Web — tab "Bài tập":**
+- Danh sách bài tập.
+- Tạo bài: chọn puzzle (lọc theo chủ đề, xem thử), giao lớp/học viên, đặt hạn nộp.
+- Học viên làm bài: chuyển câu, đánh dấu ✓/✗, nộp mỗi lượt thử.
+- Báo cáo cho HLV/phụ huynh: bảng học viên × câu, số lần thử, thời gian. HLV xoá được bài.
+- Có test giao diện `PuzzleSolver.test.tsx`.
+
+**Mobile:**
+- Thẻ "Bài tập" trong màn hình học viện.
+- Màn hình `assignments/[id]`: học viên làm puzzle; HLV/phụ huynh xem báo cáo rút gọn.
+
+**Còn để sau:**
+- Soạn puzzle bằng trình dựng FEN; import PGN/EPD; bộ puzzle Lichess.
+- Tạo bài tập trên mobile.
+- Nhắc hạn nộp qua cron + push; hàng đợi offline.
+- Học viên đọc được `puzzles.moves` (cần để chấm ngay ở client). Server vẫn chấm lại nên không gian lận được kết quả, nhưng học viên xem được lời giải nếu tự gọi API — chấp nhận cho MVP.
+- Chưa thử giao diện trên Chrome bằng tài khoản thật vì không tự nhập mật khẩu vào trình duyệt. Người dùng cần đăng nhập để xem trực tiếp.
