@@ -1,0 +1,21 @@
+{
+  "name": "@erpchess/ui-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens.css"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@erpchess/config": "workspace:*",
+    "@types/node": "^24.19.2",
+    "typescript": "~6.0.3",
+    "vitest": "5.0.5"
+  }
+}

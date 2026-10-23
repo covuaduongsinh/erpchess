@@ -1,0 +1,172 @@
+/** Hook React dùng chung cho web/desktop (react-dom) và mobile (react-native). */
+import type { Session } from '@supabase/supabase-js';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { createContext, type ReactNode, use, useEffect, useState } from 'react';
+import type { ErpClient } from './client';
+import * as api from './queries';
+
+const ClientContext = createContext<ErpClient | null>(null);
+
+export function ErpProvider({ client, children }: { client: ErpClient; children: ReactNode }) {
+  const [queryClient] = useState(
+    () => new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, retry: 1 } } }),
+  );
+  return (
+    <ClientContext value={client}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </ClientContext>
+  );
+}
+
+export function useErpClient(): ErpClient {
+  const client = use(ClientContext);
+  if (!client) throw new Error('useErpClient phải nằm trong <ErpProvider>');
+  return client;
+}
+
+export type SessionState = { session: Session | null; loading: boolean };
+
+/** Theo dõi phiên đăng nhập; tự cập nhật khi đăng nhập/đăng xuất ở tab khác hoặc khi token được làm mới. */
+export function useSession(): SessionState {
+  const client = useErpClient();
+  const queryClient = useQueryClient();
+  const [state, setState] = useState<SessionState>({ session: null, loading: true });
+
+  useEffect(() => {
+    let active = true;
+    void client.auth.getSession().then(({ data }) => {
+      if (active) setState({ session: data.session, loading: false });
+    });
+    const { data } = client.auth.onAuthStateChange((event, session) => {
+      setState({ session, loading: false });
+      if (event === 'SIGNED_OUT') queryClient.clear();
+    });
+    return () => {
+      active = false;
+      data.subscription.unsubscribe();
+    };
+  }, [client, queryClient]);
+
+  return state;
+}
+
+export const queryKeys = {
+  academies: (userId: string) => ['academies', userId] as const,
+  members: (academyId: string) => ['members', academyId] as const,
+  groups: (academyId: string) => ['groups', academyId] as const,
+  groupStudents: (groupId: string) => ['group-students', groupId] as const,
+};
+
+export function useMyAcademies(userId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.academies(userId ?? ''),
+    queryFn: () => api.fetchMyAcademies(client, userId ?? ''),
+    enabled: !!userId,
+  });
+}
+
+export function useMembers(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.members(academyId ?? ''),
+    queryFn: () => api.fetchMembers(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useGroups(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.groups(academyId ?? ''),
+    queryFn: () => api.fetchGroups(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useGroupStudentIds(groupId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: queryKeys.groupStudents(groupId ?? ''),
+    queryFn: () => api.fetchGroupStudentIds(client, groupId ?? ''),
+    enabled: !!groupId,
+  });
+}
+
+export function useCreateAcademy() {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: Parameters<typeof api.createAcademy>[1]) =>
+      api.createAcademy(client, input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+export function useCreateGroup(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ name, coachId }: { name: string; coachId?: string }) =>
+      api.createGroup(client, academyId, name, coachId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) }),
+  });
+}
+
+export function useCreateStudent(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: Omit<Parameters<typeof api.createStudent>[1], 'academyId'>) =>
+      api.createStudent(client, { ...input, academyId }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.members(academyId) });
+      void qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) });
+    },
+  });
+}
+
+export function useToggleGroupStudent(academyId: string, groupId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ studentId, inGroup }: { studentId: string; inGroup: boolean }) =>
+      inGroup
+        ? api.removeStudentFromGroup(client, groupId, studentId)
+        : api.addStudentToGroup(client, groupId, studentId),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: queryKeys.groupStudents(groupId) });
+      void qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) });
+    },
+  });
+}
+
+export function useCreateInvitation(academyId: string) {
+  const client = useErpClient();
+  return useMutation({
+    mutationFn: ({
+      role,
+      email,
+      studentId,
+    }: {
+      role: 'coach' | 'parent';
+      email?: string;
+      studentId?: string;
+    }) => api.createInvitation(client, academyId, role, { email, studentId }),
+  });
+}
+
+export function useAcceptInvitation() {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (token: string) => api.acceptInvitation(client, token),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}

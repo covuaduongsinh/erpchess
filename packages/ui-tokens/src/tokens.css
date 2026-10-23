@@ -1,0 +1,19 @@
+/* Sinh tay từ src/index.ts — test tokens.test.ts đảm bảo hai nơi luôn khớp nhau. */
+@theme {
+  --color-primary: #2b3990;
+  --color-blue-light: #2275b4;
+  --color-teal: #3dbb95;
+  --color-green: #2da44a;
+  --color-orange: #f7941d;
+  --color-orange-hover: #e8850f;
+  --color-yellow: #fbb040;
+  --color-bg: #f8f9fc;
+  --color-white: #ffffff;
+  --color-text: #1a1a2e;
+  --color-text-muted: #6b7280;
+  --color-text-on-primary: #ffffff;
+  --color-danger: #dc2626;
+  --color-board-light: #e8ebf7;
+  --color-board-dark: #7c88c9;
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+}

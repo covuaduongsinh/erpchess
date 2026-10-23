@@ -1,0 +1,24 @@
+{
+  "name": "@erpchess/engine",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node.ts",
+    "./wasm": "./src/wasm.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "probe": "node scripts/uci-probe.mjs",
+    "build:native": "node scripts/build-native.mjs"
+  },
+  "devDependencies": {
+    "@erpchess/config": "workspace:*",
+    "@types/node": "^24.19.2",
+    "typescript": "~6.0.3",
+    "vitest": "5.0.5"
+  }
+}

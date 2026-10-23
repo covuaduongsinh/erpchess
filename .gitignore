@@ -1,0 +1,32 @@
+node_modules/
+dist/
+.next/
+.turbo/
+.expo/
+web-build/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+
+# Tauri
+apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
+
+# Expo native (CNG)
+apps/mobile/ios/
+apps/mobile/android/
+
+# OMC runtime state
+.omc/
+
+# Build engine cục bộ
+vendor/build/
+packages/engine/wasm/dist/
+packages/engine/wasm/.obj/
+
+# Log UCI thật dùng làm dữ liệu test (đã thay đường dẫn máy)
+!packages/engine/test/fixtures/*.log
