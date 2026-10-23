@@ -94,6 +94,7 @@ export const createAssignmentSchema = z
 export type CreateAssignmentInput = z.input<typeof createAssignmentSchema>;
 
 export * from './admin';
+export * from './classroom';
 export * from './csv';
 export * from './markdown';
 export * from './periods';

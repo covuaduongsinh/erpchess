@@ -19,6 +19,7 @@ import {
 } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
+import { ScheduleEditor } from '../components/ScheduleEditor';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
@@ -26,8 +27,6 @@ import { useT } from '../lib/use-t';
 export const Route = createFileRoute('/a/$slug/groups')({
   component: GroupsPage,
 });
-
-const WEEKDAYS = [1, 2, 3, 4, 5, 6, 0] as const;
 
 function GroupsPage() {
   const { t } = useT();
@@ -145,10 +144,6 @@ function GroupSettings({ group, onDeleted }: { group: GroupWithCount; onDeleted:
   const [schedule, setSchedule] = useState<ScheduleSlot[]>(parsed.success ? parsed.data : []);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  function setSlot(index: number, patch: Partial<ScheduleSlot>) {
-    setSchedule((s) => s.map((slot, i) => (i === index ? { ...slot, ...patch } : slot)));
-  }
-
   function onSave(e: FormEvent) {
     e.preventDefault();
     update.mutate({
@@ -192,61 +187,11 @@ function GroupSettings({ group, onDeleted }: { group: GroupWithCount; onDeleted:
         </label>
 
         {kind === 'batch' && (
-          <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 text-sm font-medium">{t('groups.schedule')}</legend>
-            {schedule.length === 0 && (
-              <p className="text-sm text-text-muted">{t('groups.noSchedule')}</p>
-            )}
-            {schedule.map((slot, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: các buổi không có id, thứ tự do người dùng sửa
-              <div key={i} className="flex flex-wrap items-end gap-2">
-                <select
-                  aria-label={`${t('groups.schedule')} ${i + 1}`}
-                  value={slot.day}
-                  onChange={(e) => setSlot(i, { day: Number(e.target.value) })}
-                  className="rounded-md border border-text-muted/30 bg-white px-2 py-2"
-                >
-                  {WEEKDAYS.map((d) => (
-                    <option key={d} value={d}>
-                      {t(`weekday.d${d}`)}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="time"
-                  aria-label={t('groups.schedule')}
-                  value={slot.start}
-                  onChange={(e) => setSlot(i, { start: e.target.value })}
-                  className="rounded-md border border-text-muted/30 bg-white px-2 py-2"
-                  required
-                />
-                <input
-                  type="number"
-                  aria-label={t('groups.minutes')}
-                  min={15}
-                  max={480}
-                  step={15}
-                  value={slot.minutes}
-                  onChange={(e) => setSlot(i, { minutes: Number(e.target.value) })}
-                  className="w-24 rounded-md border border-text-muted/30 bg-white px-2 py-2"
-                />
-                <Button
-                  variant="ghost"
-                  className="text-sm"
-                  onClick={() => setSchedule((s) => s.filter((_, j) => j !== i))}
-                >
-                  {t('groups.removeSlot')}
-                </Button>
-              </div>
-            ))}
-            <Button
-              variant="ghost"
-              className="self-start text-sm"
-              onClick={() => setSchedule((s) => [...s, { day: 1, start: '18:00', minutes: 90 }])}
-            >
-              {t('groups.addSlot')}
-            </Button>
-          </fieldset>
+          <ScheduleEditor
+            legend={t('groups.schedule')}
+            schedule={schedule}
+            onChange={setSchedule}
+          />
         )}
 
         <ErrorText error={update.error ?? remove.error} />
