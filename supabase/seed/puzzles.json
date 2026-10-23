@@ -80,10 +80,10 @@
     "eval": "#1"
   },
   {
-    "title": "Tàn cuộc xe: ăn tốt thắng chất",
+    "title": "Ăn xe không được bảo vệ (tàn cuộc)",
     "fen": "8/8/4k3/8/3pK3/8/3R4/3r4 w - - 0 1",
     "moves": ["d2d1", "e6d6", "d1d4"],
-    "themes": ["endgame", "exchange"],
+    "themes": ["hangingPiece", "endgame"],
     "rating": 1000,
     "eval": "3048cp"
   },
