@@ -1,0 +1,34 @@
+{
+  "name": "@erpchess/board-native",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "gen:pieces": "node scripts/gen-pieces.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@erpchess/board-web": "workspace:*",
+    "@erpchess/chess-core": "workspace:*",
+    "@erpchess/ui-tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "19.3.0",
+    "react-native": "*",
+    "react-native-gesture-handler": "*",
+    "react-native-svg": "*"
+  },
+  "devDependencies": {
+    "@erpchess/config": "workspace:*",
+    "@types/react": "~19.3.0",
+    "react": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-gesture-handler": "~3.3.0",
+    "react-native-svg": "15.16.0",
+    "typescript": "~6.0.3"
+  }
+}

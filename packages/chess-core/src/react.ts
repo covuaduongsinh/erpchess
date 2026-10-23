@@ -1,5 +1,5 @@
-import { GameTree, isValidFen, parsePgn, type TreeNode } from '@erpchess/chess-core';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { GameTree, isValidFen, parsePgn, type TreeNode } from './index';
 
 /**
  * Giữ một GameTree (đối tượng có thể thay đổi) cùng nước đang xem.

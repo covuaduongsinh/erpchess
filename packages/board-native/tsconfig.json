@@ -1,0 +1,5 @@
+{
+  "extends": "@erpchess/config/tsconfig.base.json",
+  "compilerOptions": { "jsx": "react-jsx", "lib": ["ES2023"] },
+  "include": ["src"]
+}

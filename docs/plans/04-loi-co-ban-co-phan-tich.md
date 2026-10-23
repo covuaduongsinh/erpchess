@@ -106,3 +106,26 @@ Dựa trên chess.js 1.4.0 (BSD-2) cho luật đi và FEN. Phần tự viết:
 
 - **Mục 3:** thử engine trong app desktop đã build (`tauri build`). Cần người dùng mở app, vì không điều khiển được cửa sổ desktop từ đây.
 - **Mục 4:** bàn cờ mobile (`board-native`). **Mục 5:** engine mobile.
+
+## Kết quả mục 4 — Bàn cờ mobile (2026-10-23)
+
+- **`packages/board-native`:** bàn cờ React Native dùng `react-native-svg` 15.16 và `react-native-gesture-handler` 3.3 (API hook `usePanGesture`).
+  - Cùng hành vi với bản web: chạm-chạm hoặc kéo-thả, hiện ô có thể đi, hộp chọn phong cấp, lật bàn, toạ độ, cờ mù.
+  - Bàn cờ tối đa 560px và căn giữa, để không phình to trên máy tính bảng hay màn hình rộng.
+  - Dùng chung với web: hình học bàn cờ qua `@erpchess/board-web/geometry`; bộ quân celtic sinh thành chuỗi XML bằng `scripts/gen-pieces.mjs`, file SVG của bản web là nguồn duy nhất.
+  - Trạng thái kéo nằm trong `useRef`, tránh lỗi kéo nhanh đã gặp ở bản web. Callback cử chỉ gọi qua một ref luôn trỏ tới hàm của lần render mới nhất, phòng trường hợp RNGH giữ closure cũ.
+- **`useGameTree`** chuyển sang `@erpchess/chess-core/react`, web và mobile dùng chung.
+- **Màn hình `/analysis` trên mobile:** bàn cờ, các nút ⏮ ◀ ▶ ⏭ và lật bàn, cây nước đi có biến, mở FEN/PGN. Màn hình chào và màn danh sách học viện có nút mở Bàn phân tích.
+
+### Kiểm chứng
+
+- Chạy bản `expo export --platform web` (react-native-web dùng chính component này) trên Chrome thật:
+  - Chạm-chạm 1.e4, kéo-thả 1…e5, 2.Nf3, 2…Nc6.
+  - Bấm ◀ rồi kéo 1.d4: biến hiện "1.e4 (1.d4)".
+- **Chưa chạy trên thiết bị hoặc emulator Android/iOS.** Cần development build (`npx expo run:android`) hoặc Expo Go. RNGH và react-native-svg đều có sẵn trong Expo Go SDK 58.
+- **Ghi chú khi thử:** cú bấm qua `ref` của công cụ tự cuộn phần tử vào khung nhìn, làm `ScrollView` dịch và lệch toạ độ đã tính sẵn. Thao tác bằng toạ độ chuột thật thì không gặp vấn đề này.
+
+### Còn lại
+
+- **Mục 3:** thử engine trong app desktop đã build (cần người dùng mở app).
+- **Mục 5:** engine trên mobile (module native C++, bước 7 trong kế hoạch engine). Trước đó mobile chỉ có bàn phân tích, chưa có engine.
