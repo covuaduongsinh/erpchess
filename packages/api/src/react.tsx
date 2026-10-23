@@ -1170,3 +1170,24 @@ export function useClassroomRoom(
 
   return { room, snapshot, chat, peers, status, error };
 }
+
+/** Token video LiveKit của lớp; không thử lại (lỗi cấu hình hay quyền đều không tự hết). */
+export function useVideoToken(classroomId: string | undefined, enabled = true) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['video-token', classroomId ?? ''],
+    queryFn: () => classrooms.fetchVideoToken(client, classroomId ?? ''),
+    enabled: !!classroomId && enabled,
+    retry: false,
+    staleTime: 2 * 60 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export function useSilenceParticipant(classroomId: string) {
+  const client = useErpClient();
+  return useMutation({
+    mutationFn: (v: { identity: string; on: boolean }) =>
+      classrooms.silenceParticipant(client, classroomId, v.identity, v.on),
+  });
+}

@@ -4,11 +4,14 @@ import { Board } from '@erpchess/board-web';
 import { isValidFen, legalDests, START_FEN, sideToMove } from '@erpchess/chess-core';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { type FormEvent, lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { EngineLines } from '../components/analysis/EngineLines';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
+
+// Thư viện LiveKit chỉ nạp khi người dùng bật video
+const VideoPanel = lazy(() => import('../components/classroom/VideoPanel'));
 
 export const Route = createFileRoute('/a/$slug/classes/$id/room')({
   component: RoomPage,
@@ -35,6 +38,7 @@ function RoomPage() {
   const join = useJoinClassroom(id);
   const joined = useRef(false);
   const [flipped, setFlipped] = useState(false);
+  const [video, setVideo] = useState(false);
   const onScore = useCallback(() => undefined, []);
 
   // Học viên vào phòng thì tự ghi điểm danh (một lần)
@@ -122,6 +126,17 @@ function RoomPage() {
           )}
         </div>
         <div className="flex flex-col gap-4">
+          <Card title={t('classroom.video')}>
+            {video ? (
+              <Suspense fallback={<Spinner />}>
+                <VideoPanel classroomId={c.id} />
+              </Suspense>
+            ) : (
+              <Button variant="cta" className="self-start" onClick={() => setVideo(true)}>
+                {t('classroom.videoJoin')}
+              </Button>
+            )}
+          </Card>
           <Card title={t('classroom.people', { count: peers.length })}>
             <ul className="flex flex-col gap-1 text-sm">
               {peers.map((p) => (

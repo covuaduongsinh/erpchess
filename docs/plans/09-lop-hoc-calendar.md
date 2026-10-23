@@ -107,3 +107,13 @@ Kế hoạch con ghi vào `docs/plans/09-lop-hoc-calendar.md`. Chia 3 PR, mỗi 
   - pgTAP `08_classroom_realtime.sql`: 8/8 (học viên không gửi được lên kênh bàn cờ, người ngoài lớp không nghe/gửi được, topic sai bị từ chối).
   - `phase8.integration.test.ts` thêm test hai client trên cloud: học viên nhận nước của HLV, xin đi quân bị bỏ qua khi chưa được trao quyền và được chấp nhận sau khi trao, chat tới HLV, phòng không được giao thì không vào được.
   - Chrome: "Phòng mẫu (Claude)" (không giao ai) — đi e4, chat, bật engine (độ sâu 14), xem lại 2 bước, vào lại phòng thì bàn cờ khôi phục từ `classrooms.state`.
+
+### PR 8c (2026-10-25)
+
+- **Edge Function `livekit-token`** (đã triển khai): kiểm người gọi xem được lớp qua RLS, lớp phải online và chưa kết thúc; ký token bằng `livekit-server-sdk@2.19.1`. HLV phụ trách / owner có `roomAdmin` và được chia sẻ màn hình; chế độ "none" chỉ cho phát micro. Hành động `silence` để HLV tắt/mở quyền phát của một người. Thiếu `LIVEKIT_URL` / `LIVEKIT_API_KEY` / `LIVEKIT_API_SECRET` → 503 `video_not_configured`.
+- **Web:** `VideoPanel` tải lười (chunk riêng) trong phòng học, `livekit-client@2.22.4` + `@livekit/components-react@2.9.24` (Apache-2.0). `roomOptionsFor` (có test): hiệu năng = simulcast 720p; chuẩn = 360p không simulcast; không video = chỉ âm thanh. HLV có danh sách tắt/mở tiếng & hình.
+- **Mobile:** chưa có video (cần dev build có WebRTC native) — ghi 🟡 trong ledger.
+- **Kiểm chứng:**
+  - Test tích hợp: HLV nhận `video_not_configured` (hoặc token khi đã có khoá), lớp offline → `not_online`, học viên không được giao → `forbidden`.
+  - Chrome: bấm "Bật video & âm thanh" → báo chưa cấu hình, bàn cờ/chat vẫn trực tuyến.
+  - Chưa thử gọi video thật: cần chủ dự án tạo project LiveKit Cloud và đặt 3 secret cho Edge Functions.

@@ -554,6 +554,15 @@ export const vi = {
     webOnly: 'Luyện với máy dùng trên web hoặc máy tính.',
   },
   classroom: {
+    video: 'Video',
+    videoJoin: 'Bật video & âm thanh',
+    videoConnecting: 'Đang kết nối video…',
+    videoNotConfigured:
+      'Máy chủ chưa cấu hình video (LiveKit). Bàn cờ và trò chuyện vẫn dùng được.',
+    videoLeft: 'Bạn đã rời phòng video.',
+    videoPeople: 'Người trong phòng video',
+    silence: 'Tắt tiếng & hình',
+    unsilence: 'Cho phát lại',
     room: 'Phòng học',
     enterRoom: 'Vào phòng học',
     live: 'Đang trực tuyến',

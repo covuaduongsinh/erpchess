@@ -8,7 +8,7 @@ import {
 } from '@erpchess/domain';
 import type { ErpClient } from './client';
 import type { Json, Tables } from './database.types';
-import { unwrap } from './queries';
+import { ApiError, unwrap } from './queries';
 
 export type Classroom = Tables<'classrooms'>;
 export type ClassroomTarget = { group_id: string | null; student_id: string | null };
@@ -312,4 +312,46 @@ export async function createCalendarEvent(
 
 export async function deleteCalendarEvent(client: ErpClient, id: string) {
   unwrap(await client.from('calendar_events').delete().eq('id', id));
+}
+
+// ── Video LiveKit (Giai đoạn 8c) ──
+
+export type VideoToken = {
+  token: string;
+  url: string;
+  mode: 'performance' | 'standard' | 'none';
+  runner: boolean;
+};
+
+async function invokeLivekit<T>(client: ErpClient, body: Record<string, unknown>): Promise<T> {
+  const { data, error } = await client.functions.invoke<T>('livekit-token', { body });
+  if (error) {
+    const ctx = (error as { context?: unknown }).context;
+    let code: string | undefined;
+    if (ctx instanceof Response) {
+      try {
+        code = ((await ctx.json()) as { error?: string }).error;
+      } catch {
+        code = undefined;
+      }
+    }
+    throw new ApiError(code ?? error.message, code);
+  }
+  if (!data) throw new ApiError('Không nhận được phản hồi');
+  return data;
+}
+
+/** Token vào phòng video của lớp; lỗi `video_not_configured` khi máy chủ chưa có khoá LiveKit. */
+export function fetchVideoToken(client: ErpClient, classroomId: string) {
+  return invokeLivekit<VideoToken>(client, { classroomId });
+}
+
+/** HLV tắt (`on = true`) hoặc mở lại quyền phát của một người trong phòng video. */
+export function silenceParticipant(
+  client: ErpClient,
+  classroomId: string,
+  identity: string,
+  on: boolean,
+) {
+  return invokeLivekit<{ ok: true }>(client, { classroomId, silence: identity, on });
 }

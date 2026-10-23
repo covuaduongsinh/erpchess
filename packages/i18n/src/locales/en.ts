@@ -557,6 +557,15 @@ export const en: Resource = {
     webOnly: 'Engine practice is available on web or desktop.',
   },
   classroom: {
+    video: 'Video',
+    videoJoin: 'Join video & audio',
+    videoConnecting: 'Connecting video…',
+    videoNotConfigured:
+      'Video (LiveKit) is not configured on the server. The board and chat still work.',
+    videoLeft: 'You left the video room.',
+    videoPeople: 'People in the video room',
+    silence: 'Mute audio & video',
+    unsilence: 'Allow again',
     room: 'Classroom',
     enterRoom: 'Enter classroom',
     live: 'Live',
