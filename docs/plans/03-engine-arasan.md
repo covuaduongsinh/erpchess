@@ -63,7 +63,7 @@ interface EngineAdapter {
 - **Web:** tải từ Supabase Storage (hoặc CDN) lần đầu, cache bằng Cache API/OPFS, `FS.writeFile` vào FS ảo của Emscripten rồi `setoption name NNUE File`.
 - **Desktop:** đóng gói sẵn trong installer.
 - **Mobile:** tải lần đầu vào thư mục app.
-- **Khi chưa tải xong:** engine vẫn chạy bằng đánh giá cổ điển. Cần xác minh Arasan v26 còn hỗ trợ chế độ không NNUE (xem bước 1).
+- **Khi chưa tải xong:** engine **không chạy được**. Bước 1 xác nhận Arasan v26 không còn đánh giá cổ điển; nạp NNUE lỗi thì engine thoát. Vì vậy UI phải hiện tiến độ tải, và tính năng không cần engine (bàn cờ, PGN, puzzle) vẫn dùng được trong lúc chờ. File nén brotli còn khoảng 11 MB (gzip 13,6 MB) và trình duyệt tự giải nén qua `Content-Encoding: br`.
 
 **Đa luồng trên web:**
 - Bản mặc định là 1 luồng, chạy được ở mọi nơi.
@@ -97,3 +97,51 @@ interface EngineAdapter {
 - **Tốc độ trên web:** WASM không SIMD sẽ chậm hơn native nhiều lần. Với mục tiêu đào tạo (bot giới hạn Elo, phân tích nhanh) có thể vẫn đủ; cần đo ở bước 4.
 - **Kích thước tải về:** file NNUE 25 MB nặng cho mạng di động. Cần tải nền, có thanh tiến độ và cache.
 - **Phân tích phía server:** nếu thiết bị yếu có thể bổ sung sau. Vì Arasan là MIT nên chạy trên server cũng không vướng ràng buộc giấy phép.
+
+## Kết quả bước 1–3 (2026-10-23)
+
+### Bước 1 — Khảo sát mã nguồn (Arasan v26.1)
+
+- **Nhận lệnh:**
+  - `Protocol::poll` (`protocol.cpp`) chặn ở `Input::readInput` giữa các lệnh.
+  - Trong lúc tìm kiếm, `Protocol::monitor` gọi `Input::checkInput` (không chặn) để bắt `stop`. Tìm kiếm chạy ngay trên luồng gọi.
+  - Mọi I/O đầu vào đều nằm trong `input.cpp` (140 dòng), nên điểm chèn duy nhất cần thiết là **một bản `input.cpp` thay thế cho Emscripten/mobile** đọc từ hàng đợi lệnh. Không phải sửa `protocol.cpp`.
+- **Đầu ra:** toàn bộ in qua `std::cout`, tắt buffer trong `main`. Emscripten chuyển tiếp từng dòng qua `Module.print`; module mobile chuyển hướng `std::cout`.
+- **NNUE bắt buộc:**
+  - `globals::initGlobals` gọi `loadNetwork`; nạp lỗi thì in "failed to load network, terminating" rồi thoát.
+  - Đường dẫn tương đối tính theo thư mục file chạy (`derivePath`); có thể đặt tuyệt đối bằng `setoption name NNUE file`.
+- **Hệ quả cho bản WASM:**
+  - Engine cần một luồng được phép **chặn** khi chờ lệnh và nhận `stop` trong lúc tìm kiếm.
+  - Hướng chính: build `-pthread -sPROXY_TO_PTHREAD`. `main` chạy trên pthread; lệnh từ JS đẩy vào hàng đợi C++ dùng `std::mutex` + `std::condition_variable`. Hướng này cần `crossOriginIsolated`, đổi lại có luôn đa luồng.
+  - Bản 1 luồng không cần cross-origin isolation thì phải dùng Asyncify ở `checkInput`, và sẽ chậm. Để sau, khi đã đo được hiệu năng ở bước 4.
+- **MinGW không dựng được:** `globals.cpp` include `sys/resource.h` và dùng `std::aligned_alloc`. Trên Windows dùng MSVC (Build Tools 2022).
+
+### Bước 2 — Submodule và bản native
+
+- **Submodule:** `vendor/arasan` ghim tag `v26.1` (kèm `src/syzygy`).
+- **Build:** `pnpm --filter @erpchess/engine build:native [modern|avx2|avx2-bmi2|old|neon]`, ra file ở `vendor/build/arasan-<biến thể>/` (đã gitignore).
+- **Máy dev:** Pentium Gold G6405, **không có AVX2**, nên dùng biến thể `modern` (SSE4.2 + POPCNT). Bản desktop phải tự chọn biến thể theo CPU (`modern` làm dự phòng), vì máy ở trung tâm/trường học thường cũng thuộc loại này.
+- **Bench:** 1 luồng đạt khoảng **95.000 nps** (2.468.819 node / 25,9 s).
+- **Probe UCI:** `scripts/uci-probe.mjs` ghi 5 phiên thành fixture trong `packages/engine/test/fixtures/`; đường dẫn máy đã thay bằng `<DIR>` qua `scripts/scrub-fixtures.mjs`.
+  - `uci`: có 20 option, gồm `MultiPV` 1–10, `Threads`, `UCI_LimitStrength`, `UCI_Elo` 1000–3450, `NNUE file`.
+  - Mate-in-1 `6k1/5ppp/8/8/8/8/5PPP/3R2K1 w`: ra `bestmove d1d8`, `score mate 1`.
+  - Điểm in **theo bên đang đi** (thế đen đi: `cp 50` nghĩa là đen hơn).
+  - Mặc định `OwnBook=true` và ghi file học vào AppData; app tắt cả hai khi `init`.
+
+### Bước 3 — `packages/engine` (TypeScript)
+
+- **`src/uci.ts`:** `parseInfo` (MultiPV, cp/mate, lower/upperbound, nodes/nps/time/hashfull, pv), `parseBestMove`, `parseOption` (tên có dấu cách, combo/var), `toWhitePov`, `formatScore`.
+- **`src/engine.ts`:** `UciEngine` chạy trên `UciTransport` trừu tượng.
+  - `init`: tắt OwnBook và Position learning; đặt NNUE, Threads, Hash.
+  - `analyse(fen, limits, onInfo)` với MultiPV; `play(fen, { elo })` có kẹp Elo theo min/max của option.
+  - `stop`, `dispose`, và timeout cho mọi bước chờ.
+- **`src/node.ts`:** `spawnTransport` cho Node (server, test tích hợp).
+- **Test:** 14/14 qua, chạy liên tiếp 3 lần đều ổn định.
+  - 10 test parser và engine phát lại log thật.
+  - 1 test kiểm engine im lặng thì báo lỗi.
+  - Test tích hợp với file chạy thật (`ARASAN_BIN=…`): chiếu hết, `stop` dừng `go infinite`, bot Elo 1200. Không có `ARASAN_BIN` thì test này tự bỏ qua, nên CI chưa chạy nó.
+  - Một lần chạy đầu, test tích hợp bị treo 30 giây khi chạy cùng lúc với `pnpm install`; không tái hiện được trong 3 lần sau. Cần theo dõi khi đưa lên CI.
+
+### Việc kế tiếp
+
+- **Bước 4 (build WASM):** cần emsdk. Docker Desktop đã cài nhưng chưa chạy; WSL Ubuntu có sẵn. Dự kiến build trong WSL hoặc CI Linux để đỡ RAM máy Windows.

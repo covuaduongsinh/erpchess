@@ -16,7 +16,8 @@
       "!**/next-env.d.ts",
       "!**/src-tauri",
       "!**/assets",
-      "!**/database.types.ts"
+      "!**/database.types.ts",
+      "!vendor"
     ]
   },
   "formatter": {

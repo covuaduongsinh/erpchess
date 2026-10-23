@@ -22,3 +22,6 @@ apps/mobile/android/
 
 # OMC runtime state
 .omc/
+
+# Build engine cục bộ
+vendor/build/
