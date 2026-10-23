@@ -58,6 +58,60 @@ export type Database = {
           },
         ]
       }
+      activity_attempts: {
+        Row: {
+          activity_id: string
+          answers: Json
+          finished_at: string | null
+          id: string
+          score: number
+          solved: boolean
+          student_id: string
+          time_ms: number
+          tries: number
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          answers?: Json
+          finished_at?: string | null
+          id?: string
+          score?: number
+          solved?: boolean
+          student_id: string
+          time_ms?: number
+          tries?: number
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          answers?: Json
+          finished_at?: string | null
+          id?: string
+          score?: number
+          solved?: boolean
+          student_id?: string
+          time_ms?: number
+          tries?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_attempts_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "study_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_attempts_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assignment_items: {
         Row: {
           assignment_id: string
@@ -671,6 +725,192 @@ export type Database = {
           },
         ]
       }
+      studies: {
+        Row: {
+          academy_id: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          level_id: string | null
+          title: string
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          academy_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          level_id?: string | null
+          title: string
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          academy_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          level_id?: string | null
+          title?: string
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studies_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "studies_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "studies_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "levels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      study_activities: {
+        Row: {
+          created_at: string
+          hint_penalty: number
+          id: string
+          kind: string
+          max_attempts: number | null
+          payload: Json
+          points: number
+          position: number
+          study_id: string
+          time_limit_s: number | null
+          title: string
+          topics: string[]
+          wrong_penalty: number
+        }
+        Insert: {
+          created_at?: string
+          hint_penalty?: number
+          id?: string
+          kind: string
+          max_attempts?: number | null
+          payload: Json
+          points?: number
+          position: number
+          study_id: string
+          time_limit_s?: number | null
+          title?: string
+          topics?: string[]
+          wrong_penalty?: number
+        }
+        Update: {
+          created_at?: string
+          hint_penalty?: number
+          id?: string
+          kind?: string
+          max_attempts?: number | null
+          payload?: Json
+          points?: number
+          position?: number
+          study_id?: string
+          time_limit_s?: number | null
+          title?: string
+          topics?: string[]
+          wrong_penalty?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "study_activities_study_id_fkey"
+            columns: ["study_id"]
+            isOneToOne: false
+            referencedRelation: "studies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      study_collection_items: {
+        Row: {
+          collection_id: string
+          position: number
+          study_id: string
+        }
+        Insert: {
+          collection_id: string
+          position?: number
+          study_id: string
+        }
+        Update: {
+          collection_id?: string
+          position?: number
+          study_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "study_collection_items_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "study_collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "study_collection_items_study_id_fkey"
+            columns: ["study_id"]
+            isOneToOne: false
+            referencedRelation: "studies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      study_collections: {
+        Row: {
+          academy_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          academy_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          academy_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "study_collections_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "study_collections_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       assignment_progress: {
@@ -690,6 +930,33 @@ export type Database = {
             columns: ["academy_id"]
             isOneToOne: false
             referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      study_progress: {
+        Row: {
+          completed: number | null
+          last_activity: string | null
+          score: number | null
+          student_id: string | null
+          study_id: string | null
+          time_ms: number | null
+          total_activities: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_attempts_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "study_activities_study_id_fkey"
+            columns: ["study_id"]
+            isOneToOne: false
+            referencedRelation: "studies"
             referencedColumns: ["id"]
           },
         ]
@@ -719,6 +986,17 @@ export type Database = {
         }[]
       }
       accept_invitation: { Args: { p_token: string }; Returns: string }
+      activity_for_student: {
+        Args: { p_activity: string; p_student: string }
+        Returns: {
+          hint_penalty: number
+          kind: string
+          max_attempts: number
+          payload: Json
+          points: number
+          wrong_penalty: number
+        }[]
+      }
       create_academy: {
         Args: { p_name: string; p_slug: string }
         Returns: {

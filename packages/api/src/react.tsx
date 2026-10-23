@@ -1,9 +1,11 @@
 /** Hook React dùng chung cho web/desktop (react-dom) và mobile (react-native). */
 import type {
   AcademyProfileInput,
+  ActivityInput,
   LevelInput,
   RatingCategory,
   StudentCsvRow,
+  StudyInput,
 } from '@erpchess/domain';
 import type { Session } from '@supabase/supabase-js';
 import {
@@ -16,6 +18,8 @@ import {
 import { createContext, type ReactNode, use, useEffect, useState } from 'react';
 import type { ErpClient } from './client';
 import * as api from './queries';
+import type { StudyScope } from './studies';
+import * as studies from './studies';
 
 const ClientContext = createContext<ErpClient | null>(null);
 
@@ -422,4 +426,156 @@ export function useImportStudents(academyId: string) {
     },
   });
   return { ...mutation, progress };
+}
+
+// ── Study (Giai đoạn 6) ──
+
+export const studyKeys = {
+  list: (scope: StudyScope, academyId: string, search: string) =>
+    ['studies', scope, academyId, search] as const,
+  detail: (id: string) => ['study', id] as const,
+  attempts: (studyId: string, studentId?: string) =>
+    ['activity-attempts', studyId, studentId ?? 'all'] as const,
+  progress: (studyIds: readonly string[]) => ['study-progress', ...studyIds] as const,
+  collections: (academyId: string) => ['collections', academyId] as const,
+};
+
+export function useStudies(opts: {
+  scope: StudyScope;
+  academyId: string | undefined;
+  userId: string | undefined;
+  search?: string;
+}) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: studyKeys.list(opts.scope, opts.academyId ?? '', opts.search ?? ''),
+    queryFn: () =>
+      studies.fetchStudies(client, {
+        scope: opts.scope,
+        academyId: opts.academyId ?? '',
+        userId: opts.userId ?? '',
+        search: opts.search,
+      }),
+    enabled: !!opts.academyId && !!opts.userId,
+  });
+}
+
+export function useStudy(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: studyKeys.detail(id ?? ''),
+    queryFn: () => studies.fetchStudy(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+/** Tạo/sửa/xoá study và hoạt động; làm mới danh sách và chi tiết sau mỗi thao tác. */
+export function useStudyMutations(userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = (studyId?: string) => {
+    void qc.invalidateQueries({ queryKey: ['studies'] });
+    if (studyId) void qc.invalidateQueries({ queryKey: studyKeys.detail(studyId) });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (input: StudyInput) => studies.createStudy(client, userId, input),
+      onSuccess: () => refresh(),
+    }),
+    update: useMutation({
+      mutationFn: ({
+        id,
+        patch,
+      }: {
+        id: string;
+        patch: Parameters<typeof studies.updateStudy>[2];
+      }) => studies.updateStudy(client, id, patch),
+      onSuccess: (_, v) => refresh(v.id),
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => studies.deleteStudy(client, id),
+      onSuccess: () => refresh(),
+    }),
+    addActivity: useMutation({
+      mutationFn: (v: { studyId: string; input: ActivityInput; position: number }) =>
+        studies.addActivity(client, v.studyId, v.input, v.position),
+      onSuccess: (_, v) => refresh(v.studyId),
+    }),
+    updateActivity: useMutation({
+      mutationFn: (v: { studyId: string; id: string; input: ActivityInput }) =>
+        studies.updateActivity(client, v.id, v.input),
+      onSuccess: (_, v) => refresh(v.studyId),
+    }),
+    deleteActivity: useMutation({
+      mutationFn: (v: { studyId: string; id: string }) => studies.deleteActivity(client, v.id),
+      onSuccess: (_, v) => refresh(v.studyId),
+    }),
+    reorder: useMutation({
+      mutationFn: (v: { studyId: string; orderedIds: string[] }) =>
+        studies.reorderActivities(client, v.orderedIds),
+      onSettled: (_, __, v) => refresh(v.studyId),
+    }),
+  };
+}
+
+export function useActivityAttempts(study: studies.StudyDetail | undefined, studentId?: string) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: studyKeys.attempts(study?.id ?? '', studentId),
+    queryFn: () =>
+      studies.fetchActivityAttempts(client, study?.activities.map((a) => a.id) ?? [], studentId),
+    enabled: !!study,
+  });
+}
+
+export function useStudyProgress(studyIds: readonly string[]) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: studyKeys.progress(studyIds),
+    queryFn: () => studies.fetchStudyProgress(client, studyIds),
+    enabled: studyIds.length > 0,
+  });
+}
+
+export function useSubmitActivity(studyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { activityId: string; answer: studies.ActivityAnswer; ms?: number }) =>
+      studies.submitActivity(client, v.activityId, v.answer, v.ms),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['activity-attempts', studyId] });
+      void qc.invalidateQueries({ queryKey: ['study-progress'] });
+    },
+  });
+}
+
+export function useCollections(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: studyKeys.collections(academyId ?? ''),
+    queryFn: () => studies.fetchCollections(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useCollectionMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const onSuccess = () => qc.invalidateQueries({ queryKey: studyKeys.collections(academyId) });
+  return {
+    create: useMutation({
+      mutationFn: (name: string) => studies.createCollection(client, academyId, userId, name),
+      onSuccess,
+    }),
+    toggle: useMutation({
+      mutationFn: (v: { collectionId: string; studyId: string; included: boolean }) =>
+        studies.setCollectionStudy(client, v.collectionId, v.studyId, v.included),
+      onSuccess,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => studies.deleteCollection(client, id),
+      onSuccess,
+    }),
+  };
 }
