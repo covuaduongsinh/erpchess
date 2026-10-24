@@ -58,7 +58,7 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | play.pairing           | HLV ghép cặp; học viên online; ván đang diễn ra                   | 9   | ✅         | Game Area: HLV ghép cặp, học viên online (presence `academy:<id>:online`), ván đang diễn ra, lịch sử     |
 | play.bot               | Đánh máy theo mức                                                 | 9   | ✅         | `/play/bot` theo `BOT_LEVELS` (Arasan `UCI_Elo`), ván lưu vào lịch sử, không tính rating; mobile chưa có |
 | play.simul             | Simul                                                             | 9   | ✅         | `simuls` + bàn là `games`; tạo/bắt đầu/tự kết thúc, đồng hồ chỉ tính học viên, thống kê, tìm kiếm        |
-| tour.swiss             | Giải Swiss, Quad, Swiss đồng đội; vòng, thời gian, FEN tuỳ chỉnh  | 10  | ⬜         |                                                                                                          |
+| tour.swiss             | Giải Swiss, Quad, Swiss đồng đội; vòng, thời gian, FEN tuỳ chỉnh  | 10  | ✅         | Swiss (Dutch rút gọn), vòng tròn, Quad, Swiss đồng đội; FEN/khai cuộc; trọng tài server; 3 kiểu xem      |
 | tour.auto              | Tự hoàn tất vòng, tự lên lịch, lặp lại                            | 10  | ⬜         |                                                                                                          |
 | course.core            | Khoá học gồm các study theo cấp độ                                | 11  | ⬜         |                                                                                                          |
 | course.cert            | Chứng chỉ có mã xác minh công khai                                | 11  | ⬜         |                                                                                                          |
@@ -74,4 +74,4 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | ops.whatsapp           | Thông báo WhatsApp                                                | —   | ⛔         | Thay bằng email/push; Zalo OA để sau                                                                     |
 | ops.razorpay           | Razorpay                                                          | —   | ⛔         | Thị trường Ấn Độ                                                                                         |
 
-**Tổng kết:** 59 claim, gồm 34 đã đóng, 10 một phần, 13 mở, 2 ngoài phạm vi.
+**Tổng kết:** 59 claim, gồm 35 đã đóng, 10 một phần, 12 mở, 2 ngoài phạm vi.
