@@ -1,10 +1,11 @@
 // Chép mã dùng chung từ packages/chess-core sang supabase/functions/_shared/chess-core để Edge
 // Function (Deno) chấm bài bằng đúng logic của client. Đổi import cho Deno: thêm đuôi .ts,
-// 'chess.js' → 'npm:chess.js@<phiên bản>'.
+// 'chess.js' → 'npm:chess.js@<phiên bản>'. Mã server dùng chung trong supabase/functions/_lib
+// (`lib`) được chép nguyên văn sang <function>/_shared/.
 //   node supabase/functions/sync-shared.mjs          → ghi file
 //   node supabase/functions/sync-shared.mjs --check  → báo lỗi nếu bản chép đã cũ (dùng trong CI)
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 const here = import.meta.dirname;
 const srcDir = resolve(here, '../../packages/chess-core/src');
@@ -13,8 +14,18 @@ const TARGETS = [
   { fn: 'submit-attempt', files: ['rules.ts', 'puzzle.ts'] },
   { fn: 'submit-activity', files: ['rules.ts', 'puzzle.ts', 'capture.ts'] },
   { fn: 'quiz-answer', files: ['rules.ts', 'puzzle.ts', 'capture.ts'] },
-  { fn: 'game-move', files: ['rules.ts', 'game.ts', 'clock.ts', 'glicko2.ts'] },
+  {
+    fn: 'game-move',
+    files: ['rules.ts', 'game.ts', 'clock.ts', 'glicko2.ts', 'tournament.ts'],
+    lib: ['tournament-run.ts'],
+  },
+  {
+    fn: 'tournament-admin',
+    files: ['rules.ts', 'clock.ts', 'tournament.ts'],
+    lib: ['tournament-run.ts'],
+  },
 ];
+const libDir = resolve(here, '_lib');
 const pkg = JSON.parse(
   readFileSync(resolve(here, '../../packages/chess-core/package.json'), 'utf8'),
 );
@@ -22,25 +33,32 @@ const chessJs = pkg.dependencies['chess.js'];
 
 const check = process.argv.includes('--check');
 let stale = 0;
-for (const { fn, files } of TARGETS) {
-  const outDir = join(here, fn, '_shared/chess-core');
-  mkdirSync(outDir, { recursive: true });
-  for (const file of files) {
-    const content =
+const jobs = TARGETS.flatMap(({ fn, files, lib = [] }) => [
+  ...files.map((file) => ({
+    target: join(here, fn, '_shared/chess-core', file),
+    content:
       `// Tự sinh bởi supabase/functions/sync-shared.mjs từ packages/chess-core/src/${file} — không sửa tay.\n` +
       readFileSync(join(srcDir, file), 'utf8')
         .replace(/from '\.\/([\w-]+)'/g, "from './$1.ts'")
-        .replace(/from 'chess\.js'/g, `from 'npm:chess.js@${chessJs}'`);
-    const target = join(outDir, file);
-    const current = existsSync(target) ? readFileSync(target, 'utf8') : '';
-    if (current === content) continue;
-    if (check) {
-      console.error(`Bản chép đã cũ: ${target} — chạy node supabase/functions/sync-shared.mjs`);
-      stale++;
-    } else {
-      writeFileSync(target, content);
-      console.log(`Đã cập nhật ${target}`);
-    }
+        .replace(/from 'chess\.js'/g, `from 'npm:chess.js@${chessJs}'`),
+  })),
+  ...lib.map((file) => ({
+    target: join(here, fn, '_shared', file),
+    content:
+      `// Tự sinh bởi supabase/functions/sync-shared.mjs từ supabase/functions/_lib/${file} — không sửa tay.\n` +
+      readFileSync(join(libDir, file), 'utf8'),
+  })),
+]);
+for (const { target, content } of jobs) {
+  mkdirSync(dirname(target), { recursive: true });
+  const current = existsSync(target) ? readFileSync(target, 'utf8') : '';
+  if (current === content) continue;
+  if (check) {
+    console.error(`Bản chép đã cũ: ${target} — chạy node supabase/functions/sync-shared.mjs`);
+    stale++;
+  } else {
+    writeFileSync(target, content);
+    console.log(`Đã cập nhật ${target}`);
   }
 }
 process.exit(stale ? 1 : 0);

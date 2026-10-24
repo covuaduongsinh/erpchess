@@ -15,6 +15,7 @@ import {
   resultOf,
 } from './_shared/chess-core/game.ts';
 import { glicko2Update, newRating } from './_shared/chess-core/glicko2.ts';
+import { afterGame } from './_shared/tournament-run.ts';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const UCI_RE = /^[a-h][1-8][a-h][1-8][qrbn]?$/;
@@ -62,6 +63,8 @@ type Game = {
   started_at: string | null;
   created_at: string;
   simul_id: string | null;
+  tournament_id: string | null;
+  round: number | null;
 };
 type Patch = Record<string, unknown>;
 
@@ -136,6 +139,20 @@ Deno.serve(async (req) => {
       simul?.host_id === game.white_id ? 'w' : simul?.host_id === game.black_id ? 'b' : null;
   }
   const canFlag = (side: 'w' | 'b') => side !== hostColor;
+  // Ván giải: theo luật của giải (cho phép hoà / xin thua)
+  let rules = { allowDraw: true, allowResign: true };
+  if (game.tournament_id) {
+    const { data: t } = await admin
+      .from('tournaments')
+      .select('allow_draw, allow_resign')
+      .eq('id', game.tournament_id)
+      .maybeSingle();
+    rules = { allowDraw: t?.allow_draw !== false, allowResign: t?.allow_resign !== false };
+  }
+  // Ván giải xong thì xử lý vòng (đóng vòng, tự ghép vòng kế, kết thúc giải)
+  const afterTournamentGame = async () => {
+    if (game.tournament_id && game.round) await afterGame(admin, game.tournament_id, game.round);
+  };
 
   // Ghi có điều kiện theo version; ván kết thúc thì tính PGN + rating
   async function save(
@@ -194,6 +211,7 @@ Deno.serve(async (req) => {
         saved.rating_change = change;
       }
     }
+    if (finish) await afterTournamentGame();
     return json(200, saved);
   }
 
@@ -293,12 +311,15 @@ Deno.serve(async (req) => {
       return save(patch);
     }
     case 'resign':
+      if (!rules.allowResign) return json(403, { error: 'resign_not_allowed' });
       return save({}, { result: lossFor(me as 'w' | 'b'), reason: 'resign' });
     case 'offer_draw':
+      if (!rules.allowDraw) return json(403, { error: 'draw_not_allowed' });
       if (game.draw_offer_by === uid) return json(200, { ok: true });
       if (game.draw_offer_by) return save({}, { result: '1/2-1/2', reason: 'agreement' });
       return save({ draw_offer_by: uid });
     case 'accept_draw':
+      if (!rules.allowDraw) return json(403, { error: 'draw_not_allowed' });
       if (!game.draw_offer_by || game.draw_offer_by === uid)
         return json(409, { error: 'no_draw_offer' });
       return save({}, { result: '1/2-1/2', reason: 'agreement' });
@@ -320,7 +341,9 @@ Deno.serve(async (req) => {
         .eq('version', game.version)
         .select()
         .maybeSingle();
-      return saved ? json(200, saved) : json(409, { error: 'out_of_sync' });
+      if (!saved) return json(409, { error: 'out_of_sync' });
+      await afterTournamentGame();
+      return json(200, saved);
     }
     case 'claim_timeout':
       if (!clock || turn !== opponent || !canFlag(turn) || !flagged(clock, turn, now)) {

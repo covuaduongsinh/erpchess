@@ -101,4 +101,5 @@ export * from './periods';
 export * from './practice';
 export * from './quiz';
 export * from './study';
+export * from './tournament';
 export * from './video';

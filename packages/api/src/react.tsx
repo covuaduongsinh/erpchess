@@ -13,6 +13,7 @@ import type {
   RatingCategory,
   StudentCsvRow,
   StudyInput,
+  TournamentInput,
 } from '@erpchess/domain';
 import type { Session } from '@supabase/supabase-js';
 import {
@@ -51,6 +52,7 @@ import {
 import * as simuls from './simuls';
 import type { StudyScope } from './studies';
 import * as studies from './studies';
+import * as tournaments from './tournaments';
 
 const ClientContext = createContext<ErpClient | null>(null);
 
@@ -1352,6 +1354,73 @@ export function useSimulMutations(academyId: string, userId: string) {
     }),
     remove: useMutation({
       mutationFn: (id: string) => simuls.deleteSimul(client, id),
+      onSuccess: refresh,
+    }),
+  };
+}
+
+// ── Giải đấu (Giai đoạn 10) ──
+
+export function useTournaments(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['tournaments', academyId ?? ''],
+    queryFn: () => tournaments.fetchTournaments(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+/** Một giải; nghe kênh `tournament:<id>` để bảng xếp hạng cập nhật ngay khi có ván xong. */
+export function useTournament(id: string | undefined) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const query = useQuery({
+    queryKey: ['tournament', id ?? ''],
+    queryFn: () => tournaments.fetchTournament(client, id ?? ''),
+    enabled: !!id,
+  });
+  useEffect(() => {
+    if (!id) return;
+    return tournaments.subscribeTournament(client, id, () => {
+      void qc.invalidateQueries({ queryKey: ['tournament', id] });
+    });
+  }, [client, qc, id]);
+  return query;
+}
+
+export function useTournamentMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => {
+    void qc.invalidateQueries({ queryKey: ['tournaments', academyId] });
+    void qc.invalidateQueries({ queryKey: ['tournament'] });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (input: Omit<TournamentInput, 'academyId'>) =>
+        tournaments.createTournament(client, userId, { ...input, academyId }),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => tournaments.deleteTournament(client, id),
+      onSuccess: refresh,
+    }),
+    join: useMutation({
+      mutationFn: (id: string) => tournaments.joinTournament(client, id, userId),
+      onSuccess: refresh,
+    }),
+    leave: useMutation({
+      mutationFn: (id: string) => tournaments.leaveTournament(client, id, userId),
+      onSuccess: refresh,
+    }),
+    withdraw: useMutation({
+      mutationFn: (v: { id: string; playerId: string; withdrawn: boolean }) =>
+        tournaments.setWithdrawn(client, v.id, v.playerId, v.withdrawn),
+      onSuccess: refresh,
+    }),
+    act: useMutation({
+      mutationFn: (v: { id: string; action: tournaments.TournamentAction }) =>
+        tournaments.tournamentAction(client, v.id, v.action),
       onSuccess: refresh,
     }),
   };
