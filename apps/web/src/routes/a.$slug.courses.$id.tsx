@@ -1,5 +1,7 @@
 import type { CourseDetail } from '@erpchess/api';
 import {
+  useCertificateMutations,
+  useCertificates,
   useCourse,
   useCourseCompletions,
   useCourseMutations,
@@ -54,6 +56,12 @@ function CourseLearner({ course }: { course: CourseDetail }) {
   const studyIds = course.items.map((i) => i.study_id);
   const progress = useStudyProgress(studyIds);
   const done = useCourseCompletions([course.id]);
+  const certs = useCertificates({
+    academyId: academy.id,
+    studentId: session.user.id,
+    courseId: course.id,
+  });
+  const cert = certs.data?.find((c) => !c.revoked_at);
   const mine = (sid: string) =>
     progress.data?.find((p) => p.studyId === sid && p.studentId === session.user.id);
   const isDone = (sid: string) => {
@@ -82,6 +90,15 @@ function CourseLearner({ course }: { course: CourseDetail }) {
             : t('course.percent', { percent: pct })}
         </span>
       </div>
+      {cert && (
+        <Link
+          to="/a/$slug/certificates/$id"
+          params={{ slug: academy.slug, id: cert.id }}
+          className="self-start rounded-md bg-primary px-4 py-2 font-medium text-white hover:opacity-90"
+        >
+          🎓 {t('cert.view')}
+        </Link>
+      )}
       {next?.study && (
         <Link
           to="/a/$slug/studies/$id"
@@ -403,6 +420,8 @@ function ProgressTable({ course }: { course: CourseDetail }) {
   const progress = useStudyProgress(course.items.map((i) => i.study_id));
   const summary = useCourseProgress([course.id]);
   const done = useCourseCompletions([course.id]);
+  const certs = useCertificates({ academyId: academy.id, courseId: course.id });
+  const { issue } = useCertificateMutations(academy.id);
   const studentIds = [
     ...new Set(summary.data?.map((r) => r.student_id).filter((x): x is string => !!x)),
   ];
@@ -448,13 +467,59 @@ function ProgressTable({ course }: { course: CourseDetail }) {
                     );
                   })}
                   <td className="py-1">
-                    {done.data?.some((c) => c.student_id === sid) ? '✓' : ''}
+                    <DoneCell
+                      done={!!done.data?.some((c) => c.student_id === sid)}
+                      certId={certs.data?.find((c) => c.student_id === sid && !c.revoked_at)?.id}
+                      onIssue={() => issue.mutate({ studentId: sid, courseId: course.id })}
+                      issuing={issue.isPending}
+                    />
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
+      <ErrorText error={issue.error} />
     </Card>
+  );
+}
+
+function DoneCell({
+  done,
+  certId,
+  onIssue,
+  issuing,
+}: {
+  done: boolean;
+  certId: string | undefined;
+  onIssue: () => void;
+  issuing: boolean;
+}) {
+  const { t } = useT();
+  const { academy } = useAcademy();
+  if (!done) return null;
+  return (
+    <span className="flex items-center gap-2">
+      ✓
+      {certId ? (
+        <Link
+          to="/a/$slug/certificates/$id"
+          params={{ slug: academy.slug, id: certId }}
+          className="text-primary hover:underline"
+          title={t('cert.view')}
+        >
+          🎓
+        </Link>
+      ) : (
+        <button
+          type="button"
+          onClick={onIssue}
+          disabled={issuing}
+          className="text-xs text-primary underline"
+        >
+          {t('cert.issue')}
+        </button>
+      )}
+    </span>
   );
 }

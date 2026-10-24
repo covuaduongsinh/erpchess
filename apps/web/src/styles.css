@@ -19,3 +19,24 @@ body {
     10px -10px,
     -10px 0;
 }
+
+/* In chứng chỉ: chỉ in khung chứng chỉ, khổ A4 ngang, không lề */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .certificate-print,
+  .certificate-print * {
+    visibility: visible;
+  }
+  .certificate-print {
+    position: fixed;
+    inset: 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

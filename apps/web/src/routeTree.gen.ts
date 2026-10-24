@@ -26,6 +26,8 @@ import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
 import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
 import { Route as ASlugAssignmentsNewRouteImport } from './routes/a.$slug.assignments.new'
+import { Route as ASlugCertificatesIndexRouteImport } from './routes/a.$slug.certificates.index'
+import { Route as ASlugCertificatesIdRouteImport } from './routes/a.$slug.certificates.$id'
 import { Route as ASlugClassesIndexRouteImport } from './routes/a.$slug.classes.index'
 import { Route as ASlugCoursesIndexRouteImport } from './routes/a.$slug.courses.index'
 import { Route as ASlugCoursesIdRouteImport } from './routes/a.$slug.courses.$id'
@@ -133,6 +135,16 @@ const ASlugAssignmentsIdRoute = ASlugAssignmentsIdRouteImport.update({
 const ASlugAssignmentsNewRoute = ASlugAssignmentsNewRouteImport.update({
   id: '/assignments/new',
   path: '/assignments/new',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugCertificatesIndexRoute = ASlugCertificatesIndexRouteImport.update({
+  id: '/certificates/',
+  path: '/certificates/',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugCertificatesIdRoute = ASlugCertificatesIdRouteImport.update({
+  id: '/certificates/$id',
+  path: '/certificates/$id',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugClassesIndexRoute = ASlugClassesIndexRouteImport.update({
@@ -268,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/certificates/$id': typeof ASlugCertificatesIdRoute
   '/a/$slug/courses/$id': typeof ASlugCoursesIdRoute
   '/a/$slug/play/$id': typeof ASlugPlayIdRoute
   '/a/$slug/play/bot': typeof ASlugPlayBotRoute
@@ -279,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/tournaments/$id': typeof ASlugTournamentsIdRoute
   '/a/$slug/tournaments/new': typeof ASlugTournamentsNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/certificates/': typeof ASlugCertificatesIndexRoute
   '/a/$slug/classes/': typeof ASlugClassesIndexRoute
   '/a/$slug/courses/': typeof ASlugCoursesIndexRoute
   '/a/$slug/play/': typeof ASlugPlayIndexRoute
@@ -309,6 +323,7 @@ export interface FileRoutesByTo {
   '/a/$slug': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/certificates/$id': typeof ASlugCertificatesIdRoute
   '/a/$slug/courses/$id': typeof ASlugCoursesIdRoute
   '/a/$slug/play/$id': typeof ASlugPlayIdRoute
   '/a/$slug/play/bot': typeof ASlugPlayBotRoute
@@ -320,6 +335,7 @@ export interface FileRoutesByTo {
   '/a/$slug/tournaments/$id': typeof ASlugTournamentsIdRoute
   '/a/$slug/tournaments/new': typeof ASlugTournamentsNewRoute
   '/a/$slug/assignments': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/certificates': typeof ASlugCertificatesIndexRoute
   '/a/$slug/classes': typeof ASlugClassesIndexRoute
   '/a/$slug/courses': typeof ASlugCoursesIndexRoute
   '/a/$slug/play': typeof ASlugPlayIndexRoute
@@ -352,6 +368,7 @@ export interface FileRoutesById {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/certificates/$id': typeof ASlugCertificatesIdRoute
   '/a/$slug/courses/$id': typeof ASlugCoursesIdRoute
   '/a/$slug/play/$id': typeof ASlugPlayIdRoute
   '/a/$slug/play/bot': typeof ASlugPlayBotRoute
@@ -363,6 +380,7 @@ export interface FileRoutesById {
   '/a/$slug/tournaments/$id': typeof ASlugTournamentsIdRoute
   '/a/$slug/tournaments/new': typeof ASlugTournamentsNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/certificates/': typeof ASlugCertificatesIndexRoute
   '/a/$slug/classes/': typeof ASlugClassesIndexRoute
   '/a/$slug/courses/': typeof ASlugCoursesIndexRoute
   '/a/$slug/play/': typeof ASlugPlayIndexRoute
@@ -396,6 +414,7 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/certificates/$id'
     | '/a/$slug/courses/$id'
     | '/a/$slug/play/$id'
     | '/a/$slug/play/bot'
@@ -407,6 +426,7 @@ export interface FileRouteTypes {
     | '/a/$slug/tournaments/$id'
     | '/a/$slug/tournaments/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/certificates/'
     | '/a/$slug/classes/'
     | '/a/$slug/courses/'
     | '/a/$slug/play/'
@@ -437,6 +457,7 @@ export interface FileRouteTypes {
     | '/a/$slug'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/certificates/$id'
     | '/a/$slug/courses/$id'
     | '/a/$slug/play/$id'
     | '/a/$slug/play/bot'
@@ -448,6 +469,7 @@ export interface FileRouteTypes {
     | '/a/$slug/tournaments/$id'
     | '/a/$slug/tournaments/new'
     | '/a/$slug/assignments'
+    | '/a/$slug/certificates'
     | '/a/$slug/classes'
     | '/a/$slug/courses'
     | '/a/$slug/play'
@@ -479,6 +501,7 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/certificates/$id'
     | '/a/$slug/courses/$id'
     | '/a/$slug/play/$id'
     | '/a/$slug/play/bot'
@@ -490,6 +513,7 @@ export interface FileRouteTypes {
     | '/a/$slug/tournaments/$id'
     | '/a/$slug/tournaments/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/certificates/'
     | '/a/$slug/classes/'
     | '/a/$slug/courses/'
     | '/a/$slug/play/'
@@ -635,6 +659,20 @@ declare module '@tanstack/react-router' {
       path: '/assignments/new'
       fullPath: '/a/$slug/assignments/new'
       preLoaderRoute: typeof ASlugAssignmentsNewRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/certificates/': {
+      id: '/a/$slug/certificates/'
+      path: '/certificates'
+      fullPath: '/a/$slug/certificates/'
+      preLoaderRoute: typeof ASlugCertificatesIndexRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/certificates/$id': {
+      id: '/a/$slug/certificates/$id'
+      path: '/certificates/$id'
+      fullPath: '/a/$slug/certificates/$id'
+      preLoaderRoute: typeof ASlugCertificatesIdRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/classes/': {
@@ -810,6 +848,7 @@ interface ASlugRouteChildren {
   ASlugIndexRoute: typeof ASlugIndexRoute
   ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
   ASlugAssignmentsNewRoute: typeof ASlugAssignmentsNewRoute
+  ASlugCertificatesIdRoute: typeof ASlugCertificatesIdRoute
   ASlugCoursesIdRoute: typeof ASlugCoursesIdRoute
   ASlugPlayIdRoute: typeof ASlugPlayIdRoute
   ASlugPlayBotRoute: typeof ASlugPlayBotRoute
@@ -821,6 +860,7 @@ interface ASlugRouteChildren {
   ASlugTournamentsIdRoute: typeof ASlugTournamentsIdRoute
   ASlugTournamentsNewRoute: typeof ASlugTournamentsNewRoute
   ASlugAssignmentsIndexRoute: typeof ASlugAssignmentsIndexRoute
+  ASlugCertificatesIndexRoute: typeof ASlugCertificatesIndexRoute
   ASlugClassesIndexRoute: typeof ASlugClassesIndexRoute
   ASlugCoursesIndexRoute: typeof ASlugCoursesIndexRoute
   ASlugPlayIndexRoute: typeof ASlugPlayIndexRoute
@@ -845,6 +885,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugIndexRoute: ASlugIndexRoute,
   ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,
   ASlugAssignmentsNewRoute: ASlugAssignmentsNewRoute,
+  ASlugCertificatesIdRoute: ASlugCertificatesIdRoute,
   ASlugCoursesIdRoute: ASlugCoursesIdRoute,
   ASlugPlayIdRoute: ASlugPlayIdRoute,
   ASlugPlayBotRoute: ASlugPlayBotRoute,
@@ -856,6 +897,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugTournamentsIdRoute: ASlugTournamentsIdRoute,
   ASlugTournamentsNewRoute: ASlugTournamentsNewRoute,
   ASlugAssignmentsIndexRoute: ASlugAssignmentsIndexRoute,
+  ASlugCertificatesIndexRoute: ASlugCertificatesIndexRoute,
   ASlugClassesIndexRoute: ASlugClassesIndexRoute,
   ASlugCoursesIndexRoute: ASlugCoursesIndexRoute,
   ASlugPlayIndexRoute: ASlugPlayIndexRoute,
