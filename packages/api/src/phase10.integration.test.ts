@@ -7,7 +7,8 @@
 import { describe, expect, it } from 'vitest';
 import { createErpClient } from './client';
 import { type GameRow, gameAction } from './games';
-import { fetchMyAcademies, signInStudent, signInWithEmail } from './queries';
+import { fetchMyAcademies, signInStudent, signInWithEmail, unwrap } from './queries';
+import type { Tournament } from './tournaments';
 import {
   createTournament,
   fetchTournament,
@@ -131,5 +132,56 @@ describe.skipIf(!ready)('Giai đoạn 10 trên Supabase thật', () => {
     d = await fetchTournament(owner, t.id);
     expect(d.status).toBe('finished');
     expect(d.games.every((g) => g.status === 'aborted')).toBe(true);
+  });
+
+  it('cron: giải tự lên lịch tới giờ thì bắt đầu, giải lặp lại sinh lần kế tiếp', {
+    timeout: 200_000,
+  }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const student = newClient();
+    const { user: su } = await signInStudent(
+      student,
+      env.STUDENT_USERNAME ?? '',
+      env.STUDENT_PIN ?? '',
+    );
+    const t = await createTournament(owner, user.id, {
+      academyId: academy.id,
+      title: 'Tích hợp GĐ10c — cron',
+      format: 'swiss',
+      rounds: 1,
+      baseMs: null,
+      control: 'auto_schedule',
+      startsAt: new Date(Date.now() - 60_000).toISOString(),
+      repeat: 'weekly',
+      repeatUntil: new Date(Date.now() + 10 * 86_400_000).toISOString(),
+      playerIds: [user.id, su.id],
+    });
+    // pg_cron chạy mỗi phút: đợi tối đa ~2 phút cho giải bắt đầu và bản lặp kế tiếp được tạo
+    let started = false;
+    let child: Pick<Tournament, 'id' | 'starts_at' | 'status'> | undefined;
+    for (let i = 0; i < 30 && !(started && child); i++) {
+      await new Promise((r) => setTimeout(r, 5000));
+      started = (await fetchTournament(owner, t.id)).status !== 'upcoming';
+      child = unwrap(
+        await owner.from('tournaments').select('id, starts_at, status').eq('parent_id', t.id),
+      )[0];
+    }
+    expect(started).toBe(true);
+    expect(child).toMatchObject({ status: 'upcoming' });
+    const gap = Date.parse(child?.starts_at ?? '') - Date.parse(t.starts_at ?? '');
+    expect(Math.round(gap / 86_400_000)).toBe(7);
+    const childDetail = await fetchTournament(owner, child?.id ?? '');
+    expect(childDetail.players.map((p) => p.player_id).sort()).toEqual([user.id, su.id].sort());
+    // Dọn: xoá giải gốc (bản lặp mất liên kết) rồi xoá bản lặp chưa bắt đầu
+    await owner.from('tournaments').delete().eq('id', t.id);
+    await owner
+      .from('tournaments')
+      .delete()
+      .eq('id', child?.id ?? '');
   });
 });

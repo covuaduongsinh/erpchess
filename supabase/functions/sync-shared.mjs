@@ -16,12 +16,17 @@ const TARGETS = [
   { fn: 'quiz-answer', files: ['rules.ts', 'puzzle.ts', 'capture.ts'] },
   {
     fn: 'game-move',
-    files: ['rules.ts', 'game.ts', 'clock.ts', 'glicko2.ts', 'tournament.ts'],
+    files: ['rules.ts', 'game.ts', 'clock.ts', 'glicko2.ts', 'tournament.ts', 'schedule.ts'],
     lib: ['tournament-run.ts'],
   },
   {
     fn: 'tournament-admin',
-    files: ['rules.ts', 'clock.ts', 'tournament.ts'],
+    files: ['rules.ts', 'clock.ts', 'tournament.ts', 'schedule.ts'],
+    lib: ['tournament-run.ts'],
+  },
+  {
+    fn: 'tournament-tick',
+    files: ['rules.ts', 'clock.ts', 'tournament.ts', 'schedule.ts'],
     lib: ['tournament-run.ts'],
   },
 ];
