@@ -87,3 +87,14 @@ Kế hoạch con ghi vào `docs/plans/11-giai-dau.md`. Chia 3 PR, mỗi PR đủ
 - **Trang giải** `/tournaments/$id`: bảng xếp hạng (điểm, Buchholz cắt 1, SB, thắng; đội: điểm trận, điểm ván) tự cập nhật qua `tournament:<id>`; cặp đấu theo vòng; "Vào ván của tôi"; đăng ký/rút (giải công khai); người tổ chức bắt đầu / ghép vòng kế / kết thúc / rút người chơi / xoá.
 - **Mobile:** thẻ "Giải đấu" (giải đang diễn ra/sắp tới, vòng hiện tại); ván giải hiện trong "Ván của tôi".
 - **Kiểm chứng (Chrome, DSC1):** tạo "Giải mẫu (Claude)" qua 3 bước (khai cuộc định sẵn, 15/11 19:00, lặp hằng tuần, chưa có người chơi) → trang giải đúng; bấm bắt đầu → "Cần ít nhất 2 người chơi."; ba kiểu xem hiện giải (lịch tháng 11 ngày 15); xoá giải. Sửa tiêu đề cột trạng thái của kiểu bảng sau khi thử.
+
+### PR 10c (2026-10-25)
+
+- **Migration `…0018_tournament_cron.sql`:** bật `pg_cron` + `pg_net`; `private.cron_secrets` giữ chuỗi bí mật 64 ký tự hex sinh bằng `gen_random_bytes` ngay trong CSDL; RPC `cron_secret_ok` chỉ `service_role` gọi được (schema `private` không lộ qua REST); job `tournament-tick` mỗi phút gọi `net.http_post`.
+- **Edge Function `tournament-tick`** (`verify_jwt = false`, tự kiểm chuỗi bí mật): bắt đầu giải tự lên lịch đã tới giờ, ghép vòng đã tới giờ, tạo lần tổ chức kế tiếp cho giải lặp lại đang diễn ra (sao chép thiết lập, đội, người chơi; `parent_id`). Chỉ sinh khi giải gốc đang diễn ra để xoá bản lặp sau khi giải gốc xong không bị tạo lại.
+- **`nextOccurrence`** chuyển sang `chess-core/schedule.ts` để client và function dùng chung (có test; tháng ngắn lấy ngày cuối tháng).
+- **Kiểm chứng:**
+  - `cron.job_run_details` báo các nhịp `succeeded`; `net._http_response` trả 200 `{"started":0,"paired":0,"repeated":0}`.
+  - Gọi function từ ngoài không có / sai chuỗi bí mật → 401.
+  - `phase10.integration.test.ts` thêm test cron: giải `auto_schedule` giờ bắt đầu đã qua được cron bắt đầu; bản lặp hằng tuần được tạo đúng +7 ngày, đủ 2 người chơi; dọn dữ liệu sau test.
+- **Lưu ý:** bản đã triển khai của `game-move` và `tournament-admin` chưa có `schedule.ts` (không cần cho việc của chúng); lần triển khai sau gửi kèm theo bản chép trong repo.

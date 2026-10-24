@@ -5,6 +5,7 @@
 // Mọi bước đều idempotent: ghép vòng chỉ chạy khi chuyển được vòng từ pending → active.
 import type { SupabaseClient } from 'npm:@supabase/supabase-js@2';
 import { categoryOf } from './chess-core/clock.ts';
+import { nextOccurrence } from './chess-core/schedule.ts';
 import {
   pairSwiss,
   pairTeamSwiss,
@@ -337,4 +338,147 @@ export async function finishTournament(admin: Admin, tournamentId: string): Prom
     .from('tournaments')
     .update({ status: 'finished', finished_at: new Date().toISOString() })
     .eq('id', tournamentId);
+}
+
+/** Tạo lần tổ chức kế tiếp của giải lặp lại (sao chép thiết lập, đội và người chơi còn thi đấu). */
+async function cloneForRepeat(
+  admin: Admin,
+  t: Tournament & Record<string, unknown>,
+  startsAt: Date,
+) {
+  const { data: child } = await admin
+    .from('tournaments')
+    .insert({
+      academy_id: t.academy_id,
+      title: t.title,
+      description: t.description,
+      location: t.location,
+      format: t.format,
+      rounds: t.format === 'swiss' || t.format === 'team_swiss' ? t.rounds : 1,
+      base_ms: t.base_ms,
+      inc_ms: t.inc_ms,
+      rated: t.rated,
+      allow_draw: t.allow_draw,
+      allow_resign: t.allow_resign,
+      is_public: t.is_public,
+      control: t.control,
+      start_kind: t.start_kind,
+      initial_fen: t.initial_fen,
+      team_boards: t.team_boards,
+      starts_at: startsAt.toISOString(),
+      timezone: t.timezone,
+      round_interval_min: t.round_interval_min,
+      repeat: t.repeat,
+      repeat_until: t.repeat_until,
+      parent_id: t.id,
+      created_by: t.created_by,
+    })
+    .select('id')
+    .single();
+  if (!child) return;
+  const players = (await loadPlayers(admin, t)).filter((p) => !p.withdrawn);
+  const { data: teams } = await admin
+    .from('tournament_teams')
+    .select('id, name')
+    .eq('tournament_id', t.id);
+  const teamMap = new Map<string, string>();
+  for (const team of teams ?? []) {
+    const { data: copy } = await admin
+      .from('tournament_teams')
+      .insert({ tournament_id: child.id, name: team.name })
+      .select('id')
+      .single();
+    if (copy) teamMap.set(team.id, copy.id);
+  }
+  if (players.length) {
+    await admin.from('tournament_players').insert(
+      players.map((p) => ({
+        tournament_id: child.id,
+        player_id: p.player_id,
+        team_id: p.team_id ? (teamMap.get(p.team_id) ?? null) : null,
+        board_no: p.board_no,
+        seed_rating: p.seed_rating,
+      })),
+    );
+  }
+}
+
+/**
+ * Một nhịp của cron (mỗi phút): bắt đầu giải tự lên lịch đã tới giờ, ghép vòng đã tới giờ, tạo lần
+ * tổ chức kế tiếp cho giải lặp lại đang diễn ra. Trả số việc đã làm để ghi log.
+ */
+export async function runTick(
+  admin: Admin,
+  now = new Date(),
+): Promise<{ started: number; paired: number; repeated: number }> {
+  const iso = now.toISOString();
+  let started = 0;
+  let paired = 0;
+  let repeated = 0;
+
+  const { data: due } = await admin
+    .from('tournaments')
+    .select('*')
+    .eq('control', 'auto_schedule')
+    .eq('status', 'upcoming')
+    .lte('starts_at', iso)
+    .limit(50);
+  for (const t of (due ?? []) as Tournament[]) {
+    try {
+      await startTournament(admin, t);
+      started++;
+    } catch {
+      // Thiếu người chơi: để người tổ chức xử lý, nhịp sau thử lại
+    }
+  }
+
+  const { data: running } = await admin
+    .from('tournaments')
+    .select('*')
+    .eq('control', 'auto_schedule')
+    .eq('status', 'active')
+    .limit(200);
+  for (const t of (running ?? []) as Tournament[]) {
+    if (t.current_round >= t.rounds) continue;
+    const { data: rounds } = await admin
+      .from('tournament_rounds')
+      .select('round, status, starts_at')
+      .eq('tournament_id', t.id)
+      .in('round', [t.current_round, t.current_round + 1]);
+    const cur = rounds?.find((r) => r.round === t.current_round);
+    const next = rounds?.find((r) => r.round === t.current_round + 1);
+    if (
+      cur?.status === 'finished' &&
+      next?.status === 'pending' &&
+      (!next.starts_at || next.starts_at <= iso)
+    ) {
+      if (await pairRound(admin, t, next.round)) paired++;
+    }
+  }
+
+  const { data: repeating } = await admin
+    .from('tournaments')
+    .select('*')
+    .neq('repeat', 'none')
+    // Chỉ sinh khi giải gốc đang diễn ra: xoá bản lặp sau khi giải gốc xong thì không bị tạo lại
+    .eq('status', 'active')
+    .not('starts_at', 'is', null)
+    .limit(200);
+  for (const t of (repeating ?? []) as (Tournament & Record<string, unknown>)[]) {
+    const { data: children } = await admin
+      .from('tournaments')
+      .select('id')
+      .eq('parent_id', t.id)
+      .limit(1);
+    if (children?.length) continue;
+    const next = nextOccurrence(
+      new Date(t.starts_at as string),
+      t.repeat as 'daily' | 'weekly' | 'monthly',
+      t.repeat_until ? new Date(t.repeat_until as string) : null,
+    );
+    if (!next) continue;
+    await cloneForRepeat(admin, t, next);
+    repeated++;
+  }
+  return { started, paired, repeated };
 }

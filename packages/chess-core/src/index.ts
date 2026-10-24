@@ -60,6 +60,7 @@ export {
   sideToMove,
   toUci,
 } from './rules';
+export { nextOccurrence } from './schedule';
 export {
   type Pairing,
   pairSwiss,
