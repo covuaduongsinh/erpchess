@@ -6,6 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { createErpClient } from './client';
 import { createPairing, fetchGame, type GameRow, gameAction, subscribeGame } from './games';
+import { joinAcademyPresence, type OnlineMember } from './presence';
 import { fetchMyAcademies, signInStudent, signInWithEmail } from './queries';
 
 const env: Record<string, string | undefined> =
@@ -140,5 +141,59 @@ describe.skipIf(!ready)('Giai đoạn 9 trên Supabase thật', () => {
       rated: false,
     });
     expect(await gameAction(student, g3.id, 'abort')).toMatchObject({ status: 'aborted' });
+  });
+
+  it('presence học viện: thành viên thấy nhau, người ngoài không vào được', {
+    timeout: 60_000,
+  }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const student = newClient();
+    const { user: su } = await signInStudent(
+      student,
+      env.STUDENT_USERNAME ?? '',
+      env.STUDENT_PIN ?? '',
+    );
+    let seen: OnlineMember[] = [];
+    const a = joinAcademyPresence(
+      owner,
+      academy.id,
+      { userId: user.id, name: 'HLV', role: 'owner' },
+      (l) => {
+        seen = l;
+      },
+    );
+    const b = joinAcademyPresence(
+      student,
+      academy.id,
+      { userId: su.id, name: 'HV', role: 'student' },
+      () => undefined,
+    );
+    // Học viện không phải của học viên → bị từ chối
+    const outsider = joinAcademyPresence(
+      student,
+      '00000000-0000-4000-8000-000000000000',
+      { userId: su.id, name: 'HV', role: 'student' },
+      () => undefined,
+    );
+    const outsiderResult = outsider.ready.then(
+      () => 'joined',
+      () => 'denied',
+    );
+    try {
+      await a.ready;
+      await b.ready;
+      for (let t = 0; t < 50 && !seen.some((m) => m.userId === su.id); t++) await wait(100);
+      expect(seen.find((m) => m.userId === su.id)).toMatchObject({ role: 'student' });
+      expect(await outsiderResult).toBe('denied');
+    } finally {
+      await outsider.leave();
+      await b.leave();
+      await a.leave();
+    }
   });
 });
