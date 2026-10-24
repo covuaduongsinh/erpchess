@@ -12,6 +12,10 @@ export function formatDateTime(iso: string, locale: string): string {
   return new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' });
 }
 
+export function formatDate(iso: string, locale: string): string {
+  return new Date(iso).toLocaleDateString(locale, { dateStyle: 'long' });
+}
+
 /** Giá trị cho <input type="datetime-local"> → ISO có múi giờ (hoặc undefined nếu trống). */
 export function localInputToIso(value: string): string | undefined {
   if (!value) return undefined;

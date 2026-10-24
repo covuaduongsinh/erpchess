@@ -1,6 +1,8 @@
+import { certificateVerifyUrl, formatCertificateCode } from '@erpchess/api';
 import {
   useAcademyPresence,
   useAssignments,
+  useCertificates,
   useClassrooms,
   useCourseCompletions,
   useCourseProgress,
@@ -35,7 +37,7 @@ import type { TranslationKey } from '@erpchess/i18n';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
+import { Linking, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -96,6 +98,7 @@ export default function AcademyScreen() {
       <CoursesCard academyId={academy.id} />
 
       {academy.role === 'student' ? <XpCard academyId={academy.id} /> : null}
+      {academy.role === 'student' ? <CertificatesCard academyId={academy.id} /> : null}
 
       <Card title={t('groups.title')}>
         {groups.isPending ? (
@@ -674,6 +677,33 @@ function XpCard({ academyId }: { academyId: string }) {
         {`${t('xp.today')}: +${xp.data.today} · ${t('xp.total')}: ${xp.data.total} · 🔥 ${t('xp.days', { count: streak.current })}`}
       </Text>
       <Muted>{t('xp.longest', { count: streak.longest })}</Muted>
+    </Card>
+  );
+}
+
+const SITE_URL = process.env.EXPO_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
+/** Chứng chỉ của tôi; chạm để mở trang xác minh công khai. */
+function CertificatesCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const { session } = useSession();
+  const list = useCertificates(session ? { academyId, studentId: session.user.id } : undefined);
+  if (!list.data?.length) return null;
+  return (
+    <Card title={t('cert.title')}>
+      {list.data.map((c) => (
+        <Pressable
+          key={c.id}
+          accessibilityRole="link"
+          onPress={() => void Linking.openURL(certificateVerifyUrl(SITE_URL, c.code))}
+          style={styles.row}
+        >
+          <Text style={[styles.text, { flex: 1, color: colors.primary }]}>🎓 {c.title}</Text>
+          <Text style={styles.hint}>
+            {c.revoked_at ? t('cert.revoked') : formatCertificateCode(c.code)}
+          </Text>
+        </Pressable>
+      ))}
     </Card>
   );
 }

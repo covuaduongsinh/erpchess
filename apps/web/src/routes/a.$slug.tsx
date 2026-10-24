@@ -37,6 +37,7 @@ function AcademyLayout({ session }: { session: Session }) {
     { to: '/a/$slug/assignments', label: t('assignments.title'), exact: false },
     { to: '/a/$slug/studies', label: t('studies.title'), exact: false },
     { to: '/a/$slug/courses', label: t('course.title'), exact: false },
+    { to: '/a/$slug/certificates', label: t('cert.title'), exact: false },
     { to: '/a/$slug/quizzes', label: t('quiz.title'), exact: false },
     { to: '/a/$slug/classes', label: t('classroom.title'), exact: false },
     { to: '/a/$slug/practice', label: t('practice.title'), exact: false },

@@ -14,8 +14,8 @@ const body = src
   .join('\n');
 
 const header = `create temp table tap_out(n serial, line text);
-grant all on tap_out to authenticated, service_role;
-grant usage on sequence tap_out_n_seq to authenticated, service_role;`;
+grant all on tap_out to anon, authenticated, service_role;
+grant usage on sequence tap_out_n_seq to anon, authenticated, service_role;`;
 const footer = `do $$
 declare v text;
 begin

@@ -33,6 +33,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import * as certificates from './certificates';
 import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
 import * as courses from './courses';
@@ -1522,4 +1523,49 @@ export function useXpLeaderboard(
     queryFn: () => courses.fetchXpLeaderboard(client, academyId ?? '', range),
     enabled: !!academyId,
   });
+}
+
+export function useCertificates(
+  filter: { academyId: string; studentId?: string; courseId?: string } | undefined,
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: [
+      'certificates',
+      filter?.academyId ?? '',
+      filter?.studentId ?? '',
+      filter?.courseId ?? '',
+    ],
+    queryFn: () => certificates.fetchCertificates(client, filter ?? { academyId: '' }),
+    enabled: !!filter?.academyId,
+  });
+}
+
+export function useCertificate(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['certificate', id ?? ''],
+    queryFn: () => certificates.fetchCertificate(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function useCertificateMutations(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => {
+    void qc.invalidateQueries({ queryKey: ['certificates', academyId] });
+    void qc.invalidateQueries({ queryKey: ['certificate'] });
+  };
+  return {
+    issue: useMutation({
+      mutationFn: (input: { studentId: string; title?: string; courseId?: string | null }) =>
+        certificates.issueCertificate(client, { ...input, academyId }),
+      onSuccess: refresh,
+    }),
+    revoke: useMutation({
+      mutationFn: (id: string) => certificates.revokeCertificate(client, id),
+      onSuccess: refresh,
+    }),
+  };
 }

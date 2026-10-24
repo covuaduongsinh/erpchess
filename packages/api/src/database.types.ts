@@ -382,6 +382,77 @@ export type Database = {
           },
         ]
       }
+      certificates: {
+        Row: {
+          academy_id: string
+          academy_name: string
+          code: string
+          course_id: string | null
+          id: string
+          issued_at: string
+          issued_by: string | null
+          revoked_at: string | null
+          student_id: string
+          student_name: string
+          title: string
+        }
+        Insert: {
+          academy_id: string
+          academy_name: string
+          code: string
+          course_id?: string | null
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          revoked_at?: string | null
+          student_id: string
+          student_name: string
+          title: string
+        }
+        Update: {
+          academy_id?: string
+          academy_name?: string
+          code?: string
+          course_id?: string | null
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          revoked_at?: string | null
+          student_id?: string
+          student_name?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_issued_by_fkey"
+            columns: ["issued_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       classroom_attendance: {
         Row: {
           classroom_id: string
@@ -2673,6 +2744,15 @@ export type Database = {
         Args: { p_name: string; p_secret: string }
         Returns: boolean
       }
+      issue_certificate: {
+        Args: {
+          p_academy: string
+          p_course?: string
+          p_student: string
+          p_title?: string
+        }
+        Returns: string
+      }
       puzzle_for_student_item: {
         Args: { p_item: string; p_student: string }
         Returns: {
@@ -2716,6 +2796,7 @@ export type Database = {
         }[]
       }
       recheck_course: { Args: { p_course: string }; Returns: number }
+      revoke_certificate: { Args: { p_id: string }; Returns: undefined }
       set_student_level: {
         Args: { p_academy: string; p_level: string; p_student: string }
         Returns: undefined
@@ -2729,6 +2810,17 @@ export type Database = {
           next_level_xp: number
           today: number
           total: number
+        }[]
+      }
+      verify_certificate: {
+        Args: { p_code: string }
+        Returns: {
+          academy_name: string
+          code: string
+          issued_at: string
+          revoked_at: string
+          student_name: string
+          title: string
         }[]
       }
       xp_leaderboard: {

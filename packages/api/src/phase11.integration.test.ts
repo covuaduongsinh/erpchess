@@ -3,6 +3,12 @@
  * `submit-activity` → XP ghi đúng một lần (trigger), khoá hoàn thành + thưởng XP, tiến độ khoá.
  */
 import { describe, expect, it } from 'vitest';
+import {
+  fetchCertificates,
+  issueCertificate,
+  revokeCertificate,
+  verifyCertificate,
+} from './certificates';
 import { createErpClient } from './client';
 import {
   createCourse,
@@ -77,6 +83,7 @@ describe.skipIf(!ready)('Giai đoạn 11 trên Supabase thật', () => {
       academyId: academy.id,
       title: 'Khoá GĐ11',
     });
+    const certIds: string[] = [];
     try {
       await setCourseItems(owner, course.id, [{ studyId: study.id, required: true }]);
       await setCourseTargets(owner, course.id, [], [su.id]);
@@ -103,7 +110,41 @@ describe.skipIf(!ready)('Giai đoạn 11 trên Supabase thật', () => {
         required_total: 1,
         required_done: 1,
       });
+
+      // Giai đoạn 11b: khoá bật auto_certificate → tự cấp chứng chỉ, ai cũng xác minh được bằng mã
+      const [cert] = await fetchCertificates(student, {
+        academyId: academy.id,
+        studentId: su.id,
+        courseId: course.id,
+      });
+      if (!cert) throw new Error('chưa tự cấp chứng chỉ');
+      certIds.push(cert.id);
+      expect(cert.title).toBe('Khoá GĐ11');
+      const anon = newClient();
+      expect(
+        await verifyCertificate(
+          anon,
+          `${cert.code.slice(0, 5).toLowerCase()}-${cert.code.slice(5)}`,
+        ),
+      ).toMatchObject({ title: 'Khoá GĐ11', revoked_at: null });
+      await expect(
+        issueCertificate(student, { academyId: academy.id, studentId: su.id, title: 'Giả' }),
+      ).rejects.toThrow();
+      await expect(
+        issueCertificate(owner, { academyId: academy.id, studentId: su.id, courseId: course.id }),
+      ).rejects.toThrow();
+      const manual = await issueCertificate(owner, {
+        academyId: academy.id,
+        studentId: su.id,
+        title: 'Chứng chỉ tay GĐ11',
+      });
+      certIds.push(manual);
+      await revokeCertificate(owner, cert.id);
+      expect((await verifyCertificate(anon, cert.code))?.revoked_at).toBeTruthy();
+      expect(await verifyCertificate(anon, 'ZZZZZZZZZZ')).toBeNull();
     } finally {
+      // Chứng chỉ không xoá được (giữ toàn vẹn xác minh): thu hồi chứng chỉ thử
+      for (const id of certIds) await revokeCertificate(owner, id).catch(() => undefined);
       await deleteCourse(owner, course.id);
       await deleteStudy(owner, study.id);
     }
