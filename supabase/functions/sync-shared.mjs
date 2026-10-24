@@ -13,6 +13,7 @@ const TARGETS = [
   { fn: 'submit-attempt', files: ['rules.ts', 'puzzle.ts'] },
   { fn: 'submit-activity', files: ['rules.ts', 'puzzle.ts', 'capture.ts'] },
   { fn: 'quiz-answer', files: ['rules.ts', 'puzzle.ts', 'capture.ts'] },
+  { fn: 'game-move', files: ['rules.ts', 'game.ts', 'clock.ts', 'glicko2.ts'] },
 ];
 const pkg = JSON.parse(
   readFileSync(resolve(here, '../../packages/chess-core/package.json'), 'utf8'),

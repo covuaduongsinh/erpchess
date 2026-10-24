@@ -34,6 +34,7 @@ import {
 import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
 import * as databases from './databases';
+import * as games from './games';
 import * as practice from './practice';
 import * as api from './queries';
 import { ApiError } from './queries';
@@ -1190,4 +1191,82 @@ export function useSilenceParticipant(classroomId: string) {
     mutationFn: (v: { identity: string; on: boolean }) =>
       classrooms.silenceParticipant(client, classroomId, v.identity, v.on),
   });
+}
+
+// ── Ván đấu (Giai đoạn 9) ──
+
+export const gameKeys = {
+  all: (academyId: string) => ['games', academyId] as const,
+  list: (academyId: string, filter: object) => ['games', academyId, filter] as const,
+  detail: (id: string) => ['game', id] as const,
+};
+
+export function usePlayGames(
+  academyId: string | undefined,
+  filter: Parameters<typeof games.fetchGames>[2] = {},
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: gameKeys.list(academyId ?? '', filter),
+    queryFn: () => games.fetchGames(client, academyId ?? '', filter),
+    enabled: !!academyId,
+  });
+}
+
+/**
+ * Một ván: tải từ CSDL rồi nghe kênh `game:<id>`; chỉ nhận trạng thái có `version` mới hơn để
+ * tin đến muộn không ghi đè.
+ */
+export function useGame(id: string | undefined) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const query = useQuery({
+    queryKey: gameKeys.detail(id ?? ''),
+    queryFn: () => games.fetchGame(client, id ?? ''),
+    enabled: !!id,
+  });
+  useEffect(() => {
+    if (!id) return;
+    return games.subscribeGame(client, id, (patch) => {
+      qc.setQueryData<games.GameRow>(gameKeys.detail(id), (old) =>
+        old && (patch.version ?? 0) > old.version ? { ...old, ...patch } : old,
+      );
+    });
+  }, [client, qc, id]);
+  return query;
+}
+
+export function useGameAction(id: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { action: games.GameAction; move?: string; ply?: number }) =>
+      games.gameAction(client, id, v.action, { move: v.move, ply: v.ply }),
+    onSuccess: (row) => {
+      if (!('id' in row)) return;
+      qc.setQueryData<games.GameRow>(gameKeys.detail(id), (old) =>
+        !old || row.version >= old.version ? row : old,
+      );
+    },
+    // Lệch bước hoặc ván đã xong: tải lại trạng thái thật từ server
+    onError: () => qc.invalidateQueries({ queryKey: gameKeys.detail(id) }),
+  });
+}
+
+export function useGameMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => qc.invalidateQueries({ queryKey: gameKeys.all(academyId) });
+  return {
+    pair: useMutation({
+      mutationFn: (v: Omit<Parameters<typeof games.createPairing>[2], 'academyId'>) =>
+        games.createPairing(client, userId, { ...v, academyId }),
+      onSuccess: refresh,
+    }),
+    saveBot: useMutation({
+      mutationFn: (v: Omit<Parameters<typeof games.saveBotGame>[2], 'academyId'>) =>
+        games.saveBotGame(client, userId, { ...v, academyId }),
+      onSuccess: refresh,
+    }),
+  };
 }

@@ -8,6 +8,25 @@ export {
   playCaptureMove,
   solveCapture,
 } from './capture';
+export {
+  type ClockState,
+  categoryOf,
+  clockAfterMove,
+  flagged,
+  type RatingCategory,
+  remaining,
+  startClock,
+  type TimeControl,
+} from './clock';
+export {
+  formatPgn,
+  type GameEnd,
+  type GameResultCode,
+  lossFor,
+  type Replay,
+  replayGame,
+  resultOf,
+} from './game';
 export { type GameSummary, gameSummary, splitPgn } from './games';
 export { type GameResult, glicko2Update, newRating, type Rating } from './glicko2';
 export { PgnError, parsePgn, toPgn } from './pgn';
