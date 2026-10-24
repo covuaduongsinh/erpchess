@@ -826,6 +826,132 @@ export type Database = {
           },
         ]
       }
+      games: {
+        Row: {
+          academy_id: string
+          base_ms: number | null
+          black_id: string | null
+          black_ms: number | null
+          bot_elo: number | null
+          category: string | null
+          created_at: string
+          created_by: string | null
+          draw_offer_by: string | null
+          fen: string
+          finished_at: string | null
+          id: string
+          inc_ms: number
+          initial_fen: string
+          moves: string[]
+          pgn: string | null
+          rated: boolean
+          rating_change: Json | null
+          reason: string | null
+          result: string | null
+          simul_id: string | null
+          started_at: string | null
+          status: string
+          turn_started_at: string | null
+          version: number
+          white_id: string | null
+          white_ms: number | null
+        }
+        Insert: {
+          academy_id: string
+          base_ms?: number | null
+          black_id?: string | null
+          black_ms?: number | null
+          bot_elo?: number | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          draw_offer_by?: string | null
+          fen: string
+          finished_at?: string | null
+          id?: string
+          inc_ms?: number
+          initial_fen?: string
+          moves?: string[]
+          pgn?: string | null
+          rated?: boolean
+          rating_change?: Json | null
+          reason?: string | null
+          result?: string | null
+          simul_id?: string | null
+          started_at?: string | null
+          status?: string
+          turn_started_at?: string | null
+          version?: number
+          white_id?: string | null
+          white_ms?: number | null
+        }
+        Update: {
+          academy_id?: string
+          base_ms?: number | null
+          black_id?: string | null
+          black_ms?: number | null
+          bot_elo?: number | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          draw_offer_by?: string | null
+          fen?: string
+          finished_at?: string | null
+          id?: string
+          inc_ms?: number
+          initial_fen?: string
+          moves?: string[]
+          pgn?: string | null
+          rated?: boolean
+          rating_change?: Json | null
+          reason?: string | null
+          result?: string | null
+          simul_id?: string | null
+          started_at?: string | null
+          status?: string
+          turn_started_at?: string | null
+          version?: number
+          white_id?: string | null
+          white_ms?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "games_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_black_id_fkey"
+            columns: ["black_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_draw_offer_by_fkey"
+            columns: ["draw_offer_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "games_white_id_fkey"
+            columns: ["white_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_members: {
         Row: {
           created_at: string
