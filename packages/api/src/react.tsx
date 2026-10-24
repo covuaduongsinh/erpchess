@@ -6,6 +6,7 @@ import type {
   ActivityInput,
   AttendanceStatus,
   ClassroomInput,
+  CourseInput,
   ExerciseInput,
   LevelInput,
   PracticePositionInput,
@@ -34,6 +35,7 @@ import {
 } from 'react';
 import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
+import * as courses from './courses';
 import * as databases from './databases';
 import * as games from './games';
 import * as practice from './practice';
@@ -1424,4 +1426,100 @@ export function useTournamentMutations(academyId: string, userId: string) {
       onSuccess: refresh,
     }),
   };
+}
+
+// ── Khoá học, XP (Giai đoạn 11) ──
+
+export function useCourses(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['courses', academyId ?? ''],
+    queryFn: () => courses.fetchCourses(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useCourse(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['course', id ?? ''],
+    queryFn: () => courses.fetchCourse(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function useCourseProgress(courseIds: readonly string[]) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['course-progress', [...courseIds].sort().join(',')],
+    queryFn: () => courses.fetchCourseProgress(client, courseIds),
+    enabled: courseIds.length > 0,
+  });
+}
+
+export function useCourseCompletions(courseIds: readonly string[]) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['course-completions', [...courseIds].sort().join(',')],
+    queryFn: () => courses.fetchCourseCompletions(client, courseIds),
+    enabled: courseIds.length > 0,
+  });
+}
+
+export function useCourseMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => {
+    void qc.invalidateQueries({ queryKey: ['courses', academyId] });
+    void qc.invalidateQueries({ queryKey: ['course'] });
+    void qc.invalidateQueries({ queryKey: ['course-progress'] });
+    void qc.invalidateQueries({ queryKey: ['course-completions'] });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (input: Omit<CourseInput, 'academyId'>) =>
+        courses.createCourse(client, userId, { ...input, academyId }),
+      onSuccess: refresh,
+    }),
+    update: useMutation({
+      mutationFn: (v: { id: string; patch: Parameters<typeof courses.updateCourse>[2] }) =>
+        courses.updateCourse(client, v.id, v.patch),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => courses.deleteCourse(client, id),
+      onSuccess: refresh,
+    }),
+    setItems: useMutation({
+      mutationFn: (v: { id: string; items: { studyId: string; required: boolean }[] }) =>
+        courses.setCourseItems(client, v.id, v.items),
+      onSuccess: refresh,
+    }),
+    setTargets: useMutation({
+      mutationFn: (v: { id: string; groupIds: string[]; studentIds: string[] }) =>
+        courses.setCourseTargets(client, v.id, v.groupIds, v.studentIds),
+      onSuccess: refresh,
+    }),
+  };
+}
+
+export function useStudentXp(studentId: string | undefined, academyId?: string) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['student-xp', studentId ?? '', academyId ?? ''],
+    queryFn: () => courses.fetchStudentXp(client, studentId ?? '', academyId),
+    enabled: !!studentId,
+  });
+}
+
+export function useXpLeaderboard(
+  academyId: string | undefined,
+  range: { from?: string; to?: string },
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['xp-leaderboard', academyId ?? '', range.from ?? '', range.to ?? ''],
+    queryFn: () => courses.fetchXpLeaderboard(client, academyId ?? '', range),
+    enabled: !!academyId,
+  });
 }

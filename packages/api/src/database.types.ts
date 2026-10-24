@@ -634,6 +634,179 @@ export type Database = {
           },
         ]
       }
+      course_completions: {
+        Row: {
+          completed_at: string
+          course_id: string
+          student_id: string
+        }
+        Insert: {
+          completed_at?: string
+          course_id: string
+          student_id: string
+        }
+        Update: {
+          completed_at?: string
+          course_id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_completions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_completions_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_items: {
+        Row: {
+          course_id: string
+          position: number
+          required: boolean
+          study_id: string
+        }
+        Insert: {
+          course_id: string
+          position: number
+          required?: boolean
+          study_id: string
+        }
+        Update: {
+          course_id?: string
+          position?: number
+          required?: boolean
+          study_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_items_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_items_study_id_fkey"
+            columns: ["study_id"]
+            isOneToOne: false
+            referencedRelation: "studies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_targets: {
+        Row: {
+          course_id: string
+          group_id: string | null
+          id: string
+          student_id: string | null
+        }
+        Insert: {
+          course_id: string
+          group_id?: string | null
+          id?: string
+          student_id?: string | null
+        }
+        Update: {
+          course_id?: string
+          group_id?: string | null
+          id?: string
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_targets_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_targets_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_targets_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          academy_id: string
+          auto_certificate: boolean
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          level_id: string | null
+          open_to_all: boolean
+          status: string
+          title: string
+        }
+        Insert: {
+          academy_id: string
+          auto_certificate?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          level_id?: string | null
+          open_to_all?: boolean
+          status?: string
+          title: string
+        }
+        Update: {
+          academy_id?: string
+          auto_certificate?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          level_id?: string | null
+          open_to_all?: boolean
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courses_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courses_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "levels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       database_games: {
         Row: {
           black: string
@@ -2272,6 +2445,44 @@ export type Database = {
           },
         ]
       }
+      xp_events: {
+        Row: {
+          created_at: string
+          day: string
+          id: number
+          points: number
+          source: string
+          source_id: string
+          student_id: string
+        }
+        Insert: {
+          created_at?: string
+          day?: string
+          id?: never
+          points: number
+          source: string
+          source_id: string
+          student_id: string
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          id?: never
+          points?: number
+          source?: string
+          source_id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xp_events_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       assignment_progress: {
@@ -2291,6 +2502,31 @@ export type Database = {
             columns: ["academy_id"]
             isOneToOne: false
             referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_progress: {
+        Row: {
+          course_id: string | null
+          required_done: number | null
+          required_total: number | null
+          student_id: string | null
+          studies_done: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_attempts_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_items_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
             referencedColumns: ["id"]
           },
         ]
@@ -2433,6 +2669,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      cron_secret_ok: {
+        Args: { p_name: string; p_secret: string }
+        Returns: boolean
+      }
       puzzle_for_student_item: {
         Args: { p_item: string; p_student: string }
         Returns: {
@@ -2475,11 +2715,30 @@ export type Database = {
           time_ms: number
         }[]
       }
+      recheck_course: { Args: { p_course: string }; Returns: number }
       set_student_level: {
         Args: { p_academy: string; p_level: string; p_student: string }
         Returns: undefined
       }
       start_simul: { Args: { p_simul: string }; Returns: undefined }
+      student_xp: {
+        Args: { p_academy?: string; p_student: string }
+        Returns: {
+          days: string[]
+          next_level: string
+          next_level_xp: number
+          today: number
+          total: number
+        }[]
+      }
+      xp_leaderboard: {
+        Args: { p_academy: string; p_from?: string; p_to?: string }
+        Returns: {
+          display_name: string
+          student_id: string
+          xp: number
+        }[]
+      }
     }
     Enums: {
       academy_role: "owner" | "coach" | "student" | "parent"
