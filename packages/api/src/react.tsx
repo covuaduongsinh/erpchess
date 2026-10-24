@@ -48,6 +48,7 @@ import {
   type RoomStatus,
   snapshotFromState,
 } from './room';
+import * as simuls from './simuls';
 import type { StudyScope } from './studies';
 import * as studies from './studies';
 
@@ -1307,4 +1308,51 @@ export function useAcademyPresence(
     };
   }, [client, academyId, userId, name, role]);
   return online;
+}
+
+// ── Simul (Giai đoạn 9c) ──
+
+export function useSimuls(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['simuls', academyId ?? ''],
+    queryFn: () => simuls.fetchSimuls(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+/** Simul và các bàn; làm mới định kỳ để chủ simul thấy bàn nào đang chờ mình đi. */
+export function useSimul(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['simul', id ?? ''],
+    queryFn: () => simuls.fetchSimul(client, id ?? ''),
+    enabled: !!id,
+    refetchInterval: 3000,
+  });
+}
+
+export function useSimulMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => {
+    void qc.invalidateQueries({ queryKey: ['simuls', academyId] });
+    void qc.invalidateQueries({ queryKey: ['simul'] });
+    void qc.invalidateQueries({ queryKey: gameKeys.all(academyId) });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (v: Omit<Parameters<typeof simuls.createSimul>[2], 'academyId'>) =>
+        simuls.createSimul(client, userId, { ...v, academyId }),
+      onSuccess: refresh,
+    }),
+    start: useMutation({
+      mutationFn: (id: string) => simuls.startSimul(client, id),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => simuls.deleteSimul(client, id),
+      onSuccess: refresh,
+    }),
+  };
 }

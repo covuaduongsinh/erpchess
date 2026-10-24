@@ -61,6 +61,7 @@ type Game = {
   version: number;
   started_at: string | null;
   created_at: string;
+  simul_id: string | null;
 };
 type Patch = Record<string, unknown>;
 
@@ -123,6 +124,18 @@ Deno.serve(async (req) => {
           turnStartedAt: game.turn_started_at ? Date.parse(game.turn_started_at) : null,
         };
   const opponent = me === 'w' ? 'b' : 'w';
+  // Ván simul: đồng hồ chỉ tính cho học viên, chủ simul không bị trừ giờ
+  let hostColor: 'w' | 'b' | null = null;
+  if (game.simul_id) {
+    const { data: simul } = await admin
+      .from('simuls')
+      .select('host_id')
+      .eq('id', game.simul_id)
+      .maybeSingle();
+    hostColor =
+      simul?.host_id === game.white_id ? 'w' : simul?.host_id === game.black_id ? 'b' : null;
+  }
+  const canFlag = (side: 'w' | 'b') => side !== hostColor;
 
   // Ghi có điều kiện theo version; ván kết thúc thì tính PGN + rating
   async function save(
@@ -234,6 +247,13 @@ Deno.serve(async (req) => {
     return { white: round(nw.rating - w.rating), black: round(nb.rating - b.rating) };
   }
 
+  const nextClock = (c: ClockState) => {
+    const next = clockAfterMove(c, turn, game.moves.length, now, game.inc_ms);
+    if (turn !== hostColor) return next;
+    const key = turn === 'w' ? 'whiteMs' : 'blackMs';
+    return { ...next, [key]: c[key] };
+  };
+
   const clockPatch = (c: ClockState) => ({
     white_ms: c.whiteMs,
     black_ms: c.blackMs,
@@ -246,7 +266,7 @@ Deno.serve(async (req) => {
       const move = typeof body.move === 'string' && UCI_RE.test(body.move) ? body.move : null;
       if (!move) return json(400, { error: 'invalid_input' });
       if (body.ply !== game.moves.length) return json(409, { error: 'out_of_sync' });
-      if (clock && flagged(clock, turn, now)) {
+      if (clock && canFlag(turn) && flagged(clock, turn, now)) {
         return save(clockPatch({ ...clock, [turn === 'w' ? 'whiteMs' : 'blackMs']: 0 }), {
           result: lossFor(turn),
           reason: 'timeout',
@@ -261,9 +281,7 @@ Deno.serve(async (req) => {
         // Đi một nước = từ chối lời mời hoà của đối thủ (nếu có)
         draw_offer_by: game.draw_offer_by === uid ? uid : null,
         started_at: game.started_at ?? new Date(now).toISOString(),
-        ...(clock
-          ? clockPatch(clockAfterMove(clock, turn, game.moves.length, now, game.inc_ms))
-          : {}),
+        ...(clock ? clockPatch(nextClock(clock)) : {}),
       };
       if (next.status !== 'ongoing') {
         return save(patch, {
@@ -305,7 +323,7 @@ Deno.serve(async (req) => {
       return saved ? json(200, saved) : json(409, { error: 'out_of_sync' });
     }
     case 'claim_timeout':
-      if (!clock || turn !== opponent || !flagged(clock, turn, now)) {
+      if (!clock || turn !== opponent || !canFlag(turn) || !flagged(clock, turn, now)) {
         return json(409, { error: 'not_flagged' });
       }
       return save(clockPatch({ ...clock, [turn === 'w' ? 'whiteMs' : 'blackMs']: 0 }), {

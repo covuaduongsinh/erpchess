@@ -944,6 +944,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "games_simul_id_fkey"
+            columns: ["simul_id"]
+            isOneToOne: false
+            referencedRelation: "simuls"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "games_white_id_fkey"
             columns: ["white_id"]
             isOneToOne: false
@@ -1719,6 +1726,79 @@ export type Database = {
           },
         ]
       }
+      simuls: {
+        Row: {
+          academy_id: string
+          base_ms: number | null
+          created_at: string
+          created_by: string | null
+          description: string
+          finished_at: string | null
+          host_color: string
+          host_id: string
+          id: string
+          inc_ms: number
+          started_at: string | null
+          starts_at: string | null
+          status: string
+          title: string
+        }
+        Insert: {
+          academy_id: string
+          base_ms?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          finished_at?: string | null
+          host_color?: string
+          host_id: string
+          id?: string
+          inc_ms?: number
+          started_at?: string | null
+          starts_at?: string | null
+          status?: string
+          title: string
+        }
+        Update: {
+          academy_id?: string
+          base_ms?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          finished_at?: string | null
+          host_color?: string
+          host_id?: string
+          id?: string
+          inc_ms?: number
+          started_at?: string | null
+          starts_at?: string | null
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "simuls_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "simuls_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "simuls_host_id_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       studies: {
         Row: {
           academy_id: string | null
@@ -2112,6 +2192,7 @@ export type Database = {
         Args: { p_academy: string; p_level: string; p_student: string }
         Returns: undefined
       }
+      start_simul: { Args: { p_simul: string }; Returns: undefined }
     }
     Enums: {
       academy_role: "owner" | "coach" | "student" | "parent"
