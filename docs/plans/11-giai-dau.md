@@ -79,3 +79,11 @@ Kế hoạch con ghi vào `docs/plans/11-giai-dau.md`. Chia 3 PR, mỗi PR đủ
 - **Server:** `supabase/functions/_lib/tournament-run.ts` (bắt đầu, ghép vòng idempotent qua `tournament_rounds.status`, sau mỗi ván, kết thúc) — `sync-shared.mjs` mở rộng để chép `_lib` sang từng function. Edge Function `tournament-admin` (start/next_round/finish) mới; `game-move` thêm luật giải (`draw_not_allowed`, `resign_not_allowed`) và tự xử lý vòng sau mỗi ván giải. Bản triển khai lên Supabase ở dạng rút gọn tương đương (bỏ chú thích; `rules.ts` chỉ còn kiểu `Color`).
 - **API `tournaments.ts`** + hook (`useTournament` nghe kênh `tournament:<id>`), `tournamentStandings`, `teamStandings`.
 - **Kiểm chứng:** pgTAP `11_tournaments_rls.sql` 12/12; `phase10.integration.test.ts` 2/2 trên cloud (Swiss 2 vòng tự hoàn tất: không cho hoà, đầu hàng → server tự ghép vòng 2 → giải kết thúc, bảng xếp hạng 1–1; vòng tròn điều khiển tay: chưa xong vòng thì không ghép tiếp, kết thúc sớm huỷ ván dở).
+
+### PR 10b (2026-10-25)
+
+- **Tab "Giải đấu"** `/a/$slug/tournaments`: tìm theo tên / người chơi / địa điểm; lọc trạng thái; lọc tháng/quý/năm; sắp xếp (mới nhất, tên, số người chơi); ba kiểu xem danh sách / bảng / lịch tháng.
+- **Tạo giải 3 bước** `/tournaments/new`: chi tiết (thể thức, số vòng, thời gian preset hoặc tự nhập, rating, cho phép hoà/xin thua, công khai, điều khiển, kiểu ván tiêu chuẩn / 8 khai cuộc định sẵn / FEN dựng bằng `BoardEditor`), lịch (giờ bắt đầu, múi giờ, khoảng cách vòng, lặp lại), người chơi (`TargetPicker`; Swiss đồng đội có trình chia đội theo thứ tự bàn).
+- **Trang giải** `/tournaments/$id`: bảng xếp hạng (điểm, Buchholz cắt 1, SB, thắng; đội: điểm trận, điểm ván) tự cập nhật qua `tournament:<id>`; cặp đấu theo vòng; "Vào ván của tôi"; đăng ký/rút (giải công khai); người tổ chức bắt đầu / ghép vòng kế / kết thúc / rút người chơi / xoá.
+- **Mobile:** thẻ "Giải đấu" (giải đang diễn ra/sắp tới, vòng hiện tại); ván giải hiện trong "Ván của tôi".
+- **Kiểm chứng (Chrome, DSC1):** tạo "Giải mẫu (Claude)" qua 3 bước (khai cuộc định sẵn, 15/11 19:00, lặp hằng tuần, chưa có người chơi) → trang giải đúng; bấm bắt đầu → "Cần ít nhất 2 người chơi."; ba kiểu xem hiện giải (lịch tháng 11 ngày 15); xoá giải. Sửa tiêu đề cột trạng thái của kiểu bảng sau khi thử.

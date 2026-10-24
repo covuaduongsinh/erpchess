@@ -15,6 +15,7 @@ import {
   useQuizzes,
   useSession,
   useStudies,
+  useTournaments,
 } from '@erpchess/api/react';
 import {
   academyRoles,
@@ -80,6 +81,7 @@ export default function AcademyScreen() {
 
       <QuizzesCard academyId={academy.id} />
       <MyGamesCard academyId={academy.id} />
+      <TournamentsCard academyId={academy.id} />
       <ClassesCard academyId={academy.id} />
       <PracticeCard academyId={academy.id} />
 
@@ -574,6 +576,37 @@ function MyGamesCard({ academyId }: { academyId: string }) {
       )}
       <Muted>{t('play.botWebOnly')}</Muted>
       <ErrorText error={games.error} />
+    </Card>
+  );
+}
+
+/** Giải đang diễn ra / sắp tới; ván giải của mình hiện ở thẻ "Ván của tôi". */
+function TournamentsCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const { session } = useSession();
+  const list = useTournaments(academyId);
+  const shown = (list.data ?? []).filter((x) => x.status !== 'finished').slice(0, 5);
+  if (!list.isPending && shown.length === 0) return null;
+  return (
+    <Card title={t('tournament.title')}>
+      {list.isPending ? (
+        <Spinner />
+      ) : (
+        shown.map((x) => (
+          <View key={x.id} style={styles.row}>
+            <Text style={[styles.text, { flex: 1 }]}>
+              {x.title}
+              {x.playerIds.includes(session?.user.id ?? '') ? ' ★' : ''}
+            </Text>
+            <Text style={styles.hint}>
+              {x.status === 'active'
+                ? `${t('tournament.roundN', { n: x.current_round })}/${x.rounds}`
+                : t('tournament.upcoming')}
+            </Text>
+          </View>
+        ))
+      )}
+      <ErrorText error={list.error} />
     </Card>
   );
 }
