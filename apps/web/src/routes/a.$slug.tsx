@@ -1,4 +1,4 @@
-import { useMyAcademies } from '@erpchess/api/react';
+import { useAcademyPresence, useMyAcademies } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import type { Session } from '@supabase/supabase-js';
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
@@ -17,6 +17,13 @@ function AcademyLayout({ session }: { session: Session }) {
   const { t } = useT();
   const { slug } = Route.useParams();
   const academies = useMyAcademies(session.user.id);
+  const current = academies.data?.find((a) => a.slug === slug);
+  // Mở bất kỳ trang nào của học viện là báo mình đang online
+  const online = useAcademyPresence(current?.id, {
+    userId: session.user.id,
+    name: String(session.user.user_metadata?.display_name ?? ''),
+    role: current?.role ?? '',
+  });
 
   if (academies.isPending) return <Spinner />;
   if (academies.error) return <ErrorText error={academies.error} />;
@@ -32,6 +39,7 @@ function AcademyLayout({ session }: { session: Session }) {
     { to: '/a/$slug/quizzes', label: t('quiz.title'), exact: false },
     { to: '/a/$slug/classes', label: t('classroom.title'), exact: false },
     { to: '/a/$slug/practice', label: t('practice.title'), exact: false },
+    { to: '/a/$slug/play', label: t('play.title'), exact: false },
     ...(isStaff(academy.role)
       ? [
           { to: '/a/$slug/calendar', label: t('calendar.title'), exact: false },
@@ -43,7 +51,7 @@ function AcademyLayout({ session }: { session: Session }) {
   ] as const;
 
   return (
-    <AcademyContext value={{ academy, session }}>
+    <AcademyContext value={{ academy, session, online }}>
       <div className="flex flex-col gap-1">
         <h1 className="flex items-center gap-3 text-3xl font-bold text-primary">
           {academy.logo_url && (

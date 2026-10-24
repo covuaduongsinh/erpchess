@@ -1,4 +1,5 @@
 import {
+  useAcademyPresence,
   useAssignments,
   useClassrooms,
   useCreateGroup,
@@ -8,6 +9,7 @@ import {
   useLevels,
   useMembers,
   useMyAcademies,
+  usePlayGames,
   usePracticeChapters,
   useProgress,
   useQuizzes,
@@ -38,6 +40,17 @@ export default function AcademyScreen() {
   const academy = academies.data?.find((a) => a.slug === slug);
   const members = useMembers(academy?.id);
   const groups = useGroups(academy?.id);
+  // Mở màn học viện là báo mình đang online (HLV thấy ở Game Area để ghép cặp)
+  useAcademyPresence(
+    academy?.id,
+    session
+      ? {
+          userId: session.user.id,
+          name: String(session.user.user_metadata?.display_name ?? ''),
+          role: academy?.role ?? '',
+        }
+      : undefined,
+  );
 
   if (academies.isPending) return <Spinner />;
   if (!academy) return <Muted>{t('academy.none')}</Muted>;
@@ -66,6 +79,7 @@ export default function AcademyScreen() {
       <AssignmentsCard academyId={academy.id} slug={academy.slug} staff={staff} />
 
       <QuizzesCard academyId={academy.id} />
+      <MyGamesCard academyId={academy.id} />
       <ClassesCard academyId={academy.id} />
       <PracticeCard academyId={academy.id} />
 
@@ -528,6 +542,38 @@ function ClassesCard({ academyId }: { academyId: string }) {
         })
       )}
       <ErrorText error={classes.error} />
+    </Card>
+  );
+}
+
+/** Ván 1–1 đang chơi của mình (HLV ghép cặp); đánh máy chỉ có trên web/desktop. */
+function MyGamesCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const { session } = useSession();
+  const games = usePlayGames(academyId, { status: ['active'], playerId: session?.user.id });
+  return (
+    <Card title={t('play.myGames')}>
+      {games.isPending ? (
+        <Spinner />
+      ) : (games.data?.length ?? 0) === 0 ? (
+        <Muted>{t('play.noMyGames')}</Muted>
+      ) : (
+        games.data?.map((g) => (
+          <Pressable
+            key={g.id}
+            accessibilityRole="link"
+            onPress={() => router.push({ pathname: '/games/[id]', params: { id: g.id } })}
+            style={styles.row}
+          >
+            <Text style={[styles.text, { flex: 1, color: colors.primary }]}>
+              {g.white_id === session?.user.id ? `♔ ${t('play.white')}` : `♚ ${t('play.black')}`}
+              {g.base_ms ? ` · ${g.base_ms / 60000}+${g.inc_ms / 1000}` : ''}
+            </Text>
+          </Pressable>
+        ))
+      )}
+      <Muted>{t('play.botWebOnly')}</Muted>
+      <ErrorText error={games.error} />
     </Card>
   );
 }

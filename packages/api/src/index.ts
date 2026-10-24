@@ -4,6 +4,7 @@ export type { Database, Enums, Tables, TablesInsert } from './database.types';
 export * from './databases';
 export * from './games';
 export * from './practice';
+export * from './presence';
 export * from './queries';
 export * from './quizzes';
 export * from './room';

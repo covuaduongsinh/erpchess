@@ -78,3 +78,15 @@ Kế hoạch con ghi vào `docs/plans/10-game-area-simul.md`. Chia 3 PR, mỗi P
 - **Edge Function `game-move`** (đã triển khai): lượt đi, lệch bước (`out_of_sync`), nước sai, hết giờ theo giờ server, đầu hàng, xin/nhận/từ chối hoà, huỷ (trước nước thứ hai; staff huỷ bất kỳ lúc nào), PGN, cập nhật `ratings` bằng Glicko-2. Bản triển khai được gửi lên ở dạng rút gọn tương đương (cùng logic, bỏ chú thích); mã nguồn trong repo là bản chuẩn.
 - **API:** `games.ts` (`createPairing`, `fetchGames`, `gameAction`, `saveBotGame`, `subscribeGame`, `TIME_PRESETS`), `edge.ts` (`invokeEdge` dùng chung, `classrooms.ts` chuyển sang dùng); hook `usePlayGames`, `useGame` (nhận trạng thái theo `version`), `useGameAction`, `useGameMutations`.
 - **Kiểm chứng:** chess-core 76 test; pgTAP `09_games_rls.sql` 14/14; `phase9.integration.test.ts` đạt trên cloud (sai lượt, lệch bước, nước sai bị từ chối; học viên nhận trạng thái qua Realtime; hoà theo thoả thuận có PGN và thay đổi rating; đầu hàng; huỷ ván).
+
+### PR 9b (2026-10-25)
+
+- **Presence học viện** (migration `…0015_academy_presence.sql`): kênh riêng tư `academy:<id>:online`, chỉ thành viên nghe/báo. `useAcademyPresence` gắn ở layout học viện (web) và màn học viện (mobile); danh sách online đi qua `AcademyContext`.
+- **Web tab "Chơi cờ"** `/a/$slug/play`: số ván hôm nay, học viên online, ván đang diễn ra, lịch sử (lọc theo học viên), HLV "Tạo cặp đấu" (người online lên trước, preset 3+2/5+0/10+0/15+10/30+0 hoặc không giới hạn, bốc thăm màu, tính rating).
+- **Trang ván** `/a/$slug/play/$id`: đồng hồ hai bên đếm theo dữ liệu server, tự gửi `claim_timeout` khi đồng hồ đối thủ về 0, đầu hàng (bấm hai lần), xin/nhận/từ chối hoà, huỷ ván, danh sách nước, thay đổi rating, sao chép PGN (trang phân tích hiện chỉ nhận FEN).
+- **Đánh máy** `/a/$slug/play/bot`: hook mới `useBotGame` (đi lại cả ván bằng `replayGame` nên bắt được lặp 3 lần); chưa có đồng hồ; ván lưu vào lịch sử, không tính rating. `EngineGame` của Study giữ nguyên, không tách chung (khác kế hoạch).
+- **Mobile:** thẻ "Ván của tôi" + màn `games/[id]` chơi ván 1–1 (đồng hồ, hoà, đầu hàng, huỷ).
+- **Kiểm chứng:**
+  - `phase9.integration.test.ts` thêm test presence: hai client cùng học viện thấy nhau, học viện khác bị từ chối.
+  - Chrome (DSC1, chỉ có owner): Game Area hiện owner online, form ghép cặp hiện đúng (không bấm tạo); đánh máy Elo 1400: 1. e4 Nc6, đầu hàng → lưu "Đen thắng · đầu hàng" vào lịch sử, trang ván hiện PGN và nước đi.
+  - Chưa thử ván 1–1 thật trên Chrome vì DSC1 không có học viên để ghép mà không đụng dữ liệu thật; phần này đã có test tích hợp hai client ở PR 9a.

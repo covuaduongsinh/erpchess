@@ -36,6 +36,7 @@ import type { ErpClient } from './client';
 import * as databases from './databases';
 import * as games from './games';
 import * as practice from './practice';
+import * as presence from './presence';
 import * as api from './queries';
 import { ApiError } from './queries';
 import * as quizzes from './quizzes';
@@ -1269,4 +1270,41 @@ export function useGameMutations(academyId: string, userId: string) {
       onSuccess: refresh,
     }),
   };
+}
+
+/**
+ * Báo mình đang online trong học viện và nhận danh sách người đang online. Đợi lần rời kênh trước
+ * xong mới vào lại (React chạy effect hai lần ở StrictMode; cùng topic sẽ gỡ nhầm kênh mới).
+ */
+export function useAcademyPresence(
+  academyId: string | undefined,
+  me: presence.OnlineMember | undefined,
+) {
+  const client = useErpClient();
+  const [online, setOnline] = useState<presence.OnlineMember[]>([]);
+  const previous = useRef<Promise<unknown>>(Promise.resolve());
+  const userId = me?.userId;
+  const name = me?.name;
+  const role = me?.role;
+  useEffect(() => {
+    if (!academyId || !userId) return;
+    let alive = true;
+    let session: ReturnType<typeof presence.joinAcademyPresence> | null = null;
+    const start = previous.current.then(() => {
+      if (!alive) return;
+      session = presence.joinAcademyPresence(
+        client,
+        academyId,
+        { userId, name: name ?? '', role: role ?? '' },
+        (list) => alive && setOnline(list),
+      );
+      return session.ready.catch(() => undefined);
+    });
+    return () => {
+      alive = false;
+      setOnline([]);
+      previous.current = start.then(() => session?.leave()).catch(() => undefined);
+    };
+  }, [client, academyId, userId, name, role]);
+  return online;
 }
