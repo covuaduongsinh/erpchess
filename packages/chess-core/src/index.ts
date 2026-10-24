@@ -60,4 +60,19 @@ export {
   sideToMove,
   toUci,
 } from './rules';
+export {
+  type Pairing,
+  pairSwiss,
+  pairTeamSwiss,
+  quadGroups,
+  type RoundPairing,
+  roundRobinRound,
+  roundRobinRounds,
+  type Standing,
+  standings,
+  type TeamMatch,
+  type TGame,
+  type TPlayer,
+  type TTeam,
+} from './tournament';
 export { GameTree, type MoveNode, type RootNode, type TreeNode } from './tree';

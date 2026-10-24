@@ -11,3 +11,4 @@ export * from './room';
 export * from './simuls';
 export { isStudentEmail, STUDENT_EMAIL_DOMAIN, studentEmail } from './student';
 export * from './studies';
+export * from './tournaments';
