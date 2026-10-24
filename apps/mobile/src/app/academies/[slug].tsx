@@ -2,6 +2,9 @@ import {
   useAcademyPresence,
   useAssignments,
   useClassrooms,
+  useCourseCompletions,
+  useCourseProgress,
+  useCourses,
   useCreateGroup,
   useCreateStudent,
   useGroups,
@@ -14,6 +17,7 @@ import {
   useProgress,
   useQuizzes,
   useSession,
+  useStudentXp,
   useStudies,
   useTournaments,
 } from '@erpchess/api/react';
@@ -24,6 +28,8 @@ import {
   periodRange,
   periods,
   quizStatus,
+  streakFrom,
+  vnToday,
 } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
@@ -86,6 +92,10 @@ export default function AcademyScreen() {
       <PracticeCard academyId={academy.id} />
 
       <StudiesCard academyId={academy.id} userId={session?.user.id} />
+
+      <CoursesCard academyId={academy.id} />
+
+      {academy.role === 'student' ? <XpCard academyId={academy.id} /> : null}
 
       <Card title={t('groups.title')}>
         {groups.isPending ? (
@@ -607,6 +617,63 @@ function TournamentsCard({ academyId }: { academyId: string }) {
         ))
       )}
       <ErrorText error={list.error} />
+    </Card>
+  );
+}
+
+/** Khoá học đã xuất bản (học viên thấy % hoàn thành của mình). */
+function CoursesCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const { session } = useSession();
+  const list = useCourses(academyId);
+  const shown = (list.data ?? []).filter((c) => c.status === 'published');
+  const ids = shown.map((c) => c.id);
+  const progress = useCourseProgress(ids);
+  const done = useCourseCompletions(ids);
+  if (!list.isPending && shown.length === 0) return null;
+  return (
+    <Card title={t('course.title')}>
+      {list.isPending ? (
+        <Spinner />
+      ) : (
+        shown.map((c) => {
+          const p = progress.data?.find(
+            (x) => x.course_id === c.id && x.student_id === session?.user.id,
+          );
+          const finished = done.data?.some(
+            (x) => x.course_id === c.id && x.student_id === session?.user.id,
+          );
+          const pct = p?.required_total
+            ? Math.round(((p.required_done ?? 0) / p.required_total) * 100)
+            : 0;
+          return (
+            <View key={c.id} style={styles.row}>
+              <Text style={[styles.text, { flex: 1 }]}>{c.title}</Text>
+              <Text style={styles.hint}>
+                {finished ? t('course.completed') : t('course.percent', { percent: pct })}
+              </Text>
+            </View>
+          );
+        })
+      )}
+      <ErrorText error={list.error} />
+    </Card>
+  );
+}
+
+/** XP hôm nay, tổng XP và chuỗi ngày học của học viên. */
+function XpCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const { session } = useSession();
+  const xp = useStudentXp(session?.user.id, academyId);
+  if (!xp.data) return null;
+  const streak = streakFrom(xp.data.days, vnToday());
+  return (
+    <Card title={t('xp.title')}>
+      <Text style={styles.text}>
+        {`${t('xp.today')}: +${xp.data.today} · ${t('xp.total')}: ${xp.data.total} · 🔥 ${t('xp.days', { count: streak.current })}`}
+      </Text>
+      <Muted>{t('xp.longest', { count: streak.longest })}</Muted>
     </Card>
   );
 }

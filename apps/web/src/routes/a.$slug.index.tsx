@@ -3,7 +3,9 @@ import {
   useCreateInvitation,
   useLeaderboard,
   useMembers,
+  useStudentXp,
   useUpdateAcademyProfile,
+  useXpLeaderboard,
 } from '@erpchess/api/react';
 import {
   academyRoles,
@@ -12,6 +14,8 @@ import {
   periodRange,
   periods,
   socialKeys,
+  streakFrom,
+  vnToday,
 } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute } from '@tanstack/react-router';
@@ -35,6 +39,7 @@ function OverviewPage() {
       {academy.description && <p className="whitespace-pre-line">{academy.description}</p>}
       {staff && <StatsRow />}
       <div className="grid gap-6 md:grid-cols-2">
+        <XpCard />
         <LeaderboardCard />
         <MembersCard />
         {academy.role === 'owner' && <InviteCoachCard />}
@@ -261,6 +266,74 @@ function BrandingCard() {
           {t('common.save')}
         </Button>
       </form>
+    </Card>
+  );
+}
+
+/** Học viên: XP của mình và chuỗi ngày học; staff: bảng XP của học viện. */
+function XpCard() {
+  const { t } = useT();
+  const { academy, session } = useAcademy();
+  const student = academy.role === 'student';
+  const mine = useStudentXp(student ? session.user.id : undefined, academy.id);
+  const board = useXpLeaderboard(student ? undefined : academy.id, {});
+  if (student) {
+    if (mine.isPending) return <Spinner />;
+    if (mine.error) return <ErrorText error={mine.error} />;
+    const xp = mine.data;
+    const streak = streakFrom(xp.days, vnToday());
+    const missing = xp.nextLevelXp !== null ? xp.nextLevelXp - xp.total : null;
+    return (
+      <Card title={t('xp.title')}>
+        <dl className="grid grid-cols-3 gap-3 text-center">
+          <div>
+            <dt className="text-xs text-text-muted">{t('xp.today')}</dt>
+            <dd className="text-2xl font-bold text-orange">+{xp.today}</dd>
+          </div>
+          <div>
+            <dt className="text-xs text-text-muted">{t('xp.total')}</dt>
+            <dd className="text-2xl font-bold text-primary">{xp.total}</dd>
+          </div>
+          <div>
+            <dt className="text-xs text-text-muted">{t('xp.streak')}</dt>
+            <dd className="text-2xl font-bold text-primary">
+              🔥 {t('xp.days', { count: streak.current })}
+            </dd>
+          </div>
+        </dl>
+        <p className="text-xs text-text-muted">{t('xp.longest', { count: streak.longest })}</p>
+        {xp.nextLevel && missing !== null && (
+          <p className="text-sm">
+            {missing > 0
+              ? t('xp.nextLevel', { xp: missing, level: xp.nextLevel })
+              : t('xp.reachedLevel', { level: xp.nextLevel })}
+          </p>
+        )}
+        <p className="text-xs text-text-muted">{t('xp.rule')}</p>
+      </Card>
+    );
+  }
+  const ranked = (board.data ?? []).filter((r) => r.xp > 0);
+  return (
+    <Card title={t('xp.leaderboard')}>
+      {board.isPending ? (
+        <Spinner />
+      ) : board.error ? (
+        <ErrorText error={board.error} />
+      ) : ranked.length === 0 ? (
+        <p className="text-text-muted">{t('xp.empty')}</p>
+      ) : (
+        <ol className="flex flex-col gap-1">
+          {ranked.slice(0, 10).map((r, i) => (
+            <li key={r.studentId} className="flex items-center gap-3 px-3 py-1">
+              <span className="w-6 text-sm text-text-muted">{i + 1}</span>
+              <span className="flex-1 font-medium">{r.displayName}</span>
+              <span className="font-bold text-primary">{r.xp} XP</span>
+            </li>
+          ))}
+        </ol>
+      )}
+      <p className="text-xs text-text-muted">{t('xp.rule')}</p>
     </Card>
   );
 }

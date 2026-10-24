@@ -1,5 +1,6 @@
 export * from './classrooms';
 export { type ClientOptions, createErpClient, type ErpClient } from './client';
+export * from './courses';
 export type { Database, Enums, Tables, TablesInsert } from './database.types';
 export * from './databases';
 export * from './games';
