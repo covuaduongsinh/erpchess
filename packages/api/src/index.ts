@@ -8,5 +8,6 @@ export * from './presence';
 export * from './queries';
 export * from './quizzes';
 export * from './room';
+export * from './simuls';
 export { isStudentEmail, STUDENT_EMAIL_DOMAIN, studentEmail } from './student';
 export * from './studies';

@@ -51,6 +51,13 @@ function PlayPage() {
           >
             {t('play.playBot')}
           </Link>
+          <Link
+            to="/a/$slug/simuls"
+            params={{ slug: academy.slug }}
+            className="rounded-md px-4 py-2 font-medium text-primary hover:bg-primary/10"
+          >
+            {t('simul.title')}
+          </Link>
         </div>
         <Card title={t('play.liveGames')}>
           <GameList

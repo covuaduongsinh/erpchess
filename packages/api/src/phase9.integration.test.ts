@@ -8,6 +8,7 @@ import { createErpClient } from './client';
 import { createPairing, fetchGame, type GameRow, gameAction, subscribeGame } from './games';
 import { joinAcademyPresence, type OnlineMember } from './presence';
 import { fetchMyAcademies, signInStudent, signInWithEmail } from './queries';
+import { createSimul, fetchSimul, startSimul } from './simuls';
 
 const env: Record<string, string | undefined> =
   (globalThis as { process?: { env: Record<string, string | undefined> } }).process?.env ?? {};
@@ -195,5 +196,64 @@ describe.skipIf(!ready)('Giai đoạn 9 trên Supabase thật', () => {
       await b.leave();
       await a.leave();
     }
+  });
+
+  it('simul: bắt đầu, đồng hồ không trừ chủ simul, xong mọi bàn thì kết thúc', {
+    timeout: 90_000,
+  }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const student = newClient();
+    const { user: su } = await signInStudent(
+      student,
+      env.STUDENT_USERNAME ?? '',
+      env.STUDENT_PIN ?? '',
+    );
+    const simul = await createSimul(owner, user.id, {
+      academyId: academy.id,
+      title: 'Tích hợp GĐ9c',
+      hostId: user.id,
+      hostColor: 'w',
+      startsAt: null,
+      baseMs: 180_000,
+      incMs: 2_000,
+      groupIds: [],
+      studentIds: [su.id],
+    });
+    const [board] = (await fetchSimul(owner, simul.id)).games;
+    if (!board) throw new Error('thiếu bàn');
+    expect(board).toMatchObject({ status: 'pending', white_id: user.id, black_id: su.id });
+    await expect(
+      gameAction(owner, board.id, 'move', { move: 'e2e4', ply: 0 }),
+    ).rejects.toMatchObject({
+      code: 'game_over',
+    });
+    await startSimul(owner, simul.id);
+
+    await gameAction(owner, board.id, 'move', { move: 'e2e4', ply: 0 });
+    await gameAction(student, board.id, 'move', { move: 'e7e5', ply: 1 });
+    await wait(1500);
+    const afterHost = (await gameAction(owner, board.id, 'move', {
+      move: 'g1f3',
+      ply: 2,
+    })) as GameRow;
+    expect(afterHost.white_ms).toBe(180_000);
+    await wait(1500);
+    const afterStudent = (await gameAction(student, board.id, 'move', {
+      move: 'b8c6',
+      ply: 3,
+    })) as GameRow;
+    expect(afterStudent.black_ms).toBeLessThan(180_000 + 2_000);
+    // Học viên bị trừ thời gian đã dùng (cả độ trễ mạng) rồi cộng increment
+    expect(afterStudent.black_ms).not.toBe(180_000);
+    expect(afterStudent.black_ms).toBeGreaterThan(170_000);
+
+    await gameAction(student, board.id, 'resign');
+    const done = await fetchSimul(student, simul.id);
+    expect(done.status).toBe('finished');
   });
 });

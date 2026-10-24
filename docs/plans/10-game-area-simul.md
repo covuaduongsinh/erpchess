@@ -90,3 +90,15 @@ Kế hoạch con ghi vào `docs/plans/10-game-area-simul.md`. Chia 3 PR, mỗi P
   - `phase9.integration.test.ts` thêm test presence: hai client cùng học viện thấy nhau, học viện khác bị từ chối.
   - Chrome (DSC1, chỉ có owner): Game Area hiện owner online, form ghép cặp hiện đúng (không bấm tạo); đánh máy Elo 1400: 1. e4 Nc6, đầu hàng → lưu "Đen thắng · đầu hàng" vào lịch sử, trang ván hiện PGN và nước đi.
   - Chưa thử ván 1–1 thật trên Chrome vì DSC1 không có học viên để ghép mà không đụng dữ liệu thật; phần này đã có test tích hợp hai client ở PR 9a.
+
+### PR 9c (2026-10-25)
+
+- **Migration `…0016_simuls.sql`:** bảng `simuls` (chủ simul phải là HLV/owner), `games.simul_id` có khoá ngoại; RPC `start_simul` (chỉ chủ simul hoặc owner; mọi bàn pending → active); trigger kết thúc simul khi mọi bàn xong hoặc huỷ.
+- **`game-move`** (đã triển khai lại): ván simul không trừ giờ chủ simul (cũng không cộng increment cho chủ simul), không xử thua chủ simul vì hết giờ; học viên tính giờ bình thường.
+- **API:** `simuls.ts` (`createSimul` gộp học viên chọn trực tiếp + học viên trong lớp/Batch, tạo sẵn mỗi người một bàn, lỗi thì xoá simul; `fetchSimuls`, `fetchSimul`, `startSimul`, `deleteSimul`) + hook (`useSimul` tự làm mới mỗi 3 giây).
+- **Web:** `/a/$slug/simuls` (thống kê tổng/đang diễn ra/sắp tới/đã xong, tìm theo tên–mô tả, tạo simul với `TargetPicker`) và `/a/$slug/simuls/$id` (lưới bàn nhỏ, bàn đang chờ chủ simul đi được viền cam và xếp lên trước, điểm của chủ simul, học viên có nút vào bàn của mình). Vào từ nút "Simul" trong Game Area (không thêm tab).
+- **Mobile:** bàn simul đang diễn ra hiện trong "Ván của tôi" như ván thường.
+- **Kiểm chứng:**
+  - pgTAP `10_simuls_rls.sql` 10/10.
+  - `phase9.integration.test.ts` thêm test simul: bàn pending không đi được, bắt đầu rồi đi; chủ simul đi ở nước thứ 3 vẫn còn đủ 180000 ms, học viên bị trừ giờ; học viên đầu hàng → simul kết thúc.
+  - Chrome: trang Simul và form tạo hiện đúng; DSC1 chưa có học viên nên không tạo simul thật.
