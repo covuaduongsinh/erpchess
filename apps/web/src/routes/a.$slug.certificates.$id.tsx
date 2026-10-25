@@ -69,6 +69,7 @@ function CertificatePage() {
       </div>
       <ErrorText error={revoke.error} />
 
+      <style>{'@media print { @page { size: A4 landscape; margin: 0; } }'}</style>
       <div className="overflow-x-auto">
         <article className="certificate-print relative mx-auto flex h-[679px] w-[960px] shrink-0 flex-col items-center overflow-hidden bg-white p-10 text-center font-sans text-text print:h-[210mm] print:w-[297mm]">
           <div aria-hidden className="chess-pattern absolute inset-0 opacity-[0.05]" />

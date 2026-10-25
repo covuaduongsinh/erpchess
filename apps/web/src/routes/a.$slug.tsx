@@ -43,6 +43,9 @@ function AcademyLayout({ session }: { session: Session }) {
     { to: '/a/$slug/practice', label: t('practice.title'), exact: false },
     { to: '/a/$slug/play', label: t('play.title'), exact: false },
     { to: '/a/$slug/tournaments', label: t('tournament.title'), exact: false },
+    ...(academy.role !== 'coach'
+      ? [{ to: '/a/$slug/billing', label: t('bill.title'), exact: false }]
+      : []),
     ...(isStaff(academy.role)
       ? [
           { to: '/a/$slug/calendar', label: t('calendar.title'), exact: false },

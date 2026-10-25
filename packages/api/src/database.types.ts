@@ -58,6 +58,53 @@ export type Database = {
           },
         ]
       }
+      academy_billing: {
+        Row: {
+          academy_id: string
+          bank_account: string | null
+          bank_bin: string | null
+          bank_holder: string | null
+          currency: string
+          invoice_prefix: string
+          next_number: number
+          number_year: number | null
+          tax_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          academy_id: string
+          bank_account?: string | null
+          bank_bin?: string | null
+          bank_holder?: string | null
+          currency?: string
+          invoice_prefix?: string
+          next_number?: number
+          number_year?: number | null
+          tax_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          academy_id?: string
+          bank_account?: string | null
+          bank_bin?: string | null
+          bank_holder?: string | null
+          currency?: string
+          invoice_prefix?: string
+          next_number?: number
+          number_year?: number | null
+          tax_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_billing_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: true
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       activity_attempts: {
         Row: {
           activity_id: string
@@ -940,6 +987,96 @@ export type Database = {
           },
         ]
       }
+      discount_plans: {
+        Row: {
+          discount_id: string
+          plan_id: string
+        }
+        Insert: {
+          discount_id: string
+          plan_id: string
+        }
+        Update: {
+          discount_id?: string
+          plan_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discount_plans_discount_id_fkey"
+            columns: ["discount_id"]
+            isOneToOne: false
+            referencedRelation: "discount_stats"
+            referencedColumns: ["discount_id"]
+          },
+          {
+            foreignKeyName: "discount_plans_discount_id_fkey"
+            columns: ["discount_id"]
+            isOneToOne: false
+            referencedRelation: "discounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discount_plans_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discounts: {
+        Row: {
+          academy_id: string
+          active: boolean
+          code: string | null
+          created_at: string
+          currency: string | null
+          ends_on: string | null
+          id: string
+          kind: string
+          max_uses: number | null
+          name: string
+          starts_on: string | null
+          value: number
+        }
+        Insert: {
+          academy_id: string
+          active?: boolean
+          code?: string | null
+          created_at?: string
+          currency?: string | null
+          ends_on?: string | null
+          id?: string
+          kind: string
+          max_uses?: number | null
+          name: string
+          starts_on?: string | null
+          value: number
+        }
+        Update: {
+          academy_id?: string
+          active?: boolean
+          code?: string | null
+          created_at?: string
+          currency?: string | null
+          ends_on?: string | null
+          id?: string
+          kind?: string
+          max_uses?: number | null
+          name?: string
+          starts_on?: string | null
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discounts_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_items: {
         Row: {
           exercise_id: string
@@ -1378,6 +1515,150 @@ export type Database = {
           },
         ]
       }
+      invoice_lines: {
+        Row: {
+          description: string
+          id: string
+          invoice_id: string
+          position: number
+          quantity: number
+          unit_amount: number
+        }
+        Insert: {
+          description: string
+          id?: string
+          invoice_id: string
+          position: number
+          quantity: number
+          unit_amount: number
+        }
+        Update: {
+          description?: string
+          id?: string
+          invoice_id?: string
+          position?: number
+          quantity?: number
+          unit_amount?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_lines_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          academy_id: string
+          created_by: string | null
+          currency: string
+          discount_amount: number
+          discount_id: string | null
+          due_on: string | null
+          id: string
+          issued_at: string
+          note: string
+          number: string
+          paid_amount: number
+          paid_at: string | null
+          pay_token: string
+          plan_id: string | null
+          status: string
+          student_id: string
+          subtotal: number
+          total: number
+          voided_at: string | null
+        }
+        Insert: {
+          academy_id: string
+          created_by?: string | null
+          currency: string
+          discount_amount?: number
+          discount_id?: string | null
+          due_on?: string | null
+          id?: string
+          issued_at?: string
+          note?: string
+          number: string
+          paid_amount?: number
+          paid_at?: string | null
+          pay_token?: string
+          plan_id?: string | null
+          status?: string
+          student_id: string
+          subtotal: number
+          total: number
+          voided_at?: string | null
+        }
+        Update: {
+          academy_id?: string
+          created_by?: string | null
+          currency?: string
+          discount_amount?: number
+          discount_id?: string | null
+          due_on?: string | null
+          id?: string
+          issued_at?: string
+          note?: string
+          number?: string
+          paid_amount?: number
+          paid_at?: string | null
+          pay_token?: string
+          plan_id?: string | null
+          status?: string
+          student_id?: string
+          subtotal?: number
+          total?: number
+          voided_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_discount_id_fkey"
+            columns: ["discount_id"]
+            isOneToOne: false
+            referencedRelation: "discount_stats"
+            referencedColumns: ["discount_id"]
+          },
+          {
+            foreignKeyName: "invoices_discount_id_fkey"
+            columns: ["discount_id"]
+            isOneToOne: false
+            referencedRelation: "discounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       levels: {
         Row: {
           academy_id: string
@@ -1507,6 +1788,118 @@ export type Database = {
             columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          id: string
+          invoice_id: string
+          method: string
+          paid_at: string
+          recorded_by: string | null
+          reference: string
+        }
+        Insert: {
+          amount: number
+          id?: string
+          invoice_id: string
+          method?: string
+          paid_at?: string
+          recorded_by?: string | null
+          reference?: string
+        }
+        Update: {
+          amount?: number
+          id?: string
+          invoice_id?: string
+          method?: string
+          paid_at?: string
+          recorded_by?: string | null
+          reference?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plan_prices: {
+        Row: {
+          amount: number
+          currency: string
+          plan_id: string
+        }
+        Insert: {
+          amount: number
+          currency: string
+          plan_id: string
+        }
+        Update: {
+          amount?: number
+          currency?: string
+          plan_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_prices_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          academy_id: string
+          active: boolean
+          created_at: string
+          description: string
+          id: string
+          name: string
+          period: string
+          sessions: number | null
+        }
+        Insert: {
+          academy_id: string
+          active?: boolean
+          created_at?: string
+          description?: string
+          id?: string
+          name: string
+          period?: string
+          sessions?: number | null
+        }
+        Update: {
+          academy_id?: string
+          active?: boolean
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          period?: string
+          sessions?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plans_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
             referencedColumns: ["id"]
           },
         ]
@@ -2602,6 +2995,22 @@ export type Database = {
           },
         ]
       }
+      discount_stats: {
+        Row: {
+          academy_id: string | null
+          discount_id: string | null
+          uses: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discounts_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quiz_progress: {
         Row: {
           last_activity: string | null
@@ -2740,6 +3149,19 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_invoice: {
+        Args: {
+          p_academy: string
+          p_currency?: string
+          p_discount?: string
+          p_due?: string
+          p_lines?: Json
+          p_note?: string
+          p_plan?: string
+          p_student: string
+        }
+        Returns: string
+      }
       cron_secret_ok: {
         Args: { p_name: string; p_secret: string }
         Returns: boolean
@@ -2753,6 +3175,7 @@ export type Database = {
         }
         Returns: string
       }
+      public_invoice: { Args: { p_token: string }; Returns: Json }
       puzzle_for_student_item: {
         Args: { p_item: string; p_student: string }
         Returns: {
@@ -2796,6 +3219,15 @@ export type Database = {
         }[]
       }
       recheck_course: { Args: { p_course: string }; Returns: number }
+      record_payment: {
+        Args: {
+          p_amount: number
+          p_invoice: string
+          p_method?: string
+          p_reference?: string
+        }
+        Returns: string
+      }
       revoke_certificate: { Args: { p_id: string }; Returns: undefined }
       set_student_level: {
         Args: { p_academy: string; p_level: string; p_student: string }
@@ -2823,6 +3255,7 @@ export type Database = {
           title: string
         }[]
       }
+      void_invoice: { Args: { p_invoice: string }; Returns: undefined }
       xp_leaderboard: {
         Args: { p_academy: string; p_from?: string; p_to?: string }
         Returns: {

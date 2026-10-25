@@ -33,6 +33,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import * as billing from './billing';
 import * as certificates from './certificates';
 import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
@@ -1566,6 +1567,121 @@ export function useCertificateMutations(academyId: string) {
     revoke: useMutation({
       mutationFn: (id: string) => certificates.revokeCertificate(client, id),
       onSuccess: refresh,
+    }),
+  };
+}
+
+export function useBilling(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['billing', academyId ?? ''],
+    queryFn: () => billing.fetchBilling(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function usePlans(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['plans', academyId ?? ''],
+    queryFn: () => billing.fetchPlans(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useDiscounts(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['discounts', academyId ?? ''],
+    queryFn: () => billing.fetchDiscounts(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useInvoices(
+  filter: { academyId: string; status?: string; studentId?: string } | undefined,
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['invoices', filter?.academyId ?? '', filter?.status ?? '', filter?.studentId ?? ''],
+    queryFn: () => billing.fetchInvoices(client, filter ?? { academyId: '' }),
+    enabled: !!filter?.academyId,
+  });
+}
+
+export function useInvoice(id: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['invoice', id ?? ''],
+    queryFn: () => billing.fetchInvoice(client, id ?? ''),
+    enabled: !!id,
+  });
+}
+
+export function usePublicInvoice(token: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['public-invoice', token ?? ''],
+    queryFn: () => billing.fetchPublicInvoice(client, token ?? ''),
+    enabled: !!token,
+  });
+}
+
+export function useBillingMutations(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh =
+    (...keys: string[]) =>
+    () => {
+      for (const k of keys) void qc.invalidateQueries({ queryKey: [k] });
+    };
+  return {
+    saveSettings: useMutation({
+      mutationFn: (input: Omit<billing.BillingSettingsInput, 'academyId'>) =>
+        billing.saveBilling(client, { ...input, academyId }),
+      onSuccess: refresh('billing'),
+    }),
+    savePlan: useMutation({
+      mutationFn: (input: Omit<Parameters<typeof billing.savePlan>[1], 'academyId'>) =>
+        billing.savePlan(client, { ...input, academyId }),
+      onSuccess: refresh('plans'),
+    }),
+    setPlanActive: useMutation({
+      mutationFn: (v: { id: string; active: boolean }) =>
+        billing.setPlanActive(client, v.id, v.active),
+      onSuccess: refresh('plans'),
+    }),
+    deletePlan: useMutation({
+      mutationFn: (id: string) => billing.deletePlan(client, id),
+      onSuccess: refresh('plans', 'discounts'),
+    }),
+    saveDiscount: useMutation({
+      mutationFn: (input: Omit<Parameters<typeof billing.saveDiscount>[1], 'academyId'>) =>
+        billing.saveDiscount(client, { ...input, academyId }),
+      onSuccess: refresh('discounts'),
+    }),
+    setDiscountActive: useMutation({
+      mutationFn: (v: { id: string; active: boolean }) =>
+        billing.setDiscountActive(client, v.id, v.active),
+      onSuccess: refresh('discounts'),
+    }),
+    deleteDiscount: useMutation({
+      mutationFn: (id: string) => billing.deleteDiscount(client, id),
+      onSuccess: refresh('discounts'),
+    }),
+    createInvoice: useMutation({
+      mutationFn: (input: Omit<billing.CreateInvoiceInput, 'academyId'>) =>
+        billing.createInvoice(client, { ...input, academyId }),
+      onSuccess: refresh('invoices', 'discounts', 'billing'),
+    }),
+    recordPayment: useMutation({
+      mutationFn: (input: Parameters<typeof billing.recordPayment>[1]) =>
+        billing.recordPayment(client, input),
+      onSuccess: refresh('invoices', 'invoice', 'public-invoice'),
+    }),
+    voidInvoice: useMutation({
+      mutationFn: (id: string) => billing.voidInvoice(client, id),
+      onSuccess: refresh('invoices', 'invoice', 'discounts', 'public-invoice'),
     }),
   };
 }
