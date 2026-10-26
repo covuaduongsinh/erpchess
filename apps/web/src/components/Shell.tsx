@@ -4,10 +4,11 @@ import { languages } from '@erpchess/i18n';
 import { Link } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 import { useT } from '../lib/use-t';
+import { CommandPalette } from './CommandPalette';
 import { NotificationBell } from './NotificationBell';
 import { Button } from './ui';
 
-/** Khung chung: thanh trên cùng (logo, ngôn ngữ, đăng xuất) và vùng nội dung. */
+/** Khung chung: thanh trên cùng (logo, thanh tìm kiếm Command Palette, ngôn ngữ, đăng xuất) và vùng nội dung. */
 export function Shell({ children }: { children: ReactNode }) {
   const { t, i18n } = useT();
   const client = useErpClient();
@@ -25,7 +26,16 @@ export function Shell({ children }: { children: ReactNode }) {
         <Link to="/analysis" className="text-sm opacity-90 hover:opacity-100">
           {t('analysis.title')}
         </Link>
+
+        {/* Command Palette tìm kiếm toàn cầu */}
+        <div className="mx-auto hidden sm:block">
+          <CommandPalette />
+        </div>
+
         <div className="ml-auto flex items-center gap-2 text-sm">
+          <div className="sm:hidden">
+            <CommandPalette />
+          </div>
           {languages.map((lng) => (
             <button
               key={lng}

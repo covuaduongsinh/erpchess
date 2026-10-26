@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalysisRouteImport } from './routes/analysis'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as EngineRouteImport } from './routes/engine'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -70,6 +71,11 @@ const IndexRoute = IndexRouteImport.update({
 const AnalysisRoute = AnalysisRouteImport.update({
   id: '/analysis',
   path: '/analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EngineRoute = EngineRouteImport.update({
@@ -326,6 +332,7 @@ const ASlugStudiesIdEditRoute = ASlugStudiesIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/dashboard': typeof DashboardRoute
   '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -380,6 +387,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/dashboard': typeof DashboardRoute
   '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -434,6 +442,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/dashboard': typeof DashboardRoute
   '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -490,6 +499,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/analysis'
+    | '/dashboard'
     | '/engine'
     | '/login'
     | '/profile'
@@ -544,6 +554,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/analysis'
+    | '/dashboard'
     | '/engine'
     | '/login'
     | '/profile'
@@ -597,6 +608,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/analysis'
+    | '/dashboard'
     | '/engine'
     | '/login'
     | '/profile'
@@ -652,6 +664,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
+  DashboardRoute: typeof DashboardRoute
   EngineRoute: typeof EngineRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
@@ -675,6 +688,13 @@ declare module '@tanstack/react-router' {
       path: '/analysis'
       fullPath: '/analysis'
       preLoaderRoute: typeof AnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/engine': {
@@ -1127,6 +1147,7 @@ const ASlugRouteWithChildren = ASlugRoute._addFileChildren(ASlugRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
+  DashboardRoute: DashboardRoute,
   EngineRoute: EngineRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,

@@ -1,5 +1,6 @@
 import {
   useAcademyStats,
+  useClassrooms,
   useCreateInvitation,
   useLeaderboard,
   useMembers,
@@ -18,12 +19,12 @@ import {
   vnToday,
 } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useMemo, useState } from 'react';
 import { InviteLink } from '../components/InviteLink';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
-
+import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/')({
@@ -36,9 +37,13 @@ function OverviewPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      {academy.description && <p className="whitespace-pre-line">{academy.description}</p>}
+      {academy.description && (
+        <p className="whitespace-pre-line text-sm text-text-muted">{academy.description}</p>
+      )}
+      {staff && <QuickActionsRow />}
       {staff && <StatsRow />}
       <div className="grid gap-6 md:grid-cols-2">
+        <UpcomingClassesCard />
         <XpCard />
         <LeaderboardCard />
         <MembersCard />
@@ -46,6 +51,138 @@ function OverviewPage() {
         {academy.role === 'owner' && <BrandingCard />}
       </div>
     </div>
+  );
+}
+
+function QuickActionsRow() {
+  const { academy } = useAcademy();
+  const slug = academy.slug;
+
+  const actions = [
+    {
+      title: 'Tạo lớp học',
+      desc: 'Mở phòng học trực tuyến hoặc điểm danh',
+      icon: '🏫',
+      to: '/a/$slug/classes',
+      color: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200',
+    },
+    {
+      title: 'Giao bài tập',
+      desc: 'Giao thế cờ từ kho học liệu cho học viên',
+      icon: '📝',
+      to: '/a/$slug/assignments/new',
+      color: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200',
+    },
+    {
+      title: 'Tổ chức giải đấu',
+      desc: 'Tạo giải đấu Swiss, Quad hoặc vòng tròn',
+      icon: '🏆',
+      to: '/a/$slug/tournaments/new',
+      color: 'bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200',
+    },
+    {
+      title: 'Quản lý học viên',
+      desc: 'Thêm học viên, chia lớp hoặc nhập CSV',
+      icon: '👥',
+      to: '/a/$slug/students',
+      color: 'bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200',
+    },
+  ];
+
+  return (
+    <div className="flex flex-col gap-2">
+      <h2 className="text-xs font-bold tracking-[0.05em] text-text-muted uppercase">
+        Thao tác nhanh
+      </h2>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {actions.map((act) => (
+          <Link
+            key={act.title}
+            to={act.to}
+            params={{ slug }}
+            className={`flex items-start gap-3 rounded-xl border p-4 shadow-xs transition-all hover:shadow-md ${act.color}`}
+          >
+            <span className="text-2xl" aria-hidden="true">
+              {act.icon}
+            </span>
+            <div className="flex flex-col">
+              <span className="font-bold text-sm">{act.title}</span>
+              <span className="text-xs opacity-80">{act.desc}</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function UpcomingClassesCard() {
+  const { i18n } = useT();
+  const { academy } = useAcademy();
+  const slug = academy.slug;
+
+  const now = new Date();
+  const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const classes = useClassrooms(academy.id, { from: now, to: nextWeek });
+
+  const list = classes.data ?? [];
+
+  return (
+    <Card title="Lịch học sắp tới">
+      {classes.isPending ? (
+        <Spinner />
+      ) : classes.error ? (
+        <ErrorText error={classes.error} />
+      ) : list.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-6 text-center text-text-muted">
+          <span className="text-3xl mb-2" aria-hidden="true">
+            📅
+          </span>
+          <p className="text-sm">Không có lớp học nào sắp diễn ra trong 7 ngày tới.</p>
+          <Link
+            to="/a/$slug/classes"
+            params={{ slug }}
+            className="mt-3 text-xs font-medium text-primary hover:underline"
+          >
+            Tạo buổi học mới →
+          </Link>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {list.slice(0, 5).map((c) => (
+            <div
+              key={c.id}
+              className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/50 p-3"
+            >
+              <div className="flex flex-col">
+                <span className="font-semibold text-sm text-gray-900">{c.title}</span>
+                <span className="text-xs text-text-muted">
+                  {formatDateTime(c.starts_at, i18n.language)} ·{' '}
+                  {c.kind === 'online' ? '🌐 Trực tuyến' : '🏫 Trực tiếp'}
+                </span>
+              </div>
+              {c.kind === 'online' ? (
+                <Link
+                  to="/a/$slug/classes/$id/room"
+                  params={{ slug, id: c.id }}
+                  className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+                >
+                  Vào lớp
+                </Link>
+              ) : (
+                <Link
+                  to="/a/$slug/classes"
+                  params={{ slug }}
+                  className="rounded-md bg-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-300"
+                >
+                  Chi tiết
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
   );
 }
 

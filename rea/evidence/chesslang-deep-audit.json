@@ -1,0 +1,1999 @@
+{
+  "crawledAt": "2026-10-26T17:26:53.631Z",
+  "username": "duongsinhchess",
+  "discoveredRoutes": [
+    {
+      "path": "/dashboard",
+      "actualUrl": "https://platform.chesslang.com/dashboard",
+      "title": "platform.chesslang",
+      "heading": ["Dương Sinh chess CLB overview", "QUICK ACTIONS", "1", "0", "0"],
+      "screenshot": "screenshots\\route_dashboard.png"
+    },
+    {
+      "path": "/classes",
+      "actualUrl": "https://platform.chesslang.com/classes",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_classes.png"
+    },
+    {
+      "path": "/classrooms",
+      "actualUrl": "https://platform.chesslang.com/classrooms",
+      "title": "platform.chesslang",
+      "heading": ["Classrooms", "Command palette"],
+      "screenshot": "screenshots\\route_classrooms.png"
+    },
+    {
+      "path": "/assignments",
+      "actualUrl": "https://platform.chesslang.com/assignments",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_assignments.png"
+    },
+    {
+      "path": "/quizzes",
+      "actualUrl": "https://platform.chesslang.com/quizzes",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_quizzes.png"
+    },
+    {
+      "path": "/studies",
+      "actualUrl": "https://platform.chesslang.com/studies",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_studies.png"
+    },
+    {
+      "path": "/tournaments",
+      "actualUrl": "https://platform.chesslang.com/tournaments",
+      "title": "platform.chesslang",
+      "heading": ["Tournaments", "No tournaments yet", "Command palette"],
+      "screenshot": "screenshots\\route_tournaments.png"
+    },
+    {
+      "path": "/games",
+      "actualUrl": "https://platform.chesslang.com/games",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_games.png"
+    },
+    {
+      "path": "/students",
+      "actualUrl": "https://platform.chesslang.com/students",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_students.png"
+    },
+    {
+      "path": "/batches",
+      "actualUrl": "https://platform.chesslang.com/batches",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_batches.png"
+    },
+    {
+      "path": "/settings",
+      "actualUrl": "https://platform.chesslang.com/settings",
+      "title": "platform.chesslang",
+      "heading": ["Page Not Found"],
+      "screenshot": "screenshots\\route_settings.png"
+    },
+    {
+      "path": "/administration/students",
+      "actualUrl": "https://platform.chesslang.com/administration/students",
+      "title": "platform.chesslang",
+      "heading": ["Students", "*Gold Kiwi", "Student Details", "Command palette"],
+      "screenshot": "screenshots\\route_administration_students.png"
+    },
+    {
+      "path": "/quiz/list",
+      "actualUrl": "https://platform.chesslang.com/quiz/list",
+      "title": "platform.chesslang",
+      "heading": ["Quiz Management", "Your students are eager to learn!", "Command palette"],
+      "screenshot": "screenshots\\route_quiz_list.png"
+    },
+    {
+      "path": "/assignment",
+      "actualUrl": "https://platform.chesslang.com/assignment/exercise",
+      "title": "platform.chesslang",
+      "heading": ["Exercises", "Start creating exercises!", "Command palette"],
+      "screenshot": "screenshots\\route_assignment.png"
+    },
+    {
+      "path": "/course",
+      "actualUrl": "https://platform.chesslang.com/course/list",
+      "title": "platform.chesslang",
+      "heading": ["Courses", "Command palette"],
+      "screenshot": "screenshots\\route_course.png"
+    },
+    {
+      "path": "/board",
+      "actualUrl": "https://platform.chesslang.com/board",
+      "title": "platform.chesslang",
+      "heading": [
+        "Masterbase",
+        "Database Library",
+        "Masterbase",
+        "Database Library",
+        "Command palette"
+      ],
+      "screenshot": "screenshots\\route_board.png"
+    },
+    {
+      "path": "/practice",
+      "actualUrl": "https://platform.chesslang.com/practice",
+      "title": "platform.chesslang",
+      "heading": [
+        "Practice",
+        "Chapters",
+        "Start organizing your practice drills!",
+        "Command palette"
+      ],
+      "screenshot": "screenshots\\route_practice.png"
+    },
+    {
+      "path": "/simul",
+      "actualUrl": "https://platform.chesslang.com/simul",
+      "title": "platform.chesslang",
+      "heading": ["Command palette"],
+      "screenshot": "screenshots\\route_simul.png"
+    },
+    {
+      "path": "/game-area",
+      "actualUrl": "https://platform.chesslang.com/game-area",
+      "title": "platform.chesslang",
+      "heading": [
+        "Game Area",
+        "Challenge the bot at different difficulty levels",
+        "Online Students",
+        "Command palette"
+      ],
+      "screenshot": "screenshots\\route_game_area.png"
+    },
+    {
+      "path": "/database",
+      "actualUrl": "https://platform.chesslang.com/database",
+      "title": "platform.chesslang",
+      "heading": [
+        "DATABASE LIBRARY",
+        "VIEWER READY",
+        "Viewer Ready",
+        "Viewer Ready",
+        "Command palette"
+      ],
+      "screenshot": "screenshots\\route_database.png"
+    },
+    {
+      "path": "/study",
+      "actualUrl": "https://platform.chesslang.com/study/list",
+      "title": "platform.chesslang",
+      "heading": ["Studies", "Drafts", "Command palette"],
+      "screenshot": "screenshots\\route_study.png"
+    },
+    {
+      "path": "/preferences",
+      "actualUrl": "https://platform.chesslang.com/preferences",
+      "title": "platform.chesslang",
+      "heading": ["Settings", "Command palette"],
+      "screenshot": "screenshots\\route_preferences.png"
+    },
+    {
+      "path": "/reports",
+      "actualUrl": "https://platform.chesslang.com/reports/coach",
+      "title": "platform.chesslang",
+      "heading": ["Command palette"],
+      "screenshot": "screenshots\\route_reports.png"
+    },
+    {
+      "path": "/chat",
+      "actualUrl": "https://platform.chesslang.com/chat",
+      "title": "platform.chesslang",
+      "heading": ["Academy Chat", "Select a chat", "Command palette"],
+      "screenshot": "screenshots\\route_chat.png"
+    }
+  ],
+  "networkCallsCount": 495,
+  "networkLog": [
+    {
+      "timestamp": "2026-10-26T17:25:05.447Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:06.826Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:07.198Z",
+      "url": "https://firebaseinstallations.googleapis.com/v1/projects/svc-ui/installations",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"fid\":\"fFqaGNEJM_ZAYOuLGu4r1W\",\"authVersion\":\"FIS_v2\",\"appId\":\"1:485585240937:web:1cfb18d6872fdbed\",\"sdkVersion\":\"w:0.6.19\"}",
+      "responseSnippet": "{\n  \"name\": \"projects/485585240937/installations/fFqaGNEJM_ZAYOuLGu4r1W\",\n  \"fid\": \"fFqaGNEJM_ZAYOuLGu4r1W\",\n  \"refreshToken\": \"3_AS3qfwLnXYevWsJis68fCnB-k9zGjKehnBSazTwb3eS1lY8RnrofgJxLfvZYT9vOjDKL5w8xUUGQ3Ag8e376CEHErFqepnMpr7CPeyVcFz8qjQ\",\n  \"authToken\": {\n    \"token\": \"eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjE6NDg1NTg1MjQwOTM3OndlYjoxY2ZiMThkNjg3MmZkYmVkIiwiZXhwIjoxNzkzNjQwMzA4LCJmaWQiOiJmRnFhR05FSk1fWkFZT3VMR3U0cjFXIiwicHJvamVjdE51bWJlciI6NDg1NTg1MjQwOTM3fQ.AB2LPV8wRgIhAJ43c57HNF",
+      "responseLength": 617
+    },
+    {
+      "timestamp": "2026-10-26T17:25:07.666Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1481.2999999970198,\"rating\":\"needs-improvement\",\"delta\":1481.2999999970198,\"entries\":[{\"name\":\"https://platform.chesslang.com/login\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":4575.10000000149,\"navigationId\":450,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":1.2999999970197678,\"domainLookupStart\":2.600000001490116,\"domainLookupEnd\":246.29999999701977,\"connectStart\":246.29999999701977,\"secureConnectionStart\":472,\"connectEnd\":751.5,\"requestStart\":751.8999999985099,\"responseStart\":1481.2999999970198,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1481.2999999970198,\"responseEnd\":1482.3999999985099,\"transferSize\":79486,\"encodedBodySize\":79186,\"decodedBodySize\":79186,\"responseStatus\":200,\"serverTiming\":[],\"unloadEventStart\":0,\"unloadEventEnd\":0,\"domInteractive\":2484.5,\"domContentLoadedEventStart\":2484.6999999955297,\"domContentLoadedEventEnd\":2485.2999999970198,\"domComplete\":4570.69999999553,\"loadEventStart\":4570.89999999851,\"loadEventEnd\":4575.10000000149,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"low\"}}],\"id\":\"v4-1793035507102-2905872748419\",\"navigationType\":\"navigate\",\"pathname\":\"/login\",\"capturedAt\":\"2026-10-26T17:25:07.365Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:07.941Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:09.164Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":6092,\"rating\":\"poor\",\"delta\":6092,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":6092,\"duration\":0,\"navigationId\":450,\"paintTime\":5791.5,\"presentationTime\":6092}],\"id\":\"v4-1793035507101-6041592908896\",\"navigationType\":\"navigate\",\"pathname\":\"/login\",\"capturedAt\":\"2026-10-26T17:25:08.892Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:09.810Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"LCP\",\"value\":6092,\"rating\":\"poor\",\"delta\":6092,\"entries\":[{\"name\":\"\",\"entryType\":\"largest-contentful-paint\",\"startTime\":6092,\"duration\":0,\"navigationId\":450,\"paintTime\":5791.5,\"presentationTime\":6092,\"size\":37290,\"renderTime\":6092,\"loadTime\":0,\"id\":\"\",\"url\":\"\"}],\"id\":\"v4-1793035507102-8543293356274\",\"navigationType\":\"navigate\",\"pathname\":\"/login\",\"capturedAt\":\"2026-10-26T17:25:09.538Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:10.477Z",
+      "url": "https://rybbit.shortcastle.com/api/track",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"site_id\":\"cd2b71048bc4\",\"hostname\":\"platform.chesslang.com\",\"pathname\":\"/login\",\"querystring\":\"\",\"screenWidth\":1440,\"screenHeight\":900,\"language\":\"en-US\",\"page_title\":\"platform.chesslang\",\"referrer\":\"\",\"_bs\":0,\"_bsm\":0,\"tag\":\"platform.chesslang.com\",\"type\":\"pageview\",\"event_name\":\"\"}",
+      "responseSnippet": "{\"success\":true}",
+      "responseLength": 16
+    },
+    {
+      "timestamp": "2026-10-26T17:25:10.990Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/auth/token",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"username\":\"duongsinhchess\",\"password\":\"covua@123\"}",
+      "responseSnippet": "{\"token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTc5MzAzNTUxMSwiZXhwIjoxNzkzMDM5MTExLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay05MnlucUBzdmMtdWkuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay05MnlucUBzdmMtdWkuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJ1aWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJjbGFpbXMiOnsidXVpZCI6ImNjYmU3ZTczLTA4NWMtNDRjZ",
+      "responseLength": 1255
+    },
+    {
+      "timestamp": "2026-10-26T17:25:11.623Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTc5MzAzNTUxMSwiZXhwIjoxNzkzMDM5MTExLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay05MnlucUBzdmMtdWkuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay05MnlucUBzdmMtdWkuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJ1aWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJjbGFpbXMiOnsidXVpZCI6ImNjYmU3ZTczLTA4NWMtNDRjZi1iNGQ3LWMyNDg5MDk2NGJjNyIsInVzZXJuYW1lIjoiZHVvbmdzaW5oY2hlc3MiLCJmaXJzdG5hbWUiOiJExrDGoW5nIFNpbmgiLCJsYXN0bmFtZSI6ImNoZXNzIiwicm9sZSI6NTAsInVzZXJfdHlwZSI6IkFETUlOIiwidGltZXpvbmUiOiJBc2lhL1NhaWdvbiIsImVtYWlsIjoiZHVvbmdzaW5oY2hlc3NAZ21haWwuY29tIiwiaXNfdG91cm5hbWVudF9vbiI6dHJ1ZSwib25fYm9hcmRlZCI6ZmFsc2UsImFjYWRlbXlfaWQiOiI1MDNiZGYwOS0zY2EyLTRmNTAtYmI2Yy00OWYxMWVjZWQ5NjMiLCJhY2FkZW15X3Nob3J0X25hbWUiOiJkc2MifX0.Mv9pblpiQSQmNENNmUxvnfOvbyA1LnHumvZhUa82gt4OdqOi_IxXD9WNdSrLRcJRrblKiN32Dv9-qACK4ACkj8lTnCp6z9cXS7KxKzAtOPpBBSClLckGMhSe-nImq7wLuVGK4ydQXGwixZsXZ4zl2HgvYC5-0ScCU4Rvgcw8D2TzfOA9ydhrUBpuTbQlvzB8RGfrnn-z0anW0RNSgQ152aKImlqYU6QgOcSYW5MqyHZBRPIxtedsbE0-aS40zd2RY4q1EuA9uDv6nEltJCIFJv-UrdvzQWDwORYqe11bNGoKNXEoWEgD72tAfAFb5OsTtXguIxfnWQ35-g5r0YOK4Q\",\"returnSecureToken\":true}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#VerifyCustomTokenResponse\",\n  \"idToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZG",
+      "responseLength": 2022
+    },
+    {
+      "timestamp": "2026-10-26T17:25:12.282Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:12.778Z",
+      "url": "https://rybbit.shortcastle.com/api/identify",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"site_id\":\"cd2b71048bc4\",\"user_id\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"traits\":{\"role\":\"admin\",\"username\":\"duongsinhchess\",\"academy_id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"academy_short_name\":\"dsc\"},\"is_new_identify\":true}",
+      "responseSnippet": "{\"success\":true}",
+      "responseLength": 16
+    },
+    {
+      "timestamp": "2026-10-26T17:25:12.793Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:12.801Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:13.079Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:13.120Z",
+      "url": "https://api-core.chesslang.com/api/v2/identity/should-reset-password",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"shouldResetPassword\":false}",
+      "responseLength": 29
+    },
+    {
+      "timestamp": "2026-10-26T17:25:13.329Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:13.339Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:13.607Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:15.534Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:15.652Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:15.983Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.291Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.333Z",
+      "url": "https://cap.chesslang.com/api/orchestrator/bobby/reports?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"success\":true,\"tickets\":[]}",
+      "responseLength": 29
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.444Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.444Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.457Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.458Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/logo?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Logo retrieved successfully\",\"data\":{\"logo\":null}}",
+      "responseLength": 83
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.458Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User preferences retrieved successfully\",\"data\":{}}",
+      "responseLength": 84
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.458Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.485Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.607Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":2004,\"rating\":\"needs-improvement\",\"delta\":2004,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":2004,\"duration\":0,\"navigationId\":5367,\"paintTime\":1975.6000000014901,\"presentationTime\":2004}],\"id\":\"v4-1793035516093-6764950386287\",\"navigationType\":\"navigate\",\"pathname\":\"/dashboard\",\"capturedAt\":\"2026-10-26T17:25:16.317Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.668Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.759Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.782Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.813Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1155.6000000014901,\"rating\":\"needs-improvement\",\"delta\":1155.6000000014901,\"entries\":[{\"name\":\"https://platform.chesslang.com/dashboard\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":2395.7000000029802,\"navigationId\":5367,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":2.8000000044703484,\"domainLookupStart\":2.8000000044703484,\"domainLookupEnd\":2.8000000044703484,\"connectStart\":2.8000000044703484,\"secureConnectionStart\":2.8000000044703484,\"connectEnd\":2.8000000044703484,\"requestStart\":3.8000000044703484,\"responseStart\":1155.6000000014901,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1155.6000000014901,\"responseEnd\":1156.9000000059605,\"transferSize\":91869,\"encodedBodySize\":91569,\"decodedBodySize\":91569,\"responseStatus\":200,\"serverTiming\":[],\"unloadEventStart\":1177.6000000014901,\"unloadEventEnd\":1177.6000000014901,\"domInteractive\":1408.9000000059605,\"domContentLoadedEventStart\":1408.9000000059605,\"domContentLoadedEventEnd\":1409.7000000029802,\"domComplete\":2385.8000000044703,\"loadEventStart\":2385.8000000044703,\"loadEventEnd\":2395.7000000029802,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"low\"}}],\"id\":\"v4-1793035516094-9110081730605\",\"navigationType\":\"navigate\",\"pathname\":\"/dashboard\",\"capturedAt\":\"2026-10-26T17:25:16.517Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:16.943Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/release-notes?limit=50&offset=0",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Release notes retrieved successfully\",\"data\":{\"notes\":[],\"hasMore\":false}}",
+      "responseLength": 107
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.025Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/dashboard/feed/upcoming?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Dashboard feed retrieved successfully\",\"data\":{\"tournaments\":{\"upcoming\":[],\"current\":[]},\"classrooms\":{\"active\":[],\"upcoming\":[]}}}",
+      "responseLength": 165
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.026Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/dashboard/feed/weekly-stats?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963&timeFilter=WEEK&timezone=Asia%2FSaigon&weekOffset=0",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Weekly stats retrieved successfully\",\"data\":{\"range\":{\"timezone\":\"Asia/Saigon\",\"weekOffset\":0,\"weekStartUtc\":\"2026-10-25T17:00:00.000Z\",\"weekEndUtc\":\"2026-11-01T16:59:59.999Z\",\"startUtc\":\"2026-10-25T17:00:00.000Z\",\"endUtc\":\"2026-10-27T16:59:59.999Z\"},\"navigation\":{\"hasPreviousWeek\":true,\"hasNextWeek\":false,\"previousWeekOffset\":-1,\"nextWeekOffset\":0},\"summary\":{\"attendanceRate\":0,\"quizCompletionRate\":0,\"activityCount\":0,\"classroomsAttended\":0,\"eligibleClassrooms\":",
+      "responseLength": 1141
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.026Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.074Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/students?itemsPerPage=1&page=1&includeInactive=true&academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"success\":true,\"data\":[{\"uuid\":\"acfeccee-e734-4875-b9d1-353377417362\",\"username\":\"dsc_1\",\"role\":100,\"firstname\":\"*Gold\",\"lastname\":\"Kiwi\",\"dateOfBirth\":\"0\",\"email\":\"test_dsc_1nSzr8k3M2@dsc.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:52:42.064Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":null,\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":null,\"lichess_id\":null,\"chess_com_id\":null,\"last_login_at\":null,\"c",
+      "responseLength": 2264
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.074Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/dashboard/learners/top?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963&timeFilter=WEEK&timezone=Asia%2FSaigon&page=1&pageSize=10",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Top learners retrieved successfully\",\"data\":{\"range\":{\"timeFilter\":\"WEEK\",\"timezone\":\"Asia/Saigon\",\"startUtc\":\"2026-10-25T17:00:00.000Z\",\"endUtc\":\"2026-10-27T16:59:59.999Z\"},\"pagination\":{\"page\":1,\"pageSize\":10,\"totalCount\":1,\"totalPages\":1,\"hasNextPage\":false,\"hasPreviousPage\":false},\"learners\":[{\"userId\":\"acfeccee-e734-4875-b9d1-353377417362\",\"rank\":1,\"totalScore\":0,\"breakdown\":{\"attendance\":0,\"quiz\":0,\"tournament\":0},\"meta\":{\"attendedSessions\":0,\"eligibleSessi",
+      "responseLength": 678
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.074Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.074Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:17.292Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:18.340Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.261Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.518Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/dashboard/learners/top?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963&timeFilter=WEEK&timezone=Asia%2FSaigon&page=1&pageSize=10",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Top learners retrieved successfully\",\"data\":{\"range\":{\"timeFilter\":\"WEEK\",\"timezone\":\"Asia/Saigon\",\"startUtc\":\"2026-10-25T17:00:00.000Z\",\"endUtc\":\"2026-10-27T16:59:59.999Z\"},\"pagination\":{\"page\":1,\"pageSize\":10,\"totalCount\":1,\"totalPages\":1,\"hasNextPage\":false,\"hasPreviousPage\":false},\"learners\":[{\"userId\":\"acfeccee-e734-4875-b9d1-353377417362\",\"rank\":1,\"totalScore\":0,\"breakdown\":{\"attendance\":0,\"quiz\":0,\"tournament\":0},\"meta\":{\"attendedSessions\":0,\"eligibleSessi",
+      "responseLength": 678
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.519Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.598Z",
+      "url": "https://cap.chesslang.com/api/orchestrator/bobby/reports?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"success\":true,\"tickets\":[]}",
+      "responseLength": 29
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.677Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.695Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/release-notes?limit=50&offset=0",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Release notes retrieved successfully\",\"data\":{\"notes\":[],\"hasMore\":false}}",
+      "responseLength": 107
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.695Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/dashboard/feed/upcoming?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Dashboard feed retrieved successfully\",\"data\":{\"tournaments\":{\"upcoming\":[],\"current\":[]},\"classrooms\":{\"active\":[],\"upcoming\":[]}}}",
+      "responseLength": 165
+    },
+    {
+      "timestamp": "2026-10-26T17:25:20.713Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.377Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/dashboard/feed/weekly-stats?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963&timeFilter=WEEK&timezone=Asia%2FSaigon&weekOffset=0",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Weekly stats retrieved successfully\",\"data\":{\"range\":{\"timezone\":\"Asia/Saigon\",\"weekOffset\":0,\"weekStartUtc\":\"2026-10-25T17:00:00.000Z\",\"weekEndUtc\":\"2026-11-01T16:59:59.999Z\",\"startUtc\":\"2026-10-25T17:00:00.000Z\",\"endUtc\":\"2026-10-27T16:59:59.999Z\"},\"navigation\":{\"hasPreviousWeek\":true,\"hasNextWeek\":false,\"previousWeekOffset\":-1,\"nextWeekOffset\":0},\"summary\":{\"attendanceRate\":0,\"quizCompletionRate\":0,\"activityCount\":0,\"classroomsAttended\":0,\"eligibleClassrooms\":",
+      "responseLength": 1141
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.378Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/students?itemsPerPage=1&page=1&includeInactive=true&academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"success\":true,\"data\":[{\"uuid\":\"acfeccee-e734-4875-b9d1-353377417362\",\"username\":\"dsc_1\",\"role\":100,\"firstname\":\"*Gold\",\"lastname\":\"Kiwi\",\"dateOfBirth\":\"0\",\"email\":\"test_dsc_1nSzr8k3M2@dsc.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:52:42.064Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":null,\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":null,\"lichess_id\":null,\"chess_com_id\":null,\"last_login_at\":null,\"c",
+      "responseLength": 2264
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.378Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.379Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.379Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/logo?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Logo retrieved successfully\",\"data\":{\"logo\":null}}",
+      "responseLength": 83
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.379Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User preferences retrieved successfully\",\"data\":{}}",
+      "responseLength": 84
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.379Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.379Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.380Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.383Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.383Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.578Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.730Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:21.985Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:22.663Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.514Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.704Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.710Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.944Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.944Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.951Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.951Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:24.953Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:25.047Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:25.197Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:25.214Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:26.743Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1441,\"rating\":\"needs-improvement\",\"delta\":1441,\"entries\":[{\"name\":\"https://platform.chesslang.com/classes\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":1633.3999999985099,\"navigationId\":4924,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":3.6999999955296516,\"domainLookupStart\":3.6999999955296516,\"domainLookupEnd\":3.6999999955296516,\"connectStart\":3.6999999955296516,\"secureConnectionStart\":3.6999999955296516,\"connectEnd\":3.6999999955296516,\"requestStart\":4.899999998509884,\"responseStart\":1441,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1441,\"responseEnd\":1444.1000000014901,\"transferSize\":542405,\"encodedBodySize\":542105,\"decodedBodySize\":542105,\"responseStatus\":404,\"serverTiming\":[],\"unloadEventStart\":1454.7999999970198,\"unloadEventEnd\":1454.7999999970198,\"domInteractive\":1630.5,\"domContentLoadedEventStart\":1630.6000000014901,\"domContentLoadedEventEnd\":1631.1000000014901,\"domComplete\":1631.1999999955297,\"loadEventStart\":1631.6000000014901,\"loadEventEnd\":1633.3999999985099,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"low\"}}],\"id\":\"v4-1793035524669-7665755344397\",\"navigationType\":\"navigate\",\"pathname\":\"/classes\",\"capturedAt\":\"2026-10-26T17:25:24.698Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:26.912Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:26.988Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":1812,\"rating\":\"needs-improvement\",\"delta\":1812,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":1812,\"duration\":0,\"navigationId\":4924,\"paintTime\":1767.6000000014901,\"presentationTime\":1812}],\"id\":\"v4-1793035524669-8157424368781\",\"navigationType\":\"navigate\",\"pathname\":\"/classes\",\"capturedAt\":\"2026-10-26T17:25:24.734Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:28.871Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.092Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.206Z",
+      "url": "https://cap.chesslang.com/api/orchestrator/bobby/reports?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"success\":true,\"tickets\":[]}",
+      "responseLength": 29
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.288Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.303Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.748Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.752Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.752Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.752Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/logo?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Logo retrieved successfully\",\"data\":{\"logo\":null}}",
+      "responseLength": 83
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.752Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User preferences retrieved successfully\",\"data\":{}}",
+      "responseLength": 84
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.752Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.752Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:29.851Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:30.131Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:30.264Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:31.162Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":1840,\"rating\":\"needs-improvement\",\"delta\":1840,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":1840,\"duration\":0,\"navigationId\":2147,\"paintTime\":1792.3999999985099,\"presentationTime\":1840}],\"id\":\"v4-1793035529018-9621388156034\",\"navigationType\":\"navigate\",\"pathname\":\"/classrooms\",\"capturedAt\":\"2026-10-26T17:25:29.081Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:31.320Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:31.517Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/coaches?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963&page=1&limit=100",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":100,\"total\":0,\"totalPages\":0}}",
+      "responseLength": 87
+    },
+    {
+      "timestamp": "2026-10-26T17:25:31.517Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/sessions?startDate=2026-09-26T17%3A00%3A00.000Z&endDate=2027-01-27T16%3A59%3A59.999Z",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Sessions retrieved successfully\",\"data\":{\"records\":[],\"count\":0}}",
+      "responseLength": 98
+    },
+    {
+      "timestamp": "2026-10-26T17:25:32.917Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.157Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.159Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.393Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.404Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.406Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.413Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.418Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.475Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.677Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:33.678Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:35.370Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:35.380Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1274,\"rating\":\"needs-improvement\",\"delta\":1274,\"entries\":[{\"name\":\"https://platform.chesslang.com/assignments\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":1461.7000000029802,\"navigationId\":5385,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":2.399999998509884,\"domainLookupStart\":2.399999998509884,\"domainLookupEnd\":2.399999998509884,\"connectStart\":2.399999998509884,\"secureConnectionStart\":2.399999998509884,\"connectEnd\":2.399999998509884,\"requestStart\":3.5,\"responseStart\":1274,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1274,\"responseEnd\":1275.6000000014901,\"transferSize\":542414,\"encodedBodySize\":542114,\"decodedBodySize\":542114,\"responseStatus\":404,\"serverTiming\":[],\"unloadEventStart\":1284.5,\"unloadEventEnd\":1284.5,\"domInteractive\":1459.3999999985099,\"domContentLoadedEventStart\":1459.5,\"domContentLoadedEventEnd\":1459.8999999985099,\"domComplete\":1460.1000000014901,\"loadEventStart\":1460.3999999985099,\"loadEventEnd\":1461.7000000029802,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"low\"}}],\"id\":\"v4-1793035533122-6744550514679\",\"navigationType\":\"navigate\",\"pathname\":\"/assignments\",\"capturedAt\":\"2026-10-26T17:25:33.153Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:35.661Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":1600,\"rating\":\"good\",\"delta\":1600,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":1600,\"duration\":0,\"navigationId\":5385,\"paintTime\":1566.6000000014901,\"presentationTime\":1600}],\"id\":\"v4-1793035533122-7785027154286\",\"navigationType\":\"navigate\",\"pathname\":\"/assignments\",\"capturedAt\":\"2026-10-26T17:25:33.193Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:37.394Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:37.542Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:37.797Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:37.880Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.114Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.114Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.114Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.383Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.386Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.386Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.649Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.660Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:38.963Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:39.760Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:40.060Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1554.3000000044703,\"rating\":\"needs-improvement\",\"delta\":1554.3000000044703,\"entries\":[{\"name\":\"https://platform.chesslang.com/quizzes\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":1743.9000000059605,\"navigationId\":8457,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":1.7000000029802322,\"domainLookupStart\":1.7000000029802322,\"domainLookupEnd\":1.7000000029802322,\"connectStart\":1.7000000029802322,\"secureConnectionStart\":1.7000000029802322,\"connectEnd\":1.7000000029802322,\"requestStart\":2.600000001490116,\"responseStart\":1554.3000000044703,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1554.3000000044703,\"responseEnd\":1561.3000000044703,\"transferSize\":542405,\"encodedBodySize\":542105,\"decodedBodySize\":542105,\"responseStatus\":404,\"serverTiming\":[],\"unloadEventStart\":1568.6000000014901,\"unloadEventEnd\":1568.6000000014901,\"domInteractive\":1738.9000000059605,\"domContentLoadedEventStart\":1739,\"domContentLoadedEventEnd\":1740.8000000044703,\"domComplete\":1742.6000000014901,\"loadEventStart\":1742.9000000059605,\"loadEventEnd\":1743.9000000059605,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"low\"}}],\"id\":\"v4-1793035537509-7870034289210\",\"navigationType\":\"navigate\",\"pathname\":\"/quizzes\",\"capturedAt\":\"2026-10-26T17:25:37.531Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:40.061Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":1840,\"rating\":\"needs-improvement\",\"delta\":1840,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":1840,\"duration\":0,\"navigationId\":8457,\"paintTime\":1827.9000000059605,\"presentationTime\":1840}],\"id\":\"v4-1793035537508-3369054707834\",\"navigationType\":\"navigate\",\"pathname\":\"/quizzes\",\"capturedAt\":\"2026-10-26T17:25:37.543Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:41.709Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:41.930Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:41.934Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.156Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.156Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.162Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.162Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.176Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.236Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.431Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:42.437Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:44.017Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:44.151Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1513.5,\"rating\":\"needs-improvement\",\"delta\":1513.5,\"entries\":[{\"name\":\"https://platform.chesslang.com/studies\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":1709,\"navigationId\":9992,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":1.6999999955296516,\"domainLookupStart\":1.6999999955296516,\"domainLookupEnd\":1.6999999955296516,\"connectStart\":1.6999999955296516,\"secureConnectionStart\":1.6999999955296516,\"connectEnd\":1.6999999955296516,\"requestStart\":3.0999999940395355,\"responseStart\":1513.5,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1513.5,\"responseEnd\":1515.3999999985099,\"transferSize\":542405,\"encodedBodySize\":542105,\"decodedBodySize\":542105,\"responseStatus\":404,\"serverTiming\":[],\"unloadEventStart\":1527.3999999985099,\"unloadEventEnd\":1527.3999999985099,\"domInteractive\":1692.2999999970198,\"domContentLoadedEventStart\":1692.2999999970198,\"domContentLoadedEventEnd\":1693.3999999985099,\"domComplete\":1707.3999999985099,\"loadEventStart\":1708,\"loadEventEnd\":1709,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"high\"}}],\"id\":\"v4-1793035541878-1280431533570\",\"navigationType\":\"navigate\",\"pathname\":\"/studies\",\"capturedAt\":\"2026-10-26T17:25:41.902Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:44.266Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":1840,\"rating\":\"needs-improvement\",\"delta\":1840,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":1840,\"duration\":0,\"navigationId\":9992,\"paintTime\":1812.3999999985099,\"presentationTime\":1840}],\"id\":\"v4-1793035541878-2794358249643\",\"navigationType\":\"navigate\",\"pathname\":\"/studies\",\"capturedAt\":\"2026-10-26T17:25:41.964Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:44.311Z",
+      "url": "https://rybbit.shortcastle.com/api/identify",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"site_id\":\"cd2b71048bc4\",\"user_id\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"traits\":{\"role\":\"admin\",\"username\":\"duongsinhchess\",\"academy_id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"academy_short_name\":\"dsc\"},\"is_new_identify\":true}",
+      "responseSnippet": "{\"success\":true}",
+      "responseLength": 16
+    },
+    {
+      "timestamp": "2026-10-26T17:25:45.372Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:45.619Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:45.831Z",
+      "url": "https://cap.chesslang.com/api/orchestrator/bobby/reports?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"success\":true,\"tickets\":[]}",
+      "responseLength": 29
+    },
+    {
+      "timestamp": "2026-10-26T17:25:45.851Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:45.874Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:45.890Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.393Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.400Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.400Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/logo?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Logo retrieved successfully\",\"data\":{\"logo\":null}}",
+      "responseLength": 83
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.400Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User preferences retrieved successfully\",\"data\":{}}",
+      "responseLength": 84
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.400Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.400Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.409Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/tournaments?page=1&pageSize=20&sortBy=newest&sortOrder=desc",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Tournaments retrieved successfully\",\"data\":{\"items\":[],\"pagination\":{\"page\":1,\"pageSize\":20,\"totalItems\":0,\"totalPages\":0,\"hasNext\":false,\"hasPrev\":false}}}",
+      "responseLength": 189
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.484Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.484Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.484Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.753Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.905Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:46.983Z",
+      "url": "https://rybbit.shortcastle.com/api/identify",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"site_id\":\"cd2b71048bc4\",\"user_id\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"traits\":{\"role\":\"admin\",\"username\":\"duongsinhchess\",\"academy_id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"academy_short_name\":\"dsc\"},\"is_new_identify\":true}",
+      "responseSnippet": "{\"success\":true}",
+      "responseLength": 16
+    },
+    {
+      "timestamp": "2026-10-26T17:25:47.164Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:47.956Z",
+      "url": "https://api-core.chesslang.com/api/v2/coach-tournaments",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"total\":0,\"records\":[]}",
+      "responseLength": 24
+    },
+    {
+      "timestamp": "2026-10-26T17:25:49.800Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:49.952Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:49.954Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.216Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.217Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.220Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.220Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.220Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.292Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.471Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:50.477Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:51.991Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1630.6999999955297,\"rating\":\"needs-improvement\",\"delta\":1630.6999999955297,\"entries\":[{\"name\":\"https://platform.chesslang.com/games\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":1820.8999999985099,\"navigationId\":4862,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":2,\"domainLookupStart\":2,\"domainLookupEnd\":2,\"connectStart\":2,\"secureConnectionStart\":2,\"connectEnd\":2,\"requestStart\":3.6999999955296516,\"responseStart\":1630.6999999955297,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1630.6999999955297,\"responseEnd\":1633.7999999970198,\"transferSize\":542400,\"encodedBodySize\":542100,\"decodedBodySize\":542100,\"responseStatus\":404,\"serverTiming\":[],\"unloadEventStart\":1646.1000000014901,\"unloadEventEnd\":1646.1000000014901,\"domInteractive\":1819,\"domContentLoadedEventStart\":1819,\"domContentLoadedEventEnd\":1819.3999999985099,\"domComplete\":1819.5,\"loadEventStart\":1819.8999999985099,\"loadEventEnd\":1820.8999999985099,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"low\"}}],\"id\":\"v4-1793035549911-2301748245746\",\"navigationType\":\"navigate\",\"pathname\":\"/games\",\"capturedAt\":\"2026-10-26T17:25:49.943Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:52.171Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:52.244Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":1940,\"rating\":\"needs-improvement\",\"delta\":1940,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":1940,\"duration\":0,\"navigationId\":4862,\"paintTime\":1916.1000000014901,\"presentationTime\":1940}],\"id\":\"v4-1793035549911-9581284684891\",\"navigationType\":\"navigate\",\"pathname\":\"/games\",\"capturedAt\":\"2026-10-26T17:25:49.957Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:54.606Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:54.829Z",
+      "url": "https://firebase.googleapis.com/v1alpha/projects/-/apps/1:485585240937:web:1cfb18d6872fdbed/webConfig",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\n  \"projectId\": \"svc-ui\",\n  \"appId\": \"1:485585240937:web:1cfb18d6872fdbed\",\n  \"databaseURL\": \"https://svc-ui.firebaseio.com\",\n  \"storageBucket\": \"svc-ui.appspot.com\",\n  \"locationId\": \"asia-east2\",\n  \"authDomain\": \"svc-ui.firebaseapp.com\",\n  \"messagingSenderId\": \"485585240937\",\n  \"measurementId\": \"G-DT4NYH4P99\"\n}\n",
+      "responseLength": 315
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.035Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.144Z",
+      "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCeIYfx5to0wmn6rtz1b4fOrtrVDdEYlPY",
+      "method": "POST",
+      "status": 200,
+      "postData": "{\"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJ1dWlkIjoiY2NiZTdlNzMtMDg1Yy00NGNmLWI0ZDctYzI0ODkwOTY0YmM3IiwidXNlcm5hbWUiOiJkdW9uZ3NpbmhjaGVzcyIsImZpcnN0bmFtZSI6IkTGsMahbmcgU2luaCIsImxhc3RuYW1lIjoiY2hlc3MiLCJyb2xlIjo1MCwidXNlcl90eXBlIjoiQURNSU4iLCJ0aW1lem9uZSI6IkFzaWEvU2FpZ29uIiwiZW1haWwiOiJkdW9uZ3NpbmhjaGVzc0BnbWFpbC5jb20iLCJpc190b3VybmFtZW50X29uIjp0cnVlLCJvbl9ib2FyZGVkIjpmYWxzZSwiYWNhZGVteV9pZCI6IjUwM2JkZjA5LTNjYTItNGY1MC1iYjZjLTQ5ZjExZWNlZDk2MyIsImFjYWRlbXlfc2hvcnRfbmFtZSI6ImRzYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9zdmMtdWkiLCJhdWQiOiJzdmMtdWkiLCJhdXRoX3RpbWUiOjE3OTMwMzU1MTIsInVzZXJfaWQiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJzdWIiOiJjY2JlN2U3My0wODVjLTQ0Y2YtYjRkNy1jMjQ4OTA5NjRiYzciLCJpYXQiOjE3OTMwMzU1MTIsImV4cCI6MTc5MzAzOTExMiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.uc2EBOrDozWMsZE8uNrt02bWE4tcSt2TJlQP34opSIMFzKv9KLHcz5u8dTB6tvR49OTh625OIy-Yae21-1IvX_GeiZG1_7NHrGX-Z9H1DOSk9gCiCiKXcMIrc-dIqs2pK30DjY26M1154oMMT97NO_Ik_jVC9flZnCA3duWidIlzZWwjWM5MTNrUfgDTvehJGd8896wDTzNfTDCHbSUaQUiazaD7TXrwjQDOW16r3houqQqUmO6KKd8_qEwQK3_Ml2XZ7HGnET3gHkmSRte2n5JpSNSMJPBfkiOJSfKuuL62bpCE2W4HlLCA_HujDAMXzTj2uB4TDDTf6XOadal3UA\"}",
+      "responseSnippet": "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\n      \"validSince\": \"1792759902\",\n      \"lastLoginAt\": \"1793035512399\",\n      \"createdAt\": \"1792759902269\",\n      \"customAuth\": true,\n      \"lastRefreshAt\": \"2026-10-26T17:25:12.399Z\"\n    }\n  ]\n}\n",
+      "responseLength": 326
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.382Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"records\":[{\"id\":\"503bdf09-3ca2-4f50-bb6c-49f11eced963\",\"shortName\":\"dsc\",\"name\":\"Dương Sinh chess CLB\",\"role\":\"ADMIN\",\"logo\":\"\",\"description\":\"\",\"domain\":\"\",\"info\":null,\"facebook\":null,\"twitter\":null,\"instagram\":null,\"youtube\":null,\"seats\":5,\"count\":1,\"features\":{},\"flags\":{},\"timezone\":\"Asia/Saigon\",\"currency\":\"USD\",\"updatedAt\":\"2026-10-23T12:52:57.618Z\",\"createdAt\":\"2026-10-23T12:52:42.021Z\",\"preferences\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"",
+      "responseLength": 674
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.384Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.384Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.596Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/preferences?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Preferences retrieved successfully\",\"data\":{\"theme\":{\"defaultMode\":\"LIGHT\",\"primaryColor\":\"#3b82f6\"},\"com.chesslang.boardTheme\":{\"dark\":\"#b58863\",\"light\":\"#f0d9b5\"},\"com.chesslang.boardPieces\":\"defaultPieces\",\"com.chesslang.boardCoordinates\":\"outside\",\"com.chesslang.boardMoveAssistanceEnabled\":false}}",
+      "responseLength": 335
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.601Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/identity/profile/me",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"uuid\":\"ccbe7e73-085c-44cf-b4d7-c24890964bc7\",\"username\":\"duongsinhchess\",\"role\":\"Coach\",\"firstname\":\"Dương Sinh\",\"lastname\":\"chess\",\"dateOfBirth\":\"1970 - 01 - 01\",\"email\":\"duongsinhchess@gmail.com\",\"gender\":\"M\",\"emailVerified\":true,\"disabled\":false,\"createdAt\":\"2026-10-23T12:48:00.725Z\",\"preferences\":{},\"game_collection_uuid\":null,\"phone_number\":\"0983119819\",\"rating\":{},\"should_reset_password\":false,\"firebase_uid\":null,\"flags\":{},\"timezone\":\"Asia/Saigon\",\"lichess_id\":null,\"chess_com_id\":null,\"",
+      "responseLength": 1640
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.633Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academy/favicon?academyId=503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Favicon retrieved successfully\",\"data\":{\"favicon\":null}}",
+      "responseLength": 89
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.859Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/user/theme-preferences?userId=ccbe7e73-085c-44cf-b4d7-c24890964bc7&domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"User theme preferences retrieved successfully\",\"data\":null}",
+      "responseLength": 92
+    },
+    {
+      "timestamp": "2026-10-26T17:25:55.892Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:56.148Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/academies/get-by-userId/",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "503bdf09-3ca2-4f50-bb6c-49f11eced963",
+      "responseLength": 36
+    },
+    {
+      "timestamp": "2026-10-26T17:25:57.051Z",
+      "url": "https://rybbit.shortcastle.com/api/site/tracking-config/cd2b71048bc4",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"type\":\"web\",\"featureFlagsEnabled\":false,\"sessionReplay\":false,\"webVitals\":false,\"trackErrors\":false,\"trackOutbound\":true,\"trackUrlParams\":true,\"trackInitialPageView\":true,\"trackSpaNavigation\":true,\"trackButtonClicks\":false,\"trackCopy\":false,\"trackFormInteractions\":false}",
+      "responseLength": 273
+    },
+    {
+      "timestamp": "2026-10-26T17:25:57.111Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"TTFB\",\"value\":1986.3000000044703,\"rating\":\"poor\",\"delta\":1986.3000000044703,\"entries\":[{\"name\":\"https://platform.chesslang.com/students\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":2191.8000000044703,\"navigationId\":4680,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"h2\",\"renderBlockingStatus\":\"non-blocking\",\"contentType\":\"text/html\",\"contentEncoding\":\"\",\"workerStart\":0,\"workerRouterEvaluationStart\":0,\"workerCacheLookupStart\":0,\"workerMatchedSourceType\":\"\",\"workerFinalSourceType\":\"\",\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":0.8000000044703484,\"domainLookupStart\":0.8000000044703484,\"domainLookupEnd\":0.8000000044703484,\"connectStart\":0.8000000044703484,\"secureConnectionStart\":0.8000000044703484,\"connectEnd\":0.8000000044703484,\"requestStart\":1.8000000044703484,\"responseStart\":1986.3000000044703,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":1986.3000000044703,\"responseEnd\":1988.5,\"transferSize\":542407,\"encodedBodySize\":542107,\"decodedBodySize\":542107,\"responseStatus\":404,\"serverTiming\":[],\"unloadEventStart\":1998.3999999985099,\"unloadEventEnd\":1998.3999999985099,\"domInteractive\":2170.7000000029802,\"domContentLoadedEventStart\":2170.8000000044703,\"domContentLoadedEventEnd\":2171.3000000044703,\"domComplete\":2189.2000000029802,\"loadEventStart\":2190.10000000149,\"loadEventEnd\":2191.8000000044703,\"type\":\"navigate\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null,\"confidence\":{\"randomizedTriggerRate\":0.4994798,\"value\":\"high\"}}],\"id\":\"v4-1793035554798-6154682759315\",\"navigationType\":\"navigate\",\"pathname\":\"/students\",\"capturedAt\":\"2026-10-26T17:25:54.821Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:57.297Z",
+      "url": "https://platform.chesslang.com/api/analytics/web-vitals",
+      "method": "POST",
+      "status": 204,
+      "postData": "{\"name\":\"FCP\",\"value\":2316,\"rating\":\"needs-improvement\",\"delta\":2316,\"entries\":[{\"name\":\"first-contentful-paint\",\"entryType\":\"paint\",\"startTime\":2316,\"duration\":0,\"navigationId\":4680,\"paintTime\":2290.39999999851,\"presentationTime\":2316}],\"id\":\"v4-1793035554798-1434664427115\",\"navigationType\":\"navigate\",\"pathname\":\"/students\",\"capturedAt\":\"2026-10-26T17:25:54.867Z\"}",
+      "responseSnippet": "",
+      "responseLength": 0
+    },
+    {
+      "timestamp": "2026-10-26T17:25:59.343Z",
+      "url": "https://rybbit.shortcastle.com/api/script.js",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "\"use strict\";(()=>{var He=Object.defineProperty;var We=(n,e,t)=>e in n?He(n,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):n[e]=t;var R=(n,e,t)=>We(n,typeof e!=\"symbol\"?e+\"\":e,t);function Ve(n){if(n.startsWith(\"re:\")){let l=n.slice(3);if(!l)throw new Error(\"Empty regex pattern\");return new RegExp(l)}let t=\"__DOUBLE_ASTERISK_TOKEN__\",r=\"__SINGLE_ASTERISK_TOKEN__\",s=n.replace(/\\*\\*/g,t).replace(/\\*/g,r).replace(/[.+?^${}()|[\\]\\\\]/g,\"\\\\$&\");s=s.replace(new RegExp(`/${t}/`,\"g\"),\"/(?:.+/)?\"),",
+      "responseLength": 32875
+    },
+    {
+      "timestamp": "2026-10-26T17:25:59.484Z",
+      "url": "https://api-core-v2.chesslang.com/api/v2/theme/domain?domain=platform.chesslang.com",
+      "method": "GET",
+      "status": 200,
+      "postData": null,
+      "responseSnippet": "{\"statusCode\":\"10000\",\"message\":\"Domain theme retrieved successfully\",\"data\":{\"domain\":\"platform.chesslang.com\",\"academy_id\":\"b3513921-55b5-4f74-a208-20f64720b401\",\"primary_color\":\"#f91515\",\"default_mode\":\"LIGHT\",\"name\":null,\"created_at\":\"2025-12-30T04:07:55.611Z\",\"updated_at\":\"2026-10-20T14:09:24.822Z\"}}",
+      "responseLength": 306
+    }
+  ]
+}
