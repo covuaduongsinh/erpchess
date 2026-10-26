@@ -14,6 +14,7 @@ export * from './presence';
 export * from './profile';
 export * from './queries';
 export * from './quizzes';
+export * from './reports';
 export * from './room';
 export * from './simuls';
 export { isStudentEmail, STUDENT_EMAIL_DOMAIN, studentEmail } from './student';

@@ -23,6 +23,7 @@ import {
   useProgress,
   useQuizzes,
   useSession,
+  useStudentReportSummary,
   useStudentXp,
   useStudies,
   useTournaments,
@@ -101,6 +102,8 @@ export default function AcademyScreen() {
       <StudiesCard academyId={academy.id} userId={session?.user.id} />
 
       <CoursesCard academyId={academy.id} />
+
+      <StudentReportCard academyId={academy.id} userId={session?.user.id} />
 
       {academy.role === 'student' ? <XpCard academyId={academy.id} /> : null}
       {academy.role === 'student' ? <CertificatesCard academyId={academy.id} /> : null}
@@ -816,6 +819,59 @@ function ChatsCard({ academyId }: { academyId: string }) {
           </Pressable>
         );
       })}
+    </Card>
+  );
+}
+
+function StudentReportCard({ academyId, userId }: { academyId: string; userId?: string }) {
+  const { t } = useT();
+  const summary = useStudentReportSummary(academyId, userId);
+
+  return (
+    <Card title={t('reports.title')}>
+      {summary.isPending ? (
+        <Spinner />
+      ) : summary.error ? (
+        <ErrorText error={summary.error} />
+      ) : !summary.data ? (
+        <Muted>{t('reports.noData')}</Muted>
+      ) : (
+        <View style={{ gap: spacing.sm }}>
+          <View style={styles.row}>
+            <Text style={styles.text}>{t('reports.assignmentsTitle')}</Text>
+            <Text style={[styles.text, { fontWeight: '600' }]}>
+              {summary.data.assignments.completed}/{summary.data.assignments.totalAssigned} (
+              {summary.data.assignments.solvedRate.toFixed(0)}%)
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text}>{t('reports.quizzesTitle')}</Text>
+            <Text style={[styles.text, { fontWeight: '600' }]}>
+              {summary.data.quizzes.completed} bài · {summary.data.quizzes.avgScore.toFixed(1)}đ
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text}>{t('reports.attendanceTitle')}</Text>
+            <Text style={[styles.text, { fontWeight: '600' }]}>
+              {summary.data.classrooms.attendanceRate.toFixed(0)}% (
+              {summary.data.classrooms.presentCount}/{summary.data.classrooms.totalSessions})
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text}>{t('reports.gamesTitle')}</Text>
+            <Text style={[styles.text, { fontWeight: '600' }]}>
+              {summary.data.games.wins}W / {summary.data.games.draws}D / {summary.data.games.losses}
+              L
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text}>{t('reports.tournamentsTitle')}</Text>
+            <Text style={[styles.text, { fontWeight: '600' }]}>
+              {summary.data.tournaments.totalJoined} giải · {summary.data.tournaments.totalPoints}đ
+            </Text>
+          </View>
+        </View>
+      )}
     </Card>
   );
 }

@@ -3532,6 +3532,32 @@ export type Database = {
         Args: { p_name: string; p_secret: string }
         Returns: boolean
       }
+      get_academy_students_report: {
+        Args: {
+          p_academy_id: string
+          p_from?: string | null
+          p_to?: string | null
+        }
+        Returns: Json
+      }
+      get_student_report_details: {
+        Args: {
+          p_academy_id: string
+          p_student_id: string
+          p_from?: string | null
+          p_to?: string | null
+        }
+        Returns: Json
+      }
+      get_student_report_summary: {
+        Args: {
+          p_academy_id: string
+          p_student_id: string
+          p_from?: string | null
+          p_to?: string | null
+        }
+        Returns: Json
+      }
       issue_certificate: {
         Args: {
           p_academy: string

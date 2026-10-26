@@ -47,6 +47,7 @@ function AcademyLayout({ session }: { session: Session }) {
       ? [{ to: '/a/$slug/billing', label: t('bill.title'), exact: false }]
       : []),
     { to: '/a/$slug/chat', label: t('chat.title'), exact: false },
+    { to: '/a/$slug/reports', label: t('reports.navReports'), exact: false },
     ...(academy.role === 'owner'
       ? [{ to: '/a/$slug/notifications', label: t('notify.title'), exact: false }]
       : []),
