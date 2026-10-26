@@ -4,6 +4,7 @@ import { languages } from '@erpchess/i18n';
 import { Link } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 import { useT } from '../lib/use-t';
+import { NotificationBell } from './NotificationBell';
 import { Button } from './ui';
 
 /** Khung chung: thanh trên cùng (logo, ngôn ngữ, đăng xuất) và vùng nội dung. */
@@ -36,6 +37,7 @@ export function Shell({ children }: { children: ReactNode }) {
               {lng.toUpperCase()}
             </button>
           ))}
+          {session && <NotificationBell userId={session.user.id} />}
           {session && (
             <Button variant="ghost" className="text-white" onClick={() => void signOut(client)}>
               {t('common.signOut')}

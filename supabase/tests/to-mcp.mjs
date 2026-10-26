@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 
 const src = readFileSync(process.argv[2], 'utf8');
-const ASSERT = /^select (lives_ok|throws_ok|results_eq|is_empty|isnt_empty|ok|is|isnt)\(/;
+const ASSERT = /^select (lives_ok|throws_ok|results_eq|is_empty|isnt_empty|ok|is|isnt|matches)\(/;
 const body = src
   .split('\n')
   .filter(

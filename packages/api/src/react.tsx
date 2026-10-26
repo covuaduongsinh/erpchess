@@ -40,6 +40,7 @@ import type { ErpClient } from './client';
 import * as courses from './courses';
 import * as databases from './databases';
 import * as games from './games';
+import * as notifications from './notifications';
 import * as practice from './practice';
 import * as presence from './presence';
 import * as api from './queries';
@@ -1682,6 +1683,99 @@ export function useBillingMutations(academyId: string) {
     voidInvoice: useMutation({
       mutationFn: (id: string) => billing.voidInvoice(client, id),
       onSuccess: refresh('invoices', 'invoice', 'discounts', 'public-invoice'),
+    }),
+  };
+}
+
+/** Thông báo của tôi; tự làm mới khi có thông báo mới trên kênh riêng. */
+export function useMyNotifications(
+  userId: string | undefined,
+  opts: { academyId?: string; limit?: number } = {},
+) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const query = useQuery({
+    queryKey: ['notifications', userId ?? '', opts.academyId ?? '', opts.limit ?? 30],
+    queryFn: () => notifications.fetchMyNotifications(client, userId ?? '', opts),
+    enabled: !!userId,
+  });
+  useEffect(() => {
+    if (!userId) return;
+    return notifications.subscribeNotifications(client, userId, () => {
+      void qc.invalidateQueries({ queryKey: ['notifications', userId] });
+    });
+  }, [client, qc, userId]);
+  return query;
+}
+
+export function useMarkNotificationsRead(userId: string | undefined) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (opts: { ids?: string[]; academyId?: string }) =>
+      notifications.markNotificationsRead(client, opts),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: ['notifications', userId ?? ''] }),
+  });
+}
+
+export function useNotificationLog(academyId: string | undefined, category?: string) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['notification-log', academyId ?? '', category ?? ''],
+    queryFn: () => notifications.fetchNotificationLog(client, academyId ?? '', { category }),
+    enabled: !!academyId,
+  });
+}
+
+export function useNotificationStats(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['notification-stats', academyId ?? ''],
+    queryFn: () => notifications.fetchNotificationStats(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useNotificationSettings(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['notification-settings', academyId ?? ''],
+    queryFn: () => notifications.fetchNotificationSettings(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useReminderRule(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['reminder-rule', academyId ?? ''],
+    queryFn: () => notifications.fetchReminderRule(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useNotificationAdmin(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh =
+    (...keys: string[]) =>
+    () => {
+      for (const k of keys) void qc.invalidateQueries({ queryKey: [k, academyId] });
+    };
+  return {
+    setEnabled: useMutation({
+      mutationFn: (v: { category: notifications.NotificationCategory; enabled: boolean }) =>
+        notifications.setNotificationEnabled(client, academyId, v.category, v.enabled),
+      onSuccess: refresh('notification-settings'),
+    }),
+    saveRule: useMutation({
+      mutationFn: (rule: notifications.ReminderRule) =>
+        notifications.saveReminderRule(client, academyId, rule),
+      onSuccess: refresh('reminder-rule'),
+    }),
+    runNow: useMutation({
+      mutationFn: () => notifications.runFeeRemindersNow(client, academyId),
+      onSuccess: refresh('notification-log', 'notification-stats'),
     }),
   };
 }

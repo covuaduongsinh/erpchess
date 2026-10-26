@@ -1749,6 +1749,83 @@ export type Database = {
           },
         ]
       }
+      notification_settings: {
+        Row: {
+          academy_id: string
+          category: string
+          enabled: boolean
+        }
+        Insert: {
+          academy_id: string
+          category: string
+          enabled?: boolean
+        }
+        Update: {
+          academy_id?: string
+          category?: string
+          enabled?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_settings_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          academy_id: string
+          body: string
+          category: string
+          created_at: string
+          id: string
+          link: string
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          academy_id: string
+          body?: string
+          category: string
+          created_at?: string
+          id?: string
+          link?: string
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          academy_id?: string
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          link?: string
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       parent_links: {
         Row: {
           academy_id: string
@@ -2375,6 +2452,61 @@ export type Database = {
             columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminder_rules: {
+        Row: {
+          academy_id: string
+          days_before: number[]
+          enabled: boolean
+          kind: string
+        }
+        Insert: {
+          academy_id: string
+          days_before?: number[]
+          enabled?: boolean
+          kind?: string
+        }
+        Update: {
+          academy_id?: string
+          days_before?: number[]
+          enabled?: boolean
+          kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_rules_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminder_sent: {
+        Row: {
+          days_before: number
+          invoice_id: string
+          sent_at: string
+        }
+        Insert: {
+          days_before: number
+          invoice_id: string
+          sent_at?: string
+        }
+        Update: {
+          days_before?: number
+          invoice_id?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_sent_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
             referencedColumns: ["id"]
           },
         ]
@@ -3011,6 +3143,24 @@ export type Database = {
           },
         ]
       }
+      notification_stats: {
+        Row: {
+          academy_id: string | null
+          category: string | null
+          last_sent_at: string | null
+          read: number | null
+          sent: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quiz_progress: {
         Row: {
           last_activity: string | null
@@ -3175,6 +3325,10 @@ export type Database = {
         }
         Returns: string
       }
+      mark_notifications_read: {
+        Args: { p_academy?: string; p_ids?: string[] }
+        Returns: number
+      }
       public_invoice: { Args: { p_token: string }; Returns: Json }
       puzzle_for_student_item: {
         Args: { p_item: string; p_student: string }
@@ -3229,6 +3383,7 @@ export type Database = {
         Returns: string
       }
       revoke_certificate: { Args: { p_id: string }; Returns: undefined }
+      run_fee_reminders_now: { Args: { p_academy: string }; Returns: number }
       set_student_level: {
         Args: { p_academy: string; p_level: string; p_student: string }
         Returns: undefined

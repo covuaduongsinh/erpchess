@@ -80,3 +80,11 @@ Kế hoạch con ghi vào `docs/plans/13-van-hanh-hoc-vien.md`. Mỗi PR: commit
 - **`apps/site`:** `/pay/[token]` (server component, QR sinh phía server, `noindex`).
 - **Mobile:** thẻ "Hoá đơn của tôi" (học viên/phụ huynh) mở trang thanh toán.
 - **Kiểm chứng:** pgTAP `14_billing_rls.sql` 20/20; `phase12.integration.test.ts` đạt (hoá đơn thử của học viên thử được huỷ, gói/giảm giá thử đã xoá; học viện thử giờ có cài đặt Billing tiền tố `TEST`).
+
+### PR 12b (2026-10-26)
+
+- **Migration `…0022_notifications.sql`:** `notifications` (mỗi dòng một lần gửi = nhật ký), `notification_settings` (tắt theo loại), `reminder_rules` (mặc định 3 ngày trước và đúng ngày hạn) + `reminder_sent` (mỗi mốc một lần). `private.notify` gửi tới học viên kèm phụ huynh, bỏ người tạo, đẩy realtime lên `user:<id>` (policy chỉ chủ kênh nghe). Trigger: quiz giao lớp/học viên hoặc mở cho tất cả, buổi học giao, có tên trong giải, hoá đơn mới. `private.run_fee_reminders` chạy pg_cron `fee-reminders` 01:00 UTC (8:00 VN); owner chạy ngay bằng `run_fee_reminders_now`. `mark_notifications_read`, view `notification_stats`.
+- **Web:** chuông ở thanh trên (đếm chưa đọc realtime, danh sách, mở link, đánh dấu đã đọc); tab "Thông báo" cho owner: bật/tắt từng loại kèm số đã gửi/đã đọc, quy tắc nhắc phí, chạy ngay, nhật ký có xem trước nội dung.
+- **Mobile:** thẻ thông báo chưa đọc của học viện, chạm để đánh dấu đã đọc.
+- **Kiểm chứng:** pgTAP `15_notifications_rls.sql` 16/16 (`to-mcp.mjs` nhận thêm `matches`); `phase12.integration.test.ts` thêm ca hoá đơn mới → thông báo, nhắc phí đúng một lần; Chrome trên DSC1: chuông tăng 1 → 2 khi gửi thông báo thử qua `private.notify` (không tải lại trang), đánh dấu đã đọc, trang Thông báo hiện thống kê và nhật ký.
+- **Dữ liệu thử còn lại:** 2 thông báo hệ thống "(Claude)" đã đọc của owner DSC1; hoá đơn `TEST-2026-9999` (đã huỷ) trong học viện thử — lệnh `DELETE` qua MCP bị chặn ở bước xác nhận. Gói "(Claude)" của DSC1 đã xoá qua giao diện.

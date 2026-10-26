@@ -13,8 +13,10 @@ import {
   useInvoices,
   useLeaderboard,
   useLevels,
+  useMarkNotificationsRead,
   useMembers,
   useMyAcademies,
+  useMyNotifications,
   usePlayGames,
   usePracticeChapters,
   useProgress,
@@ -104,6 +106,7 @@ export default function AcademyScreen() {
       {academy.role === 'student' || academy.role === 'parent' ? (
         <InvoicesCard academyId={academy.id} />
       ) : null}
+      <NotificationsCard academyId={academy.id} />
 
       <Card title={t('groups.title')}>
         {groups.isPending ? (
@@ -738,6 +741,38 @@ function InvoicesCard({ academyId }: { academyId: string }) {
           </View>
         </Pressable>
       ))}
+    </Card>
+  );
+}
+
+function NotificationsCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const { session } = useSession();
+  const userId = session?.user.id;
+  const list = useMyNotifications(userId, { academyId, limit: 10 });
+  const markRead = useMarkNotificationsRead(userId);
+  const unread = (list.data ?? []).filter((n) => !n.read_at);
+  if (unread.length === 0) return null;
+  return (
+    <Card title={`🔔 ${t('notify.title')} (${unread.length})`}>
+      {unread.map((n) => (
+        <Pressable
+          key={n.id}
+          accessibilityRole="button"
+          onPress={() => markRead.mutate({ ids: [n.id] })}
+          style={styles.row}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.text, { fontWeight: '500' }]}>{n.title}</Text>
+            {n.body ? <Text style={styles.hint}>{n.body}</Text> : null}
+          </View>
+        </Pressable>
+      ))}
+      <Button
+        title={t('notify.markAll')}
+        variant="ghost"
+        onPress={() => markRead.mutate({ academyId })}
+      />
     </Card>
   );
 }

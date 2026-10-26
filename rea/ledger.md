@@ -65,8 +65,8 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | ops.plans              | Gói học phí, đa tiền tệ, mẫu gói                                  | 12  | ✅         | `plans` + `plan_prices` (nhiều tiền tệ), 12 gói mẫu tự soạn, tiền tệ mặc định trong `academy_billing`    |
 | ops.discounts          | Giảm giá                                                          | 12  | ✅         | `discounts` % / cố định, áp nhiều gói, hạn và số lượt, thống kê `discount_stats`                         |
 | ops.invoices           | Hoá đơn + link thanh toán (VietQR/PayOS/Stripe)                   | 12  | 🟡         | VietQR tĩnh + `/pay/[token]`, ghi nhận tay; PayOS/Stripe để sau                                          |
-| ops.reminders          | Nhắc đóng phí tự động                                             | 12  | ⬜         |                                                                                                          |
-| ops.notify             | Thông báo email/push, nhật ký gửi                                 | 12  | ⬜         |                                                                                                          |
+| ops.reminders          | Nhắc đóng phí tự động                                             | 12  | ✅         | `reminder_rules` (mốc ngày trước hạn), pg_cron 8:00 VN, `reminder_sent` chống trùng, chạy ngay           |
+| ops.notify             | Thông báo email/push, nhật ký gửi                                 | 12  | 🟡         | Trong app: `notifications` + realtime `user:<id>`, bật/tắt theo loại, nhật ký; email/push để sau         |
 | ops.leads              | Lead và lớp học thử                                               | 12  | ⬜         |                                                                                                          |
 | ops.chat               | Chat theo Group/Batch/HLV/học viên                                | 12  | ⬜         |                                                                                                          |
 | report.student         | Báo cáo tổng hợp theo học viên, xuất CSV                          | 13  | 🟡         | Chỉ có báo cáo bài tập                                                                                   |
@@ -74,4 +74,4 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | ops.whatsapp           | Thông báo WhatsApp                                                | —   | ⛔         | Thay bằng email/push; Zalo OA để sau                                                                     |
 | ops.razorpay           | Razorpay                                                          | —   | ⛔         | Thị trường Ấn Độ                                                                                         |
 
-**Tổng kết:** 59 claim, gồm 40 đã đóng, 11 một phần, 6 mở, 2 ngoài phạm vi.
+**Tổng kết:** 59 claim, gồm 41 đã đóng, 12 một phần, 4 mở, 2 ngoài phạm vi.
