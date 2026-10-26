@@ -100,7 +100,7 @@ Kế hoạch hoàn thiện được chia thành **3 PR** tập trung và độc 
   - Dashboard Overview chuyên nghiệp: Hàng Quick Actions 4 nút trực quan, widget Lịch học sắp tới (Upcoming Sessions) có nút "Vào lớp ngay", thống kê hoạt động tuần và Top Learners.
   - Thêm route alias `/dashboard`.
 
-- **PR 15b (Đang mở PR):**
+- **PR 15b (#34 - Đã hoàn thành & Merge vào main):**
   - **Luyện tập thế cờ (Practice Chapters):** Bổ sung thẻ thống kê tổng quan (Tổng số chương, số thế cờ), giao diện grid card hiện đại; chi tiết chương có thanh tiến độ %, bộ lọc (Tất cả / Chưa giải / Đã xong) và nút chuyển nhanh bài trước/kế tiếp.
   - **Khu vực thi đấu (Game Area):** Banner Game Area trực quan, widget Học viên Online có nút Thách đấu 1 chạm (Quick Challenge modal) chọn thời gian và màu quân; giao diện Đấu Bot Arasan 7 cấp độ trực quan với avatar, Elo, huy hiệu và phong cách chiến thuật.
   - **CSDL ván đấu (PGN Database):** Tích hợp công cụ phân tích thế trận Arasan NNUE với thanh đánh giá `EvalBar` dọc bàn cờ; bổ sung route alias `/game-area` và `/database`.
