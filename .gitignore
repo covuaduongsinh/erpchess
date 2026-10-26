@@ -3,6 +3,7 @@ dist/
 .next/
 .turbo/
 .expo/
+.tanstack/
 web-build/
 coverage/
 *.tsbuildinfo

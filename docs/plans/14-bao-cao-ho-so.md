@@ -162,4 +162,17 @@
 
 ## Kết quả
 
-_(Sẽ cập nhật sau khi hoàn thành từng PR)_
+- **PR 13a (#29):** Đã hoàn thành và merge vào `main` (commit `328ce80`).
+  - Hỗ trợ ký hiệu nước đi figurine (`♔`, `♕`, `♖`, `♗`, `♘`) cho quân cờ và phong cấp tốt trong `@erpchess/chess-core`.
+  - Bổ sung `timezone`, `move_notation`, `country`, `bio` vào bảng `profiles` và migration `20261026000024_profiles_preferences.sql`.
+  - Màn hình `/profile` trên web: quản lý thông tin tài khoản, đổi mật khẩu, tuỳ chọn ngôn ngữ/múi giờ/ký hiệu nước đi kèm bàn xem trước.
+  - Tích hợp `MoveList` và `EngineLines` hỗ trợ linh hoạt cả 2 chế độ hiển thị notation (chữ hoặc biểu tượng).
+  - Màn hình hồ sơ mobile `apps/mobile/src/app/profile.tsx`.
+  - Đóng `pref.profile` ✅ trong `rea/ledger.md`.
+- **PR 13b (#30):** Đã hoàn thành và merge vào `main` (commit `780e359`).
+  - Các kiểu báo cáo tóm tắt và chi tiết trong `@erpchess/domain`, hàm xuất CSV chuẩn RFC 4180 có UTF-8 BOM hiển thị chuẩn tiếng Việt trên Excel.
+  - Migration `20261026000025_student_reports.sql` cung cấp các RPC bảo mật `get_student_report_summary`, `get_student_report_details`, `get_academy_students_report`.
+  - API & React Query hooks: `useStudentReportSummary`, `useStudentReportDetails`, `useAcademyStudentsReport`.
+  - Web UI: route `/a/$slug/reports` với bộ lọc học viên, khoảng thời gian (M/Q/Y/All/tuỳ chỉnh), thẻ KPI tóm tắt, 6 tab chi tiết, bảng toàn học viện và xuất file CSV.
+  - Mobile UI: thẻ `StudentReportCard` trong màn hình học viện.
+  - Đóng `report.student` ✅ trong `rea/ledger.md`.
