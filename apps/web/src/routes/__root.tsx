@@ -1,10 +1,13 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { AppErrorBoundary } from '../components/AppErrorBoundary';
 import { Shell } from '../components/Shell';
 
 export const Route = createRootRoute({
   component: () => (
-    <Shell>
-      <Outlet />
-    </Shell>
+    <AppErrorBoundary>
+      <Shell>
+        <Outlet />
+      </Shell>
+    </AppErrorBoundary>
   ),
 });

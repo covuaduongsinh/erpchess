@@ -10,10 +10,11 @@ Mỗi dòng là một **claim**: một hành vi của Chesslang mà erpchess c�
 
 **Cột GĐ** là giai đoạn erpchess dự kiến làm claim đó.
 
-Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
+Cập nhật lần cuối: 2026-10-26, sau Giai đoạn 14.
 
 | ID                     | Claim                                                             | GĐ  | Trạng thái | Bằng chứng trong erpchess                                                                                        |
 | ---------------------- | ----------------------------------------------------------------- | --- | ---------- | ---------------------------------------------------------------------------------------------------------------- |
+| release.distribution   | Đóng gói đa nền tảng (Web, Desktop Tauri, Mobile EAS) & Vận hành  | 14  | ✅         | Tauri release `.github/workflows/release-desktop.yml`, EAS `eas.json`, Vercel config, `docs/ops/`                |
 | org.academy            | Tạo học viện, chủ học viện                                        | 2   | ✅         | `supabase/migrations/20261023000001_core_org.sql`, pgTAP                                                         |
 | org.coach-invite       | Mời HLV bằng link                                                 | 2   | ✅         | `apps/web/src/routes/invite.$token.tsx`                                                                          |
 | org.student-pin        | Học viên đăng nhập bằng username + PIN, không cần email           | 2   | ✅         | Edge Function `create-student`                                                                                   |
@@ -74,4 +75,4 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | ops.whatsapp           | Thông báo WhatsApp                                                | —   | ⛔         | Thay bằng email/push; Zalo OA để sau                                                                             |
 | ops.razorpay           | Razorpay                                                          | —   | ⛔         | Thị trường Ấn Độ                                                                                                 |
 
-**Tổng kết:** 59 claim, gồm 45 đã đóng, 10 một phần, 2 mở, 2 ngoài phạm vi.
+**Tổng kết:** 60 claim, gồm 46 đã đóng, 10 một phần, 2 mở, 2 ngoài phạm vi.
