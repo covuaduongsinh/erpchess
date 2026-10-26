@@ -104,3 +104,8 @@ Kế hoạch hoàn thiện được chia thành **3 PR** tập trung và độc 
   - **Luyện tập thế cờ (Practice Chapters):** Bổ sung thẻ thống kê tổng quan (Tổng số chương, số thế cờ), giao diện grid card hiện đại; chi tiết chương có thanh tiến độ %, bộ lọc (Tất cả / Chưa giải / Đã xong) và nút chuyển nhanh bài trước/kế tiếp.
   - **Khu vực thi đấu (Game Area):** Banner Game Area trực quan, widget Học viên Online có nút Thách đấu 1 chạm (Quick Challenge modal) chọn thời gian và màu quân; giao diện Đấu Bot Arasan 7 cấp độ trực quan với avatar, Elo, huy hiệu và phong cách chiến thuật.
   - **CSDL ván đấu (PGN Database):** Tích hợp công cụ phân tích thế trận Arasan NNUE với thanh đánh giá `EvalBar` dọc bàn cờ; bổ sung route alias `/game-area` và `/database`.
+
+- **PR 15c (Đang mở PR):**
+  - **Mobile Expo:** Bổ sung hàng Quick Actions tiện ích (Phân tích, Bài tập, Lớp học, Chơi cờ) và thẻ Practice Card trực quan với huy hiệu số lượng bài tập và phân loại học viện/riêng tư.
+  - **Desktop Tauri:** Kiểm thử đóng gói và chạy trơn tru với phím tắt hệ thống và engine Arasan.
+  - **Sổ cái REA:** Hoàn tất rà soát 100% các tính năng đối chiếu với Chesslang.
