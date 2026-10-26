@@ -319,7 +319,7 @@ function SelectedGame({ gameId }: { gameId: string }) {
   if (pgn.isPending) return <Spinner />;
   if (pgn.error) return <ErrorText error={pgn.error} />;
   return (
-    <GameViewer pgn={pgn.data}>
+    <GameViewer pgn={pgn.data} showAnalysisToggle>
       {(fen) => (
         <Link
           to="/analysis"
