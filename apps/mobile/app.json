@@ -7,6 +7,13 @@
     "icon": "./assets/images/icon.png",
     "scheme": "erpchess",
     "userInterfaceStyle": "automatic",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "fallbackToCacheTimeout": 0
+    },
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "vn.duongsinh.erpchess"
