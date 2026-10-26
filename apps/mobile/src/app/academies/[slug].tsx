@@ -43,7 +43,15 @@ import type { TranslationKey } from '@erpchess/i18n';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Linking, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
+import {
+  Linking,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -87,6 +95,7 @@ export default function AcademyScreen() {
     >
       <Stack.Screen options={{ title: academy.name }} />
       <Muted>{t(`role.${academy.role}`)}</Muted>
+      <MobileQuickActions slug={academy.slug} />
       {academy.role === 'student' && <MyLevel academyId={academy.id} userId={session?.user.id} />}
 
       <LeaderboardCard academyId={academy.id} userId={session?.user.id} />
@@ -501,7 +510,7 @@ function QuizzesCard({ academyId }: { academyId: string }) {
   );
 }
 
-/** Practice: chỉ liệt kê chương; luyện với máy dùng trên web/desktop (engine mobile ở bước sau). */
+/** Practice: liệt kê chương với số lượng thế cờ và phân loại học viện/riêng tư. */
 function PracticeCard({ academyId }: { academyId: string }) {
   const { t } = useT();
   const chapters = usePracticeChapters(academyId);
@@ -513,10 +522,25 @@ function PracticeCard({ academyId }: { academyId: string }) {
       ) : (
         chapters.data?.map((c) => (
           <View key={c.id} style={styles.row}>
-            <Text style={[styles.text, { flex: 1 }]}>{c.title}</Text>
-            <Text style={styles.hint}>
-              {t('practice.positionCount', { count: c.positionCount })}
-            </Text>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text style={[styles.text, { fontWeight: '600' }]}>{c.title}</Text>
+              <Text style={styles.hint}>
+                {c.visibility === 'academy' ? 'Học viện' : 'Riêng tư'} ·{' '}
+                {t('practice.positionCount', { count: c.positionCount })}
+              </Text>
+            </View>
+            <View
+              style={{
+                paddingVertical: 3,
+                paddingHorizontal: 8,
+                borderRadius: radius.sm,
+                backgroundColor: `${colors.primary}15`,
+              }}
+            >
+              <Text style={{ fontSize: 11, fontWeight: '700', color: colors.primary }}>
+                {c.positionCount > 0 ? `${c.positionCount} thế cờ` : 'Trống'}
+              </Text>
+            </View>
           </View>
         ))
       )}
@@ -875,3 +899,73 @@ function StudentReportCard({ academyId, userId }: { academyId: string; userId?: 
     </Card>
   );
 }
+
+function MobileQuickActions({ slug }: { slug: string }) {
+  const { t } = useT();
+  return (
+    <View style={quickStyles.container}>
+      <Pressable
+        accessibilityRole="button"
+        style={quickStyles.button}
+        onPress={() => router.push('/analysis')}
+      >
+        <Text style={quickStyles.icon}>♟️</Text>
+        <Text style={quickStyles.label}>{t('analysis.title')}</Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        style={quickStyles.button}
+        onPress={() => router.push({ pathname: '/academies/[slug]', params: { slug } })}
+      >
+        <Text style={quickStyles.icon}>🧩</Text>
+        <Text style={quickStyles.label}>{t('assignments.title')}</Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        style={quickStyles.button}
+        onPress={() => router.push({ pathname: '/academies/[slug]', params: { slug } })}
+      >
+        <Text style={quickStyles.icon}>🏫</Text>
+        <Text style={quickStyles.label}>{t('classroom.room')}</Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        style={quickStyles.button}
+        onPress={() => router.push({ pathname: '/academies/[slug]', params: { slug } })}
+      >
+        <Text style={quickStyles.icon}>⚔️</Text>
+        <Text style={quickStyles.label}>{t('play.title')}</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+const quickStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: spacing.xs,
+    marginVertical: spacing.xs,
+  },
+  button: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xs,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  icon: {
+    fontSize: 20,
+    marginBottom: 4,
+  },
+  label: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.primary,
+    textAlign: 'center',
+  },
+});
