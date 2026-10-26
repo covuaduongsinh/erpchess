@@ -49,13 +49,11 @@ export async function sendMessage(
   const body = input.body.trim();
   if (!body) return;
   unwrap(
-    await client
-      .from('messages')
-      .insert({
-        conversation_id: input.conversationId,
-        sender_id: input.senderId,
-        body: body.slice(0, 2000),
-      }),
+    await client.from('messages').insert({
+      conversation_id: input.conversationId,
+      sender_id: input.senderId,
+      body: body.slice(0, 2000),
+    }),
   );
 }
 
