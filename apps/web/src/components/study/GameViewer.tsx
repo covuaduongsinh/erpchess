@@ -1,7 +1,10 @@
 import { Board } from '@erpchess/board-web';
 import { type GameTree, type MoveNode, parsePgn } from '@erpchess/chess-core';
-import { type ReactNode, useEffect, useMemo, useState } from 'react';
+import type { Score } from '@erpchess/engine';
+import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useT } from '../../lib/use-t';
+import { EngineLines } from '../analysis/EngineLines';
+import { EvalBar } from '../analysis/EvalBar';
 import { MoveList } from '../analysis/MoveList';
 import { Button } from '../ui';
 
@@ -11,9 +14,11 @@ import { Button } from '../ui';
  */
 export function GameViewer({
   pgn,
+  showAnalysisToggle = false,
   children,
 }: {
   pgn: string;
+  showAnalysisToggle?: boolean;
   children?: (fen: string) => ReactNode;
 }) {
   const { t } = useT();
@@ -26,10 +31,16 @@ export function GameViewer({
   }, [pgn]);
   const [currentId, setCurrentId] = useState('root');
   const [flipped, setFlipped] = useState(false);
+  const [engineOn, setEngineOn] = useState(false);
+  const [bestScore, setBestScore] = useState<Score | null>(null);
+  const onScore = useCallback((s: Score | null) => setBestScore(s), []);
 
   // Ván mới thì về đầu
   // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ đặt lại khi đổi ván
-  useEffect(() => setCurrentId('root'), [tree]);
+  useEffect(() => {
+    setCurrentId('root');
+    setBestScore(null);
+  }, [tree]);
 
   useEffect(() => {
     if (!tree) return;
@@ -63,49 +74,87 @@ export function GameViewer({
           {headers.Event && <span className="text-text-muted"> · {headers.Event}</span>}
         </p>
       )}
-      <Board
-        fen={node.fen}
-        orientation={orientation}
-        lastMove={move ? [move.uci.slice(0, 2), move.uci.slice(2, 4)] : undefined}
-        label={t('database.viewer')}
-      />
-      <div className="flex flex-wrap gap-1">
-        <Button
-          variant="ghost"
-          aria-label={t('database.first')}
-          onClick={() => setCurrentId('root')}
-        >
-          ⏮
-        </Button>
-        <Button
-          variant="ghost"
-          aria-label={t('database.prev')}
-          onClick={() => setCurrentId(tree.parentOf(currentId)?.id ?? currentId)}
-        >
-          ◀
-        </Button>
-        <Button
-          variant="ghost"
-          aria-label={t('database.next')}
-          onClick={() => setCurrentId(tree.next(currentId)?.id ?? currentId)}
-        >
-          ▶
-        </Button>
-        <Button
-          variant="ghost"
-          aria-label={t('database.last')}
-          onClick={() => setCurrentId(tree.mainline().at(-1)?.id ?? 'root')}
-        >
-          ⏭
-        </Button>
+
+      {showAnalysisToggle && (
+        <div className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-xs">
+          <label className="flex cursor-pointer items-center gap-2 font-medium text-primary">
+            <input
+              type="checkbox"
+              checked={engineOn}
+              onChange={(e) => {
+                setEngineOn(e.target.checked);
+                if (!e.target.checked) setBestScore(null);
+              }}
+              className="h-4 w-4 rounded border-gray-300 text-primary"
+            />
+            <span>⚡ Phân tích Arasan NNUE</span>
+          </label>
+          <span className="text-text-muted">{engineOn ? 'Đang chạy phân tích thế cờ' : 'Tắt'}</span>
+        </div>
+      )}
+
+      <div className="flex gap-2">
+        {engineOn && (
+          <div className="h-full min-h-[300px]">
+            <EvalBar score={bestScore} orientation={orientation} label="Đánh giá thế trận" />
+          </div>
+        )}
+        <div className="flex-1">
+          <Board
+            fen={node.fen}
+            orientation={orientation}
+            lastMove={move ? [move.uci.slice(0, 2), move.uci.slice(2, 4)] : undefined}
+            label={t('database.viewer')}
+          />
+        </div>
+      </div>
+
+      {engineOn && (
+        <div className="rounded-lg border border-text-muted/15 bg-white p-3 text-xs">
+          <EngineLines fen={node.fen} onPlay={() => {}} onScore={onScore} />
+        </div>
+      )}
+
+      <div className="flex flex-wrap items-center justify-between gap-1">
+        <div className="flex gap-1">
+          <Button
+            variant="ghost"
+            aria-label={t('database.first')}
+            onClick={() => setCurrentId('root')}
+          >
+            ⏮
+          </Button>
+          <Button
+            variant="ghost"
+            aria-label={t('database.prev')}
+            onClick={() => setCurrentId(tree.parentOf(currentId)?.id ?? currentId)}
+          >
+            ◀
+          </Button>
+          <Button
+            variant="ghost"
+            aria-label={t('database.next')}
+            onClick={() => setCurrentId(tree.next(currentId)?.id ?? currentId)}
+          >
+            ▶
+          </Button>
+          <Button
+            variant="ghost"
+            aria-label={t('database.last')}
+            onClick={() => setCurrentId(tree.mainline().at(-1)?.id ?? 'root')}
+          >
+            ⏭
+          </Button>
+        </div>
         <Button
           variant="ghost"
           aria-label={t('database.flip')}
           onClick={() => setFlipped((f) => !f)}
         >
-          ⇅
+          ⇅ {t('database.flip')}
         </Button>
       </div>
+
       <div className="max-h-64 overflow-y-auto rounded-md bg-bg p-2">
         <MoveList tree={tree} currentId={currentId} onSelect={setCurrentId} />
       </div>

@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DatabaseRouteImport } from './routes/database'
 import { Route as EngineRouteImport } from './routes/engine'
+import { Route as GameAreaRouteImport } from './routes/game-area'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -78,9 +80,19 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DatabaseRoute = DatabaseRouteImport.update({
+  id: '/database',
+  path: '/database',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EngineRoute = EngineRouteImport.update({
   id: '/engine',
   path: '/engine',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameAreaRoute = GameAreaRouteImport.update({
+  id: '/game-area',
+  path: '/game-area',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -333,7 +345,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/dashboard': typeof DashboardRoute
+  '/database': typeof DatabaseRoute
   '/engine': typeof EngineRoute
+  '/game-area': typeof GameAreaRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
@@ -388,7 +402,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/dashboard': typeof DashboardRoute
+  '/database': typeof DatabaseRoute
   '/engine': typeof EngineRoute
+  '/game-area': typeof GameAreaRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
@@ -443,7 +459,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/dashboard': typeof DashboardRoute
+  '/database': typeof DatabaseRoute
   '/engine': typeof EngineRoute
+  '/game-area': typeof GameAreaRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
@@ -500,7 +518,9 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/dashboard'
+    | '/database'
     | '/engine'
+    | '/game-area'
     | '/login'
     | '/profile'
     | '/signup'
@@ -555,7 +575,9 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/dashboard'
+    | '/database'
     | '/engine'
+    | '/game-area'
     | '/login'
     | '/profile'
     | '/signup'
@@ -609,7 +631,9 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/dashboard'
+    | '/database'
     | '/engine'
+    | '/game-area'
     | '/login'
     | '/profile'
     | '/signup'
@@ -665,7 +689,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
   DashboardRoute: typeof DashboardRoute
+  DatabaseRoute: typeof DatabaseRoute
   EngineRoute: typeof EngineRoute
+  GameAreaRoute: typeof GameAreaRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
@@ -697,11 +723,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/database': {
+      id: '/database'
+      path: '/database'
+      fullPath: '/database'
+      preLoaderRoute: typeof DatabaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/engine': {
       id: '/engine'
       path: '/engine'
       fullPath: '/engine'
       preLoaderRoute: typeof EngineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game-area': {
+      id: '/game-area'
+      path: '/game-area'
+      fullPath: '/game-area'
+      preLoaderRoute: typeof GameAreaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1148,7 +1188,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
   DashboardRoute: DashboardRoute,
+  DatabaseRoute: DatabaseRoute,
   EngineRoute: EngineRoute,
+  GameAreaRoute: GameAreaRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
