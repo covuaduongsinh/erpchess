@@ -1,4 +1,5 @@
-import type { GameTree, MoveNode } from '@erpchess/chess-core';
+import { useProfile, useSession } from '@erpchess/api/react';
+import { formatSan, type GameTree, type MoveNode, type MoveNotation } from '@erpchess/chess-core';
 import type { ReactNode } from 'react';
 
 const NAG_SYMBOLS: Record<number, string> = { 1: '!', 2: '?', 3: '!!', 4: '??', 5: '!?', 6: '?!' };
@@ -8,15 +9,22 @@ export function MoveList({
   tree,
   currentId,
   onSelect,
+  notation: customNotation,
 }: {
   tree: GameTree;
   currentId: string;
   onSelect: (id: string) => void;
+  notation?: MoveNotation;
 }) {
+  const { session } = useSession();
+  const profileQuery = useProfile(session?.user?.id);
+  const notation: MoveNotation =
+    customNotation ?? (profileQuery.data?.move_notation as MoveNotation) ?? 'letters';
+
   return (
     <div className="flex flex-wrap items-baseline gap-x-1 gap-y-1 text-sm leading-7">
       {tree.root.comment && <Comment text={tree.root.comment} />}
-      {renderLine(tree.root.children, true, true, currentId, onSelect)}
+      {renderLine(tree.root.children, true, true, currentId, onSelect, notation)}
     </div>
   );
 }
@@ -27,6 +35,7 @@ function renderLine(
   forceNumber: boolean,
   currentId: string,
   onSelect: (id: string) => void,
+  notation: MoveNotation,
 ): ReactNode[] {
   const out: ReactNode[] = [];
   let current = nodes;
@@ -41,6 +50,7 @@ function renderLine(
         active={main.id === currentId}
         mainline={mainline}
         onSelect={onSelect}
+        notation={notation}
       />,
     );
     if (main.comment) out.push(<Comment key={`${main.id}-c`} text={main.comment} />);
@@ -51,7 +61,7 @@ function renderLine(
           key={`var-${alt.id}`}
           className="inline-flex flex-wrap items-baseline gap-x-1 text-text-muted"
         >
-          ({renderLine([alt], false, true, currentId, onSelect)})
+          ({renderLine([alt], false, true, currentId, onSelect, notation)})
         </span>,
       );
       force = true;
@@ -67,12 +77,14 @@ function MoveButton({
   active,
   mainline,
   onSelect,
+  notation,
 }: {
   node: MoveNode;
   showNumber: boolean;
   active: boolean;
   mainline: boolean;
   onSelect: (id: string) => void;
+  notation: MoveNotation;
 }) {
   const moveNo = Math.ceil(node.ply / 2);
   const number = node.ply % 2 === 1 ? `${moveNo}.` : `${moveNo}…`;
@@ -88,7 +100,7 @@ function MoveButton({
       }`}
     >
       {showNumber && <span className="mr-0.5 text-text-muted">{number}</span>}
-      {node.san}
+      {formatSan(node.san, notation)}
       {nags}
     </button>
   );

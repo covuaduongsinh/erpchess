@@ -4,7 +4,7 @@ import { slugify } from '@erpchess/domain';
 import { colors } from '@erpchess/ui-tokens';
 import { Redirect, router, Stack } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, RefreshControl, ScrollView, Text } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -32,9 +32,16 @@ export default function AcademiesScreen() {
         options={{
           title: t('academy.mine'),
           headerRight: () => (
-            <Pressable accessibilityRole="button" onPress={() => void signOut(client)}>
-              <Text style={{ color: colors.textOnPrimary }}>{t('common.signOut')}</Text>
-            </Pressable>
+            <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+              <Pressable accessibilityRole="button" onPress={() => router.push('/profile')}>
+                <Text style={{ color: colors.textOnPrimary }}>{t('profile.title')}</Text>
+              </Pressable>
+              <Pressable accessibilityRole="button" onPress={() => void signOut(client)}>
+                <Text style={{ color: colors.textOnPrimary, opacity: 0.8 }}>
+                  {t('common.signOut')}
+                </Text>
+              </Pressable>
+            </View>
           ),
         }}
       />

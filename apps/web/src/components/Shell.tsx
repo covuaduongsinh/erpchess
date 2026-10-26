@@ -37,6 +37,15 @@ export function Shell({ children }: { children: ReactNode }) {
               {lng.toUpperCase()}
             </button>
           ))}
+          {session && (
+            <Link
+              to="/profile"
+              className="rounded-sm px-2 py-1 text-white hover:bg-white/10"
+              title={t('profile.title')}
+            >
+              {t('profile.title')}
+            </Link>
+          )}
           {session && <NotificationBell userId={session.user.id} />}
           {session && (
             <Button variant="ghost" className="text-white" onClick={() => void signOut(client)}>

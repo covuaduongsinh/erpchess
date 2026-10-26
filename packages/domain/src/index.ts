@@ -102,6 +102,7 @@ export * from './markdown';
 export * from './money';
 export * from './periods';
 export * from './practice';
+export * from './profile';
 export * from './quiz';
 export * from './study';
 export * from './tournament';
