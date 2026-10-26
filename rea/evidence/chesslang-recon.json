@@ -1,0 +1,335 @@
+{
+  "capturedAt": "2026-10-26T17:22:16.240Z",
+  "startUrl": "https://platform.chesslang.com/dashboard",
+  "finalUrl": "https://platform.chesslang.com/login?redirect=%2Fdashboard",
+  "pageTitle": "platform.chesslang",
+  "menuLinks": [
+    {
+      "href": "https://platform.chesslang.com/reset-password",
+      "text": "Forgot Password?"
+    },
+    {
+      "href": "https://platform.chesslang.com/signup",
+      "text": "Sign up"
+    },
+    {
+      "href": "https://platform.chesslang.com/signup",
+      "text": "Get Started Free"
+    },
+    {
+      "href": "https://platform.chesslang.com/privacy",
+      "text": "Privacy Policy"
+    },
+    {
+      "href": "https://platform.chesslang.com/terms",
+      "text": "Terms of Service"
+    },
+    {
+      "href": "https://platform.chesslang.com/support",
+      "text": "Support"
+    }
+  ],
+  "apiRequestsSample": [
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/dashboard",
+      "resourceType": "document",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/login?redirect=%2Fdashboard",
+      "resourceType": "document",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/media/22a5144ee8d83bca-s.p.woff2",
+      "resourceType": "font",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/media/7d4881bb7e1bf84d-s.p.woff2",
+      "resourceType": "font",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/media/b261c59b2d76913d-s.p.woff2",
+      "resourceType": "font",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/css/9ae579f496bf8bee.css?dpl=d3130987",
+      "resourceType": "stylesheet",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/css/747aff7edc3a3a78.css?dpl=d3130987",
+      "resourceType": "stylesheet",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/css/227ac6d76fcb5ccf.css?dpl=d3130987",
+      "resourceType": "stylesheet",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/webpack-8c4e683759bbed89.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/4bd1b696-b96ffcaa54b3c1ca.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/31255-6dc28b4910384d69.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/main-app-7bc418e816390277.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/7508b87c-e0450446d012d8c9.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/d8b2f613-ffa9d0ea5c5a733b.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/261b60bd-9b4b841263afc594.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/f6d0a8ec-a8a59c7ed5deda5c.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/d31eb080-9770c6a6ccc96059.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/81029-25dfa195d7096fa9.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/95125-1a3f99ea0c7d49bf.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/49230-c663d5fa8e2400c0.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/58111-e6216684d2a19978.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/10075-cb27668da5d89387.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/83280-738d45d500afb416.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/28514-cc4be120b96bc79d.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/app/(public)/login/layout-e915b20777e95b98.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/app/global-error-286c5e3fd42fc3bd.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/36c684af-4977e71c129f51de.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/18955-e93e37983ce3a177.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/24909-e2e56ed04f023755.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/74431-7ff5bb154054b910.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/53455-10d88aad3b7dbb0d.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/88167-cc9ffec944e070a9.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/18720-03a52b0a2ab9cd17.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/55993-d4d6fc25a332f3a9.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/83817-6d45e7a9b2fea147.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/app/layout-05f0f1258de7d4dd.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/app/error-268e697f79ffebd3.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/52619-c48a18d6f62d2371.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/64680-f109eac5b78c7131.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/30120-1dfb8111726be088.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/app/not-found-258d752248112eda.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/d6e2710b-35836cf36a9ebcd5.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/66093-2ed27bcf921d36f2.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/94415-cb46d5a4efc8f1d6.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/12011-1e321ec45f914717.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/47887-bb403767724adac6.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/47520-0384503d6982e2cd.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/11828-e29150737ffe36a8.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/19515-8a9b042da5f0ad05.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    },
+    {
+      "method": "GET",
+      "url": "https://platform.chesslang.com/_next/static/chunks/26991-31db1a3cb660817c.js?dpl=d3130987",
+      "resourceType": "script",
+      "postData": null
+    }
+  ],
+  "bodyTextSnippet": "♟️\nChessAcademy\nLearn, Play,\nSolve & Improve\n\nThe world's first activity-based chess curriculum for students of all levels.\n\n♛\n♞\n♝\n150+\nLESSONS\n2500+\nACTIVITIES\n5\nLEVELS\nWelcome back\n\nSign in to your account to continue\n\n* Username\n* Password\nForgot Password?\nLogin\nDon't have an account? Sign up\nSecure Login\n|\nFree to Start\n|\nAlways On\n✦ PLATFORM FEATURES\nEverything you need to\nmaster chess\n\nA complete learning ecosystem - from beginner to advanced - built for serious students.\n\n📚\nActivity-Based Curriculum\nBuild a strong foundation with the world's first activity-based curriculum (ABC) for chess. 150+ lessons across 5 learning levels, from beginner to advanced.\n2500+ Activities\n🧠\nSmart & Active Learning\nLearn from interactive chess courses on openings, middlegames, endgames, tactics, and strategies. Watch video lessons and solve activities to reinforce learning.\nVideo + Practice\n🏆\nOnline Tournaments\nCompete with other students in online chess tournaments. Play different formats including Swiss, Quad, and Swiss Team to test your skills competitively.\nMulti-format\n🧩\nChess Quizzes\nSolve chess puzzles, MCQs, and fun capture activities. Play against the computer and sharpen your tactical vision with interactive quizzes.\nPuzzles & MCQs\n🏫\nInteractive Classroom\nAttend live online chess classes. Actively participate by answering questions, solving puzzles, and competing on the leaderboard by scoring points.\nLive Classes\n🤝\nPlay with Friends & Bots\nPlay casual games with friends o"
+}

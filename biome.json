@@ -19,7 +19,9 @@
       "!**/database.types.ts",
       "!vendor",
       "!packages/board-web/src/pieces",
-      "!**/_shared/chess-core"
+      "!**/_shared/chess-core",
+      "!rea/evidence",
+      "!rea/scripts"
     ]
   },
   "formatter": {
