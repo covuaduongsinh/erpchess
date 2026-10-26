@@ -46,6 +46,9 @@ function AcademyLayout({ session }: { session: Session }) {
     ...(academy.role !== 'coach'
       ? [{ to: '/a/$slug/billing', label: t('bill.title'), exact: false }]
       : []),
+    ...(academy.role === 'owner'
+      ? [{ to: '/a/$slug/notifications', label: t('notify.title'), exact: false }]
+      : []),
     ...(isStaff(academy.role)
       ? [
           { to: '/a/$slug/calendar', label: t('calendar.title'), exact: false },

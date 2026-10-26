@@ -3,6 +3,8 @@
  * phía server, học viên chỉ đọc hoá đơn của mình, client chưa đăng nhập đọc qua pay_token,
  * ghi nhận thanh toán một phần rồi huỷ (hoá đơn thử không xoá được, chỉ huỷ).
  */
+
+import { vnToday } from '@erpchess/domain';
 import { describe, expect, it } from 'vitest';
 import {
   createInvoice,
@@ -18,6 +20,7 @@ import {
   voidInvoice,
 } from './billing';
 import { createErpClient } from './client';
+import { fetchMyNotifications, markNotificationsRead, runFeeRemindersNow } from './notifications';
 import { fetchMyAcademies, signInStudent, signInWithEmail } from './queries';
 
 const env: Record<string, string | undefined> =
@@ -130,6 +133,50 @@ describe.skipIf(!ready)('Giai đoạn 12 trên Supabase thật', () => {
     } finally {
       await deleteDiscount(owner, discountId);
       await deletePlan(owner, planId);
+    }
+  });
+
+  it('thông báo: hoá đơn mới + nhắc phí đúng một lần', { timeout: 120_000 }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const student = newClient();
+    const { user: su } = await signInStudent(
+      student,
+      env.STUDENT_USERNAME ?? '',
+      env.STUDENT_PIN ?? '',
+    );
+
+    const due = new Date(Date.parse(`${vnToday()}T00:00:00Z`) + 3 * 86_400_000)
+      .toISOString()
+      .slice(0, 10);
+    const id = await createInvoice(owner, {
+      academyId: academy.id,
+      studentId: su.id,
+      dueOn: due,
+      lines: [{ description: 'Học phí thử GĐ12b', quantity: 1, unitAmount: 200_000 }],
+    });
+    try {
+      const inv = await fetchInvoice(owner, id);
+      const mine = () => fetchMyNotifications(student, su.id, { academyId: academy.id, limit: 50 });
+      const created = (await mine()).filter((n) => n.link.endsWith(`/billing/${id}`));
+      expect(created.map((n) => n.category)).toEqual(['invoice']);
+      expect(created[0]?.title).toContain(inv.number);
+
+      expect(await runFeeRemindersNow(owner, academy.id)).toBeGreaterThanOrEqual(1);
+      expect(await runFeeRemindersNow(owner, academy.id)).toBe(0);
+      const after = (await mine()).filter((n) => n.link.endsWith(`/billing/${id}`));
+      expect(after.filter((n) => n.category === 'invoice_reminder')).toHaveLength(1);
+
+      expect(await markNotificationsRead(student, { ids: after.map((n) => n.id) })).toBe(2);
+      await expect(runFeeRemindersNow(student, academy.id)).rejects.toThrow();
+    } finally {
+      await voidInvoice(owner, id);
+      // Học viên thử tự xoá thông báo thử của mình
+      await student.from('notifications').delete().like('link', `%/billing/${id}`);
     }
   });
 });

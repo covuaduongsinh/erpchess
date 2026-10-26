@@ -22,6 +22,7 @@ import { Route as ASlugCalendarRouteImport } from './routes/a.$slug.calendar'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
 import { Route as ASlugLevelsRouteImport } from './routes/a.$slug.levels'
+import { Route as ASlugNotificationsRouteImport } from './routes/a.$slug.notifications'
 import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
 import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
@@ -120,6 +121,11 @@ const ASlugGroupsRoute = ASlugGroupsRouteImport.update({
 const ASlugLevelsRoute = ASlugLevelsRouteImport.update({
   id: '/levels',
   path: '/levels',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugNotificationsRoute = ASlugNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugStudentsRoute = ASlugStudentsRouteImport.update({
@@ -306,6 +312,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
+  '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -354,6 +361,7 @@ export interface FileRoutesByTo {
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
+  '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -404,6 +412,7 @@ export interface FileRoutesById {
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
+  '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -455,6 +464,7 @@ export interface FileRouteTypes {
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/levels'
+    | '/a/$slug/notifications'
     | '/a/$slug/students'
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
@@ -503,6 +513,7 @@ export interface FileRouteTypes {
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/levels'
+    | '/a/$slug/notifications'
     | '/a/$slug/students'
     | '/a/$slug'
     | '/a/$slug/assignments/$id'
@@ -552,6 +563,7 @@ export interface FileRouteTypes {
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/levels'
+    | '/a/$slug/notifications'
     | '/a/$slug/students'
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
@@ -691,6 +703,13 @@ declare module '@tanstack/react-router' {
       path: '/levels'
       fullPath: '/a/$slug/levels'
       preLoaderRoute: typeof ASlugLevelsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/notifications': {
+      id: '/a/$slug/notifications'
+      path: '/notifications'
+      fullPath: '/a/$slug/notifications'
+      preLoaderRoute: typeof ASlugNotificationsRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/students': {
@@ -939,6 +958,7 @@ interface ASlugRouteChildren {
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
   ASlugGroupsRoute: typeof ASlugGroupsRoute
   ASlugLevelsRoute: typeof ASlugLevelsRoute
+  ASlugNotificationsRoute: typeof ASlugNotificationsRoute
   ASlugStudentsRoute: typeof ASlugStudentsRoute
   ASlugIndexRoute: typeof ASlugIndexRoute
   ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
@@ -981,6 +1001,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugDatabaseRoute: ASlugDatabaseRoute,
   ASlugGroupsRoute: ASlugGroupsRoute,
   ASlugLevelsRoute: ASlugLevelsRoute,
+  ASlugNotificationsRoute: ASlugNotificationsRoute,
   ASlugStudentsRoute: ASlugStudentsRoute,
   ASlugIndexRoute: ASlugIndexRoute,
   ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,
