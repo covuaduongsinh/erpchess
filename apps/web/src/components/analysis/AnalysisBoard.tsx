@@ -5,6 +5,7 @@ import {
   kingSquare,
   legalDests,
   type MoveNode,
+  type MoveNotation,
   sideToMove,
   toPgn,
 } from '@erpchess/chess-core';
@@ -20,7 +21,13 @@ import { MoveList } from './MoveList';
 
 const NO_DRAWINGS: Drawings = { arrows: [], highlights: [] };
 
-export function AnalysisBoard({ initialFen }: { initialFen?: string }) {
+export function AnalysisBoard({
+  initialFen,
+  notation = 'letters',
+}: {
+  initialFen?: string;
+  notation?: MoveNotation;
+}) {
   const { t } = useT();
   const game = useGameTree(initialFen);
   const { tree, current } = game;
@@ -121,14 +128,16 @@ export function AnalysisBoard({ initialFen }: { initialFen?: string }) {
           >
             {engineOn ? t('analysis.engineOff') : t('analysis.engineOn')}
           </Button>
-          {engineOn && <EngineLines fen={fen} onPlay={game.play} onScore={onScore} />}
+          {engineOn && (
+            <EngineLines fen={fen} onPlay={game.play} onScore={onScore} notation={notation} />
+          )}
         </Card>
 
         <Card title={t('analysis.moves')}>
           {tree.root.children.length === 0 ? (
             <p className="text-sm text-text-muted">{t('analysis.noMoves')}</p>
           ) : (
-            <MoveList tree={tree} currentId={current.id} onSelect={game.goTo} />
+            <MoveList tree={tree} currentId={current.id} onSelect={game.goTo} notation={notation} />
           )}
           {current.id !== 'root' && (
             <>

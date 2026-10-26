@@ -1,4 +1,3 @@
-import { useProfile, useSession } from '@erpchess/api/react';
 import { formatSanList, type MoveNotation, sanLine, sideToMove } from '@erpchess/chess-core';
 import { formatScore, type Score, toWhitePov } from '@erpchess/engine';
 import type { TranslationKey } from '@erpchess/i18n';
@@ -24,15 +23,14 @@ export function EngineLines({
   fen,
   onPlay,
   onScore,
+  notation = 'letters',
 }: {
   fen: string;
   onPlay: (uci: string) => void;
   onScore: (score: Score | null) => void;
+  notation?: MoveNotation;
 }) {
   const { t } = useT();
-  const { session } = useSession();
-  const profileQuery = useProfile(session?.user?.id);
-  const notation = (profileQuery.data?.move_notation as MoveNotation) ?? 'letters';
   const state = useEngine();
   const engine = state.status === 'ready' ? state.engine : null;
   const lines = useAnalysis(engine, fen, true, MULTI_PV);

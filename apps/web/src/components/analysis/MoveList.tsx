@@ -1,4 +1,3 @@
-import { useProfile, useSession } from '@erpchess/api/react';
 import { formatSan, type GameTree, type MoveNode, type MoveNotation } from '@erpchess/chess-core';
 import type { ReactNode } from 'react';
 
@@ -9,18 +8,13 @@ export function MoveList({
   tree,
   currentId,
   onSelect,
-  notation: customNotation,
+  notation = 'letters',
 }: {
   tree: GameTree;
   currentId: string;
   onSelect: (id: string) => void;
   notation?: MoveNotation;
 }) {
-  const { session } = useSession();
-  const profileQuery = useProfile(session?.user?.id);
-  const notation: MoveNotation =
-    customNotation ?? (profileQuery.data?.move_notation as MoveNotation) ?? 'letters';
-
   return (
     <div className="flex flex-wrap items-baseline gap-x-1 gap-y-1 text-sm leading-7">
       {tree.root.comment && <Comment text={tree.root.comment} />}
