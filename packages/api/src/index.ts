@@ -1,3 +1,4 @@
+export * from './billing';
 export * from './certificates';
 export * from './classrooms';
 export { type ClientOptions, createErpClient, type ErpClient } from './client';

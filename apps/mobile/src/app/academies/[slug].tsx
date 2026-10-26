@@ -1,4 +1,4 @@
-import { certificateVerifyUrl, formatCertificateCode } from '@erpchess/api';
+import { certificateVerifyUrl, formatCertificateCode, invoicePayUrl } from '@erpchess/api';
 import {
   useAcademyPresence,
   useAssignments,
@@ -10,6 +10,7 @@ import {
   useCreateGroup,
   useCreateStudent,
   useGroups,
+  useInvoices,
   useLeaderboard,
   useLevels,
   useMembers,
@@ -25,6 +26,7 @@ import {
 } from '@erpchess/api/react';
 import {
   academyRoles,
+  formatMoney,
   isStaff,
   type Period,
   periodRange,
@@ -99,6 +101,9 @@ export default function AcademyScreen() {
 
       {academy.role === 'student' ? <XpCard academyId={academy.id} /> : null}
       {academy.role === 'student' ? <CertificatesCard academyId={academy.id} /> : null}
+      {academy.role === 'student' || academy.role === 'parent' ? (
+        <InvoicesCard academyId={academy.id} />
+      ) : null}
 
       <Card title={t('groups.title')}>
         {groups.isPending ? (
@@ -702,6 +707,35 @@ function CertificatesCard({ academyId }: { academyId: string }) {
           <Text style={styles.hint}>
             {c.revoked_at ? t('cert.revoked') : formatCertificateCode(c.code)}
           </Text>
+        </Pressable>
+      ))}
+    </Card>
+  );
+}
+
+function InvoicesCard({ academyId }: { academyId: string }) {
+  const { t, i18n } = useT();
+  const list = useInvoices({ academyId });
+  if (!list.data?.length) return null;
+  return (
+    <Card title={t('bill.myInvoices')}>
+      {list.data.map((i) => (
+        <Pressable
+          key={i.id}
+          accessibilityRole="link"
+          onPress={() => void Linking.openURL(invoicePayUrl(SITE_URL, i.pay_token))}
+          style={styles.row}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.text, { color: colors.primary }]}>{i.number}</Text>
+            <Text style={styles.hint}>{i.student?.display_name}</Text>
+          </View>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text style={styles.text}>{formatMoney(i.total, i.currency, i18n.language)}</Text>
+            <Text style={[styles.hint, i.status === 'open' ? { color: colors.orange } : null]}>
+              {t(`bill.status_${i.status as 'open'}`)}
+            </Text>
+          </View>
         </Pressable>
       ))}
     </Card>

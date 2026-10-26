@@ -26,6 +26,11 @@ import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
 import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
 import { Route as ASlugAssignmentsNewRouteImport } from './routes/a.$slug.assignments.new'
+import { Route as ASlugBillingIndexRouteImport } from './routes/a.$slug.billing.index'
+import { Route as ASlugBillingIdRouteImport } from './routes/a.$slug.billing.$id'
+import { Route as ASlugBillingDiscountsRouteImport } from './routes/a.$slug.billing.discounts'
+import { Route as ASlugBillingPlansRouteImport } from './routes/a.$slug.billing.plans'
+import { Route as ASlugBillingSettingsRouteImport } from './routes/a.$slug.billing.settings'
 import { Route as ASlugCertificatesIndexRouteImport } from './routes/a.$slug.certificates.index'
 import { Route as ASlugCertificatesIdRouteImport } from './routes/a.$slug.certificates.$id'
 import { Route as ASlugClassesIndexRouteImport } from './routes/a.$slug.classes.index'
@@ -135,6 +140,31 @@ const ASlugAssignmentsIdRoute = ASlugAssignmentsIdRouteImport.update({
 const ASlugAssignmentsNewRoute = ASlugAssignmentsNewRouteImport.update({
   id: '/assignments/new',
   path: '/assignments/new',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugBillingIndexRoute = ASlugBillingIndexRouteImport.update({
+  id: '/billing/',
+  path: '/billing/',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugBillingIdRoute = ASlugBillingIdRouteImport.update({
+  id: '/billing/$id',
+  path: '/billing/$id',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugBillingDiscountsRoute = ASlugBillingDiscountsRouteImport.update({
+  id: '/billing/discounts',
+  path: '/billing/discounts',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugBillingPlansRoute = ASlugBillingPlansRouteImport.update({
+  id: '/billing/plans',
+  path: '/billing/plans',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugBillingSettingsRoute = ASlugBillingSettingsRouteImport.update({
+  id: '/billing/settings',
+  path: '/billing/settings',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugCertificatesIndexRoute = ASlugCertificatesIndexRouteImport.update({
@@ -280,6 +310,10 @@ export interface FileRoutesByFullPath {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/billing/$id': typeof ASlugBillingIdRoute
+  '/a/$slug/billing/discounts': typeof ASlugBillingDiscountsRoute
+  '/a/$slug/billing/plans': typeof ASlugBillingPlansRoute
+  '/a/$slug/billing/settings': typeof ASlugBillingSettingsRoute
   '/a/$slug/certificates/$id': typeof ASlugCertificatesIdRoute
   '/a/$slug/courses/$id': typeof ASlugCoursesIdRoute
   '/a/$slug/play/$id': typeof ASlugPlayIdRoute
@@ -292,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/tournaments/$id': typeof ASlugTournamentsIdRoute
   '/a/$slug/tournaments/new': typeof ASlugTournamentsNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/billing/': typeof ASlugBillingIndexRoute
   '/a/$slug/certificates/': typeof ASlugCertificatesIndexRoute
   '/a/$slug/classes/': typeof ASlugClassesIndexRoute
   '/a/$slug/courses/': typeof ASlugCoursesIndexRoute
@@ -323,6 +358,10 @@ export interface FileRoutesByTo {
   '/a/$slug': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/billing/$id': typeof ASlugBillingIdRoute
+  '/a/$slug/billing/discounts': typeof ASlugBillingDiscountsRoute
+  '/a/$slug/billing/plans': typeof ASlugBillingPlansRoute
+  '/a/$slug/billing/settings': typeof ASlugBillingSettingsRoute
   '/a/$slug/certificates/$id': typeof ASlugCertificatesIdRoute
   '/a/$slug/courses/$id': typeof ASlugCoursesIdRoute
   '/a/$slug/play/$id': typeof ASlugPlayIdRoute
@@ -335,6 +374,7 @@ export interface FileRoutesByTo {
   '/a/$slug/tournaments/$id': typeof ASlugTournamentsIdRoute
   '/a/$slug/tournaments/new': typeof ASlugTournamentsNewRoute
   '/a/$slug/assignments': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/billing': typeof ASlugBillingIndexRoute
   '/a/$slug/certificates': typeof ASlugCertificatesIndexRoute
   '/a/$slug/classes': typeof ASlugClassesIndexRoute
   '/a/$slug/courses': typeof ASlugCoursesIndexRoute
@@ -368,6 +408,10 @@ export interface FileRoutesById {
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
   '/a/$slug/assignments/new': typeof ASlugAssignmentsNewRoute
+  '/a/$slug/billing/$id': typeof ASlugBillingIdRoute
+  '/a/$slug/billing/discounts': typeof ASlugBillingDiscountsRoute
+  '/a/$slug/billing/plans': typeof ASlugBillingPlansRoute
+  '/a/$slug/billing/settings': typeof ASlugBillingSettingsRoute
   '/a/$slug/certificates/$id': typeof ASlugCertificatesIdRoute
   '/a/$slug/courses/$id': typeof ASlugCoursesIdRoute
   '/a/$slug/play/$id': typeof ASlugPlayIdRoute
@@ -380,6 +424,7 @@ export interface FileRoutesById {
   '/a/$slug/tournaments/$id': typeof ASlugTournamentsIdRoute
   '/a/$slug/tournaments/new': typeof ASlugTournamentsNewRoute
   '/a/$slug/assignments/': typeof ASlugAssignmentsIndexRoute
+  '/a/$slug/billing/': typeof ASlugBillingIndexRoute
   '/a/$slug/certificates/': typeof ASlugCertificatesIndexRoute
   '/a/$slug/classes/': typeof ASlugClassesIndexRoute
   '/a/$slug/courses/': typeof ASlugCoursesIndexRoute
@@ -414,6 +459,10 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/billing/$id'
+    | '/a/$slug/billing/discounts'
+    | '/a/$slug/billing/plans'
+    | '/a/$slug/billing/settings'
     | '/a/$slug/certificates/$id'
     | '/a/$slug/courses/$id'
     | '/a/$slug/play/$id'
@@ -426,6 +475,7 @@ export interface FileRouteTypes {
     | '/a/$slug/tournaments/$id'
     | '/a/$slug/tournaments/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/billing/'
     | '/a/$slug/certificates/'
     | '/a/$slug/classes/'
     | '/a/$slug/courses/'
@@ -457,6 +507,10 @@ export interface FileRouteTypes {
     | '/a/$slug'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/billing/$id'
+    | '/a/$slug/billing/discounts'
+    | '/a/$slug/billing/plans'
+    | '/a/$slug/billing/settings'
     | '/a/$slug/certificates/$id'
     | '/a/$slug/courses/$id'
     | '/a/$slug/play/$id'
@@ -469,6 +523,7 @@ export interface FileRouteTypes {
     | '/a/$slug/tournaments/$id'
     | '/a/$slug/tournaments/new'
     | '/a/$slug/assignments'
+    | '/a/$slug/billing'
     | '/a/$slug/certificates'
     | '/a/$slug/classes'
     | '/a/$slug/courses'
@@ -501,6 +556,10 @@ export interface FileRouteTypes {
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
     | '/a/$slug/assignments/new'
+    | '/a/$slug/billing/$id'
+    | '/a/$slug/billing/discounts'
+    | '/a/$slug/billing/plans'
+    | '/a/$slug/billing/settings'
     | '/a/$slug/certificates/$id'
     | '/a/$slug/courses/$id'
     | '/a/$slug/play/$id'
@@ -513,6 +572,7 @@ export interface FileRouteTypes {
     | '/a/$slug/tournaments/$id'
     | '/a/$slug/tournaments/new'
     | '/a/$slug/assignments/'
+    | '/a/$slug/billing/'
     | '/a/$slug/certificates/'
     | '/a/$slug/classes/'
     | '/a/$slug/courses/'
@@ -659,6 +719,41 @@ declare module '@tanstack/react-router' {
       path: '/assignments/new'
       fullPath: '/a/$slug/assignments/new'
       preLoaderRoute: typeof ASlugAssignmentsNewRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/billing/': {
+      id: '/a/$slug/billing/'
+      path: '/billing'
+      fullPath: '/a/$slug/billing/'
+      preLoaderRoute: typeof ASlugBillingIndexRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/billing/$id': {
+      id: '/a/$slug/billing/$id'
+      path: '/billing/$id'
+      fullPath: '/a/$slug/billing/$id'
+      preLoaderRoute: typeof ASlugBillingIdRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/billing/discounts': {
+      id: '/a/$slug/billing/discounts'
+      path: '/billing/discounts'
+      fullPath: '/a/$slug/billing/discounts'
+      preLoaderRoute: typeof ASlugBillingDiscountsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/billing/plans': {
+      id: '/a/$slug/billing/plans'
+      path: '/billing/plans'
+      fullPath: '/a/$slug/billing/plans'
+      preLoaderRoute: typeof ASlugBillingPlansRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/billing/settings': {
+      id: '/a/$slug/billing/settings'
+      path: '/billing/settings'
+      fullPath: '/a/$slug/billing/settings'
+      preLoaderRoute: typeof ASlugBillingSettingsRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/certificates/': {
@@ -848,6 +943,10 @@ interface ASlugRouteChildren {
   ASlugIndexRoute: typeof ASlugIndexRoute
   ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
   ASlugAssignmentsNewRoute: typeof ASlugAssignmentsNewRoute
+  ASlugBillingIdRoute: typeof ASlugBillingIdRoute
+  ASlugBillingDiscountsRoute: typeof ASlugBillingDiscountsRoute
+  ASlugBillingPlansRoute: typeof ASlugBillingPlansRoute
+  ASlugBillingSettingsRoute: typeof ASlugBillingSettingsRoute
   ASlugCertificatesIdRoute: typeof ASlugCertificatesIdRoute
   ASlugCoursesIdRoute: typeof ASlugCoursesIdRoute
   ASlugPlayIdRoute: typeof ASlugPlayIdRoute
@@ -860,6 +959,7 @@ interface ASlugRouteChildren {
   ASlugTournamentsIdRoute: typeof ASlugTournamentsIdRoute
   ASlugTournamentsNewRoute: typeof ASlugTournamentsNewRoute
   ASlugAssignmentsIndexRoute: typeof ASlugAssignmentsIndexRoute
+  ASlugBillingIndexRoute: typeof ASlugBillingIndexRoute
   ASlugCertificatesIndexRoute: typeof ASlugCertificatesIndexRoute
   ASlugClassesIndexRoute: typeof ASlugClassesIndexRoute
   ASlugCoursesIndexRoute: typeof ASlugCoursesIndexRoute
@@ -885,6 +985,10 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugIndexRoute: ASlugIndexRoute,
   ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,
   ASlugAssignmentsNewRoute: ASlugAssignmentsNewRoute,
+  ASlugBillingIdRoute: ASlugBillingIdRoute,
+  ASlugBillingDiscountsRoute: ASlugBillingDiscountsRoute,
+  ASlugBillingPlansRoute: ASlugBillingPlansRoute,
+  ASlugBillingSettingsRoute: ASlugBillingSettingsRoute,
   ASlugCertificatesIdRoute: ASlugCertificatesIdRoute,
   ASlugCoursesIdRoute: ASlugCoursesIdRoute,
   ASlugPlayIdRoute: ASlugPlayIdRoute,
@@ -897,6 +1001,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugTournamentsIdRoute: ASlugTournamentsIdRoute,
   ASlugTournamentsNewRoute: ASlugTournamentsNewRoute,
   ASlugAssignmentsIndexRoute: ASlugAssignmentsIndexRoute,
+  ASlugBillingIndexRoute: ASlugBillingIndexRoute,
   ASlugCertificatesIndexRoute: ASlugCertificatesIndexRoute,
   ASlugClassesIndexRoute: ASlugClassesIndexRoute,
   ASlugCoursesIndexRoute: ASlugCoursesIndexRoute,

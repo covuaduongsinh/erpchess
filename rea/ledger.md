@@ -62,9 +62,9 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | tour.auto              | Tự hoàn tất vòng, tự lên lịch, lặp lại                            | 10  | ✅         | Tự hoàn tất vòng (game-move), tự lên lịch + lặp lại (pg_cron → `tournament-tick`)                        |
 | course.core            | Khoá học gồm các study theo cấp độ                                | 11  | ✅         | `courses` + lộ trình học liệu, giao, tiến độ, XP + chuỗi ngày (trigger), bảng XP                         |
 | course.cert            | Chứng chỉ có mã xác minh công khai                                | 11  | ✅         | `certificates` mã base32 10 ký tự, tự cấp/cấp tay/thu hồi, in A4 + QR, `apps/site/verify/[code]`         |
-| ops.plans              | Gói học phí, đa tiền tệ, mẫu gói                                  | 12  | ⬜         |                                                                                                          |
-| ops.discounts          | Giảm giá                                                          | 12  | ⬜         |                                                                                                          |
-| ops.invoices           | Hoá đơn + link thanh toán (VietQR/PayOS/Stripe)                   | 12  | ⬜         |                                                                                                          |
+| ops.plans              | Gói học phí, đa tiền tệ, mẫu gói                                  | 12  | ✅         | `plans` + `plan_prices` (nhiều tiền tệ), 12 gói mẫu tự soạn, tiền tệ mặc định trong `academy_billing`    |
+| ops.discounts          | Giảm giá                                                          | 12  | ✅         | `discounts` % / cố định, áp nhiều gói, hạn và số lượt, thống kê `discount_stats`                         |
+| ops.invoices           | Hoá đơn + link thanh toán (VietQR/PayOS/Stripe)                   | 12  | 🟡         | VietQR tĩnh + `/pay/[token]`, ghi nhận tay; PayOS/Stripe để sau                                          |
 | ops.reminders          | Nhắc đóng phí tự động                                             | 12  | ⬜         |                                                                                                          |
 | ops.notify             | Thông báo email/push, nhật ký gửi                                 | 12  | ⬜         |                                                                                                          |
 | ops.leads              | Lead và lớp học thử                                               | 12  | ⬜         |                                                                                                          |
@@ -74,4 +74,4 @@ Cập nhật lần cuối: 2026-10-23, sau Giai đoạn 6.
 | ops.whatsapp           | Thông báo WhatsApp                                                | —   | ⛔         | Thay bằng email/push; Zalo OA để sau                                                                     |
 | ops.razorpay           | Razorpay                                                          | —   | ⛔         | Thị trường Ấn Độ                                                                                         |
 
-**Tổng kết:** 59 claim, gồm 38 đã đóng, 10 một phần, 9 mở, 2 ngoài phạm vi.
+**Tổng kết:** 59 claim, gồm 40 đã đóng, 11 một phần, 6 mở, 2 ngoài phạm vi.
