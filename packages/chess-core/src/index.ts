@@ -29,6 +29,12 @@ export {
 } from './game';
 export { type GameSummary, gameSummary, splitPgn } from './games';
 export { type GameResult, glicko2Update, newRating, type Rating } from './glicko2';
+export {
+  FIGURINE_MAP,
+  formatSan,
+  formatSanList,
+  type MoveNotation,
+} from './notation';
 export { PgnError, parsePgn, toPgn } from './pgn';
 export {
   type GradeResult,

@@ -15,6 +15,7 @@ import type {
   StudentCsvRow,
   StudyInput,
   TournamentInput,
+  UpdateProfileInput,
 } from '@erpchess/domain';
 import type { Session } from '@supabase/supabase-js';
 import {
@@ -45,6 +46,7 @@ import * as leads from './leads';
 import * as notifications from './notifications';
 import * as practice from './practice';
 import * as presence from './presence';
+import * as profile from './profile';
 import * as api from './queries';
 import { ApiError } from './queries';
 import * as quizzes from './quizzes';
@@ -1883,4 +1885,29 @@ export function useChatMutations(academyId: string, userId: string) {
       onSuccess: refresh,
     }),
   };
+}
+
+/** Hồ sơ người dùng và tuỳ chọn (Giai đoạn 13a). */
+export function useProfile(userId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['profile', userId ?? ''],
+    queryFn: () => (userId ? profile.fetchProfile(client, userId) : null),
+    enabled: !!userId,
+  });
+}
+
+export function useUpdateProfile(userId: string | undefined) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (patch: UpdateProfileInput) => {
+      if (!userId) throw new Error('Chưa đăng nhập');
+      return profile.updateProfile(client, userId, patch);
+    },
+    onSuccess: (updated) => {
+      qc.setQueryData(['profile', userId], updated);
+      void qc.invalidateQueries({ queryKey: ['profile', userId] });
+    },
+  });
 }

@@ -1,4 +1,5 @@
-import { isValidFen } from '@erpchess/chess-core';
+import { useProfile, useSession } from '@erpchess/api/react';
+import { isValidFen, type MoveNotation } from '@erpchess/chess-core';
 import { createFileRoute } from '@tanstack/react-router';
 import { AnalysisBoard } from '../components/analysis/AnalysisBoard';
 
@@ -14,5 +15,8 @@ export const Route = createFileRoute('/analysis')({
 
 function AnalysisPage() {
   const { fen } = Route.useSearch();
-  return <AnalysisBoard initialFen={fen} />;
+  const { session } = useSession();
+  const profileQuery = useProfile(session?.user?.id);
+  const notation = (profileQuery.data?.move_notation as MoveNotation) ?? 'letters';
+  return <AnalysisBoard initialFen={fen} notation={notation} />;
 }

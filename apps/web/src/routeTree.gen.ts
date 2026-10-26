@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as EngineRouteImport } from './routes/engine'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ASlugRouteImport } from './routes/a.$slug'
 import { Route as AcademiesNewRouteImport } from './routes/academies.new'
@@ -78,6 +79,11 @@ const EngineRoute = EngineRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -316,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/analysis': typeof AnalysisRoute
   '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
@@ -368,6 +375,7 @@ export interface FileRoutesByTo {
   '/analysis': typeof AnalysisRoute
   '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/analysis': typeof AnalysisRoute
   '/engine': typeof EngineRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
@@ -474,6 +483,7 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/engine'
     | '/login'
+    | '/profile'
     | '/signup'
     | '/a/$slug'
     | '/academies/new'
@@ -526,6 +536,7 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/engine'
     | '/login'
+    | '/profile'
     | '/signup'
     | '/academies/new'
     | '/invite/$token'
@@ -577,6 +588,7 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/engine'
     | '/login'
+    | '/profile'
     | '/signup'
     | '/a/$slug'
     | '/academies/new'
@@ -630,6 +642,7 @@ export interface RootRouteChildren {
   AnalysisRoute: typeof AnalysisRoute
   EngineRoute: typeof EngineRoute
   LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
   ASlugRoute: typeof ASlugRouteWithChildren
   AcademiesNewRoute: typeof AcademiesNewRoute
@@ -664,6 +677,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -1088,6 +1108,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalysisRoute: AnalysisRoute,
   EngineRoute: EngineRoute,
   LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
   ASlugRoute: ASlugRouteWithChildren,
   AcademiesNewRoute: AcademiesNewRoute,

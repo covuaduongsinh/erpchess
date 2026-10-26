@@ -1,4 +1,4 @@
-import { sanLine, sideToMove } from '@erpchess/chess-core';
+import { formatSanList, type MoveNotation, sanLine, sideToMove } from '@erpchess/chess-core';
 import { formatScore, type Score, toWhitePov } from '@erpchess/engine';
 import type { TranslationKey } from '@erpchess/i18n';
 import { useEffect } from 'react';
@@ -23,10 +23,12 @@ export function EngineLines({
   fen,
   onPlay,
   onScore,
+  notation = 'letters',
 }: {
   fen: string;
   onPlay: (uci: string) => void;
   onScore: (score: Score | null) => void;
+  notation?: MoveNotation;
 }) {
   const { t } = useT();
   const state = useEngine();
@@ -92,7 +94,9 @@ export function EngineLines({
               <span className="w-14 shrink-0 font-bold">
                 {info.score ? formatScore(toWhitePov(info.score, side)) : '…'}
               </span>
-              <span className="truncate">{sanLine(fen, info.pv.slice(0, 8)).join(' ')}</span>
+              <span className="truncate">
+                {formatSanList(sanLine(fen, info.pv.slice(0, 8)), notation).join(' ')}
+              </span>
             </button>
           </li>
         ))}
