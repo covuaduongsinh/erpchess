@@ -19,7 +19,9 @@ import {
   savePlan,
   voidInvoice,
 } from './billing';
+import { fetchConversations, fetchMessages, openDirectChat, sendMessage } from './chat';
 import { createErpClient } from './client';
+import { createLead, deleteLead, fetchLeads, scheduleTrial } from './leads';
 import { fetchMyNotifications, markNotificationsRead, runFeeRemindersNow } from './notifications';
 import { fetchMyAcademies, signInStudent, signInWithEmail } from './queries';
 
@@ -178,5 +180,54 @@ describe.skipIf(!ready)('Giai đoạn 12 trên Supabase thật', () => {
       // Học viên thử tự xoá thông báo thử của mình
       await student.from('notifications').delete().like('link', `%/billing/${id}`);
     }
+  });
+
+  it('lead + học thử, chat nhắn riêng', { timeout: 120_000 }, async () => {
+    const owner = newClient();
+    const { user } = await signInWithEmail(owner, env.OWNER_EMAIL ?? '', env.OWNER_PASSWORD ?? '');
+    const academy = (await fetchMyAcademies(owner, user.id)).find(
+      (a) => a.slug === env.ACADEMY_SLUG,
+    );
+    if (!academy) throw new Error('không thấy học viện');
+    const student = newClient();
+    const { user: su } = await signInStudent(
+      student,
+      env.STUDENT_USERNAME ?? '',
+      env.STUDENT_PIN ?? '',
+    );
+
+    // Lead: chỉ staff thấy; hẹn học thử tạo sự kiện lịch
+    const leadId = await createLead(owner, user.id, {
+      academyId: academy.id,
+      name: 'Phụ huynh thử GĐ12c',
+      childName: 'Bé thử',
+      childAge: 8,
+      source: 'test',
+    });
+    let eventId: string | undefined;
+    try {
+      expect(await fetchLeads(student, academy.id)).toHaveLength(0);
+      eventId = await scheduleTrial(owner, {
+        leadId,
+        startsAt: '2099-01-01T02:00:00Z',
+        endsAt: '2099-01-01T03:00:00Z',
+      });
+      const lead = (await fetchLeads(owner, academy.id)).find((l) => l.id === leadId);
+      expect(lead?.status).toBe('trial');
+      expect(lead?.trial?.starts_at).toContain('2099-01-01');
+    } finally {
+      await deleteLead(owner, leadId);
+      if (eventId) await owner.from('calendar_events').delete().eq('id', eventId);
+    }
+
+    // Chat: học viên nhắn riêng chủ học viện; chủ đọc được, thấy số chưa đọc
+    const conv = await openDirectChat(student, academy.id, user.id);
+    expect(await openDirectChat(owner, academy.id, su.id)).toBe(conv);
+    await sendMessage(student, { conversationId: conv, senderId: su.id, body: 'Tin thử GĐ12c' });
+    const msgs = await fetchMessages(owner, conv);
+    expect(msgs.at(-1)?.body).toBe('Tin thử GĐ12c');
+    const mine = (await fetchConversations(owner, academy.id)).find((c) => c.id === conv);
+    expect(mine?.unread).toBeGreaterThanOrEqual(1);
+    expect(mine?.other_role).toBe('student');
   });
 });

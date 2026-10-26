@@ -4,6 +4,7 @@ import {
   useAssignments,
   useCertificates,
   useClassrooms,
+  useConversations,
   useCourseCompletions,
   useCourseProgress,
   useCourses,
@@ -107,6 +108,7 @@ export default function AcademyScreen() {
         <InvoicesCard academyId={academy.id} />
       ) : null}
       <NotificationsCard academyId={academy.id} />
+      <ChatsCard academyId={academy.id} />
 
       <Card title={t('groups.title')}>
         {groups.isPending ? (
@@ -773,6 +775,47 @@ function NotificationsCard({ academyId }: { academyId: string }) {
         variant="ghost"
         onPress={() => markRead.mutate({ academyId })}
       />
+    </Card>
+  );
+}
+
+function ChatsCard({ academyId }: { academyId: string }) {
+  const { t } = useT();
+  const list = useConversations(academyId);
+  if (!list.data?.length) return null;
+  return (
+    <Card title={`💬 ${t('chat.title')}`}>
+      {list.data.slice(0, 8).map((c) => {
+        const title = (c.kind === 'group' ? c.group_name : c.other_name) ?? '—';
+        return (
+          <Pressable
+            key={c.id}
+            accessibilityRole="link"
+            onPress={() =>
+              router.push({
+                pathname: '/chats/[id]',
+                params: { id: c.id, academy: academyId, title },
+              })
+            }
+            style={styles.row}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.text, { fontWeight: '500' }]}>
+                {c.kind === 'group' ? '👥 ' : ''}
+                {title}
+              </Text>
+              <Text style={styles.hint} numberOfLines={1}>
+                {c.last_body ?? t('chat.empty')}
+              </Text>
+            </View>
+            {c.unread > 0 ? (
+              <Text style={[styles.hint, { color: colors.orange, fontWeight: '700' }]}>
+                {c.unread}
+              </Text>
+            ) : null}
+          </Pressable>
+        );
+      })}
     </Card>
   );
 }

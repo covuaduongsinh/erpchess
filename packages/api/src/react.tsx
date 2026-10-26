@@ -35,11 +35,13 @@ import {
 } from 'react';
 import * as billing from './billing';
 import * as certificates from './certificates';
+import * as chat from './chat';
 import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
 import * as courses from './courses';
 import * as databases from './databases';
 import * as games from './games';
+import * as leads from './leads';
 import * as notifications from './notifications';
 import * as practice from './practice';
 import * as presence from './presence';
@@ -1776,6 +1778,109 @@ export function useNotificationAdmin(academyId: string) {
     runNow: useMutation({
       mutationFn: () => notifications.runFeeRemindersNow(client, academyId),
       onSuccess: refresh('notification-log', 'notification-stats'),
+    }),
+  };
+}
+
+export function useLeads(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['leads', academyId ?? ''],
+    queryFn: () => leads.fetchLeads(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useLeadMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => void qc.invalidateQueries({ queryKey: ['leads', academyId] });
+  return {
+    create: useMutation({
+      mutationFn: (input: Omit<leads.LeadInput, 'academyId'>) =>
+        leads.createLead(client, userId, { ...input, academyId }),
+      onSuccess: refresh,
+    }),
+    update: useMutation({
+      mutationFn: (v: { id: string; patch: Parameters<typeof leads.updateLead>[2] }) =>
+        leads.updateLead(client, v.id, v.patch),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => leads.deleteLead(client, id),
+      onSuccess: refresh,
+    }),
+    scheduleTrial: useMutation({
+      mutationFn: (input: Parameters<typeof leads.scheduleTrial>[1]) =>
+        leads.scheduleTrial(client, input),
+      onSuccess: () => {
+        refresh();
+        void qc.invalidateQueries({ queryKey: classroomKeys.calendar(academyId) });
+      },
+    }),
+    setEnabled: useMutation({
+      mutationFn: (enabled: boolean) => leads.setLeadsEnabled(client, academyId, enabled),
+      onSuccess: () => void qc.invalidateQueries({ queryKey: ['academies'] }),
+    }),
+  };
+}
+
+/** Danh sách hội thoại; tự làm mới định kỳ để cập nhật số chưa đọc. */
+export function useConversations(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['conversations', academyId ?? ''],
+    queryFn: () => chat.fetchConversations(client, academyId ?? ''),
+    enabled: !!academyId,
+    refetchInterval: 15_000,
+  });
+}
+
+/** Tin nhắn của một hội thoại; nghe realtime và đánh dấu đã đọc khi có tin mới. */
+export function useChatMessages(conversationId: string | undefined, academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const query = useQuery({
+    queryKey: ['chat-messages', conversationId ?? ''],
+    queryFn: () => chat.fetchMessages(client, conversationId ?? ''),
+    enabled: !!conversationId,
+  });
+  useEffect(() => {
+    if (!conversationId) return;
+    void chat
+      .markConversationRead(client, conversationId)
+      .then(() => qc.invalidateQueries({ queryKey: ['conversations', academyId] }));
+    return chat.subscribeConversation(client, conversationId, (m) => {
+      qc.setQueryData<chat.ChatMessage[]>(['chat-messages', conversationId], (old) =>
+        old?.some((x) => x.id === m.id) ? old : [...(old ?? []), m],
+      );
+      void chat.markConversationRead(client, conversationId);
+      void qc.invalidateQueries({ queryKey: ['conversations', academyId] });
+    });
+  }, [client, qc, conversationId, academyId]);
+  return query;
+}
+
+export function useChatMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => void qc.invalidateQueries({ queryKey: ['conversations', academyId] });
+  return {
+    send: useMutation({
+      mutationFn: (v: { conversationId: string; body: string }) =>
+        chat.sendMessage(client, { ...v, senderId: userId }),
+      onSuccess: (_d, v) => {
+        void qc.invalidateQueries({ queryKey: ['chat-messages', v.conversationId] });
+        refresh();
+      },
+    }),
+    openGroup: useMutation({
+      mutationFn: (groupId: string) => chat.openGroupChat(client, groupId),
+      onSuccess: refresh,
+    }),
+    openDirect: useMutation({
+      mutationFn: (otherId: string) => chat.openDirectChat(client, academyId, otherId),
+      onSuccess: refresh,
     }),
   };
 }
