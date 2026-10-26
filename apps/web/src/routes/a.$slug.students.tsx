@@ -16,6 +16,7 @@ import {
   type RatingCategory,
   ratingCategories,
   type StudentCsvResult,
+  slugify,
   studentsToCsv,
 } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
@@ -28,6 +29,9 @@ import { downloadCsv } from '../lib/download';
 import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/students')({
+  // `name`: điền sẵn khi chuyển lead thành học viên
+  validateSearch: (s: Record<string, unknown>): { name?: string } =>
+    typeof s.name === 'string' && s.name ? { name: s.name.slice(0, 80) } : {},
   component: StudentsPage,
 });
 
@@ -306,6 +310,7 @@ function ImportCard() {
 
 function CreateStudentCard() {
   const { t } = useT();
+  const { name: prefill } = Route.useSearch();
   const { academy } = useAcademy();
   const groups = useGroups(academy.id);
   const create = useCreateStudent(academy.id);
@@ -329,10 +334,11 @@ function CreateStudentCard() {
   return (
     <Card title={t('students.create')}>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <Field label={t('auth.displayName')} name="displayName" required />
+        <Field label={t('auth.displayName')} name="displayName" defaultValue={prefill} required />
         <Field
           label={t('auth.username')}
           name="username"
+          defaultValue={prefill ? slugify(prefill).replace(/-/g, '.').slice(0, 32) : undefined}
           hint={t('validation.username')}
           autoCapitalize="none"
           autoComplete="off"

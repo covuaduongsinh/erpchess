@@ -23,6 +23,7 @@ export type Database = {
           created_by: string | null
           description: string
           id: string
+          leads_enabled: boolean
           logo_url: string | null
           name: string
           slug: string
@@ -33,6 +34,7 @@ export type Database = {
           created_by?: string | null
           description?: string
           id?: string
+          leads_enabled?: boolean
           logo_url?: string | null
           name: string
           slug: string
@@ -43,6 +45,7 @@ export type Database = {
           created_by?: string | null
           description?: string
           id?: string
+          leads_enabled?: boolean
           logo_url?: string | null
           name?: string
           slug?: string
@@ -748,6 +751,84 @@ export type Database = {
             columns: ["coach_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversation_members: {
+        Row: {
+          conversation_id: string
+          joined_at: string
+          last_read_at: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          joined_at?: string
+          last_read_at?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          joined_at?: string
+          last_read_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_members_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          academy_id: string
+          created_at: string
+          group_id: string | null
+          id: string
+          kind: string
+          last_message_at: string | null
+        }
+        Insert: {
+          academy_id: string
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          kind: string
+          last_message_at?: string | null
+        }
+        Update: {
+          academy_id?: string
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          kind?: string
+          last_message_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
             referencedColumns: ["id"]
           },
         ]
@@ -1659,6 +1740,89 @@ export type Database = {
           },
         ]
       }
+      leads: {
+        Row: {
+          academy_id: string
+          assigned_to: string | null
+          child_age: number | null
+          child_name: string
+          created_at: string
+          created_by: string | null
+          email: string
+          id: string
+          name: string
+          note: string
+          phone: string
+          source: string
+          status: string
+          trial_event_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          academy_id: string
+          assigned_to?: string | null
+          child_age?: number | null
+          child_name?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          id?: string
+          name: string
+          note?: string
+          phone?: string
+          source?: string
+          status?: string
+          trial_event_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          academy_id?: string
+          assigned_to?: string | null
+          child_age?: number | null
+          child_name?: string
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          id?: string
+          name?: string
+          note?: string
+          phone?: string
+          source?: string
+          status?: string
+          trial_event_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_trial_event_id_fkey"
+            columns: ["trial_event_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       levels: {
         Row: {
           academy_id: string
@@ -1743,6 +1907,45 @@ export type Database = {
           {
             foreignKeyName: "memberships_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          sender_id: string | null
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -3260,6 +3463,7 @@ export type Database = {
           created_by: string | null
           description: string
           id: string
+          leads_enabled: boolean
           logo_url: string | null
           name: string
           slug: string
@@ -3325,10 +3529,35 @@ export type Database = {
         }
         Returns: string
       }
+      mark_conversation_read: {
+        Args: { p_conversation: string }
+        Returns: undefined
+      }
       mark_notifications_read: {
         Args: { p_academy?: string; p_ids?: string[] }
         Returns: number
       }
+      my_conversations: {
+        Args: { p_academy: string }
+        Returns: {
+          group_id: string
+          group_kind: string
+          group_name: string
+          id: string
+          kind: string
+          last_body: string
+          last_message_at: string
+          other_id: string
+          other_name: string
+          other_role: string
+          unread: number
+        }[]
+      }
+      open_direct_chat: {
+        Args: { p_academy: string; p_user: string }
+        Returns: string
+      }
+      open_group_chat: { Args: { p_group: string }; Returns: string }
       public_invoice: { Args: { p_token: string }; Returns: Json }
       puzzle_for_student_item: {
         Args: { p_item: string; p_student: string }
@@ -3384,6 +3613,15 @@ export type Database = {
       }
       revoke_certificate: { Args: { p_id: string }; Returns: undefined }
       run_fee_reminders_now: { Args: { p_academy: string }; Returns: number }
+      schedule_trial: {
+        Args: {
+          p_coach?: string
+          p_ends: string
+          p_lead: string
+          p_starts: string
+        }
+        Returns: string
+      }
       set_student_level: {
         Args: { p_academy: string; p_level: string; p_student: string }
         Returns: undefined

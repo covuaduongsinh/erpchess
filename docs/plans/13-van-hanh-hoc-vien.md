@@ -88,3 +88,10 @@ Kế hoạch con ghi vào `docs/plans/13-van-hanh-hoc-vien.md`. Mỗi PR: commit
 - **Mobile:** thẻ thông báo chưa đọc của học viện, chạm để đánh dấu đã đọc.
 - **Kiểm chứng:** pgTAP `15_notifications_rls.sql` 16/16 (`to-mcp.mjs` nhận thêm `matches`); `phase12.integration.test.ts` thêm ca hoá đơn mới → thông báo, nhắc phí đúng một lần; Chrome trên DSC1: chuông tăng 1 → 2 khi gửi thông báo thử qua `private.notify` (không tải lại trang), đánh dấu đã đọc, trang Thông báo hiện thống kê và nhật ký.
 - **Dữ liệu thử còn lại:** 2 thông báo hệ thống "(Claude)" đã đọc của owner DSC1; hoá đơn `TEST-2026-9999` (đã huỷ) trong học viện thử — lệnh `DELETE` qua MCP bị chặn ở bước xác nhận. Gói "(Claude)" của DSC1 đã xoá qua giao diện.
+
+### PR 12c (2026-10-26)
+
+- **Migration `…0023_leads_chat.sql`** (áp lên Supabase thành 2 migration `leads` + `chat`): `academies.leads_enabled`; `leads` chỉ staff; `schedule_trial` tạo sự kiện lịch loại `trial` và chuyển lead sang "Học thử". Chat: `conversations` (group/direct), `conversation_members`, `messages`; `open_group_chat` (HLV + học viên của Group/Batch + staff mở), `open_direct_chat` (bắt buộc có một bên là staff — không nhắn riêng học viên ↔ học viên), `mark_conversation_read`, `my_conversations` (tin cuối, số chưa đọc, đối phương). Trigger đẩy tin lên `chat:<id>`; phụ huynh xem (không gửi) hội thoại có con. Học viên rời lớp không bị xoá khỏi hội thoại mà mất quyền qua `is_conversation_member` (MCP không chạy được câu `DELETE`).
+- **Web:** tab "Lead" (owner luôn thấy để bật/tắt; coach thấy khi đã bật): đếm theo trạng thái, tìm, thêm lead, đổi trạng thái, hẹn học thử, "Chuyển thành học viên" mở trang Học viên điền sẵn tên. Tab "Chat": danh sách lọc Tất cả/Chưa đọc/Lớp/Batch/HLV/Học viên + tìm, mở chat lớp hoặc nhắn riêng, khung tin nhắn realtime.
+- **Mobile:** thẻ hội thoại + màn `chats/[id]`.
+- **Kiểm chứng:** pgTAP `16_leads_chat_rls.sql` 17/17; `phase12.integration.test.ts` 3/3 (lead + học thử, nhắn riêng học viên → chủ học viện). Chrome DSC1: trang Chat và Lead hiển thị đúng (không bật Lead cho DSC1).

@@ -19,8 +19,10 @@ import { Route as AcademiesNewRouteImport } from './routes/academies.new'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
 import { Route as ASlugCalendarRouteImport } from './routes/a.$slug.calendar'
+import { Route as ASlugChatRouteImport } from './routes/a.$slug.chat'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
+import { Route as ASlugLeadsRouteImport } from './routes/a.$slug.leads'
 import { Route as ASlugLevelsRouteImport } from './routes/a.$slug.levels'
 import { Route as ASlugNotificationsRouteImport } from './routes/a.$slug.notifications'
 import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
@@ -108,6 +110,11 @@ const ASlugCalendarRoute = ASlugCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => ASlugRoute,
 } as any)
+const ASlugChatRoute = ASlugChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => ASlugRoute,
+} as any)
 const ASlugDatabaseRoute = ASlugDatabaseRouteImport.update({
   id: '/database',
   path: '/database',
@@ -116,6 +123,11 @@ const ASlugDatabaseRoute = ASlugDatabaseRouteImport.update({
 const ASlugGroupsRoute = ASlugGroupsRouteImport.update({
   id: '/groups',
   path: '/groups',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugLeadsRoute = ASlugLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugLevelsRoute = ASlugLevelsRouteImport.update({
@@ -309,8 +321,10 @@ export interface FileRoutesByFullPath {
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
+  '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
@@ -358,8 +372,10 @@ export interface FileRoutesByTo {
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
+  '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
@@ -409,8 +425,10 @@ export interface FileRoutesById {
   '/academies/new': typeof AcademiesNewRoute
   '/invite/$token': typeof InviteTokenRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
+  '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
@@ -461,8 +479,10 @@ export interface FileRouteTypes {
     | '/academies/new'
     | '/invite/$token'
     | '/a/$slug/calendar'
+    | '/a/$slug/chat'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/notifications'
     | '/a/$slug/students'
@@ -510,8 +530,10 @@ export interface FileRouteTypes {
     | '/academies/new'
     | '/invite/$token'
     | '/a/$slug/calendar'
+    | '/a/$slug/chat'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/notifications'
     | '/a/$slug/students'
@@ -560,8 +582,10 @@ export interface FileRouteTypes {
     | '/academies/new'
     | '/invite/$token'
     | '/a/$slug/calendar'
+    | '/a/$slug/chat'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/notifications'
     | '/a/$slug/students'
@@ -684,6 +708,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ASlugCalendarRouteImport
       parentRoute: typeof ASlugRoute
     }
+    '/a/$slug/chat': {
+      id: '/a/$slug/chat'
+      path: '/chat'
+      fullPath: '/a/$slug/chat'
+      preLoaderRoute: typeof ASlugChatRouteImport
+      parentRoute: typeof ASlugRoute
+    }
     '/a/$slug/database': {
       id: '/a/$slug/database'
       path: '/database'
@@ -696,6 +727,13 @@ declare module '@tanstack/react-router' {
       path: '/groups'
       fullPath: '/a/$slug/groups'
       preLoaderRoute: typeof ASlugGroupsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/leads': {
+      id: '/a/$slug/leads'
+      path: '/leads'
+      fullPath: '/a/$slug/leads'
+      preLoaderRoute: typeof ASlugLeadsRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/levels': {
@@ -955,8 +993,10 @@ declare module '@tanstack/react-router' {
 
 interface ASlugRouteChildren {
   ASlugCalendarRoute: typeof ASlugCalendarRoute
+  ASlugChatRoute: typeof ASlugChatRoute
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
   ASlugGroupsRoute: typeof ASlugGroupsRoute
+  ASlugLeadsRoute: typeof ASlugLeadsRoute
   ASlugLevelsRoute: typeof ASlugLevelsRoute
   ASlugNotificationsRoute: typeof ASlugNotificationsRoute
   ASlugStudentsRoute: typeof ASlugStudentsRoute
@@ -998,8 +1038,10 @@ interface ASlugRouteChildren {
 
 const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugCalendarRoute: ASlugCalendarRoute,
+  ASlugChatRoute: ASlugChatRoute,
   ASlugDatabaseRoute: ASlugDatabaseRoute,
   ASlugGroupsRoute: ASlugGroupsRoute,
+  ASlugLeadsRoute: ASlugLeadsRoute,
   ASlugLevelsRoute: ASlugLevelsRoute,
   ASlugNotificationsRoute: ASlugNotificationsRoute,
   ASlugStudentsRoute: ASlugStudentsRoute,

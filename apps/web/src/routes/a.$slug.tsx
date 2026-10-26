@@ -46,8 +46,12 @@ function AcademyLayout({ session }: { session: Session }) {
     ...(academy.role !== 'coach'
       ? [{ to: '/a/$slug/billing', label: t('bill.title'), exact: false }]
       : []),
+    { to: '/a/$slug/chat', label: t('chat.title'), exact: false },
     ...(academy.role === 'owner'
       ? [{ to: '/a/$slug/notifications', label: t('notify.title'), exact: false }]
+      : []),
+    ...(academy.role === 'owner' || (academy.role === 'coach' && academy.leads_enabled)
+      ? [{ to: '/a/$slug/leads', label: t('lead.title'), exact: false }]
       : []),
     ...(isStaff(academy.role)
       ? [
