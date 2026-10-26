@@ -50,6 +50,8 @@ import * as profile from './profile';
 import * as api from './queries';
 import { ApiError } from './queries';
 import * as quizzes from './quizzes';
+import type { ReportDateFilter } from './reports';
+import * as reports from './reports';
 import {
   ClassroomRoom,
   type RoomChat,
@@ -1909,5 +1911,62 @@ export function useUpdateProfile(userId: string | undefined) {
       qc.setQueryData(['profile', userId], updated);
       void qc.invalidateQueries({ queryKey: ['profile', userId] });
     },
+  });
+}
+
+/** Báo cáo học viên và học viện (Giai đoạn 13b). */
+export function useStudentReportSummary(
+  academyId: string | undefined,
+  studentId: string | undefined,
+  filter?: ReportDateFilter,
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: [
+      'student-report-summary',
+      academyId ?? '',
+      studentId ?? '',
+      filter?.from,
+      filter?.to,
+    ],
+    queryFn: () => {
+      if (!academyId || !studentId) return null;
+      return reports.getStudentReportSummary(client, academyId, studentId, filter);
+    },
+    enabled: !!academyId && !!studentId,
+  });
+}
+
+export function useStudentReportDetails(
+  academyId: string | undefined,
+  studentId: string | undefined,
+  filter?: ReportDateFilter,
+) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: [
+      'student-report-details',
+      academyId ?? '',
+      studentId ?? '',
+      filter?.from,
+      filter?.to,
+    ],
+    queryFn: () => {
+      if (!academyId || !studentId) return null;
+      return reports.getStudentReportDetails(client, academyId, studentId, filter);
+    },
+    enabled: !!academyId && !!studentId,
+  });
+}
+
+export function useAcademyStudentsReport(academyId: string | undefined, filter?: ReportDateFilter) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['academy-students-report', academyId ?? '', filter?.from, filter?.to],
+    queryFn: () => {
+      if (!academyId) return [];
+      return reports.getAcademyStudentsReport(client, academyId, filter);
+    },
+    enabled: !!academyId,
   });
 }
