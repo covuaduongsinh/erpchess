@@ -101,4 +101,12 @@
 
 ## Kết quả
 
-_(Sẽ cập nhật sau khi hoàn thành từng PR)_
+- **PR 14a (Đóng gói Desktop & Mobile):** PR #31 đã được merge vào `main`.
+  - Cấu hình đóng gói Tauri v1.0.0 cho Windows (NSIS, MSI), Linux (AppImage, deb), macOS (dmg).
+  - Cấu hình EAS Build (`eas.json`) với 3 profiles và cấu hình Expo Updates (`app.json`).
+  - Workflow GitHub Actions release đa nền tảng `.github/workflows/release-desktop.yml`.
+- **PR 14b (Web/Site Vercel, Telemetry/Health & Sổ tay vận hành):** Đang chuẩn bị merge.
+  - Cấu hình Security headers và rewrite trên Vercel cho Web & Site.
+  - Endpoint giám sát `/api/health`, `robots.txt`, `sitemap.ts` cho Site.
+  - Error Boundary `AppErrorBoundary` và module `telemetry.ts` cho Web app.
+  - Sổ tay vận hành `docs/ops/deployment-guide.md` và `docs/ops/release-checklist.md`.
