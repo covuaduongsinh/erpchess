@@ -101,6 +101,7 @@ Giai đoạn 17 hiện thực hóa các yêu cầu tại `docs/dacta/03-lop-hoc-
 Giai đoạn 18 hiện thực hóa các yêu cầu tại `docs/dacta/04-bai-tap-quiz-luyen-tap.md` và `docs/dacta/07-bao-cao-hoc-vien-chat-cai-dat.md`:
 
 ### **PR 18a: Phân hệ Ngân hàng Bài tập (Exercises) & Luyện thế cờ (Practice)**
+
 - **Mục tiêu:**
   1. **Danh mục Bài tập Chesslang (`/assignment/exercise`):**
      - Bảng Exercise tái sử dụng với lọc theo Cấp độ (Level), Chủ đề chiến thuật (Ghim quân, Chĩa ba, Chiếu thắt...), Số nước đi (Mate in 1, 2, 3+).
@@ -110,6 +111,7 @@ Giai đoạn 18 hiện thực hóa các yêu cầu tại `docs/dacta/04-bai-tap-
      - Đồng bộ điểm số và tự động đánh dấu thế cờ đã vượt qua.
 
 ### **PR 18b: Quiz Trắc nghiệm Tính giờ & Báo cáo Tiến độ Học viên**
+
 - **Mục tiêu:**
   1. **Quiz Trắc nghiệm Tính giờ (`/quiz/list`):**
      - Hỗ trợ câu hỏi thế cờ kèm đồng hồ đếm ngược (countdown timer), trừ điểm khi hết giờ.

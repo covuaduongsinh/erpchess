@@ -17,12 +17,15 @@ import { Route as DatabaseRouteImport } from './routes/database'
 import { Route as EngineRouteImport } from './routes/engine'
 import { Route as GameAreaRouteImport } from './routes/game-area'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ASlugRouteImport } from './routes/a.$slug'
 import { Route as AcademiesNewRouteImport } from './routes/academies.new'
 import { Route as AdministrationStudentsRouteImport } from './routes/administration.students'
+import { Route as AssignmentExerciseRouteImport } from './routes/assignment.exercise'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as QuizListRouteImport } from './routes/quiz.list'
 import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
 import { Route as ASlugBatchesRouteImport } from './routes/a.$slug.batches'
 import { Route as ASlugCalendarRouteImport } from './routes/a.$slug.calendar'
@@ -108,6 +111,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PracticeRoute = PracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -133,9 +141,19 @@ const AdministrationStudentsRoute = AdministrationStudentsRouteImport.update({
   path: '/administration/students',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssignmentExerciseRoute = AssignmentExerciseRouteImport.update({
+  id: '/assignment/exercise',
+  path: '/assignment/exercise',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizListRoute = QuizListRouteImport.update({
+  id: '/quiz/list',
+  path: '/quiz/list',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ASlugIndexRoute = ASlugIndexRouteImport.update({
@@ -368,12 +386,15 @@ export interface FileRoutesByFullPath {
   '/engine': typeof EngineRoute
   '/game-area': typeof GameAreaRoute
   '/login': typeof LoginRoute
+  '/practice': typeof PracticeRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
   '/administration/students': typeof AdministrationStudentsRoute
+  '/assignment/exercise': typeof AssignmentExerciseRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/quiz/list': typeof QuizListRoute
   '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
@@ -428,11 +449,14 @@ export interface FileRoutesByTo {
   '/engine': typeof EngineRoute
   '/game-area': typeof GameAreaRoute
   '/login': typeof LoginRoute
+  '/practice': typeof PracticeRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/academies/new': typeof AcademiesNewRoute
   '/administration/students': typeof AdministrationStudentsRoute
+  '/assignment/exercise': typeof AssignmentExerciseRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/quiz/list': typeof QuizListRoute
   '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
@@ -488,12 +512,15 @@ export interface FileRoutesById {
   '/engine': typeof EngineRoute
   '/game-area': typeof GameAreaRoute
   '/login': typeof LoginRoute
+  '/practice': typeof PracticeRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
   '/administration/students': typeof AdministrationStudentsRoute
+  '/assignment/exercise': typeof AssignmentExerciseRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/quiz/list': typeof QuizListRoute
   '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
@@ -550,12 +577,15 @@ export interface FileRouteTypes {
     | '/engine'
     | '/game-area'
     | '/login'
+    | '/practice'
     | '/profile'
     | '/signup'
     | '/a/$slug'
     | '/academies/new'
     | '/administration/students'
+    | '/assignment/exercise'
     | '/invite/$token'
+    | '/quiz/list'
     | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
@@ -610,11 +640,14 @@ export interface FileRouteTypes {
     | '/engine'
     | '/game-area'
     | '/login'
+    | '/practice'
     | '/profile'
     | '/signup'
     | '/academies/new'
     | '/administration/students'
+    | '/assignment/exercise'
     | '/invite/$token'
+    | '/quiz/list'
     | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
@@ -669,12 +702,15 @@ export interface FileRouteTypes {
     | '/engine'
     | '/game-area'
     | '/login'
+    | '/practice'
     | '/profile'
     | '/signup'
     | '/a/$slug'
     | '/academies/new'
     | '/administration/students'
+    | '/assignment/exercise'
     | '/invite/$token'
+    | '/quiz/list'
     | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
@@ -730,12 +766,15 @@ export interface RootRouteChildren {
   EngineRoute: typeof EngineRoute
   GameAreaRoute: typeof GameAreaRoute
   LoginRoute: typeof LoginRoute
+  PracticeRoute: typeof PracticeRoute
   ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
   ASlugRoute: typeof ASlugRouteWithChildren
   AcademiesNewRoute: typeof AcademiesNewRoute
   AdministrationStudentsRoute: typeof AdministrationStudentsRoute
+  AssignmentExerciseRoute: typeof AssignmentExerciseRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  QuizListRoute: typeof QuizListRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -796,6 +835,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/practice': {
+      id: '/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof PracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -831,11 +877,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdministrationStudentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assignment/exercise': {
+      id: '/assignment/exercise'
+      path: '/assignment/exercise'
+      fullPath: '/assignment/exercise'
+      preLoaderRoute: typeof AssignmentExerciseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
       fullPath: '/invite/$token'
       preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz/list': {
+      id: '/quiz/list'
+      path: '/quiz/list'
+      fullPath: '/quiz/list'
+      preLoaderRoute: typeof QuizListRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a/$slug/': {
@@ -1254,12 +1314,15 @@ const rootRouteChildren: RootRouteChildren = {
   EngineRoute: EngineRoute,
   GameAreaRoute: GameAreaRoute,
   LoginRoute: LoginRoute,
+  PracticeRoute: PracticeRoute,
   ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
   ASlugRoute: ASlugRouteWithChildren,
   AcademiesNewRoute: AcademiesNewRoute,
   AdministrationStudentsRoute: AdministrationStudentsRoute,
+  AssignmentExerciseRoute: AssignmentExerciseRoute,
   InviteTokenRoute: InviteTokenRoute,
+  QuizListRoute: QuizListRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
