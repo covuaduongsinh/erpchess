@@ -21,6 +21,8 @@ import {
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useMemo, useState } from 'react';
+import { QuickSessionModal } from '../components/dashboard/QuickSessionModal';
+import { WeeklyActivityChart } from '../components/dashboard/WeeklyActivityChart';
 import { InviteLink } from '../components/InviteLink';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
@@ -32,16 +34,28 @@ export const Route = createFileRoute('/a/$slug/')({
 });
 
 function OverviewPage() {
-  const { academy } = useAcademy();
+  const { academy, session } = useAcademy();
   const staff = isStaff(academy.role);
+  const [quickSessionOpen, setQuickSessionOpen] = useState(false);
+  const members = useMembers(academy.id);
+
+  const coaches = useMemo(() => {
+    return (members.data ?? [])
+      .filter((m) => m.role === 'coach' || m.role === 'owner')
+      .map((m) => ({
+        id: m.profile.id,
+        name: m.profile.display_name || m.profile.username || 'Huấn luyện viên',
+      }));
+  }, [members.data]);
 
   return (
     <div className="flex flex-col gap-6">
       {academy.description && (
         <p className="whitespace-pre-line text-sm text-text-muted">{academy.description}</p>
       )}
-      {staff && <QuickActionsRow />}
+      {staff && <QuickActionsRow onOpenQuickSession={() => setQuickSessionOpen(true)} />}
       {staff && <StatsRow />}
+      {staff && <WeeklyActivityChart />}
       <div className="grid gap-6 md:grid-cols-2">
         <UpcomingClassesCard />
         <XpCard />
@@ -50,21 +64,48 @@ function OverviewPage() {
         {academy.role === 'owner' && <InviteCoachCard />}
         {academy.role === 'owner' && <BrandingCard />}
       </div>
+
+      {staff && (
+        <QuickSessionModal
+          open={quickSessionOpen}
+          onClose={() => setQuickSessionOpen(false)}
+          academyId={academy.id}
+          slug={academy.slug}
+          userId={session.user.id}
+          coaches={coaches}
+        />
+      )}
     </div>
   );
 }
 
-function QuickActionsRow() {
+type QuickAction =
+  | {
+      title: string;
+      desc: string;
+      icon: string;
+      onClick: () => void;
+      color: string;
+    }
+  | {
+      title: string;
+      desc: string;
+      icon: string;
+      to: string;
+      color: string;
+    };
+
+function QuickActionsRow({ onOpenQuickSession }: { onOpenQuickSession: () => void }) {
   const { academy } = useAcademy();
   const slug = academy.slug;
 
-  const actions = [
+  const actions: QuickAction[] = [
     {
       title: 'Tạo lớp học',
-      desc: 'Mở phòng học trực tuyến hoặc điểm danh',
+      desc: 'Mở nhanh phòng học trực tuyến LiveKit',
       icon: '🏫',
-      to: '/a/$slug/classes',
-      color: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200',
+      onClick: onOpenQuickSession,
+      color: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 cursor-pointer',
     },
     {
       title: 'Giao bài tập',
@@ -95,22 +136,39 @@ function QuickActionsRow() {
         Thao tác nhanh
       </h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {actions.map((act) => (
-          <Link
-            key={act.title}
-            to={act.to}
-            params={{ slug }}
-            className={`flex items-start gap-3 rounded-xl border p-4 shadow-xs transition-all hover:shadow-md ${act.color}`}
-          >
-            <span className="text-2xl" aria-hidden="true">
-              {act.icon}
-            </span>
-            <div className="flex flex-col">
-              <span className="font-bold text-sm">{act.title}</span>
-              <span className="text-xs opacity-80">{act.desc}</span>
-            </div>
-          </Link>
-        ))}
+        {actions.map((act) =>
+          'onClick' in act ? (
+            <button
+              key={act.title}
+              type="button"
+              onClick={act.onClick}
+              className={`flex items-start text-left gap-3 rounded-xl border p-4 shadow-xs transition-all hover:shadow-md ${act.color}`}
+            >
+              <span className="text-2xl" aria-hidden="true">
+                {act.icon}
+              </span>
+              <div className="flex flex-col">
+                <span className="font-bold text-sm">{act.title}</span>
+                <span className="text-xs opacity-80">{act.desc}</span>
+              </div>
+            </button>
+          ) : (
+            <Link
+              key={act.title}
+              to={act.to}
+              params={{ slug }}
+              className={`flex items-start gap-3 rounded-xl border p-4 shadow-xs transition-all hover:shadow-md ${act.color}`}
+            >
+              <span className="text-2xl" aria-hidden="true">
+                {act.icon}
+              </span>
+              <div className="flex flex-col">
+                <span className="font-bold text-sm">{act.title}</span>
+                <span className="text-xs opacity-80">{act.desc}</span>
+              </div>
+            </Link>
+          ),
+        )}
       </div>
     </div>
   );
