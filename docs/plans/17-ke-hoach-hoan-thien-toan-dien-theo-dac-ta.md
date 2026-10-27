@@ -58,6 +58,7 @@ Giai đoạn 16 tập trung giải quyết triệt để 2 vấn đề mà ngư�
 Giai đoạn 17 hiện thực hóa các yêu cầu tại `docs/dacta/03-lop-hoc-tuong-tac-classroom.md` và `docs/dacta/05-ban-co-hoc-lieu-study-database.md`:
 
 ### **PR 17a: Nâng cấp Bàn cờ Giảng dạy Tương tác (Interactive Classroom Board)**
+
 - **Mục tiêu:** Nâng cấp bàn cờ lớp học trực tuyến (`apps/web/src/routes/a.$slug.classes.$id.room.tsx`) với đầy đủ tính năng sư phạm:
   1. **Công cụ vẽ hình sư phạm (Annotations):**
      - Chuột phải kéo thả vẽ mũi tên (xanh lá, đỏ, vàng, xanh dương).
@@ -71,6 +72,7 @@ Giai đoạn 17 hiện thực hóa các yêu cầu tại `docs/dacta/03-lop-hoc-
      - Trạng thái đồng bộ tức thì qua kênh Realtime Supabase Broadcast.
 
 ### **PR 17b: Nâng cấp LiveKit Video Grid & Bảng điều khiển Lớp học**
+
 - **Mục tiêu:** Hoàn thiện giao diện phòng học trực tuyến LiveKit:
   1. **Video Layouts:** Hỗ trợ 3 chế độ xem (Chế độ Bàn cờ tập trung Board-focused, Chế độ Hội nghị Gallery Grid, Chế độ Diễn giả Speaker).
   2. **Điều khiển Lớp học cho HLV:** Quản lý Mic/Camera học viên (Mute all, Tắt camera khi cần), giơ tay phát biểu (Raise Hand).
