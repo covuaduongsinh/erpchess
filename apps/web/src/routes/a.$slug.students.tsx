@@ -1,6 +1,5 @@
 import { fetchGroupMemberships, type Member } from '@erpchess/api';
 import {
-  useCreateInvitation,
   useCreateStudent,
   useErpClient,
   useGroups,
@@ -8,21 +7,12 @@ import {
   useLevels,
   useMembers,
   useRatings,
-  useSetInitialRating,
-  useSetStudentLevel,
 } from '@erpchess/api/react';
-import {
-  parseStudentsCsv,
-  type RatingCategory,
-  ratingCategories,
-  type StudentCsvResult,
-  slugify,
-  studentsToCsv,
-} from '@erpchess/domain';
+import { parseStudentsCsv, type StudentCsvResult, slugify, studentsToCsv } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
-import { InviteLink } from '../components/InviteLink';
+import { StudentAdminTable } from '../components/students/StudentAdminTable';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { downloadCsv } from '../lib/download';
@@ -35,151 +25,55 @@ export const Route = createFileRoute('/a/$slug/students')({
   component: StudentsPage,
 });
 
-const selectClass = 'rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm';
-
 function StudentsPage() {
-  const { t } = useT();
   const { academy } = useAcademy();
   const members = useMembers(academy.id);
   const levels = useLevels(academy.id);
+  const groups = useGroups(academy.id);
   const ratings = useRatings(academy.id);
-  const invite = useCreateInvitation(academy.id);
-  const setLevel = useSetStudentLevel(academy.id);
-  const [invitedFor, setInvitedFor] = useState<string | null>(null);
-  const [category, setCategory] = useState<RatingCategory>('rapid');
+
   const students = members.data?.filter((m) => m.role === 'student') ?? [];
-  const ratingOf = (studentId: string) =>
-    ratings.data?.find((r) => r.student_id === studentId && r.category === category)?.rating;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-      <Card title={t('students.title')}>
-        <div className="flex flex-wrap items-center gap-3">
-          <label className="flex items-center gap-2 text-sm">
-            <span className="font-medium">{t('students.rating')}</span>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as RatingCategory)}
-              className={selectClass}
-            >
-              {ratingCategories.map((c) => (
-                <option key={c} value={c}>
-                  {t(`rating.${c}`)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <ExportButton students={students} />
+    <div className="flex flex-col gap-6">
+      {/* Top Action Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-blue-700 to-indigo-800 p-6 text-white shadow-md">
+        <div>
+          <h1 className="font-extrabold text-2xl tracking-tight">
+            Quản trị Học viên (Students Administration)
+          </h1>
+          <p className="mt-1 text-blue-100 text-sm">
+            Danh sách học viên, phân nhóm lớp (batches), cấp độ đào tạo và liên kết tài khoản phụ
+            huynh
+          </p>
         </div>
-        {members.isPending ? (
-          <Spinner />
-        ) : members.error ? (
-          <ErrorText error={members.error} />
-        ) : students.length === 0 ? (
-          <p className="text-text-muted">{t('students.none')}</p>
-        ) : (
-          <ul className="divide-y divide-text-muted/15">
-            {students.map(({ profile, levelId }) => (
-              <li key={profile.id} className="flex flex-col gap-2 py-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span>
-                    <span className="font-medium">{profile.display_name}</span>
-                    <span className="text-sm text-text-muted"> · @{profile.username}</span>
-                  </span>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <select
-                      aria-label={`${t('students.level')} — ${profile.display_name}`}
-                      value={levelId ?? ''}
-                      disabled={setLevel.isPending}
-                      onChange={(e) =>
-                        setLevel.mutate({ studentId: profile.id, levelId: e.target.value || null })
-                      }
-                      className={selectClass}
-                    >
-                      <option value="">{t('groups.noLevel')}</option>
-                      {levels.data?.map((l) => (
-                        <option key={l.id} value={l.id}>
-                          {l.name}
-                        </option>
-                      ))}
-                    </select>
-                    <RatingInput
-                      key={`${profile.id}-${category}-${ratingOf(profile.id) ?? ''}`}
-                      studentId={profile.id}
-                      name={profile.display_name}
-                      category={category}
-                      value={ratingOf(profile.id)}
-                    />
-                    <Button
-                      variant="ghost"
-                      className="text-sm"
-                      disabled={invite.isPending}
-                      onClick={() =>
-                        invite.mutate(
-                          { role: 'parent', studentId: profile.id },
-                          { onSuccess: () => setInvitedFor(profile.id) },
-                        )
-                      }
-                    >
-                      {t('students.inviteParent')}
-                    </Button>
-                  </div>
-                </div>
-                {invitedFor === profile.id && invite.data && (
-                  <InviteLink token={invite.data.token} />
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-        <ErrorText error={invite.error ?? setLevel.error} />
-      </Card>
-      <div className="flex flex-col gap-6">
-        <CreateStudentCard />
-        <ImportCard />
+        <ExportButton students={students} />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[2.5fr_1fr]">
+        <div className="flex flex-col gap-4">
+          {members.isPending || levels.isPending || groups.isPending ? (
+            <Spinner />
+          ) : members.error ? (
+            <ErrorText error={members.error} />
+          ) : (
+            <StudentAdminTable
+              students={students}
+              academyId={academy.id}
+              slug={academy.slug}
+              levels={levels.data ?? []}
+              groups={groups.data ?? []}
+              ratings={ratings.data ?? []}
+            />
+          )}
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <CreateStudentCard />
+          <ImportCard />
+        </div>
       </div>
     </div>
-  );
-}
-
-/** Ô rating: lưu khi rời ô hoặc bấm Enter, chỉ khi giá trị đổi. */
-function RatingInput({
-  studentId,
-  name,
-  category,
-  value,
-}: {
-  studentId: string;
-  name: string;
-  category: RatingCategory;
-  value: number | undefined;
-}) {
-  const { t } = useT();
-  const { academy } = useAcademy();
-  const set = useSetInitialRating(academy.id);
-  const [draft, setDraft] = useState(value === undefined ? '' : String(Math.round(value)));
-
-  function save() {
-    const next = Number(draft);
-    if (draft.trim() === '' || !Number.isInteger(next)) return;
-    if (value !== undefined && Math.round(value) === next) return;
-    set.mutate({ studentId, category, rating: next });
-  }
-
-  return (
-    <input
-      type="number"
-      min={0}
-      max={3500}
-      aria-label={`${t('students.rating')} ${t(`rating.${category}`)} — ${name}`}
-      placeholder={t('rating.none')}
-      value={draft}
-      onChange={(e) => setDraft(e.target.value)}
-      onBlur={save}
-      onKeyDown={(e) => e.key === 'Enter' && save()}
-      aria-invalid={set.isError}
-      className="w-20 rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm aria-invalid:border-danger"
-    />
   );
 }
 
