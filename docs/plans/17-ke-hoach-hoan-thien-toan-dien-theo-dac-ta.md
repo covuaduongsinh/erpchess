@@ -57,19 +57,24 @@ Giai đoạn 16 tập trung giải quyết triệt để 2 vấn đề mà ngư�
 
 Giai đoạn 17 hiện thực hóa các yêu cầu tại `docs/dacta/03-lop-hoc-tuong-tac-classroom.md` và `docs/dacta/05-ban-co-hoc-lieu-study-database.md`:
 
-### **PR 17a: Nâng cấp Bàn cờ Giảng dạy Tương tác (Interactive Classroom Board)**
+### **PR 17a: Nâng cấp Bàn cờ Giảng dạy Tương tác (Interactive Classroom Board)** (✅ ĐÃ HOÀN THÀNH & MERGE #38)
 
-- **Mục tiêu:** Nâng cấp bàn cờ lớp học trực tuyến (`apps/web/src/routes/a.$slug.classes.$id.room.tsx`) với đầy đủ tính năng sư phạm:
-  1. **Công cụ vẽ hình sư phạm (Annotations):**
-     - Chuột phải kéo thả vẽ mũi tên (xanh lá, đỏ, vàng, xanh dương).
-     - Chuột phải bấm tô màu ô cờ để làm nổi bật ô chiến thuật.
-     - Nút xóa nhanh toàn bộ chú thích trên bàn cờ.
-  2. **Thanh đánh giá EvalBar & Engine Arasan tích hợp trong lớp học:**
-     - Tích hợp EvalBar động hiển thị lợi thế điểm số (+1.5, -2.3, M3...).
-     - Phân tích nước đi trực tiếp cho HLV (giấu hoặc hiện với học viên tùy quyền).
-  3. **Cơ chế Phân quyền Đi quân (Turn & Move Permission):**
-     - HLV có nút trao quyền đi quân cho học viên bất kỳ hoặc chuyển chế độ Free Play / Coach Only.
-     - Trạng thái đồng bộ tức thì qua kênh Realtime Supabase Broadcast.
+- **Mục tiêu:** Nâng cấp bàn cờ lớp học trực tuyến (`apps/web/src/routes/a.$slug.classes.$id.room.tsx`) với đầy đủ tính năng sư phạm theo đặc tả `docs/dacta/03-lop-hoc-tuong-tac-classroom.md`.
+- **Kết quả nghiệm thu:**
+  1. **Thanh công cụ Giảng dạy Bàn cờ (`ClassroomToolbar.tsx`):**
+     - Nút lật bàn cờ nhìn bên Trắng/Đen linh hoạt.
+     - Nút xóa nét vẽ (Clear Drawings) một chạm.
+     - Công cụ sư phạm HLV: Hoàn tác nước đi (Undo), Tạo ván mới (Reset), Bật/Tắt phân tích động cơ Arasan NNUE và ô nạp chuỗi FEN thế cờ trực tiếp với kiểm tra tính hợp lệ tức thì.
+  2. **Quản lý Thành viên & Trao quyền Đi cờ (`ClassroomRoster.tsx`):**
+     - Hiển thị danh sách học viên và HLV với avatar chữ cái và chức danh.
+     - Badge trực quan `Đang đi cờ ♟️` chỉ rõ người đang được trao quyền thao tác trên bàn cờ chính.
+     - Nút `Cho đi cờ ♟` và `Hủy quyền ✕` một chạm dành riêng cho HLV.
+     - Nút `Thu quyền về HLV` trên thanh tiêu đề để thu hồi quyền tức thì.
+  3. **Thanh đánh giá Thế trận (`EvalBar.tsx`) trong Phòng học:**
+     - Tích hợp thanh EvalBar đứng dọc cạnh bàn cờ lớp học, co giãn mượt mà theo điểm số của động cơ Arasan NNUE.
+  4. **Chia sẻ Thế cờ vào Khung Chat:**
+     - Nút `Chia sẻ FEN ♟` trên tiêu đề ChatBox cho phép gửi thế cờ hiện tại vào khung chat lớp học.
+  5. **Kiểm thử tự động:** Hoàn tất 7 unit tests mới cho `ClassroomToolbar` và `ClassroomRoster`, 20/20 test files và 54 tests trong `@erpchess/web` pass 100%, 3/3 jobs CI xanh. PR #38 đã được merge vào `main` tại commit `09db234`.
 
 ### **PR 17b: Nâng cấp LiveKit Video Grid & Bảng điều khiển Lớp học**
 
