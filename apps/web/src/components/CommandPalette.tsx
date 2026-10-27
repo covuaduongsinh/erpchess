@@ -141,6 +141,15 @@ export function CommandPalette() {
           action: () => void navigate({ to: '/a/$slug/tournaments', params: { slug } }),
         },
         {
+          id: 'nav-simuls',
+          title: t('simul.title'),
+          subtitle: `/${slug}/simuls`,
+          category: 'nav',
+          icon: '👑',
+          keywords: ['dau dong loat', 'simul', 'bieu dien', 'hlv dau nhieu ban'],
+          action: () => void navigate({ to: '/a/$slug/simuls', params: { slug } }),
+        },
+        {
           id: 'nav-database',
           title: t('database.title'),
           subtitle: `/${slug}/database`,
