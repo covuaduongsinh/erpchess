@@ -155,8 +155,17 @@ export function CommandPalette() {
           subtitle: `/${slug}/students`,
           category: 'nav',
           icon: '👥',
-          keywords: ['hoc vien', 'students', 'danh sach', 'lop'],
+          keywords: ['hoc vien', 'students', 'danh sach', 'administration'],
           action: () => void navigate({ to: '/a/$slug/students', params: { slug } }),
+        },
+        {
+          id: 'nav-batches',
+          title: 'Lớp học & Nhóm (Batches)',
+          subtitle: `/${slug}/batches`,
+          category: 'nav',
+          icon: '🏫',
+          keywords: ['batches', 'nhom hoc vien', 'lop hoc', 'phan lop'],
+          action: () => void navigate({ to: '/a/$slug/batches', params: { slug } }),
         },
         {
           id: 'nav-reports',

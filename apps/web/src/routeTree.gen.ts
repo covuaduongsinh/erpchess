@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalysisRouteImport } from './routes/analysis'
+import { Route as BatchesRouteImport } from './routes/batches'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DatabaseRouteImport } from './routes/database'
 import { Route as EngineRouteImport } from './routes/engine'
@@ -20,8 +21,10 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ASlugRouteImport } from './routes/a.$slug'
 import { Route as AcademiesNewRouteImport } from './routes/academies.new'
+import { Route as AdministrationStudentsRouteImport } from './routes/administration.students'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
+import { Route as ASlugBatchesRouteImport } from './routes/a.$slug.batches'
 import { Route as ASlugCalendarRouteImport } from './routes/a.$slug.calendar'
 import { Route as ASlugChatRouteImport } from './routes/a.$slug.chat'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
@@ -75,6 +78,11 @@ const AnalysisRoute = AnalysisRouteImport.update({
   path: '/analysis',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BatchesRoute = BatchesRouteImport.update({
+  id: '/batches',
+  path: '/batches',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -120,6 +128,11 @@ const AcademiesNewRoute = AcademiesNewRouteImport.update({
   path: '/academies/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdministrationStudentsRoute = AdministrationStudentsRouteImport.update({
+  id: '/administration/students',
+  path: '/administration/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -128,6 +141,11 @@ const InviteTokenRoute = InviteTokenRouteImport.update({
 const ASlugIndexRoute = ASlugIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugBatchesRoute = ASlugBatchesRouteImport.update({
+  id: '/batches',
+  path: '/batches',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugCalendarRoute = ASlugCalendarRouteImport.update({
@@ -344,6 +362,7 @@ const ASlugStudiesIdEditRoute = ASlugStudiesIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/batches': typeof BatchesRoute
   '/dashboard': typeof DashboardRoute
   '/database': typeof DatabaseRoute
   '/engine': typeof EngineRoute
@@ -353,7 +372,9 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
+  '/administration/students': typeof AdministrationStudentsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
@@ -401,6 +422,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/batches': typeof BatchesRoute
   '/dashboard': typeof DashboardRoute
   '/database': typeof DatabaseRoute
   '/engine': typeof EngineRoute
@@ -409,7 +431,9 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/academies/new': typeof AcademiesNewRoute
+  '/administration/students': typeof AdministrationStudentsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
@@ -458,6 +482,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
+  '/batches': typeof BatchesRoute
   '/dashboard': typeof DashboardRoute
   '/database': typeof DatabaseRoute
   '/engine': typeof EngineRoute
@@ -467,7 +492,9 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
+  '/administration/students': typeof AdministrationStudentsRoute
   '/invite/$token': typeof InviteTokenRoute
+  '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
@@ -517,6 +544,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/analysis'
+    | '/batches'
     | '/dashboard'
     | '/database'
     | '/engine'
@@ -526,7 +554,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/a/$slug'
     | '/academies/new'
+    | '/administration/students'
     | '/invite/$token'
+    | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
     | '/a/$slug/database'
@@ -574,6 +604,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/analysis'
+    | '/batches'
     | '/dashboard'
     | '/database'
     | '/engine'
@@ -582,7 +613,9 @@ export interface FileRouteTypes {
     | '/profile'
     | '/signup'
     | '/academies/new'
+    | '/administration/students'
     | '/invite/$token'
+    | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
     | '/a/$slug/database'
@@ -630,6 +663,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/analysis'
+    | '/batches'
     | '/dashboard'
     | '/database'
     | '/engine'
@@ -639,7 +673,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/a/$slug'
     | '/academies/new'
+    | '/administration/students'
     | '/invite/$token'
+    | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
     | '/a/$slug/database'
@@ -688,6 +724,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
+  BatchesRoute: typeof BatchesRoute
   DashboardRoute: typeof DashboardRoute
   DatabaseRoute: typeof DatabaseRoute
   EngineRoute: typeof EngineRoute
@@ -697,6 +734,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   ASlugRoute: typeof ASlugRouteWithChildren
   AcademiesNewRoute: typeof AcademiesNewRoute
+  AdministrationStudentsRoute: typeof AdministrationStudentsRoute
   InviteTokenRoute: typeof InviteTokenRoute
 }
 
@@ -714,6 +752,13 @@ declare module '@tanstack/react-router' {
       path: '/analysis'
       fullPath: '/analysis'
       preLoaderRoute: typeof AnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/batches': {
+      id: '/batches'
+      path: '/batches'
+      fullPath: '/batches'
+      preLoaderRoute: typeof BatchesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -779,6 +824,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademiesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/administration/students': {
+      id: '/administration/students'
+      path: '/administration/students'
+      fullPath: '/administration/students'
+      preLoaderRoute: typeof AdministrationStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite/$token': {
       id: '/invite/$token'
       path: '/invite/$token'
@@ -791,6 +843,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/a/$slug/'
       preLoaderRoute: typeof ASlugIndexRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/batches': {
+      id: '/a/$slug/batches'
+      path: '/batches'
+      fullPath: '/a/$slug/batches'
+      preLoaderRoute: typeof ASlugBatchesRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/calendar': {
@@ -1091,6 +1150,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ASlugRouteChildren {
+  ASlugBatchesRoute: typeof ASlugBatchesRoute
   ASlugCalendarRoute: typeof ASlugCalendarRoute
   ASlugChatRoute: typeof ASlugChatRoute
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
@@ -1137,6 +1197,7 @@ interface ASlugRouteChildren {
 }
 
 const ASlugRouteChildren: ASlugRouteChildren = {
+  ASlugBatchesRoute: ASlugBatchesRoute,
   ASlugCalendarRoute: ASlugCalendarRoute,
   ASlugChatRoute: ASlugChatRoute,
   ASlugDatabaseRoute: ASlugDatabaseRoute,
@@ -1187,6 +1248,7 @@ const ASlugRouteWithChildren = ASlugRoute._addFileChildren(ASlugRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
+  BatchesRoute: BatchesRoute,
   DashboardRoute: DashboardRoute,
   DatabaseRoute: DatabaseRoute,
   EngineRoute: EngineRoute,
@@ -1196,6 +1258,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   ASlugRoute: ASlugRouteWithChildren,
   AcademiesNewRoute: AcademiesNewRoute,
+  AdministrationStudentsRoute: AdministrationStudentsRoute,
   InviteTokenRoute: InviteTokenRoute,
 }
 export const routeTree = rootRouteImport
