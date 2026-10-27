@@ -276,6 +276,15 @@ export function CommandPalette() {
         action: () => void navigate({ to: '/profile' }),
       },
       {
+        id: 'nav-board-preferences',
+        title: t('profile.commandPreferences'),
+        subtitle: '/preferences · Tùy biến màu sắc bàn cờ, âm thanh, tọa độ',
+        category: 'nav',
+        icon: '🎨',
+        keywords: ['cai dat ban co', 'board preferences', 'theme ban co', 'customizer', 'am thanh'],
+        action: () => void navigate({ to: '/preferences' }),
+      },
+      {
         id: 'sys-lang-vi',
         title: 'Tiếng Việt',
         subtitle: 'Chuyển giao diện sang Tiếng Việt',

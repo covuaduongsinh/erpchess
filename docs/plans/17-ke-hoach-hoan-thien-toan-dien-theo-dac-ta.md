@@ -170,7 +170,35 @@ Giai đoạn 19 hiện thực hóa các yêu cầu tại `docs/dacta/06-thi-dau-
      - Tích hợp Command Palette `Ctrl+K` truy cập nhanh vào Giải đấu.
   5. **Kiểm thử tự động:** Hoàn tất 4 unit tests mới (`TournamentLiveBoardGrid.test.tsx`), toàn bộ 72 unit tests của `@erpchess/web` pass 100%, 11/11 packages typecheck passed, 100% Biome linting clean. Hoàn thành toàn diện Giai đoạn 19!
 
-## 5. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
+---
+
+## 6. Kế hoạch Giai đoạn 20: Tùy biến Bàn cờ Thời gian Thực & Cấu hình Sở thích (Preferences)
+
+Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-hoc-vien-chat-cai-dat.md`:
+
+### **PR 20a: Bộ Tùy biến Bàn cờ Thời gian Thực (Live Board Customizer & Preferences)** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **Hỗ trợ 5 Theme Màu Sắc Bàn Cờ Đỉnh Cao trong `@erpchess/board-web`:**
+     - `navy` (Mặc định Dương Sinh Navy: Light `#E8EBF7`, Dark `#7C88C9`).
+     - `green` (Cẩm thạch Xanh giải đấu: Light `#EEEED2`, Dark `#769656`).
+     - `wood` (Gỗ Cổ điển: Light `#F0D9B5`, Dark `#B58863`).
+     - `blue` (Xanh Đại dương: Light `#DEE3E6`, Dark `#8CA2AD`).
+     - `charcoal` (Xám Kim loại hiện đại: Light `#E0E0E0`, Dark `#4E545C`).
+  2. **Quản lý Cài đặt Bền vững (`useBoardPreferences.ts`):**
+     - Lưu trữ cấu hình `theme`, `coordinates`, `soundEnabled`, `autoFlip` vào `localStorage`.
+     - Đồng bộ thời gian thực qua CustomEvent giữa các tab và component trên trang.
+  3. **Thẻ Tùy Biến Bàn Cờ Trực Quan (`BoardPreferencesCard.tsx`):**
+     - Thẻ swatch màu thực tế cho từng theme.
+     - Công tắc bật/tắt Tọa độ viền bàn cờ a-h, 1-8.
+     - Công tắc bật/tắt Âm thanh nước đi và Tự động xoay bàn theo lượt.
+     - Bàn cờ Live Preview hiển thị thế trận mẫu cập nhật tức thời khi đổi cấu hình.
+  4. **Tương thích Route Aliases & Điều hướng:**
+     - Route aliases tương thích Chesslang: `/preferences` và `/settings`.
+     - Tích hợp Command Palette `Ctrl+K` truy cập nhanh vào Tùy biến bàn cờ (`nav-board-preferences`).
+  5. **Kiểm thử tự động:** Hoàn tất 4 unit tests mới (`BoardPreferencesCard.test.tsx`), toàn bộ 76 unit tests của `@erpchess/web` pass 100%, 11/11 packages typecheck passed, 100% Biome linting clean.
+
+## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
 1. `pnpm lint` (Biome check không cảnh báo/lỗi).
