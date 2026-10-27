@@ -7,6 +7,9 @@ export type ClassroomRosterProps = {
   runner: boolean;
   room: ClassroomRoom | null;
   currentUserId: string;
+  raisedHands?: Set<string>;
+  onToggleRaiseHand?: () => void;
+  onLowerAllHands?: () => void;
 };
 
 export function ClassroomRoster({
@@ -15,25 +18,62 @@ export function ClassroomRoster({
   runner,
   room,
   currentUserId,
+  raisedHands = new Set(),
+  onToggleRaiseHand,
+  onLowerAllHands,
 }: ClassroomRosterProps) {
   const currentController = snapshot.controller;
   const isCoachOnly = !currentController;
+  const isMyHandRaised = raisedHands.has(currentUserId);
+  const totalRaised = raisedHands.size;
 
   return (
     <Card title={`Thành viên (${peers.length})`}>
       <div className="flex flex-col gap-2">
-        {runner && !isCoachOnly && (
-          <div className="flex justify-end -mt-1 pb-1 border-b border-gray-100">
+        {/* Thanh công cụ quản lý nhanh trên đầu Roster */}
+        <div className="flex flex-wrap items-center justify-between gap-1.5 -mt-1 pb-2 border-b border-gray-100 text-xs">
+          {/* Nút giơ tay dành cho học viên */}
+          {!runner && onToggleRaiseHand && (
             <button
               type="button"
-              onClick={() => room?.setController(null)}
-              className="text-xs font-medium text-amber-700 hover:text-amber-800 underline decoration-dotted"
-              title="Thu lại toàn bộ quyền đi cờ về HLV"
+              onClick={onToggleRaiseHand}
+              className={`flex items-center gap-1 rounded-md px-2.5 py-1 font-semibold transition-all ${
+                isMyHandRaised
+                  ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             >
-              Thu quyền về HLV
+              <span>{isMyHandRaised ? '✋ Hạ tay xuống' : '✋ Giơ tay phát biểu'}</span>
             </button>
-          </div>
-        )}
+          )}
+
+          {/* Công cụ HLV: Thu quyền hoặc Hạ tất cả tay */}
+          {runner && (
+            <div className="flex items-center gap-2 w-full justify-between">
+              {totalRaised > 0 && onLowerAllHands && (
+                <button
+                  type="button"
+                  onClick={onLowerAllHands}
+                  className="text-xs font-medium text-amber-700 hover:text-amber-800 underline decoration-dotted"
+                  title="Hạ tất cả cánh tay đang giơ"
+                >
+                  Hạ tay ({totalRaised})
+                </button>
+              )}
+              {!isCoachOnly && (
+                <button
+                  type="button"
+                  onClick={() => room?.setController(null)}
+                  className="text-xs font-medium text-primary hover:underline ml-auto"
+                  title="Thu lại toàn bộ quyền đi cờ về HLV"
+                >
+                  Thu quyền về HLV
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
         {peers.length === 0 ? (
           <p className="text-xs text-text-muted py-2 text-center">
             Chưa có thành viên nào trong phòng.
@@ -43,12 +83,13 @@ export function ClassroomRoster({
             {peers.map((peer) => {
               const isMe = peer.userId === currentUserId;
               const hasTurn = currentController === peer.userId;
+              const handRaised = raisedHands.has(peer.userId);
 
               return (
                 <li
                   key={peer.userId}
                   className={`flex items-center justify-between py-2 px-1 rounded-md transition-colors ${
-                    hasTurn ? 'bg-green/10' : 'hover:bg-gray-50'
+                    hasTurn ? 'bg-green/10' : handRaised ? 'bg-amber-50/70' : 'hover:bg-gray-50'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
@@ -61,10 +102,21 @@ export function ClassroomRoster({
                       {peer.name.slice(0, 1).toUpperCase()}
                     </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="truncate text-xs font-medium text-gray-900">
-                        {peer.name}{' '}
-                        {isMe && <span className="text-text-muted font-normal">(bạn)</span>}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="truncate text-xs font-medium text-gray-900">
+                          {peer.name}{' '}
+                          {isMe && <span className="text-text-muted font-normal">(bạn)</span>}
+                        </span>
+                        {handRaised && (
+                          <span
+                            role="status"
+                            className="inline-flex items-center animate-bounce text-sm"
+                            title="Đang giơ tay xin phát biểu"
+                          >
+                            ✋
+                          </span>
+                        )}
+                      </div>
                       <span className="text-[10px] text-text-muted">
                         {peer.runner ? 'Huấn luyện viên' : 'Học viên'}
                       </span>
@@ -82,7 +134,7 @@ export function ClassroomRoster({
 
                     {/* Nút trao/thu quyền dành riêng cho HLV */}
                     {runner && !peer.runner && (
-                      <div>
+                      <div className="flex items-center gap-1">
                         {hasTurn ? (
                           <button
                             type="button"
@@ -95,11 +147,17 @@ export function ClassroomRoster({
                         ) : (
                           <button
                             type="button"
-                            onClick={() => room?.setController(peer.userId)}
-                            className="rounded-md border border-gray-200 bg-white px-2 py-1 text-[11px] font-medium text-primary hover:bg-primary/10"
+                            onClick={() => {
+                              room?.setController(peer.userId);
+                            }}
+                            className={`rounded-md border px-2 py-1 text-[11px] font-medium transition-colors ${
+                              handRaised
+                                ? 'border-amber-300 bg-amber-100 text-amber-900 hover:bg-amber-200 font-semibold'
+                                : 'border-gray-200 bg-white text-primary hover:bg-primary/10'
+                            }`}
                             title="Cho phép học viên này thao tác trên bàn cờ"
                           >
-                            Cho đi cờ ♟
+                            {handRaised ? 'Mời đi cờ ✋' : 'Cho đi cờ ♟'}
                           </button>
                         )}
                       </div>
@@ -111,7 +169,7 @@ export function ClassroomRoster({
           </ul>
         )}
 
-        {/* Chú thích quyền đi quân */}
+        {/* Chú thích quyền đi quân & giơ tay */}
         <div className="mt-2 rounded-lg bg-gray-50 p-2 text-[11px] text-text-muted">
           {isCoachOnly ? (
             <p>
