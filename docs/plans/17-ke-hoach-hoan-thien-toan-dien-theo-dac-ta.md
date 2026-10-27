@@ -116,17 +116,31 @@ Giai đoạn 18 hiện thực hóa các yêu cầu tại `docs/dacta/04-bai-tap-
      - Bổ sung các lệnh truy cập nhanh vào Ngân hàng Bài tập, Luyện tập Thế cờ và Trắc nghiệm.
   4. **Kiểm thử tự động:** Hoàn tất 4 unit tests mới cho `Exercises.test.tsx`, toàn bộ 59 unit tests của `@erpchess/web` pass 100%, 3/3 jobs CI xanh. PR #40 đã được merge vào `main` tại commit `eb7d1c7`.
 
-### **PR 18b: Quiz Trắc nghiệm Tính giờ & Báo cáo Tiến độ Học viên**
+### **PR 18b: Quiz Trắc nghiệm Tính giờ & Báo cáo Tiến độ Học viên Chuyên sâu** (✅ ĐÃ HOÀN THÀNH)
 
-- **Mục tiêu:**
-  1. **Quiz Trắc nghiệm Tính giờ (`/quiz/list`):**
-     - Hỗ trợ câu hỏi thế cờ kèm đồng hồ đếm ngược (countdown timer), trừ điểm khi hết giờ.
-     - Bảng xếp hạng tức thì sau khi hoàn thành Quiz.
-  2. **Báo cáo Tiến độ Chuyên sâu (`/reports`):**
-     - Xuất báo cáo hoạt động học viên dạng bảng, hỗ trợ xuất CSV.
-     - Thống kê chi tiết tỷ lệ giải đúng, số giờ học, điểm Elo và chuyên cần.
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **Quiz Trắc nghiệm Tính giờ (`QuizTaker.tsx`):**
+     - Đồng hồ đếm ngược từng câu (`QuestionTimer` 60s) kèm hiệu ứng đổi màu cảnh báo (vàng < 15s, đỏ nhấp nháy < 5s) và khóa thao tác khi hết thời gian (`timeUp`).
+     - Chế độ làm bài tập trung toàn màn hình (Focus Mode ⛶) loại bỏ các yếu tố gây xao nhãng.
+     - Thẻ tổng kết kết quả làm bài trực quan (`QuizSummaryCard`): tỷ lệ chính xác %, điểm số/tối đa, thời gian và huy hiệu đánh giá thành tích.
+  2. **Báo cáo Tiến độ Chuyên sâu & Phiếu Điểm In ấn (`/reports` & `PrintableReportCard.tsx`):**
+     - Bổ sung bộ lọc theo Lớp/Nhóm (Batch Filter) kết hợp `useGroups` và `useGroupStudentIds` lọc tức thì cả bảng toàn học viện và danh sách học viên.
+     - Mẫu Phiếu Báo Cáo Kết Quả Học Tập A4 in ấn chuẩn quốc tế (`PrintableReportCard`): Logo học viện, thông tin học viên, 4 thẻ chỉ số cốt lõi (Bài tập, Quiz, Chuyên cần, Elo), Biểu đồ năng lực 4 trụ cột cờ vua (Khai cuộc, Chiến thuật, Tính toán, Tàn cuộc), Nhận xét HLV và khu vực ký duyệt, hỗ trợ `window.print()` và CSS in ấn sạch sẽ.
+  3. **Kiểm thử tự động:** Hoàn tất 6 unit tests mới (`QuizTaker.test.tsx`, `PrintableReportCard.test.tsx`), toàn bộ 65 unit tests của `@erpchess/web` pass 100%, typecheck và build xanh 100%.
 
 ---
+
+## 5. Kế hoạch Giai đoạn 19: Đấu cờ Đồng loạt Simul & Phân hệ Giải đấu Swiss/Arena
+
+Giai đoạn 19 hiện thực hóa các yêu cầu tại `docs/dacta/06-thi-dau-game-area-bot-simul-giai.md`:
+- **PR 19a: Đấu cờ Đồng loạt (Simul Exhibition):**
+  - HLV mở phòng đấu đồng loạt với 5 - 20 học viên cùng lúc.
+  - Bàn cờ đa mục tiêu (Multi-board View) cho HLV chuyển đổi nhanh giữa các bàn đấu.
+  - Tự động cảnh báo bàn cờ sắp hết thời gian hoặc đến lượt HLV đi cờ.
+- **PR 19b: Phân hệ Giải đấu Nội bộ (Swiss System & Arena Tournaments):**
+  - Thuật toán bốc thăm hệ Thụy Sĩ (Swiss Dutch Pairing) chuẩn FIDE.
+  - Chế độ Đấu trường Đua điểm (Arena Tournament) tính chuỗi thắng (Streak Berserk).
+  - Bảng xếp hạng trực tiếp theo thời gian thực (Live Standings).
 
 ## 5. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
