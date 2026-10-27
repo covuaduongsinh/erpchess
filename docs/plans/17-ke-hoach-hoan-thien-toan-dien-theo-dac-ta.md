@@ -151,11 +151,24 @@ Giai đoạn 19 hiện thực hóa các yêu cầu tại `docs/dacta/06-thi-dau-
 
 ---
 
-### **PR 19b: Phân hệ Giải đấu Nội bộ (Swiss System & Arena Tournaments)** (Đang triển khai)
+### **PR 19b: Phân hệ Giải đấu Nội bộ (Swiss System & Arena Tournaments & Live Standings)** (✅ ĐÃ HOÀN THÀNH)
 
-- Thuật toán bốc thăm hệ Thụy Sĩ (Swiss Dutch Pairing) chuẩn FIDE.
-- Chế độ Đấu trường Đua điểm (Arena Tournament) tính chuỗi thắng (Streak Berserk).
-- Bảng xếp hạng trực tiếp theo thời gian thực (Live Standings).
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **Bảng Xếp Hạng Trực Tiếp Nâng Cao (Live Standings):**
+     - Hiển thị huy chương 🥇 Quán quân, 🥈 Á quân, 🥉 Hạng 3 cho top 3 kỳ thủ dẫn đầu.
+     - Badge động nhấp nháy `⚡ Trực tiếp (Live)` khi giải đấu đang diễn ra.
+     - Tự động tính điểm hệ số Buchholz Cut 1, Sonneborn-Berger và số ván thắng theo chuẩn FIDE.
+  2. **Chế độ Xem Lưới Bàn Cờ Trực Tiếp (Live Board Grid):**
+     - Component mới `TournamentLiveBoardGrid.tsx` cho phép HLV và kỳ thủ xem trực quan các bàn cờ trong vòng thi đấu.
+     - Hiển thị thời gian đồng hồ từng bên, quân cờ bị bắt, nước đi cuối cùng và nhãn trạng thái bàn cờ.
+     - Nút chuyển đổi mượt mà giữa chế độ Danh sách (`viewModeList`) và Lưới bàn cờ (`viewModeGrid`).
+  3. **Thanh Tiến Độ & Bộ Lọc Ván Đấu:**
+     - Thanh thống kê tiến độ vòng: `X / Y ván đã xong`.
+     - Bộ lọc ván đấu 3 chế độ: Tất cả ván (`all`), Đang diễn ra (`active`), Đã hoàn tất (`finished`).
+  4. **Tương thích Route Aliases & Điều hướng:**
+     - Route aliases tương thích Chesslang: `/tournaments` và `/game-area/tournaments`.
+     - Tích hợp Command Palette `Ctrl+K` truy cập nhanh vào Giải đấu.
+  5. **Kiểm thử tự động:** Hoàn tất 4 unit tests mới (`TournamentLiveBoardGrid.test.tsx`), toàn bộ 72 unit tests của `@erpchess/web` pass 100%, 11/11 packages typecheck passed, 100% Biome linting clean. Hoàn thành toàn diện Giai đoạn 19!
 
 ## 5. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
