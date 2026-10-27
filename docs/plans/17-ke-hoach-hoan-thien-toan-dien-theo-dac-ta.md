@@ -133,14 +133,29 @@ Giai đoạn 18 hiện thực hóa các yêu cầu tại `docs/dacta/04-bai-tap-
 ## 5. Kế hoạch Giai đoạn 19: Đấu cờ Đồng loạt Simul & Phân hệ Giải đấu Swiss/Arena
 
 Giai đoạn 19 hiện thực hóa các yêu cầu tại `docs/dacta/06-thi-dau-game-area-bot-simul-giai.md`:
-- **PR 19a: Đấu cờ Đồng loạt (Simul Exhibition):**
-  - HLV mở phòng đấu đồng loạt với 5 - 20 học viên cùng lúc.
-  - Bàn cờ đa mục tiêu (Multi-board View) cho HLV chuyển đổi nhanh giữa các bàn đấu.
-  - Tự động cảnh báo bàn cờ sắp hết thời gian hoặc đến lượt HLV đi cờ.
-- **PR 19b: Phân hệ Giải đấu Nội bộ (Swiss System & Arena Tournaments):**
-  - Thuật toán bốc thăm hệ Thụy Sĩ (Swiss Dutch Pairing) chuẩn FIDE.
-  - Chế độ Đấu trường Đua điểm (Arena Tournament) tính chuỗi thắng (Streak Berserk).
-  - Bảng xếp hạng trực tiếp theo thời gian thực (Live Standings).
+### **PR 19a: Đấu cờ Đồng loạt (Simul Exhibition Multi-board Console)** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **Bảng Điều Khiển Đấu Đồng Loạt Chuyên Nghiệp (`a.$slug.simuls.$id.tsx`):**
+     - HLV điều hành đồng thời nhiều bàn cờ (Multi-board View) với thanh tỷ số trực quan (Thắng / Hòa / Thua) và tổng điểm tích lũy.
+     - Bộ lọc bàn cờ 4 chế độ: `Tất cả`, `⚡ Đến lượt tôi (My Turn)`, `Đang chờ đối thủ`, `Đã kết thúc`.
+     - Bàn cờ đang chờ HLV đi được ghim huy hiệu động nhấp nháy nổi bật và tự động xếp ưu tiên lên đầu.
+  2. **Modal Đi Nước Nhanh Trực Tiếp (`SimulQuickPlayModal.tsx`):**
+     - Cho phép HLV đi cờ trực tiếp ngay trên trang Simul mà không cần tải lại hay chuyển trang rời khỏi giao diện tổng quan.
+     - Nút tự động chuyển sang bàn tiếp theo đang chờ HLV (`Next Active Board ⏭️`) giúp luân chuyển ván đấu mượt mà, tối ưu trải nghiệm đấu đồng loạt.
+     - Hiển thị thời gian đồng hồ hai bên, quân cờ bị bắt và tên học viên đối thủ.
+  3. **Tương thích Route Aliases & Command Palette:**
+     - Route aliases tương thích Chesslang: `/simul` và `/game-area/simul`.
+     - Tích hợp Command Palette `Ctrl+K` truy cập nhanh vào Đấu cờ Đồng loạt (`simul.commandTitle`).
+  4. **Kiểm thử tự động:** Hoàn tất 3 unit tests mới (`SimulQuickPlayModal.test.tsx`), toàn bộ 68 unit tests của `@erpchess/web` pass 100%, typecheck, lint, build, mobile export và desktop cargo check xanh 100%.
+
+---
+
+### **PR 19b: Phân hệ Giải đấu Nội bộ (Swiss System & Arena Tournaments)** (Đang triển khai)
+
+- Thuật toán bốc thăm hệ Thụy Sĩ (Swiss Dutch Pairing) chuẩn FIDE.
+- Chế độ Đấu trường Đua điểm (Arena Tournament) tính chuỗi thắng (Streak Berserk).
+- Bảng xếp hạng trực tiếp theo thời gian thực (Live Standings).
 
 ## 5. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
