@@ -100,15 +100,21 @@ Giai đoạn 17 hiện thực hóa các yêu cầu tại `docs/dacta/03-lop-hoc-
 
 Giai đoạn 18 hiện thực hóa các yêu cầu tại `docs/dacta/04-bai-tap-quiz-luyen-tap.md` và `docs/dacta/07-bao-cao-hoc-vien-chat-cai-dat.md`:
 
-### **PR 18a: Phân hệ Ngân hàng Bài tập (Exercises) & Luyện thế cờ (Practice)**
+### **PR 18a: Phân hệ Ngân hàng Bài tập (Exercises) & Luyện thế cờ (Practice)** (✅ ĐÃ HOÀN THÀNH & MERGE #40)
 
-- **Mục tiêu:**
-  1. **Danh mục Bài tập Chesslang (`/assignment/exercise`):**
-     - Bảng Exercise tái sử dụng với lọc theo Cấp độ (Level), Chủ đề chiến thuật (Ghim quân, Chĩa ba, Chiếu thắt...), Số nước đi (Mate in 1, 2, 3+).
-     - Giao diện nạp FEN / PGN nhanh, tạo bài tập mẫu hàng loạt.
-  2. **Chế độ Luyện tập Thế cờ (Practice Chapters):**
-     - Hiển thị danh mục chương luyện cờ với thanh tiến độ % hoàn thành của từng học viên.
-     - Đồng bộ điểm số và tự động đánh dấu thế cờ đã vượt qua.
+- **Mục tiêu:** Hoàn thiện phân hệ Ngân hàng Bài tập và tương thích URL theo đặc tả `docs/dacta/04-bai-tap-quiz-luyen-tap.md`:
+- **Kết quả nghiệm thu:**
+  1. **Ngân hàng Bài tập Nâng cao (`Exercises.tsx`):**
+     - Thanh tìm kiếm bài tập tức thì theo tiêu đề hoặc thẻ tag (`#fork`, `#pin`, `#mate`...).
+     - Bộ lọc cấp độ đào tạo (Level) kết nối trực tiếp với CSDL học viện.
+     - Thiết kế giao diện thẻ bài tập trực quan hiển thị số lượng thế cờ, cấp độ gán và số lần đã giao.
+  2. **Tương thích hoàn toàn URL Chesslang (Route Aliases):**
+     - Bổ sung route alias `/assignment/exercise` tự động điều hướng vào Ngân hàng Bài tập.
+     - Bổ sung route alias `/practice` tự động điều hướng vào phân hệ Luyện tập Thế cờ theo chương.
+     - Bổ sung route alias `/quiz/list` tự động điều hướng vào danh mục Trắc nghiệm Tính giờ.
+  3. **Tích hợp Command Palette (`Ctrl+K`):**
+     - Bổ sung các lệnh truy cập nhanh vào Ngân hàng Bài tập, Luyện tập Thế cờ và Trắc nghiệm.
+  4. **Kiểm thử tự động:** Hoàn tất 4 unit tests mới cho `Exercises.test.tsx`, toàn bộ 59 unit tests của `@erpchess/web` pass 100%, 3/3 jobs CI xanh. PR #40 đã được merge vào `main` tại commit `eb7d1c7`.
 
 ### **PR 18b: Quiz Trắc nghiệm Tính giờ & Báo cáo Tiến độ Học viên**
 
