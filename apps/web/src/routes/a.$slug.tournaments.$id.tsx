@@ -3,6 +3,7 @@ import { useMembers, useTournament, useTournamentMutations } from '@erpchess/api
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { resultText } from '../components/play/gameText';
+import { TournamentLiveBoardGrid } from '../components/tournament/TournamentLiveBoardGrid';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
@@ -24,6 +25,8 @@ function TournamentPage() {
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState(false);
   const [round, setRound] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [gameFilter, setGameFilter] = useState<'all' | 'active' | 'finished'>('all');
   const me = session.user.id;
 
   if (tour.isPending) return <Spinner />;
@@ -144,7 +147,15 @@ function TournamentPage() {
       </Card>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card title={t('tournament.standings')}>
+        <Card title={t('tournament.liveStandings')}>
+          {d.status === 'active' && (
+            <div className="mb-2 flex items-center justify-end">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 animate-pulse">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                {t('tournament.livePulse')}
+              </span>
+            </div>
+          )}
           {teams.length > 0 && (
             <table className="w-full text-left text-sm">
               <thead className="text-text-muted">
@@ -183,81 +194,184 @@ function TournamentPage() {
                 </tr>
               </thead>
               <tbody>
-                {table.map((r) => (
-                  <tr
-                    key={r.id}
-                    className={`border-t border-text-muted/15 ${r.id === me ? 'bg-primary/5' : ''}`}
-                  >
-                    <td className="py-1">{r.rank}</td>
-                    <td
-                      className={`py-1 font-medium ${withdrawn.has(r.id) ? 'text-text-muted line-through' : ''}`}
+                {table.map((r) => {
+                  const medal =
+                    r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : null;
+                  return (
+                    <tr
+                      key={r.id}
+                      className={`border-t border-text-muted/15 ${r.id === me ? 'bg-primary/5 font-semibold' : ''}`}
                     >
-                      {name(r.id)}
-                    </td>
-                    <td className="py-1">{r.points}</td>
-                    <td className="py-1">{r.buchholzCut1}</td>
-                    <td className="py-1">{r.sonneborn}</td>
-                    <td className="py-1">{r.wins}</td>
-                    {runner && d.status === 'active' && (
-                      <td className="py-1 text-right">
-                        <button
-                          type="button"
-                          className="text-xs text-primary hover:underline"
-                          onClick={() =>
-                            m.withdraw.mutate({
-                              id: d.id,
-                              playerId: r.id,
-                              withdrawn: !withdrawn.has(r.id),
-                            })
-                          }
-                        >
-                          {withdrawn.has(r.id)
-                            ? t('tournament.reinstate')
-                            : t('tournament.withdraw')}
-                        </button>
+                      <td className="py-1">
+                        {medal ? (
+                          <span className="text-base" title={`Top ${r.rank}`}>
+                            {medal}
+                          </span>
+                        ) : (
+                          r.rank
+                        )}
                       </td>
-                    )}
-                  </tr>
-                ))}
+                      <td
+                        className={`py-1 font-medium ${withdrawn.has(r.id) ? 'text-text-muted line-through' : ''}`}
+                      >
+                        {name(r.id)}
+                      </td>
+                      <td className="py-1 font-bold text-primary">{r.points}</td>
+                      <td className="py-1 text-text-muted">{r.buchholzCut1}</td>
+                      <td className="py-1 text-text-muted">{r.sonneborn}</td>
+                      <td className="py-1 text-text-muted">{r.wins}</td>
+                      {runner && d.status === 'active' && (
+                        <td className="py-1 text-right">
+                          <button
+                            type="button"
+                            className="text-xs text-primary hover:underline"
+                            onClick={() =>
+                              m.withdraw.mutate({
+                                id: d.id,
+                                playerId: r.id,
+                                withdrawn: !withdrawn.has(r.id),
+                              })
+                            }
+                          >
+                            {withdrawn.has(r.id)
+                              ? t('tournament.reinstate')
+                              : t('tournament.withdraw')}
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}
         </Card>
 
         <Card title={t('tournament.pairings')}>
-          {d.roundList.length > 0 && (
-            <div role="tablist" className="flex flex-wrap gap-1">
-              {d.roundList.map((r) => (
+          <div className="flex flex-col gap-2 mb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              {d.roundList.length > 0 && (
+                <div role="tablist" className="flex flex-wrap gap-1">
+                  {d.roundList.map((r) => (
+                    <button
+                      key={r.round}
+                      type="button"
+                      role="tab"
+                      aria-selected={shownRound === r.round}
+                      onClick={() => setRound(r.round)}
+                      className="rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary"
+                      title={t(`tournament.roundStatus_${r.status as 'pending'}`)}
+                    >
+                      {r.round}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="flex items-center gap-1 rounded-lg bg-surface-2 p-0.5 text-xs ml-auto">
                 <button
-                  key={r.round}
                   type="button"
-                  role="tab"
-                  aria-selected={shownRound === r.round}
-                  onClick={() => setRound(r.round)}
-                  className="rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary"
-                  title={t(`tournament.roundStatus_${r.status as 'pending'}`)}
+                  onClick={() => setViewMode('list')}
+                  className={`rounded-md px-2.5 py-1 font-medium transition-colors ${
+                    viewMode === 'list'
+                      ? 'bg-card text-primary shadow-sm font-semibold'
+                      : 'text-text-muted hover:text-text'
+                  }`}
                 >
-                  {r.round}
+                  {t('tournament.viewModeList')}
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  className={`rounded-md px-2.5 py-1 font-medium transition-colors ${
+                    viewMode === 'grid'
+                      ? 'bg-card text-primary shadow-sm font-semibold'
+                      : 'text-text-muted hover:text-text'
+                  }`}
+                >
+                  {t('tournament.viewModeGrid')}
+                </button>
+              </div>
             </div>
-          )}
+            {roundGames.length > 0 && (
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-text-muted font-normal pt-1 border-t border-border/40">
+                <span>
+                  {t('tournament.roundProgress', {
+                    done: roundGames.filter((g) => g.status !== 'active').length,
+                    total: roundGames.length,
+                  })}
+                </span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setGameFilter('all')}
+                    className={`px-1.5 py-0.5 rounded text-[11px] ${
+                      gameFilter === 'all'
+                        ? 'bg-primary text-text-on-primary font-bold'
+                        : 'hover:underline'
+                    }`}
+                  >
+                    {t('tournament.filterAllGames')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGameFilter('active')}
+                    className={`px-1.5 py-0.5 rounded text-[11px] ${
+                      gameFilter === 'active'
+                        ? 'bg-emerald-600 text-white font-bold'
+                        : 'hover:underline'
+                    }`}
+                  >
+                    {t('tournament.filterActiveGames')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGameFilter('finished')}
+                    className={`px-1.5 py-0.5 rounded text-[11px] ${
+                      gameFilter === 'finished'
+                        ? 'bg-slate-700 text-white font-bold'
+                        : 'hover:underline'
+                    }`}
+                  >
+                    {t('tournament.filterFinishedGames')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
           {roundGames.length === 0 && roundByes.length === 0 ? (
             <p className="text-sm text-text-muted">{t('tournament.roundStatus_pending')}</p>
+          ) : viewMode === 'grid' ? (
+            <TournamentLiveBoardGrid
+              slug={academy.slug}
+              games={roundGames}
+              getName={name}
+              filter={gameFilter}
+            />
           ) : (
             <ul className="flex flex-col divide-y divide-text-muted/15 text-sm">
-              {roundGames.map((g) => (
-                <li key={g.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
-                  <Link
-                    to="/a/$slug/play/$id"
-                    params={{ slug: academy.slug, id: g.id }}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {g.board_no}. {name(g.white_id)} – {name(g.black_id)}
-                  </Link>
-                  <span className="text-text-muted">{resultText(g, t)}</span>
-                </li>
-              ))}
+              {roundGames
+                .filter((g) => {
+                  if (gameFilter === 'active') return g.status === 'active';
+                  if (gameFilter === 'finished') return g.status !== 'active';
+                  return true;
+                })
+                .map((g) => (
+                  <li key={g.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                    <Link
+                      to="/a/$slug/play/$id"
+                      params={{ slug: academy.slug, id: g.id }}
+                      className="font-medium text-primary hover:underline flex items-center gap-2"
+                    >
+                      {g.status === 'active' && (
+                        <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                      )}
+                      <span>
+                        {g.board_no}. {name(g.white_id)} – {name(g.black_id)}
+                      </span>
+                    </Link>
+                    <span className="text-text-muted">{resultText(g, t)}</span>
+                  </li>
+                ))}
               {roundByes.map((b) => (
                 <li key={`${b.player_id ?? b.team_id}`} className="py-2 text-text-muted">
                   {b.player_id ? name(b.player_id) : d.teams.find((x) => x.id === b.team_id)?.name}{' '}
