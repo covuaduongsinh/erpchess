@@ -76,16 +76,51 @@ Giai đoạn 17 hiện thực hóa các yêu cầu tại `docs/dacta/03-lop-hoc-
      - Nút `Chia sẻ FEN ♟` trên tiêu đề ChatBox cho phép gửi thế cờ hiện tại vào khung chat lớp học.
   5. **Kiểm thử tự động:** Hoàn tất 7 unit tests mới cho `ClassroomToolbar` và `ClassroomRoster`, 20/20 test files và 54 tests trong `@erpchess/web` pass 100%, 3/3 jobs CI xanh. PR #38 đã được merge vào `main` tại commit `09db234`.
 
-### **PR 17b: Nâng cấp LiveKit Video Grid & Bảng điều khiển Lớp học**
+### **PR 17b: Nâng cấp LiveKit Video Grid & Bảng điều khiển Lớp học** (✅ ĐÃ HOÀN THÀNH & MERGE #39)
 
-- **Mục tiêu:** Hoàn thiện giao diện phòng học trực tuyến LiveKit:
-  1. **Video Layouts:** Hỗ trợ 3 chế độ xem (Chế độ Bàn cờ tập trung Board-focused, Chế độ Hội nghị Gallery Grid, Chế độ Diễn giả Speaker).
-  2. **Điều khiển Lớp học cho HLV:** Quản lý Mic/Camera học viên (Mute all, Tắt camera khi cần), giơ tay phát biểu (Raise Hand).
-  3. **Bảng trò chuyện lớp học (In-class Chat):** Chat tin nhắn có preview FEN thế cờ thu nhỏ.
+- **Mục tiêu:** Hoàn thiện giao diện phòng học trực tuyến LiveKit theo đặc tả `docs/dacta/03-lop-hoc-tuong-tac-classroom.md`:
+- **Kết quả nghiệm thu:**
+  1. **Chế độ Bố cục Phòng học Linh hoạt (Layout Modes):**
+     - Hỗ trợ 3 chế độ xem: **Bàn cờ tập trung (Board-focused)** (70% bàn cờ, 30% sidebar), **Chia đôi màn hình (Split 50-50)**, và **Hội nghị (Gallery Grid)** (Video toàn màn hình phía trên).
+     - Bộ chuyển layout 1-chạm mượt mà ngay trên thanh tiêu đề phòng học.
+  2. **Nâng cấp LiveKit VideoPanel (`VideoPanel.tsx`):**
+     - Điều chỉnh chiều cao linh hoạt theo chế độ xem (sidebar 240px, grid 400px, theater 500px).
+     - Bổ sung tính năng `Tắt tiếng tất cả (Mute All)` cho HLV quản lý âm thanh cả lớp.
+  3. **Tương tác Giơ tay Phát biểu (Raise Hand ✋):**
+     - Học viên có nút `✋ Giơ tay phát biểu` / `✋ Hạ tay xuống` đồng bộ thời gian thực.
+     - Biểu tượng ✋ hiển thị cạnh tên học viên trong `ClassroomRoster`.
+     - HLV có nút `Mời đi cờ ✋` ưu tiên học viên giơ tay và nút `Hạ tay (N)` toàn lớp.
+  4. **Khung Chat Lớp học Chuyên nghiệp:**
+     - Tự động nhận diện và định dạng badge thông báo sự kiện giơ tay, hạ tay và FEN cờ vua.
+  5. **Kiểm thử tự động:** Bổ sung unit tests cho tương tác giơ tay, toàn bộ 55 unit tests của `@erpchess/web` pass 100%, 3/3 jobs CI xanh. PR #39 đã được merge vào `main` tại commit `bae388d`.
 
 ---
 
-## 4. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
+## 4. Chi tiết Giai đoạn 18: Ngân hàng Bài tập, Quiz Trắc nghiệm & Báo cáo Chuyên sâu (Tiếp theo)
+
+Giai đoạn 18 hiện thực hóa các yêu cầu tại `docs/dacta/04-bai-tap-quiz-luyen-tap.md` và `docs/dacta/07-bao-cao-hoc-vien-chat-cai-dat.md`:
+
+### **PR 18a: Phân hệ Ngân hàng Bài tập (Exercises) & Luyện thế cờ (Practice)**
+- **Mục tiêu:**
+  1. **Danh mục Bài tập Chesslang (`/assignment/exercise`):**
+     - Bảng Exercise tái sử dụng với lọc theo Cấp độ (Level), Chủ đề chiến thuật (Ghim quân, Chĩa ba, Chiếu thắt...), Số nước đi (Mate in 1, 2, 3+).
+     - Giao diện nạp FEN / PGN nhanh, tạo bài tập mẫu hàng loạt.
+  2. **Chế độ Luyện tập Thế cờ (Practice Chapters):**
+     - Hiển thị danh mục chương luyện cờ với thanh tiến độ % hoàn thành của từng học viên.
+     - Đồng bộ điểm số và tự động đánh dấu thế cờ đã vượt qua.
+
+### **PR 18b: Quiz Trắc nghiệm Tính giờ & Báo cáo Tiến độ Học viên**
+- **Mục tiêu:**
+  1. **Quiz Trắc nghiệm Tính giờ (`/quiz/list`):**
+     - Hỗ trợ câu hỏi thế cờ kèm đồng hồ đếm ngược (countdown timer), trừ điểm khi hết giờ.
+     - Bảng xếp hạng tức thì sau khi hoàn thành Quiz.
+  2. **Báo cáo Tiến độ Chuyên sâu (`/reports`):**
+     - Xuất báo cáo hoạt động học viên dạng bảng, hỗ trợ xuất CSV.
+     - Thống kê chi tiết tỷ lệ giải đúng, số giờ học, điểm Elo và chuyên cần.
+
+---
+
+## 5. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
 1. `pnpm lint` (Biome check không cảnh báo/lỗi).
