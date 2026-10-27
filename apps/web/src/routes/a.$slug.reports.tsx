@@ -1,5 +1,8 @@
 import {
   useAcademyStudentsReport,
+  useGroupStudentIds,
+  useGroups,
+  useLevels,
   useMembers,
   useStudentReportDetails,
   useStudentReportSummary,
@@ -13,6 +16,7 @@ import {
 } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
 import { useMemo, useState } from 'react';
+import { PrintableReportCard } from '../components/reports/PrintableReportCard';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { downloadCsv } from '../lib/download';
@@ -29,6 +33,14 @@ function ReportsPage() {
   const { academy, session } = useAcademy();
   const staff = isStaff(academy.role);
   const members = useMembers(academy.id);
+  const groups = useGroups(academy.id);
+  const levels = useLevels(academy.id);
+
+  const batches = useMemo(
+    () => (groups.data ?? []).filter((g) => g.kind === 'batch'),
+    [groups.data],
+  );
+
   const students = useMemo(
     () => members.data?.filter((m) => m.role === 'student') ?? [],
     [members.data],
@@ -36,11 +48,25 @@ function ReportsPage() {
 
   // Chọn học viên (với staff: 'all' hoặc ID học viên; với học viên: ID của chính mình)
   const defaultStudentId = staff ? 'all' : session.user.id;
+  const [selectedBatchId, setSelectedBatchId] = useState<string>('all');
   const [selectedStudentId, setSelectedStudentId] = useState<string>(defaultStudentId);
   const [preset, setPreset] = useState<ReportPreset | 'custom'>('all');
   const [customFrom, setCustomFrom] = useState('');
   const [customTo, setCustomTo] = useState('');
   const [activeTab, setActiveTab] = useState<Tab>('overview');
+  const [showPrintModal, setShowPrintModal] = useState(false);
+
+  // Lọc học viên theo batch
+  const batchStudentIds = useGroupStudentIds(
+    selectedBatchId !== 'all' ? selectedBatchId : undefined,
+  );
+
+  const filteredStudents = useMemo(() => {
+    if (selectedBatchId === 'all') return students;
+    if (!batchStudentIds.data) return [];
+    const set = new Set(batchStudentIds.data);
+    return students.filter((s) => set.has(s.profile.id));
+  }, [students, selectedBatchId, batchStudentIds.data]);
 
   // Tính khoảng ngày filter
   const filter = useMemo(() => {
@@ -77,6 +103,15 @@ function ReportsPage() {
     filter,
   );
 
+  // Lọc danh sách summary theo batch
+  const filteredAcademySummaries = useMemo(() => {
+    const list = academyReport.data ?? [];
+    if (selectedBatchId === 'all') return list;
+    if (!batchStudentIds.data) return [];
+    const set = new Set(batchStudentIds.data);
+    return list.filter((s) => set.has(s.studentId));
+  }, [academyReport.data, selectedBatchId, batchStudentIds.data]);
+
   // Dữ liệu chi tiết cho một học viên
   const isSingleStudent = selectedStudentId !== 'all';
   const targetStudentId = isSingleStudent ? selectedStudentId : undefined;
@@ -93,12 +128,27 @@ function ReportsPage() {
     filter,
   );
 
+  // Thông tin cấp độ và lớp của học viên đang chọn
+  const currentMember = useMemo(
+    () => members.data?.find((m) => m.profile.id === selectedStudentId),
+    [members.data, selectedStudentId],
+  );
+  const currentLevelName = useMemo(
+    () => levels.data?.find((l) => l.id === currentMember?.levelId)?.name,
+    [levels.data, currentMember?.levelId],
+  );
+  const currentBatchName = useMemo(
+    () =>
+      selectedBatchId !== 'all' ? batches.find((b) => b.id === selectedBatchId)?.name : undefined,
+    [batches, selectedBatchId],
+  );
+
   // Xuất CSV
   const handleExportCsv = () => {
     const dateStr = new Date().toISOString().slice(0, 10);
     if (selectedStudentId === 'all') {
       if (!academyReport.data) return;
-      const csv = academyStudentsReportToCsv(academyReport.data);
+      const csv = academyStudentsReportToCsv(filteredAcademySummaries);
       downloadCsv(`bao-cao-hoc-vien-${academy.slug}-${dateStr}.csv`, csv);
     } else {
       if (!details.data) return;
@@ -120,18 +170,57 @@ function ReportsPage() {
           <p className="text-sm text-text-muted">{t('reports.subtitle')}</p>
         </div>
 
-        <Button
-          onClick={handleExportCsv}
-          disabled={isPending || !!error}
-          className="flex items-center gap-2"
-        >
-          <span>📥</span>
-          {t('reports.exportCsv')}
-        </Button>
+        <div className="flex items-center gap-2">
+          {isSingleStudent && details.data && (
+            <Button
+              variant="ghost"
+              onClick={() => setShowPrintModal(true)}
+              className="flex items-center gap-2 border border-primary/30 text-primary hover:bg-primary/10"
+            >
+              <span>🖨️</span>
+              {t('reports.printReport')}
+            </Button>
+          )}
+          <Button
+            onClick={handleExportCsv}
+            disabled={isPending || !!error}
+            className="flex items-center gap-2"
+          >
+            <span>📥</span>
+            {t('reports.exportCsv')}
+          </Button>
+        </div>
       </div>
 
       {/* Thanh bộ lọc */}
       <Card className="flex flex-wrap items-center gap-4 bg-muted/20 p-4">
+        {/* Bộ chọn Lớp / Nhóm (Batch) */}
+        {staff && (
+          <div className="flex items-center gap-2">
+            <label htmlFor="select-batch" className="text-sm font-medium text-text-muted">
+              {t('reports.filterBatch')}:
+            </label>
+            <select
+              id="select-batch"
+              value={selectedBatchId}
+              onChange={(e) => {
+                setSelectedBatchId(e.target.value);
+                if (selectedStudentId !== 'all') {
+                  setSelectedStudentId('all');
+                }
+              }}
+              className="rounded-md border border-text-muted/30 bg-white px-3 py-1.5 text-sm"
+            >
+              <option value="all">{t('reports.allBatches')}</option>
+              {batches.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {/* Bộ chọn học viên */}
         {(staff || academy.role === 'parent') && (
           <div className="flex items-center gap-2">
@@ -145,7 +234,7 @@ function ReportsPage() {
               className="rounded-md border border-text-muted/30 bg-white px-3 py-1.5 text-sm"
             >
               {staff && <option value="all">{t('reports.allStudents')}</option>}
-              {students.map((s) => (
+              {filteredStudents.map((s) => (
                 <option key={s.profile.id} value={s.profile.id}>
                   {s.profile.display_name} (@{s.profile.username})
                 </option>
@@ -211,7 +300,7 @@ function ReportsPage() {
       {/* CHẾ ĐỘ 1: TẤT CẢ HỌC VIÊN (Staff view) */}
       {!isPending && !error && selectedStudentId === 'all' && (
         <AllStudentsReportView
-          students={academyReport.data ?? []}
+          students={filteredAcademySummaries}
           onSelectStudent={(id) => setSelectedStudentId(id)}
         />
       )}
@@ -222,6 +311,17 @@ function ReportsPage() {
           report={details.data}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+        />
+      )}
+
+      {/* MODAL IN PHIẾU ĐIỂM HỌC VIÊN */}
+      {showPrintModal && details.data && (
+        <PrintableReportCard
+          report={details.data}
+          academyName={academy.name}
+          levelName={currentLevelName}
+          batchName={currentBatchName}
+          onClose={() => setShowPrintModal(false)}
         />
       )}
     </div>
