@@ -34,24 +34,51 @@ Giai đoạn 16 tập trung giải quyết triệt để 2 vấn đề mà ngư�
 
 ---
 
-### **PR 16b: Phân hệ Quản trị Học viên Chuyên sâu & Phân lớp Batches**
+### **PR 16b: Phân hệ Quản trị Học viên Chuyên sâu & Phân lớp Batches** (✅ ĐÃ HOÀN THÀNH & MERGE #37)
 
 - **Mục tiêu:** Xây dựng màn hình Quản lý Học viên chuyên nghiệp (`/administration/students`) và Quản lý Nhóm/Lớp (`/batches`) tương ứng với đặc tả `REA-SPEC-02`.
-- **Các thành phần cụ thể:**
-  1. **Màn hình Administration > Students (`a.$slug.admin.students.tsx`):**
-     - Bảng danh sách học viên trực quan với Avatar, Mã học viên, Cấp độ đào tạo, Lớp/Batch, Điểm Elo, Tỷ lệ làm bài tập và thông tin Phụ huynh.
-     - Ô tìm kiếm tức thì và bộ lọc đa tiêu chí (theo lớp, theo cấp độ, theo trạng thái).
-     - Modal Thêm mới / Chỉnh sửa học viên với 3 tab: Cơ bản, Học vụ và Phụ huynh.
-  2. **Hệ thống Cấp độ Đào tạo (Level Badges):**
-     - Hiển thị huy hiệu trực quan có biểu tượng và màu sắc sinh động (VD: 🥝 Gold Kiwi, 🛡️ Silver Knight, 👑 Master).
+- **Kết quả nghiệm thu:**
+  1. **Huy hiệu Cấp độ Kiwi Level (`LevelBadge.tsx`):** Hiển thị huy hiệu đẹp mắt kèm màu sắc, biểu tượng tương ứng theo từng bậc (Gold Kiwi, Silver Knight, Bronze Pawn, Master...).
+  2. **Bảng Quản trị Học viên (`StudentAdminTable.tsx`):**
+     - Bảng danh sách trực quan với Avatar, Tên, Username, Cấp độ, Lớp/Batch, Điểm Elo Rapid, Nút mời phụ huynh.
+     - Ô tìm kiếm tức thì và bộ lọc đa tiêu chí (theo Lớp/Batch, theo Cấp độ).
+     - Đổi cấp độ trực tiếp ngay trên hàng học viên.
+     - Chỉnh sửa Elo tức thì đồng bộ CSDL.
   3. **Màn hình Quản lý Nhóm/Lớp Batches (`a.$slug.batches.tsx`):**
-     - Danh sách các nhóm học viên dạng thẻ Grid, hiển thị HLV phụ trách, số lượng học viên, lịch học định kỳ và nút thao tác nhanh.
-  4. **Route alias:** Tạo các alias route `/administration/students` và `/batches` để khớp 100% với URL của Chesslang.
-- **Nhánh dự kiến:** `feat/giai-doan-16b-students-batches`
+     - Hiển thị danh sách các lớp học/nhóm dạng Card Grid sinh động kèm Huấn luyện viên phụ trách, sĩ số học viên và lịch học định kỳ trong tuần.
+     - Modal Sĩ số thành viên (`BatchRosterModal`) cho phép xem và thêm/bớt học viên một chạm.
+     - Modal Tạo nhóm/lớp mới (`CreateBatchModal`) kèm chọn HLV và cấp độ mục tiêu.
+  4. **Tương thích URL Chesslang:** Bổ sung route alias `/administration/students` và `/batches`, cập nhật Command Palette (`Ctrl+K`).
+  5. **Kiểm thử tự động:** Hoàn tất 6 unit tests mới (`LevelBadge.test.tsx`, `StudentAdminTable.test.tsx`), 47 tests passed, 3/3 jobs CI xanh. PR #37 đã được merge vào `main` tại commit `e1618b0`.
 
 ---
 
-## 3. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
+## 3. Chi tiết Giai đoạn 17: Công cụ Giảng dạy Bàn cờ & Lớp học Tương tác LiveKit (Tiếp theo)
+
+Giai đoạn 17 hiện thực hóa các yêu cầu tại `docs/dacta/03-lop-hoc-tuong-tac-classroom.md` và `docs/dacta/05-ban-co-hoc-lieu-study-database.md`:
+
+### **PR 17a: Nâng cấp Bàn cờ Giảng dạy Tương tác (Interactive Classroom Board)**
+- **Mục tiêu:** Nâng cấp bàn cờ lớp học trực tuyến (`apps/web/src/routes/a.$slug.classes.$id.room.tsx`) với đầy đủ tính năng sư phạm:
+  1. **Công cụ vẽ hình sư phạm (Annotations):**
+     - Chuột phải kéo thả vẽ mũi tên (xanh lá, đỏ, vàng, xanh dương).
+     - Chuột phải bấm tô màu ô cờ để làm nổi bật ô chiến thuật.
+     - Nút xóa nhanh toàn bộ chú thích trên bàn cờ.
+  2. **Thanh đánh giá EvalBar & Engine Arasan tích hợp trong lớp học:**
+     - Tích hợp EvalBar động hiển thị lợi thế điểm số (+1.5, -2.3, M3...).
+     - Phân tích nước đi trực tiếp cho HLV (giấu hoặc hiện với học viên tùy quyền).
+  3. **Cơ chế Phân quyền Đi quân (Turn & Move Permission):**
+     - HLV có nút trao quyền đi quân cho học viên bất kỳ hoặc chuyển chế độ Free Play / Coach Only.
+     - Trạng thái đồng bộ tức thì qua kênh Realtime Supabase Broadcast.
+
+### **PR 17b: Nâng cấp LiveKit Video Grid & Bảng điều khiển Lớp học**
+- **Mục tiêu:** Hoàn thiện giao diện phòng học trực tuyến LiveKit:
+  1. **Video Layouts:** Hỗ trợ 3 chế độ xem (Chế độ Bàn cờ tập trung Board-focused, Chế độ Hội nghị Gallery Grid, Chế độ Diễn giả Speaker).
+  2. **Điều khiển Lớp học cho HLV:** Quản lý Mic/Camera học viên (Mute all, Tắt camera khi cần), giơ tay phát biểu (Raise Hand).
+  3. **Bảng trò chuyện lớp học (In-class Chat):** Chat tin nhắn có preview FEN thế cờ thu nhỏ.
+
+---
+
+## 4. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
 1. `pnpm lint` (Biome check không cảnh báo/lỗi).
