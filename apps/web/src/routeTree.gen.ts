@@ -18,7 +18,9 @@ import { Route as EngineRouteImport } from './routes/engine'
 import { Route as GameAreaRouteImport } from './routes/game-area'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PracticeRouteImport } from './routes/practice'
+import { Route as PreferencesRouteImport } from './routes/preferences'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SimulRouteImport } from './routes/simul'
 import { Route as TournamentsRouteImport } from './routes/tournaments'
@@ -120,9 +122,19 @@ const PracticeRoute = PracticeRouteImport.update({
   path: '/practice',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PreferencesRoute = PreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -411,7 +423,9 @@ export interface FileRoutesByFullPath {
   '/game-area': typeof GameAreaRouteWithChildren
   '/login': typeof LoginRoute
   '/practice': typeof PracticeRoute
+  '/preferences': typeof PreferencesRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/simul': typeof SimulRoute
   '/tournaments': typeof TournamentsRoute
@@ -478,7 +492,9 @@ export interface FileRoutesByTo {
   '/game-area': typeof GameAreaRouteWithChildren
   '/login': typeof LoginRoute
   '/practice': typeof PracticeRoute
+  '/preferences': typeof PreferencesRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/simul': typeof SimulRoute
   '/tournaments': typeof TournamentsRoute
@@ -545,7 +561,9 @@ export interface FileRoutesById {
   '/game-area': typeof GameAreaRouteWithChildren
   '/login': typeof LoginRoute
   '/practice': typeof PracticeRoute
+  '/preferences': typeof PreferencesRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/simul': typeof SimulRoute
   '/tournaments': typeof TournamentsRoute
@@ -614,7 +632,9 @@ export interface FileRouteTypes {
     | '/game-area'
     | '/login'
     | '/practice'
+    | '/preferences'
     | '/profile'
+    | '/settings'
     | '/signup'
     | '/simul'
     | '/tournaments'
@@ -681,7 +701,9 @@ export interface FileRouteTypes {
     | '/game-area'
     | '/login'
     | '/practice'
+    | '/preferences'
     | '/profile'
+    | '/settings'
     | '/signup'
     | '/simul'
     | '/tournaments'
@@ -747,7 +769,9 @@ export interface FileRouteTypes {
     | '/game-area'
     | '/login'
     | '/practice'
+    | '/preferences'
     | '/profile'
+    | '/settings'
     | '/signup'
     | '/simul'
     | '/tournaments'
@@ -815,7 +839,9 @@ export interface RootRouteChildren {
   GameAreaRoute: typeof GameAreaRouteWithChildren
   LoginRoute: typeof LoginRoute
   PracticeRoute: typeof PracticeRoute
+  PreferencesRoute: typeof PreferencesRoute
   ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   SimulRoute: typeof SimulRoute
   TournamentsRoute: typeof TournamentsRoute
@@ -892,11 +918,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PracticeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/preferences': {
+      id: '/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof PreferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -1407,7 +1447,9 @@ const rootRouteChildren: RootRouteChildren = {
   GameAreaRoute: GameAreaRouteWithChildren,
   LoginRoute: LoginRoute,
   PracticeRoute: PracticeRoute,
+  PreferencesRoute: PreferencesRoute,
   ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   SimulRoute: SimulRoute,
   TournamentsRoute: TournamentsRoute,

@@ -4,6 +4,7 @@ import { COMMON_TIMEZONES, type MoveNotation } from '@erpchess/domain';
 import type { Session } from '@supabase/supabase-js';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
+import { BoardPreferencesCard } from '../components/preferences/BoardPreferencesCard';
 import { RequireSession } from '../components/RequireSession';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useT } from '../lib/use-t';
@@ -229,6 +230,8 @@ function ProfilePage({ session }: { session: Session }) {
           </div>
         </Card>
       </form>
+
+      <BoardPreferencesCard />
 
       <Card title={t('profile.changePassword')}>
         <form onSubmit={handlePasswordChange} className="flex flex-col gap-4">

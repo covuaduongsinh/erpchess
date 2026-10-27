@@ -1,7 +1,9 @@
 export {
   type Arrow,
+  BOARD_THEMES,
   Board,
   type BoardProps,
+  type BoardTheme,
   type Brush,
   type Drawings,
   type Highlight,
