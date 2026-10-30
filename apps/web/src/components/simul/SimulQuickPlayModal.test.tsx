@@ -6,6 +6,7 @@ import { SimulQuickPlayModal } from './SimulQuickPlayModal';
 afterEach(cleanup);
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({
     t: (key: string, _opt?: Record<string, unknown>) => {
       if (key === 'simul.nextActiveBoard') return 'Chuyển bàn tiếp theo';

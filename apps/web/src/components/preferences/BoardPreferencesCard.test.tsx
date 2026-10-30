@@ -9,6 +9,7 @@ beforeEach(() => {
 });
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({
     t: (key: string) => {
       if (key === 'profile.boardCustomizerTitle') return 'Tùy biến bàn cờ';

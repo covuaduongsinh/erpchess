@@ -6,6 +6,7 @@ import { TournamentLiveBoardGrid } from './TournamentLiveBoardGrid';
 afterEach(cleanup);
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({
     t: (key: string, opt?: Record<string, unknown>) => {
       if (key === 'tournament.board') return `Bàn ${opt?.n ?? 1}`;

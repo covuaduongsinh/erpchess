@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { PrintableReportCard, reportFileTitle } from './PrintableReportCard';
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({ t: (key: string) => key, i18n: { language: 'vi' } }),
 }));
 

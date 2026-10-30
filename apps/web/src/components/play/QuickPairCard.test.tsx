@@ -18,6 +18,7 @@ vi.mock('@erpchess/api', () => ({
 vi.mock('@erpchess/api/react', () => ({ useErpClient: () => ({}) }));
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({
     t: (key: string, vars?: Record<string, unknown>) =>
       vars ? `${key}:${JSON.stringify(vars)}` : key,

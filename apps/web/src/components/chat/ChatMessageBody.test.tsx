@@ -5,6 +5,7 @@ import { ChatMessageBody, useChatPreview } from './ChatMessageBody';
 afterEach(cleanup);
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({
     t: (key: string, vars?: { count?: number }) =>
       vars?.count !== undefined ? `${key}:${vars.count}` : key,

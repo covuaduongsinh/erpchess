@@ -6,6 +6,7 @@ import { QuizTaker } from './QuizTaker';
 afterEach(cleanup);
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({
     t: (key: string, opt?: Record<string, unknown>) => {
       if (key === 'quiz.summary') {
