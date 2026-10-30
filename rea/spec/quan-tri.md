@@ -48,7 +48,16 @@
 
 ## Location
 
-- Địa điểm: trung tâm, trường học.
+Quan sát lại bằng REA qua Chrome CDP ngày 2026-10-31 (chỉ mở trang và form rồi huỷ, không lưu).
+- **Danh sách địa điểm:** lọc theo tab Tất cả / Trung tâm / Trường học, có ô tìm kiếm; nút thêm địa điểm.
+- **Form thêm địa điểm:**
+  - Loại (bắt buộc): trung tâm của học viện, trường học, chung cư/nhà CLB, trung tâm cộng đồng, thư viện/phòng tự học, khác.
+  - Tên (bắt buộc), cờ "cơ sở chính" (mỗi học viện tối đa một).
+  - Địa chỉ: dòng địa chỉ, quốc gia (bắt buộc), tỉnh/bang, thành phố.
+  - Ngày làm việc (chọn nhiều, bắt buộc), giờ mở và giờ đóng cửa (bắt buộc), múi giờ IANA (bắt buộc).
+  - Người liên hệ và số điện thoại kèm mã vùng (bắt buộc); email, ghi chú (không bắt buộc).
+- **Liên kết với Batch:** form tạo Batch có trường **Hình thức học**: Online / Offline / Hybrid. Chọn Offline hoặc Hybrid thì bắt buộc chọn một địa điểm (có lối tắt tạo địa điểm mới).
+- **Menu Administration** (để đối chiếu phạm vi): Students, Coaches, Groups, Batches, Leads, Calendar, Invoices, Billing, Plans, Discounts, Reminders, Email, Notifications, Reports, Branding, Location, Levels, Integration, Rating.
 
 ## Reports
 

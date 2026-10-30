@@ -6,6 +6,7 @@ import {
   type AcademyProfileInput,
   type AcademyRole,
   academyProfileSchema,
+  type BatchMode,
   type CreateAcademyInput,
   type CreateAssignmentInput,
   type CreateStudentInput,
@@ -18,6 +19,7 @@ import {
   type LevelInput,
   levelSchema,
   levelTemplate,
+  modeNeedsLocation,
   pinSchema,
   type RatingCategory,
   type ScheduleSlot,
@@ -513,9 +515,15 @@ export type GroupPatch = {
   kind?: GroupKind;
   levelId?: string | null;
   schedule?: ScheduleSlot[];
+  /** Hình thức học (Giai đoạn 23a); offline/hybrid phải kèm `locationId`. */
+  mode?: BatchMode;
+  locationId?: string | null;
 };
 
 export async function updateGroup(client: ErpClient, id: string, patch: GroupPatch) {
+  if (patch.mode !== undefined && modeNeedsLocation(patch.mode) && !patch.locationId) {
+    throw new Error('location');
+  }
   unwrap(
     await client
       .from('groups')
@@ -524,6 +532,13 @@ export async function updateGroup(client: ErpClient, id: string, patch: GroupPat
         ...(patch.kind !== undefined ? { kind: patch.kind } : {}),
         ...(patch.levelId !== undefined ? { level_id: patch.levelId } : {}),
         ...(patch.schedule !== undefined ? { schedule: scheduleSchema.parse(patch.schedule) } : {}),
+        ...(patch.mode !== undefined ? { mode: patch.mode } : {}),
+        // Học online thì gỡ địa điểm
+        ...(patch.mode === 'online'
+          ? { location_id: null }
+          : patch.locationId !== undefined
+            ? { location_id: patch.locationId }
+            : {}),
       })
       .eq('id', id),
   );

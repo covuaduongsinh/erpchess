@@ -8,6 +8,7 @@ export type { Database, Enums, Tables, TablesInsert } from './database.types';
 export * from './databases';
 export * from './games';
 export * from './leads';
+export * from './locations';
 export * from './notifications';
 export * from './practice';
 export * from './presence';

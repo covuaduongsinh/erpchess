@@ -9,6 +9,7 @@ import type {
   CourseInput,
   ExerciseInput,
   LevelInput,
+  LocationInput,
   PracticePositionInput,
   QuizInput,
   RatingCategory,
@@ -43,6 +44,7 @@ import * as courses from './courses';
 import * as databases from './databases';
 import * as games from './games';
 import * as leads from './leads';
+import * as locations from './locations';
 import * as notifications from './notifications';
 import * as practice from './practice';
 import * as presence from './presence';
@@ -384,6 +386,40 @@ export function useUpdateGroup(academyId: string) {
       api.updateGroup(client, id, patch),
     onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) }),
   });
+}
+
+/** Địa điểm học viện (Giai đoạn 23a). */
+export function useLocations(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['locations', academyId ?? ''],
+    queryFn: () => locations.fetchLocations(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useLocationMutations(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => {
+    void qc.invalidateQueries({ queryKey: ['locations', academyId] });
+    void qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (input: LocationInput) => locations.createLocation(client, academyId, input),
+      onSuccess: refresh,
+    }),
+    update: useMutation({
+      mutationFn: ({ id, input }: { id: string; input: LocationInput }) =>
+        locations.updateLocation(client, id, input),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => locations.deleteLocation(client, id),
+      onSuccess: refresh,
+    }),
+  };
 }
 
 export function useDeleteGroup(academyId: string) {

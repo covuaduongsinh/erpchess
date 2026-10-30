@@ -4,16 +4,24 @@ import {
   useGroupStudentIds,
   useGroups,
   useLevels,
+  useLocations,
   useMembers,
   useToggleGroupStudent,
   useUpdateGroup,
 } from '@erpchess/api/react';
-import { isStaff, scheduleSchema } from '@erpchess/domain';
+import {
+  type BatchMode,
+  batchModes,
+  isStaff,
+  modeNeedsLocation,
+  scheduleSchema,
+} from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 import { LevelBadge } from '../components/students/LevelBadge';
 import { Button, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
+import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/batches')({
   component: BatchesPage,
@@ -27,6 +35,8 @@ function BatchesPage() {
   const groups = useGroups(academy.id);
   const levels = useLevels(academy.id);
   const members = useMembers(academy.id);
+  const locations = useLocations(academy.id);
+  const { t } = useT();
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [activeBatchId, setActiveBatchId] = useState<string | null>(null);
@@ -131,6 +141,23 @@ function BatchesPage() {
                       </span>
                     </div>
 
+                    <div className="flex items-center gap-2">
+                      <span className="text-base" aria-hidden="true">
+                        📍
+                      </span>
+                      <span>
+                        {t(`location.mode_${(batch.mode ?? 'online') as BatchMode}`)}
+                        {batch.location_id && (
+                          <>
+                            {' · '}
+                            <strong className="text-gray-800">
+                              {locations.data?.find((l) => l.id === batch.location_id)?.name ?? '—'}
+                            </strong>
+                          </>
+                        )}
+                      </span>
+                    </div>
+
                     {parsedSchedule.length > 0 && (
                       <div className="flex items-start gap-2">
                         <span className="text-base" aria-hidden="true">
@@ -189,6 +216,7 @@ function BatchesPage() {
         <CreateBatchModal
           academyId={academy.id}
           levels={levels.data ?? []}
+          locations={(locations.data ?? []).map((l) => ({ id: l.id, name: l.name }))}
           coaches={
             members.data
               ?.filter((m) => m.role === 'coach' || m.role === 'owner')
@@ -205,12 +233,14 @@ function BatchesPage() {
 function CreateBatchModal({
   academyId,
   levels,
+  locations,
   coaches,
   currentUserId,
   onClose,
 }: {
   academyId: string;
   levels: Array<{ id: string; name: string }>;
+  locations: Array<{ id: string; name: string }>;
   coaches: Array<{ id: string; name: string }>;
   currentUserId: string;
   onClose: () => void;
@@ -218,21 +248,28 @@ function CreateBatchModal({
   const [name, setName] = useState('');
   const [levelId, setLevelId] = useState<string>('');
   const [coachId, setCoachId] = useState<string>(coaches[0]?.id ?? currentUserId);
+  const [mode, setMode] = useState<BatchMode>('online');
+  const [locationId, setLocationId] = useState('');
+  const { t } = useT();
+  const needLocation = modeNeedsLocation(mode);
   const create = useCreateGroup(academyId);
   const update = useUpdateGroup(academyId);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!name.trim()) return;
+    if (!name.trim() || (needLocation && !locationId)) return;
 
     const res = await create.mutateAsync({
       name: name.trim(),
       coachId: coachId || undefined,
     });
-    if (res?.id && levelId) {
+    if (res?.id && (levelId || mode !== 'online')) {
       await update.mutateAsync({
         id: res.id,
-        patch: { levelId },
+        patch: {
+          ...(levelId ? { levelId } : {}),
+          ...(mode !== 'online' ? { mode, locationId } : {}),
+        },
       });
     }
     onClose();
@@ -294,13 +331,55 @@ function CreateBatchModal({
             </select>
           </label>
 
+          <label className="flex flex-col gap-1 text-sm">
+            <span className="font-medium">{t('location.mode')}</span>
+            <select
+              value={mode}
+              onChange={(e) => setMode(e.target.value as BatchMode)}
+              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+            >
+              {batchModes.map((m) => (
+                <option key={m} value={m}>
+                  {t(`location.mode_${m}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {needLocation &&
+            (locations.length === 0 ? (
+              <p className="text-xs text-danger">{t('location.noLocations')}</p>
+            ) : (
+              <label className="flex flex-col gap-1 text-sm">
+                <span className="font-medium">{t('location.title')}</span>
+                <select
+                  value={locationId}
+                  required
+                  onChange={(e) => setLocationId(e.target.value)}
+                  className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+                >
+                  <option value="">{t('location.pickLocation')}</option>
+                  {locations.map((l) => (
+                    <option key={l.id} value={l.id}>
+                      {l.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ))}
+
           {create.error && <ErrorText error={create.error} />}
+          {update.error && <ErrorText error={update.error} />}
 
           <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
             <Button type="button" variant="ghost" onClick={onClose}>
               Hủy
             </Button>
-            <Button type="submit" variant="cta" disabled={create.isPending}>
+            <Button
+              type="submit"
+              variant="cta"
+              disabled={create.isPending || (needLocation && !locationId)}
+            >
               {create.isPending ? 'Đang tạo...' : '✓ Tạo Lớp'}
             </Button>
           </div>
