@@ -26,7 +26,7 @@ import {
   squareColor,
   squareToGrid,
 } from './geometry';
-import { CELTIC, pieceLabel } from './pieces';
+import { PIECE_SETS, type PieceSet, pieceLabel } from './pieces';
 
 export type Brush = 'green' | 'red' | 'blue' | 'yellow';
 export type Arrow = { from: string; to: string; brush: Brush };
@@ -59,6 +59,8 @@ export type BoardProps = {
   coordinates?: boolean;
   /** Kiểu theme màu sắc bàn cờ */
   theme?: BoardTheme;
+  /** Bộ quân cờ */
+  pieceSet?: PieceSet;
   /** Nhãn cho trình đọc màn hình. */
   label?: string;
 };
@@ -87,10 +89,12 @@ export function Board({
   hiddenSquares = [],
   coordinates = true,
   theme = 'navy',
+  pieceSet = 'celtic',
   label = 'Bàn cờ',
 }: BoardProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const themeColors = BOARD_THEMES[theme] ?? BOARD_THEMES.navy;
+  const pieceImages = PIECE_SETS[pieceSet] ?? PIECE_SETS.celtic;
   const pieces = useMemo(() => parseBoard(fen), [fen]);
   const [selected, setSelected] = useState<string | null>(null);
   // Trạng thái kéo/vẽ giữ trong ref (cập nhật đồng bộ): pointermove/pointerup có thể tới
@@ -409,7 +413,7 @@ export function Board({
               key={`p-${sq}`}
               data-piece={code}
               data-at={sq}
-              href={CELTIC[code]}
+              href={pieceImages[code]}
               x={x}
               y={y}
               width={CELL}
@@ -470,7 +474,7 @@ export function Board({
 
         {drag?.moved && pieces.get(drag.from) && (
           <image
-            href={CELTIC[pieces.get(drag.from) as PieceCode]}
+            href={pieceImages[pieces.get(drag.from) as PieceCode]}
             x={drag.x - CELL / 2}
             y={drag.y - CELL / 2}
             width={CELL}
@@ -487,6 +491,7 @@ export function Board({
       {promotion && (
         <PromotionPicker
           color={(pieces.get(promotion.from) ?? 'wP')[0] as 'w' | 'b'}
+          images={pieceImages}
           left={(squareToGrid(promotion.to, orientation).col / 8) * 100}
           fromTop={squareToGrid(promotion.to, orientation).row === 0}
           onPick={(p) => {
@@ -503,12 +508,14 @@ export function Board({
 
 function PromotionPicker({
   color,
+  images,
   left,
   fromTop,
   onPick,
   onCancel,
 }: {
   color: 'w' | 'b';
+  images: Record<PieceCode, string>;
   left: number;
   fromTop: boolean;
   onPick: (p: 'q' | 'r' | 'b' | 'n') => void;
@@ -550,7 +557,7 @@ function PromotionPicker({
             }}
           >
             <img
-              src={CELTIC[`${color}${p.toUpperCase()}` as PieceCode]}
+              src={images[`${color}${p.toUpperCase()}` as PieceCode]}
               alt=""
               style={{ width: '100%' }}
             />

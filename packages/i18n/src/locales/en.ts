@@ -1268,6 +1268,10 @@ export const en: Resource = {
     boardCustomizerTitle: 'Board Customizer',
     boardCustomizerSubtitle: 'Choose your preferred board style, coordinates, and sound effects',
     liveBoardPreview: 'Live Board Preview',
+    boardPieceSet: 'Piece set',
+    boardPieceSet_celtic: 'Celtic',
+    boardPieceSet_spatial: 'Spatial',
+    boardSyncHint: 'Settings are saved to your account and synced across devices',
     commandPreferences: 'Preferences & Board Customizer',
   },
   reports: {

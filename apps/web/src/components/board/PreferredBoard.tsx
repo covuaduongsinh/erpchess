@@ -12,7 +12,13 @@ export type PreferredBoardProps = BoardProps & {
  * Bàn cờ áp dụng cài đặt cá nhân (theme, tọa độ, âm thanh). Prop truyền vào luôn thắng cài đặt,
  * để bàn thu nhỏ vẫn giữ `coordinates={false}`.
  */
-export function PreferredBoard({ theme, coordinates, sound, ...rest }: PreferredBoardProps) {
+export function PreferredBoard({
+  theme,
+  pieceSet,
+  coordinates,
+  sound,
+  ...rest
+}: PreferredBoardProps) {
   const { preferences } = useBoardPreferences();
   const soundOn = sound ?? preferences.soundEnabled;
   const { fen, lastMove, check } = rest;
@@ -30,6 +36,7 @@ export function PreferredBoard({ theme, coordinates, sound, ...rest }: Preferred
     <Board
       {...rest}
       theme={theme ?? preferences.theme}
+      pieceSet={pieceSet ?? preferences.pieceSet}
       coordinates={coordinates ?? preferences.coordinates}
     />
   );

@@ -1265,6 +1265,10 @@ export const vi = {
     boardCustomizerTitle: 'Tùy biến bàn cờ',
     boardCustomizerSubtitle: 'Chọn màu sắc, kiểu hiển thị và âm thanh yêu thích',
     liveBoardPreview: 'Bàn cờ xem trước',
+    boardPieceSet: 'Bộ quân cờ',
+    boardPieceSet_celtic: 'Celtic',
+    boardPieceSet_spatial: 'Spatial',
+    boardSyncHint: 'Cài đặt được lưu vào tài khoản và đồng bộ giữa các thiết bị',
     commandPreferences: 'Cài đặt sở thích & Tùy biến bàn cờ',
   },
   reports: {

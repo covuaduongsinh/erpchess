@@ -1,4 +1,10 @@
-import { BOARD_THEMES, Board, type BoardTheme } from '@erpchess/board-web';
+import {
+  BOARD_THEMES,
+  Board,
+  type BoardTheme,
+  PIECE_SETS,
+  type PieceSet,
+} from '@erpchess/board-web';
 import { useBoardPreferences } from '../../lib/use-board-preferences';
 import { useT } from '../../lib/use-t';
 import { Card } from '../ui';
@@ -6,11 +12,19 @@ import { Card } from '../ui';
 const PREVIEW_FEN = 'r1bqk2r/pp2bppp/2n1pn2/3p4/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 9';
 
 const THEME_KEYS: BoardTheme[] = ['navy', 'green', 'wood', 'blue', 'charcoal'];
+const PIECE_SET_KEYS: PieceSet[] = ['celtic', 'spatial'];
 
 export function BoardPreferencesCard() {
   const { t } = useT();
-  const { preferences, setTheme, setCoordinates, setSoundEnabled, setAutoFlip, resetPreferences } =
-    useBoardPreferences();
+  const {
+    preferences,
+    setTheme,
+    setPieceSet,
+    setCoordinates,
+    setSoundEnabled,
+    setAutoFlip,
+    resetPreferences,
+  } = useBoardPreferences();
 
   return (
     <Card title={t('profile.boardCustomizerTitle')}>
@@ -18,6 +32,7 @@ export function BoardPreferencesCard() {
         {/* Cột trái: Các tùy chọn cài đặt */}
         <div className="lg:col-span-7 flex flex-col gap-5">
           <p className="text-sm text-text-muted">{t('profile.boardCustomizerSubtitle')}</p>
+          <p className="text-xs text-text-muted">{t('profile.boardSyncHint')}</p>
 
           {/* Chọn Theme màu bàn cờ */}
           <div className="flex flex-col gap-2">
@@ -52,6 +67,36 @@ export function BoardPreferencesCard() {
                         <span className="text-[10px] font-bold text-primary">✓ Đang chọn</span>
                       )}
                     </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Chọn bộ quân cờ */}
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+              {t('profile.boardPieceSet')}
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              {PIECE_SET_KEYS.map((setKey) => {
+                const isSelected = preferences.pieceSet === setKey;
+                return (
+                  <button
+                    key={setKey}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => setPieceSet(setKey)}
+                    className={`flex items-center gap-3 rounded-lg border p-2.5 text-left transition-all cursor-pointer ${
+                      isSelected
+                        ? 'border-primary ring-2 ring-primary/20 bg-primary/5 dark:bg-primary/10'
+                        : 'border-border/60 hover:border-border hover:bg-surface-2/50'
+                    }`}
+                  >
+                    <img src={PIECE_SETS[setKey].wN} alt="" className="h-8 w-8 shrink-0" />
+                    <span className="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">
+                      {t(`profile.boardPieceSet_${setKey}`)}
+                    </span>
                   </button>
                 );
               })}
@@ -129,6 +174,7 @@ export function BoardPreferencesCard() {
             <Board
               fen={PREVIEW_FEN}
               theme={preferences.theme}
+              pieceSet={preferences.pieceSet}
               coordinates={preferences.coordinates}
               orientation="w"
               label={t('profile.liveBoardPreview')}

@@ -207,6 +207,16 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   4. **Kiểm thử tự động:** thêm `PreferredBoard.test.tsx` (6 test) và `board-sound.test.ts` (4 test).
 - **Còn lại cho PR 20c:** đồng bộ cài đặt lên hồ sơ server, bộ quân cờ (piece set), áp dụng cài đặt cho mobile.
 
+### **PR 20c: Đồng bộ tùy chọn bàn cờ lên hồ sơ và bộ quân thứ hai** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261030000026_profiles_board_preferences.sql` thêm `profiles.board_preferences jsonb not null default '{}'` (bắt buộc là object, ≤ 2 KB); pgTAP `19_profiles_board_preferences.sql`.
+  2. **Domain:** `boardPreferencesSchema`, `DEFAULT_BOARD_PREFERENCES`, `normalizeBoardPreferences` (trường sai/thiếu lấy mặc định) dùng chung web/mobile; `updateProfileSchema`/`updateProfile` nhận `boardPreferences`.
+  3. **Bộ quân spatial** (Maurizio Monge, MIT, kèm LICENSE) từ `vendor/arasan`; `board-web` có `PIECE_SETS` và prop `pieceSet`; `BoardPreferencesCard` có ô chọn bộ quân; `PreferredBoard` truyền `pieceSet`.
+  4. **Đồng bộ (`BoardPreferencesSync`, gắn trong `Shell` khi đăng nhập):** server có cài đặt thì nạp về localStorage; server trống mà máy có cài đặt thì đẩy lên; các thay đổi sau đó lưu lên server, gộp trong 800 ms.
+  5. **Kiểm thử:** `BoardPreferencesSync.test.tsx` (5), thêm test pieceSet cho `Board` và `BoardPreferencesCard`, 2 test domain.
+- **Còn lại cho PR 20d (mobile):** `board-native` nhận `theme`/`pieceSet` (sinh cả 2 bộ quân), mobile đọc `board_preferences` từ hồ sơ cho các màn có bàn cờ, màn hồ sơ mobile có phần chỉnh cài đặt bàn cờ.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

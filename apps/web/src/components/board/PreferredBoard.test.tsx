@@ -32,6 +32,7 @@ describe('PreferredBoard', () => {
   it('applies stored theme and coordinates', () => {
     saveStoredBoardPreferences({
       theme: 'wood',
+      pieceSet: 'celtic',
       coordinates: false,
       soundEnabled: true,
       autoFlip: false,
@@ -45,6 +46,7 @@ describe('PreferredBoard', () => {
   it('lets explicit props override preferences', () => {
     saveStoredBoardPreferences({
       theme: 'wood',
+      pieceSet: 'celtic',
       coordinates: true,
       soundEnabled: true,
       autoFlip: false,
@@ -71,6 +73,7 @@ describe('PreferredBoard', () => {
   it('stays silent when sound is disabled in preferences or by prop', () => {
     saveStoredBoardPreferences({
       theme: 'navy',
+      pieceSet: 'celtic',
       coordinates: true,
       soundEnabled: false,
       autoFlip: false,

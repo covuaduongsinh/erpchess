@@ -24,6 +24,7 @@ export async function updateProfile(
   if (patch.moveNotation !== undefined) updateData.move_notation = patch.moveNotation;
   if (patch.country !== undefined) updateData.country = patch.country;
   if (patch.bio !== undefined) updateData.bio = patch.bio;
+  if (patch.boardPreferences !== undefined) updateData.board_preferences = patch.boardPreferences;
 
   return unwrap(
     await client.from('profiles').update(updateData).eq('id', userId).select('*').single(),
