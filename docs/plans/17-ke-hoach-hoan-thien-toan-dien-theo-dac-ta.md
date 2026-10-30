@@ -259,6 +259,16 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   5. **Kiểm thử:** `PrintableReportCard.test.tsx` viết lại (5 test).
 - **Ghi chú:** "Xuất PDF" dùng hộp thoại in của trình duyệt (Lưu dưới dạng PDF), không thêm thư viện tạo PDF.
 
+### **PR 22c: Tìm trận nhanh (Auto Matchmaking)** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu (docs/dacta/06 mục 1.2 và 5.1):**
+  1. **DB:** migration `20261031000028_match_queue.sql` — bảng `match_queue` (mỗi người một lượt chờ/học viện, chỉ xem lượt của mình), hàm `quick_pair(academy, base_ms, inc_ms)` và `cancel_quick_pair(academy)` chạy `security definer`: vừa giữ chỗ (heartbeat) vừa ghép với người cùng mức thời gian có Elo gần nhất; khoảng chênh ±100, nới 50 mỗi 10 giây, tối đa ±600 (`private.match_window`). Ván tạo ra tính rating theo loại thời gian, màu ngẫu nhiên. Không dùng DELETE: lượt chờ chuyển trạng thái `matched`/`cancelled`, lượt mất heartbeat > 20–30 giây bị bỏ qua.
+  2. **API:** `quickPair`, `cancelQuickPair`, `parseQuickPair` (`packages/api/src/games.ts`).
+  3. **Web:** `QuickPairCard` trên trang Thi đấu (owner/coach/student): chọn mức thời gian, đếm giây chờ, hiện Elo và khoảng đang tìm, nút huỷ; ghép xong vào thẳng ván. Hook `useQuickPair` gọi lại mỗi 2 giây, rời trang khi đang chờ thì tự rời hàng đợi, huỷ đúng lúc vừa được ghép thì vẫn vào ván.
+  4. **Kiểm thử:** pgTAP `20_match_queue.sql` (7), `quick-pair.test.ts` (4), `QuickPairCard.test.tsx` (5).
+- **Chưa làm:** tìm trận nhanh trên mobile; chế độ Arena.
+- **Lỗi có từ trước (chưa sửa):** `ChallengeModal` cho học viên thách đấu chèn trực tiếp vào `games`, nhưng RLS chỉ cho staff ghép cặp → học viên tự thách đấu bị từ chối.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

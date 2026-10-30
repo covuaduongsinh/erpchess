@@ -725,6 +725,13 @@ export const vi = {
     todayGames: 'Ván hôm nay',
     onlineStudents: 'Học viên đang online ({{count}})',
     noneOnline: 'Chưa có học viên nào online.',
+    quickPairTitle: 'Tìm trận nhanh',
+    quickPairHint:
+      'Ghép với kỳ thủ trong học viện có Elo gần bạn nhất, cùng mức thời gian. Ván tính rating.',
+    quickPairStart: 'Tìm trận nhanh',
+    quickPairSearching: 'Đang tìm đối thủ… {{seconds}} giây',
+    quickPairWindow: 'Elo của bạn {{rating}} · tìm trong khoảng ±{{window}}',
+    quickPairCancel: 'Huỷ tìm',
     liveGames: 'Ván đang diễn ra',
     noLive: 'Không có ván nào đang diễn ra.',
     history: 'Lịch sử ván',
