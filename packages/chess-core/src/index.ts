@@ -67,6 +67,7 @@ export {
   toUci,
 } from './rules';
 export { nextOccurrence } from './schedule';
+export { type ChessShare, detectChessShare } from './share';
 export {
   type Pairing,
   pairSwiss,

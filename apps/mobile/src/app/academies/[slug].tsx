@@ -52,6 +52,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { chatPreview } from '@/components/ChatMessageBody';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -832,7 +833,7 @@ function ChatsCard({ academyId }: { academyId: string }) {
                 {title}
               </Text>
               <Text style={styles.hint} numberOfLines={1}>
-                {c.last_body ?? t('chat.empty')}
+                {chatPreview(c.last_body, t) ?? t('chat.empty')}
               </Text>
             </View>
             {c.unread > 0 ? (

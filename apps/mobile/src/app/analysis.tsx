@@ -1,6 +1,7 @@
 import {
   gameStatus,
   inCheck,
+  isValidFen,
   kingSquare,
   legalDests,
   type MoveNode,
@@ -9,8 +10,8 @@ import {
 import { useGameTree } from '@erpchess/chess-core/react';
 import type { TranslationKey } from '@erpchess/i18n';
 import { colors, spacing } from '@erpchess/ui-tokens';
-import { Stack } from 'expo-router';
-import { type ReactNode, useMemo, useState } from 'react';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { PreferredBoard } from '@/components/PreferredBoard';
 import { Button, Card, Field, Muted, styles } from '@/components/ui';
@@ -18,7 +19,19 @@ import { errorMessage, useT } from '@/lib/use-t';
 
 export default function AnalysisScreen() {
   const { t } = useT();
-  const game = useGameTree();
+  // Mở từ thẻ chia sẻ trong chat: ?fen=… (thế cờ) hoặc ?pgn=… (cả ván)
+  const params = useLocalSearchParams<{ fen?: string; pgn?: string }>();
+  const game = useGameTree(params.fen && isValidFen(params.fen) ? params.fen : undefined);
+  const { load } = game;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ nạp ván một lần khi mở
+  useEffect(() => {
+    if (!params.pgn) return;
+    try {
+      load(params.pgn);
+    } catch {
+      // PGN hỏng thì giữ bàn trống
+    }
+  }, []);
   const { tree, current } = game;
   const [orientation, setOrientation] = useState<'w' | 'b'>('w');
   const [importText, setImportText] = useState('');

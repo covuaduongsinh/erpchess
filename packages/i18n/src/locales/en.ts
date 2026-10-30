@@ -1228,6 +1228,14 @@ export const en: Resource = {
     batchChat: 'Batch chat',
     placeholder: 'Type a message…',
     send: 'Send',
+    sharedPosition: '♟ Position',
+    sharedGame: '♟ Game',
+    openPosition: 'Open the board to solve it',
+    openGame: 'Open the game in analysis',
+    gameMoves: '{{count}} moves',
+    unknownPlayer: 'Unknown',
+    shareHint:
+      'Paste a FEN or PGN to share a position/game · Enter to send, Shift+Enter for a new line',
   },
   profile: {
     title: 'My Profile',

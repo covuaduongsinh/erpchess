@@ -226,6 +226,18 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   4. **Màn hồ sơ mobile:** chọn theme (kèm ô màu), bộ quân, tọa độ, bàn cờ xem trước; lưu cùng nút "Lưu", giữ nguyên âm thanh/tự xoay đã đặt trên web.
 - **Chưa làm:** âm thanh và tự xoay bàn trên mobile.
 
+## 6b. Giai đoạn 21: Tính năng cờ vua trong Chat (docs/dacta/07 mục 3.2)
+
+### **PR 21a: Chia sẻ thế cờ (FEN) và ván cờ (PGN) trong chat** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **`detectChessShare` (`packages/chess-core/src/share.ts`):** nhận FEN hợp lệ trong tin nhắn (tự thêm bộ đếm nếu thiếu, giữ phần chữ trước/sau) hoặc PGN có ít nhất một nước (rút tên kỳ thủ, kết quả, giải, thế cuối qua `gameSummary`). Không đổi DB: tin nhắn vẫn là văn bản.
+  2. **Chat web:** `ChatMessageBody` vẽ bàn cờ nhỏ cho FEN (xoay theo bên đến lượt) và thẻ ván cho PGN; bấm vào mở `/analysis?fen=` hoặc `/analysis?pgn=` để giải thử/xem ván. Ô soạn đổi sang textarea (Enter gửi, Shift+Enter xuống dòng); danh sách hội thoại hiện nhãn "♟ Thế cờ"/"♟ Ván cờ".
+  3. **`/analysis` nhận `?pgn=`** (chỉ khi đọc được, ≤ 4000 ký tự); `AnalysisBoard` có prop `initialPgn`.
+  4. **Chat mobile:** cùng cách hiển thị, chạm mở màn phân tích; màn phân tích mobile đọc `fen`/`pgn` từ tham số; ô soạn cho nhiều dòng.
+  5. **Kiểm thử:** `share.test.ts` (7), `ChatMessageBody.test.tsx` (4).
+- **Giới hạn:** PGN dài hơn 2000 ký tự (ràng buộc `messages.body`) không gửi được; chưa có chia sẻ theo mã bài tập.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
