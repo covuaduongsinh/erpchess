@@ -14,6 +14,9 @@ export function validationKey(message: string): TranslationKey | null {
   if (message === 'color') return 'branding.invalidColor';
   if (message === 'phone') return 'branding.invalidPhone';
   if (message === 'contact') return 'branding.invalidContact';
+  if (message === 'hours') return 'location.invalidHours';
+  if (message === 'workingDays') return 'location.invalidWorkingDays';
+  if (message === 'location') return 'location.needLocation';
   const known = ['username', 'pin', 'displayName', 'slug', 'name', 'email', 'password'] as const;
   return (known as readonly string[]).includes(message)
     ? (`validation.${message}` as TranslationKey)

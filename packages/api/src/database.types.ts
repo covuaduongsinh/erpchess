@@ -70,6 +70,77 @@ export type Database = {
           },
         ]
       }
+      academy_locations: {
+        Row: {
+          academy_id: string
+          address_line: string
+          city: string
+          closes_at: string
+          contact_name: string
+          contact_phone: string
+          country: string
+          created_at: string
+          email: string | null
+          id: string
+          is_main: boolean
+          kind: string
+          name: string
+          notes: string
+          opens_at: string
+          state: string
+          timezone: string
+          working_days: number[]
+        }
+        Insert: {
+          academy_id: string
+          address_line?: string
+          city?: string
+          closes_at: string
+          contact_name: string
+          contact_phone: string
+          country: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_main?: boolean
+          kind?: string
+          name: string
+          notes?: string
+          opens_at: string
+          state?: string
+          timezone?: string
+          working_days: number[]
+        }
+        Update: {
+          academy_id?: string
+          address_line?: string
+          city?: string
+          closes_at?: string
+          contact_name?: string
+          contact_phone?: string
+          country?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_main?: boolean
+          kind?: string
+          name?: string
+          notes?: string
+          opens_at?: string
+          state?: string
+          timezone?: string
+          working_days?: number[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_locations_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       academy_billing: {
         Row: {
           academy_id: string
@@ -1487,6 +1558,8 @@ export type Database = {
           id: string
           kind: string
           level_id: string | null
+          location_id: string | null
+          mode: string
           name: string
           schedule: Json
         }
@@ -1497,6 +1570,8 @@ export type Database = {
           id?: string
           kind?: string
           level_id?: string | null
+          location_id?: string | null
+          mode?: string
           name: string
           schedule?: Json
         }
@@ -1507,6 +1582,8 @@ export type Database = {
           id?: string
           kind?: string
           level_id?: string | null
+          location_id?: string | null
+          mode?: string
           name?: string
           schedule?: Json
         }
@@ -3752,6 +3829,7 @@ export type Database = {
         }
         Returns: string
       }
+      set_main_location: { Args: { p_location: string }; Returns: undefined }
       set_student_level: {
         Args: { p_academy: string; p_level: string; p_student: string }
         Returns: undefined

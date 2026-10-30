@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Exercises } from './Exercises';
 
 vi.mock('../../lib/use-t', () => ({
+  validationKey: () => null,
   useT: () => ({
     t: (key: string, opt?: { count?: number }) => {
       if (key === 'assignments.puzzleCount') return `${opt?.count ?? 0} thế cờ`;

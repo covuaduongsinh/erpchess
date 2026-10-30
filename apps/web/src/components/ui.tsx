@@ -65,7 +65,10 @@ export function ErrorText({ error }: { error: unknown }) {
     message = key ? t(key) : error.message;
   } else if (error instanceof Error) {
     const code = (error as { code?: string }).code;
-    if (code === 'username_taken') message = t('students.usernameTaken');
+    // Lỗi kiểm tra tự ném ở tầng API (vd. `new Error('location')`) dùng chung mã với Zod
+    const known = validationKey(error.message);
+    if (known) message = t(known);
+    else if (code === 'username_taken') message = t('students.usernameTaken');
     else if (code === 'lichess_not_found') message = t('database.lichessNotFound');
     else if (code === 'lichess_unreachable' || code === 'lichess_error')
       message = t('database.lichessUnavailable');

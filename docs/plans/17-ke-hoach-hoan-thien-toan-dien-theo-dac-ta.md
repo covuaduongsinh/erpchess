@@ -273,6 +273,17 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
 
 - Supabase advisor báo 3 hàm báo cáo (`get_student_report_summary`, `get_student_report_details`, `get_academy_students_report`) và `handle_new_user` gọi được bằng vai trò `anon`. Migration `20261031000030_revoke_anon_reports.sql` thu hồi quyền `anon` (và mọi vai trò với hàm trigger `handle_new_user`); pgTAP `22_revoke_anon_reports.sql`.
 
+## 6d. Giai đoạn 23: Hoàn thiện các mục còn mở trong sổ cái (quan sát lại bằng REA)
+
+### **PR 23a: Địa điểm học viện (Location) và hình thức học của Batch** (✅ ĐÃ HOÀN THÀNH)
+
+- **Cơ sở đặc tả:** quan sát lại `platform.chesslang.com/administration/location` và form tạo Batch bằng REA qua Chrome CDP (2026-10-31), ghi vào `rea/spec/quan-tri.md`.
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261031000031_academy_locations.sql` — bảng `academy_locations` (6 loại, cơ sở chính tối đa một nhờ unique index có điều kiện, địa chỉ, ngày làm việc, giờ mở/đóng có kiểm tra đóng sau mở, múi giờ, liên hệ); RLS thành viên xem, chủ học viện thêm/sửa/xoá; RPC `set_main_location`; `groups.mode` (online/offline/hybrid) và `groups.location_id` (trigger bắt cùng học viện). pgTAP `23_academy_locations.sql` (8). Đã chạy thử trên Supabase trong giao dịch rồi rollback trước khi merge.
+  2. **Domain/API:** `locationSchema`, `filterLocations` (tìm không dấu), `modeNeedsLocation`; `fetchLocations`/`createLocation`/`updateLocation`/`deleteLocation`; `updateGroup` nhận `mode`/`locationId` (offline/hybrid thiếu địa điểm thì từ chối, online thì gỡ địa điểm).
+  3. **Web:** trang `/a/$slug/locations` (tab staff), lọc Tất cả/Trung tâm/Trường học/Khác + tìm, thẻ địa điểm có huy hiệu cơ sở chính, số lớp tại đây, xoá hai bước; form thêm/sửa; form tạo Batch có Hình thức học + chọn địa điểm, thẻ Batch hiện hình thức và địa điểm. `ErrorText` dịch được mã lỗi của `Error` thường.
+  4. **Kiểm thử:** domain (6), API (5), web `LocationFormModal.test.tsx` (2).
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
