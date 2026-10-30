@@ -269,6 +269,10 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
 - **Chưa làm:** tìm trận nhanh trên mobile; chế độ Arena.
 - **Lỗi có từ trước:** `ChallengeModal` cho học viên thách đấu chèn trực tiếp vào `games`, nhưng RLS chỉ cho staff ghép cặp → học viên tự thách đấu bị từ chối. **Đã sửa** ở PR sau: migration `20261031000029_create_challenge.sql` thêm RPC `create_challenge` (security definer; người gọi là một trong hai kỳ thủ, cả hai là owner/coach/student của học viện, màu ngẫu nhiên do server bốc, tối đa 3 ván đang diễn ra do mình mở, không giới hạn thời gian thì không tính rating); `ChallengeModal` gọi mutation `challenge` mới; test API + pgTAP `21_create_challenge.sql`.
 
+### **Gia cố bảo mật sau 22c** (✅ ĐÃ HOÀN THÀNH)
+
+- Supabase advisor báo 3 hàm báo cáo (`get_student_report_summary`, `get_student_report_details`, `get_academy_students_report`) và `handle_new_user` gọi được bằng vai trò `anon`. Migration `20261031000030_revoke_anon_reports.sql` thu hồi quyền `anon` (và mọi vai trò với hàm trigger `handle_new_user`); pgTAP `22_revoke_anon_reports.sql`.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
