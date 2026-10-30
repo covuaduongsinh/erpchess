@@ -5,7 +5,6 @@ import {
   useLeaderboard,
   useMembers,
   useStudentXp,
-  useUpdateAcademyProfile,
   useXpLeaderboard,
 } from '@erpchess/api/react';
 import {
@@ -14,17 +13,17 @@ import {
   type Period,
   periodRange,
   periods,
-  socialKeys,
   streakFrom,
   vnToday,
 } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { type FormEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { AcademyContactCard, BrandingCard } from '../components/academy/BrandingCard';
 import { QuickSessionModal } from '../components/dashboard/QuickSessionModal';
 import { WeeklyActivityChart } from '../components/dashboard/WeeklyActivityChart';
 import { InviteLink } from '../components/InviteLink';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -61,6 +60,7 @@ function OverviewPage() {
         <XpCard />
         <LeaderboardCard />
         <MembersCard />
+        <AcademyContactCard />
         {academy.role === 'owner' && <InviteCoachCard />}
         {academy.role === 'owner' && <BrandingCard />}
       </div>
@@ -397,70 +397,6 @@ function InviteCoachCard() {
       </Button>
       <ErrorText error={invite.error} />
       {invite.data && <InviteLink token={invite.data.token} />}
-    </Card>
-  );
-}
-
-function BrandingCard() {
-  const { t } = useT();
-  const { academy } = useAcademy();
-  const update = useUpdateAcademyProfile(academy.id);
-  const socials = (academy.socials ?? {}) as Partial<Record<(typeof socialKeys)[number], string>>;
-
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    const text = (name: string) => String(form.get(name) ?? '');
-    update.mutate({
-      name: text('name'),
-      description: text('description'),
-      logoUrl: text('logoUrl'),
-      socials: Object.fromEntries(socialKeys.map((k) => [k, text(k)])),
-    });
-  }
-
-  return (
-    <Card title={t('branding.title')}>
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <Field label={t('academy.name')} name="name" defaultValue={academy.name} required />
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">{t('branding.description')}</span>
-          <textarea
-            name="description"
-            rows={3}
-            maxLength={2000}
-            defaultValue={academy.description}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base"
-          />
-        </label>
-        <Field
-          label={t('branding.logoUrl')}
-          name="logoUrl"
-          type="url"
-          defaultValue={academy.logo_url ?? ''}
-        />
-        <fieldset className="grid gap-3 sm:grid-cols-2">
-          <legend className="mb-2 text-sm font-medium">{t('branding.socials')}</legend>
-          {socialKeys.map((k) => (
-            <Field
-              key={k}
-              label={t(`branding.${k}`)}
-              name={k}
-              type="url"
-              defaultValue={socials[k] ?? ''}
-            />
-          ))}
-        </fieldset>
-        <ErrorText error={update.error} />
-        {update.isSuccess && (
-          <p role="status" className="text-sm text-green">
-            {t('branding.saved')}
-          </p>
-        )}
-        <Button type="submit" variant="cta" className="self-start" disabled={update.isPending}>
-          {t('common.save')}
-        </Button>
-      </form>
     </Card>
   );
 }

@@ -11,6 +11,9 @@ export function useT() {
 /** Đổi mã lỗi Zod (message là tên trường) sang câu thông báo đã dịch. */
 export function validationKey(message: string): TranslationKey | null {
   if (message === 'url') return 'branding.invalidUrl';
+  if (message === 'color') return 'branding.invalidColor';
+  if (message === 'phone') return 'branding.invalidPhone';
+  if (message === 'contact') return 'branding.invalidContact';
   const known = ['username', 'pin', 'displayName', 'slug', 'name', 'email', 'password'] as const;
   return (known as readonly string[]).includes(message)
     ? (`validation.${message}` as TranslationKey)

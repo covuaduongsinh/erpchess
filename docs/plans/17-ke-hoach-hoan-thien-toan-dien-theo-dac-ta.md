@@ -238,6 +238,17 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   5. **Kiểm thử:** `share.test.ts` (7), `ChatMessageBody.test.tsx` (4).
 - **Giới hạn:** PGN dài hơn 2000 ký tự (ràng buộc `messages.body`) không gửi được; chưa có chia sẻ theo mã bài tập.
 
+## 6c. Giai đoạn 22: White-label học viện, xuất PDF báo cáo, tìm trận nhanh
+
+### **PR 22a: White-label học viện** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu (docs/dacta/07 mục 4.2):**
+  1. **DB:** migration `20261031000027_academy_white_label.sql` thêm `academies.favicon_url` (https), `brand_color` (#RRGGBB), `contact` jsonb (địa chỉ, điện thoại, hotline Zalo); bucket công khai `academy-branding` (≤ 1 MB, PNG/JPEG/WebP/SVG/ICO), chỉ chủ học viện được ghi theo thư mục `<academy_id>/`.
+  2. **Domain/API:** `academyProfileSchema` nhận `faviconUrl`, `brandColor`, `contact`; `brandColorVars` chọn màu chữ trắng/đen theo độ sáng nền; `uploadAcademyBranding` + hook `useUploadAcademyBranding`.
+  3. **Web:** `BrandingCard` (tách ra `components/academy/`) có tải logo/favicon, chọn màu kèm xem trước, thông tin liên hệ; `AcademyContactCard` cho mọi thành viên. Layout học viện ghi đè `--color-primary`/`--color-text-on-primary` trong phạm vi học viện và đổi favicon tab (trả lại khi rời đi).
+  4. **Kiểm thử:** 6 test web (`BrandingCard.test.tsx`), 3 test domain, 1 test API.
+- **Chưa làm:** áp màu/logo trên mobile; xoá ảnh cũ trong bucket khi thay ảnh mới.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

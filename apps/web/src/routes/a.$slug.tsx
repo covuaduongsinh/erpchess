@@ -4,6 +4,7 @@ import type { Session } from '@supabase/supabase-js';
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 import { RequireSession } from '../components/RequireSession';
 import { ErrorText, Spinner } from '../components/ui';
+import { academyBrandStyle, useAcademyFavicon } from '../lib/academy-branding';
 import { AcademyContext } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -24,6 +25,7 @@ function AcademyLayout({ session }: { session: Session }) {
     name: String(session.user.user_metadata?.display_name ?? ''),
     role: current?.role ?? '',
   });
+  useAcademyFavicon(current?.favicon_url);
 
   if (academies.isPending) return <Spinner />;
   if (academies.error) return <ErrorText error={academies.error} />;
@@ -66,29 +68,32 @@ function AcademyLayout({ session }: { session: Session }) {
 
   return (
     <AcademyContext value={{ academy, session, online }}>
-      <div className="flex flex-col gap-1">
-        <h1 className="flex items-center gap-3 text-3xl font-bold text-primary">
-          {academy.logo_url && (
-            <img src={academy.logo_url} alt="" className="size-10 rounded-md object-contain" />
-          )}
-          {academy.name}
-        </h1>
-        <p className="text-sm text-text-muted">{t(`role.${academy.role}`)}</p>
+      {/* `contents` để không đổi bố cục, chỉ truyền biến màu thương hiệu xuống các trang con */}
+      <div className="contents" style={academyBrandStyle(academy.brand_color)}>
+        <div className="flex flex-col gap-1">
+          <h1 className="flex items-center gap-3 text-3xl font-bold text-primary">
+            {academy.logo_url && (
+              <img src={academy.logo_url} alt="" className="size-10 rounded-md object-contain" />
+            )}
+            {academy.name}
+          </h1>
+          <p className="text-sm text-text-muted">{t(`role.${academy.role}`)}</p>
+        </div>
+        <nav className="flex gap-1 border-b border-text-muted/20">
+          {tabs.map((tab) => (
+            <Link
+              key={tab.to}
+              to={tab.to}
+              params={{ slug }}
+              activeOptions={{ exact: tab.exact }}
+              className="-mb-px border-b-2 border-transparent px-4 py-2 text-text-muted data-[status=active]:border-primary data-[status=active]:font-medium data-[status=active]:text-primary"
+            >
+              {tab.label}
+            </Link>
+          ))}
+        </nav>
+        <Outlet />
       </div>
-      <nav className="flex gap-1 border-b border-text-muted/20">
-        {tabs.map((tab) => (
-          <Link
-            key={tab.to}
-            to={tab.to}
-            params={{ slug }}
-            activeOptions={{ exact: tab.exact }}
-            className="-mb-px border-b-2 border-transparent px-4 py-2 text-text-muted data-[status=active]:border-primary data-[status=active]:font-medium data-[status=active]:text-primary"
-          >
-            {tab.label}
-          </Link>
-        ))}
-      </nav>
-      <Outlet />
     </AcademyContext>
   );
 }

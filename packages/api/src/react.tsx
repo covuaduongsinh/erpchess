@@ -448,6 +448,15 @@ export function useUpdateAcademyProfile(academyId: string) {
   });
 }
 
+/** Tải logo/favicon học viện lên Storage, trả link công khai (Giai đoạn 22a). */
+export function useUploadAcademyBranding(academyId: string) {
+  const client = useErpClient();
+  return useMutation({
+    mutationFn: ({ kind, file }: { kind: 'logo' | 'favicon'; file: File }) =>
+      api.uploadAcademyBranding(client, academyId, kind, file, file.name),
+  });
+}
+
 /** Nhập học viên từ CSV; `progress` là số dòng đã xử lý để hiện thanh tiến độ. */
 export function useImportStudents(academyId: string) {
   const client = useErpClient();
