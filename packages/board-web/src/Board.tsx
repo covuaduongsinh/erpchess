@@ -27,20 +27,13 @@ import {
   squareToGrid,
 } from './geometry';
 import { PIECE_SETS, type PieceSet, pieceLabel } from './pieces';
+import { BOARD_THEMES, type BoardTheme } from './themes';
 
 export type Brush = 'green' | 'red' | 'blue' | 'yellow';
 export type Arrow = { from: string; to: string; brush: Brush };
 export type Highlight = { square: string; brush: Brush };
 export type Drawings = { arrows: Arrow[]; highlights: Highlight[] };
-export type BoardTheme = 'navy' | 'green' | 'wood' | 'blue' | 'charcoal';
-
-export const BOARD_THEMES: Record<BoardTheme, { light: string; dark: string; name: string }> = {
-  navy: { light: colors.boardLight, dark: colors.boardDark, name: 'Dương Sinh Navy' },
-  green: { light: '#EEEED2', dark: '#769656', name: 'Cẩm thạch Xanh' },
-  wood: { light: '#F0D9B5', dark: '#B58863', name: 'Gỗ Cổ điển' },
-  blue: { light: '#DEE3E6', dark: '#8CA2AD', name: 'Xanh Đại dương' },
-  charcoal: { light: '#E0E0E0', dark: '#4E545C', name: 'Xám Kim loại' },
-};
+export { BOARD_THEMES, type BoardTheme };
 
 export type BoardProps = {
   fen: string;

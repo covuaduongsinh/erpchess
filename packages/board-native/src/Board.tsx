@@ -14,12 +14,13 @@ import {
   squareColor,
   squareToGrid,
 } from '@erpchess/board-web/geometry';
+import { BOARD_THEMES, type BoardTheme } from '@erpchess/board-web/themes';
 import { colors } from '@erpchess/ui-tokens';
 import { useMemo, useRef, useState } from 'react';
 import { type LayoutChangeEvent, Pressable, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector, usePanGesture } from 'react-native-gesture-handler';
 import Svg, { Circle, Rect, SvgXml } from 'react-native-svg';
-import { CELTIC_XML } from './pieces.generated';
+import { type NativePieceSet, PIECE_SETS_XML } from './pieces.generated';
 
 export type NativeBoardProps = {
   fen: string;
@@ -30,6 +31,10 @@ export type NativeBoardProps = {
   onMove?: (from: string, to: string, promotion?: 'q' | 'r' | 'b' | 'n') => void;
   hiddenSquares?: readonly string[];
   coordinates?: boolean;
+  /** Theme màu ô (dùng chung bảng màu với bản web). */
+  theme?: BoardTheme;
+  /** Bộ quân cờ. */
+  pieceSet?: NativePieceSet;
   /** Nhãn cho trình đọc màn hình. */
   label?: string;
 };
@@ -47,8 +52,12 @@ export function Board({
   onMove,
   hiddenSquares = [],
   coordinates = true,
+  theme = 'navy',
+  pieceSet = 'celtic',
   label = 'Bàn cờ',
 }: NativeBoardProps) {
+  const themeColors = BOARD_THEMES[theme] ?? BOARD_THEMES.navy;
+  const pieceXml = PIECE_SETS_XML[pieceSet] ?? PIECE_SETS_XML.celtic;
   const [size, setSize] = useState(0);
   const pieces = useMemo(() => parseBoard(fen), [fen]);
   const hidden = useMemo(() => new Set(hiddenSquares), [hiddenSquares]);
@@ -146,7 +155,7 @@ export function Board({
                     y={y}
                     width={cell}
                     height={cell}
-                    fill={squareColor(sq) === 'light' ? colors.boardLight : colors.boardDark}
+                    fill={squareColor(sq) === 'light' ? themeColors.light : themeColors.dark}
                   />
                 );
               })}
@@ -194,7 +203,7 @@ export function Board({
                   accessibilityLabel={`${sq} ${code}`}
                   style={[styles.piece, { left: x, top: y, width: cell, height: cell }]}
                 >
-                  <SvgXml xml={CELTIC_XML[code]} width={cell} height={cell} />
+                  <SvgXml xml={pieceXml[code]} width={cell} height={cell} />
                 </View>
               );
             })}
@@ -204,7 +213,10 @@ export function Board({
                 <Text
                   key={`r-${sq}`}
                   pointerEvents="none"
-                  style={[styles.coord, { left: 2, top: xy(sq).y + 1, color: coordColor(sq) }]}
+                  style={[
+                    styles.coord,
+                    { left: 2, top: xy(sq).y + 1, color: coordColor(sq, themeColors) },
+                  ]}
                 >
                   {sq[1]}
                 </Text>
@@ -216,7 +228,11 @@ export function Board({
                   pointerEvents="none"
                   style={[
                     styles.coord,
-                    { left: xy(sq).x + cell - 10, top: size - 14, color: coordColor(sq) },
+                    {
+                      left: xy(sq).x + cell - 10,
+                      top: size - 14,
+                      color: coordColor(sq, themeColors),
+                    },
                   ]}
                 >
                   {sq[0]}
@@ -232,7 +248,7 @@ export function Board({
                 ]}
               >
                 <SvgXml
-                  xml={CELTIC_XML[pieces.get(drag.from) as PieceCode]}
+                  xml={pieceXml[pieces.get(drag.from) as PieceCode]}
                   width={cell}
                   height={cell}
                 />
@@ -260,7 +276,7 @@ export function Board({
                   style={{ width: cell * 1.2, height: cell * 1.2 }}
                 >
                   <SvgXml
-                    xml={CELTIC_XML[`${color}${p.toUpperCase()}` as PieceCode]}
+                    xml={pieceXml[`${color}${p.toUpperCase()}` as PieceCode]}
                     width={cell * 1.2}
                     height={cell * 1.2}
                   />
@@ -277,8 +293,8 @@ export function Board({
   );
 }
 
-function coordColor(sq: string) {
-  return squareColor(sq) === 'light' ? colors.boardDark : colors.boardLight;
+function coordColor(sq: string, theme: { light: string; dark: string }) {
+  return squareColor(sq) === 'light' ? theme.dark : theme.light;
 }
 
 const styles = StyleSheet.create({

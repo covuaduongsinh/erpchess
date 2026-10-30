@@ -1269,6 +1269,8 @@ export const vi = {
     boardPieceSet_celtic: 'Celtic',
     boardPieceSet_spatial: 'Spatial',
     boardSyncHint: 'Cài đặt được lưu vào tài khoản và đồng bộ giữa các thiết bị',
+    boardOn: 'Bật',
+    boardOff: 'Tắt',
     commandPreferences: 'Cài đặt sở thích & Tùy biến bàn cờ',
   },
   reports: {

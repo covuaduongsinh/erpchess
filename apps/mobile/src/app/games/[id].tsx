@@ -1,9 +1,9 @@
 import { useGame, useGameAction, useMembers, useSession } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-native';
 import { inCheck, kingSquare, legalDests, replayGame } from '@erpchess/chess-core';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { PreferredBoard } from '@/components/PreferredBoard';
 import { Button, Card, ErrorText, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -87,7 +87,7 @@ export default function GameScreen() {
     <ScrollView contentContainerStyle={styles.screen}>
       <Stack.Screen options={{ title: `${name(g.white_id)} – ${name(g.black_id)}` }} />
       {row(orientation === 'w' ? 'b' : 'w')}
-      <Board
+      <PreferredBoard
         fen={replay.fen}
         orientation={orientation}
         lastMove={last ? [last.slice(0, 2), last.slice(2, 4)] : undefined}

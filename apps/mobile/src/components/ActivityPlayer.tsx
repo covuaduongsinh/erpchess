@@ -1,6 +1,5 @@
 import { type ActivityAttempt, resolveMediaUrl, type StudyActivity } from '@erpchess/api';
 import { useErpClient, useSubmitActivity } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-native';
 import {
   captureDests,
   captureTargets,
@@ -16,6 +15,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useMemo, useRef, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Markdown } from '@/components/Markdown';
+import { PreferredBoard } from '@/components/PreferredBoard';
 import { PuzzleSolver } from '@/components/PuzzleSolver';
 import { Button, ErrorText, Muted, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
@@ -95,7 +95,9 @@ export function ActivityPlayer({
       body = (
         <>
           <Markdown source={a.payload.body} />
-          {a.payload.fen ? <Board fen={a.payload.fen} label={t('activity.explanation')} /> : null}
+          {a.payload.fen ? (
+            <PreferredBoard fen={a.payload.fen} label={t('activity.explanation')} />
+          ) : null}
           {viewed}
         </>
       );
@@ -171,7 +173,7 @@ export function Mcq({
   return (
     <View style={{ gap: spacing.sm }}>
       <Text style={[styles.text, { fontWeight: '600', fontSize: 18 }]}>{payload.question}</Text>
-      {payload.fen ? <Board fen={payload.fen} label={payload.question} /> : null}
+      {payload.fen ? <PreferredBoard fen={payload.fen} label={payload.question} /> : null}
       {payload.options.map((opt, i) => (
         <Pressable
           // biome-ignore lint/suspicious/noArrayIndexKey: thứ tự phương án cố định
@@ -215,7 +217,7 @@ export function Capture({
   return (
     <View style={{ gap: spacing.sm }}>
       <Text style={styles.text}>{t('player.captureGoal', { count: remaining })}</Text>
-      <Board
+      <PreferredBoard
         fen={fen}
         orientation={side}
         lastMove={last ? [last.slice(0, 2), last.slice(2, 4)] : undefined}
@@ -263,7 +265,7 @@ function GameViewer({ pgn }: { pgn: string }) {
   const line = tree.mainline();
   return (
     <View style={{ gap: spacing.sm }}>
-      <Board
+      <PreferredBoard
         fen={node.fen}
         lastMove={move ? [move.uci.slice(0, 2), move.uci.slice(2, 4)] : undefined}
         label={t('database.viewer')}

@@ -217,6 +217,15 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   5. **Kiểm thử:** `BoardPreferencesSync.test.tsx` (5), thêm test pieceSet cho `Board` và `BoardPreferencesCard`, 2 test domain.
 - **Còn lại cho PR 20d (mobile):** `board-native` nhận `theme`/`pieceSet` (sinh cả 2 bộ quân), mobile đọc `board_preferences` từ hồ sơ cho các màn có bàn cờ, màn hồ sơ mobile có phần chỉnh cài đặt bàn cờ.
 
+### **PR 20d: Cài đặt bàn cờ trên mobile** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **Bảng màu dùng chung:** `BOARD_THEMES` tách ra `@erpchess/board-web/themes` (không kéo theo React DOM), `board-native` re-export.
+  2. **`board-native`:** prop `theme` và `pieceSet`; `scripts/gen-pieces.mjs` sinh `PIECE_SETS_XML` cho celtic và spatial, gắn tiền tố id theo từng quân (`spatial-wN-…`) để gradient không trùng id khi export web.
+  3. **Mobile `PreferredBoard`** (`apps/mobile/src/components/PreferredBoard.tsx`): đọc `profiles.board_preferences` qua `useProfile`, áp dụng cho 6 file có bàn cờ (phân tích, lớp học, ván đấu, quiz, ActivityPlayer, PuzzleSolver).
+  4. **Màn hồ sơ mobile:** chọn theme (kèm ô màu), bộ quân, tọa độ, bàn cờ xem trước; lưu cùng nút "Lưu", giữ nguyên âm thanh/tự xoay đã đặt trên web.
+- **Chưa làm:** âm thanh và tự xoay bàn trên mobile.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

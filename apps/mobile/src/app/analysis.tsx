@@ -1,4 +1,3 @@
-import { Board } from '@erpchess/board-native';
 import {
   gameStatus,
   inCheck,
@@ -13,6 +12,7 @@ import { colors, spacing } from '@erpchess/ui-tokens';
 import { Stack } from 'expo-router';
 import { type ReactNode, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { PreferredBoard } from '@/components/PreferredBoard';
 import { Button, Card, Field, Muted, styles } from '@/components/ui';
 import { errorMessage, useT } from '@/lib/use-t';
 
@@ -39,7 +39,7 @@ export default function AnalysisScreen() {
   return (
     <ScrollView contentContainerStyle={styles.screen} keyboardShouldPersistTaps="handled">
       <Stack.Screen options={{ title: t('analysis.title') }} />
-      <Board
+      <PreferredBoard
         fen={fen}
         orientation={orientation}
         lastMove={lastMove}

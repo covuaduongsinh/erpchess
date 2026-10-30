@@ -5,11 +5,11 @@ import {
   useMyAcademies,
   useSession,
 } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-native';
 import { legalDests, sideToMove } from '@erpchess/chess-core';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { PreferredBoard } from '@/components/PreferredBoard';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -85,7 +85,7 @@ export default function ClassScreen() {
             {t('classroom.people', { count: peers.length })}
           </Text>
           {snapshot ? (
-            <Board
+            <PreferredBoard
               fen={snapshot.fen}
               lastMove={snapshot.lastMove ?? undefined}
               movable={
