@@ -8,7 +8,8 @@ import {
 } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { type FormEvent, useEffect, useRef, useState } from 'react';
+import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { ChatMessageBody, useChatPreview } from '../components/chat/ChatMessageBody';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
@@ -32,6 +33,7 @@ function ChatPage() {
   const { c: selected } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const list = useConversations(academy.id);
+  const preview = useChatPreview();
   const [filter, setFilter] = useState<Filter>('');
   const [q, setQ] = useState('');
 
@@ -100,7 +102,7 @@ function ChatPage() {
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate font-medium">{conversationTitle(c)}</span>
                       <span className="truncate text-xs text-text-muted">
-                        {c.last_body ?? t('chat.empty')}
+                        {preview(c.last_body) ?? t('chat.empty')}
                       </span>
                     </span>
                     {c.unread > 0 && (
@@ -185,6 +187,7 @@ function ChatPane({ conversation }: { conversation: Conversation }) {
   const members = useMembers(academy.id);
   const messages = useChatMessages(conversation.id, academy.id);
   const { send } = useChatMutations(academy.id, session.user.id);
+  const navigate = useNavigate();
   const [text, setText] = useState('');
   const bottom = useRef<HTMLDivElement>(null);
   const name = (id: string | null) => {
@@ -198,10 +201,22 @@ function ChatPane({ conversation }: { conversation: Conversation }) {
     bottom.current?.scrollIntoView({ block: 'end' });
   }, [count]);
 
+  function submit() {
+    if (!text.trim() || send.isPending) return;
+    send.mutate({ conversationId: conversation.id, body: text }, { onSuccess: () => setText('') });
+  }
+
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!text.trim()) return;
-    send.mutate({ conversationId: conversation.id, body: text }, { onSuccess: () => setText('') });
+    submit();
+  }
+
+  // Enter gửi, Shift+Enter xuống dòng (để dán PGN nhiều dòng)
+  function onKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+      e.preventDefault();
+      submit();
+    }
   }
 
   return (
@@ -229,13 +244,16 @@ function ChatPane({ conversation }: { conversation: Conversation }) {
                 {!mine && conversation.kind === 'group' && (
                   <span className="text-xs text-text-muted">{name(m.sender_id)}</span>
                 )}
-                <p
-                  className={`max-w-[80%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${
-                    mine ? 'bg-primary text-text-on-primary' : 'bg-bg'
-                  }`}
-                >
-                  {m.body}
-                </p>
+                <ChatMessageBody
+                  body={m.body}
+                  mine={mine}
+                  onOpen={(share) =>
+                    void navigate({
+                      to: '/analysis',
+                      search: share.kind === 'fen' ? { fen: share.fen } : { pgn: share.pgn },
+                    })
+                  }
+                />
                 <span className="text-[10px] text-text-muted">
                   {formatDateTime(m.created_at, i18n.language)}
                 </span>
@@ -246,18 +264,22 @@ function ChatPane({ conversation }: { conversation: Conversation }) {
         <div ref={bottom} />
       </div>
       <form onSubmit={onSubmit} className="flex gap-2 border-t border-text-muted/15 p-3">
-        <input
+        <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={onKeyDown}
           maxLength={2000}
+          rows={text.includes('\n') ? 4 : 1}
           placeholder={t('chat.placeholder')}
-          className="min-w-0 flex-1 rounded-md border border-text-muted/30 bg-white px-3 py-2"
+          aria-label={t('chat.placeholder')}
+          className="min-w-0 flex-1 resize-none rounded-md border border-text-muted/30 bg-white px-3 py-2"
         />
         <Button type="submit" disabled={send.isPending || !text.trim()}>
           {t('chat.send')}
         </Button>
       </form>
       <div className="px-3 pb-2">
+        <p className="text-[11px] text-text-muted">{t('chat.shareHint')}</p>
         <ErrorText error={send.error} />
       </div>
     </section>

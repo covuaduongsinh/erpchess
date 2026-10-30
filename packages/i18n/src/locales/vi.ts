@@ -1225,6 +1225,13 @@ export const vi = {
     batchChat: 'Chat batch',
     placeholder: 'Nhập tin nhắn…',
     send: 'Gửi',
+    sharedPosition: '♟ Thế cờ',
+    sharedGame: '♟ Ván cờ',
+    openPosition: 'Mở bàn cờ để giải thử',
+    openGame: 'Mở ván trong bàn phân tích',
+    gameMoves: '{{count}} nước',
+    unknownPlayer: 'Chưa rõ',
+    shareHint: 'Dán FEN hoặc PGN để chia sẻ thế cờ/ván cờ · Enter để gửi, Shift+Enter xuống dòng',
   },
   profile: {
     title: 'Hồ sơ cá nhân',

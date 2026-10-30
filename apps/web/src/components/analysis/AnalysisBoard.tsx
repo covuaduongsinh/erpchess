@@ -25,15 +25,24 @@ const NO_DRAWINGS: Drawings = { arrows: [], highlights: [] };
 
 export function AnalysisBoard({
   initialFen,
+  initialPgn,
   notation = 'letters',
 }: {
   initialFen?: string;
+  /** Ván PGN nạp sẵn khi mở (vd. thẻ ván chia sẻ trong chat). */
+  initialPgn?: string;
   notation?: MoveNotation;
 }) {
   const { t } = useT();
   const { preferences } = useBoardPreferences();
   const game = useGameTree(initialFen);
   const { tree, current } = game;
+  const { load } = game;
+  // Nạp ván một lần khi mở; trang đổi `key` khi PGN khác nên không cần theo dõi thay đổi
+  // biome-ignore lint/correctness/useExhaustiveDependencies: chỉ nạp lúc mở
+  useEffect(() => {
+    if (initialPgn) load(initialPgn);
+  }, []);
   const [orientation, setOrientation] = useState<'w' | 'b'>('w');
   // Hình vẽ gắn với nước đang xem: đổi nước thì tự hết hiệu lực, không cần effect để xoá
   const [drawState, setDrawState] = useState<{ nodeId: string; drawings: Drawings }>({
