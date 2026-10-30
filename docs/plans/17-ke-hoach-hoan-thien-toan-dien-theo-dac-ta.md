@@ -249,6 +249,16 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   4. **Kiểm thử:** 6 test web (`BrandingCard.test.tsx`), 3 test domain, 1 test API.
 - **Chưa làm:** áp màu/logo trên mobile; xoá ảnh cũ trong bucket khi thay ảnh mới.
 
+### **PR 22b: Xuất PDF phiếu báo cáo học viên** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu (docs/dacta/07 mục 5.3):**
+  1. **Sửa lỗi in trang trắng:** CSS in chỉ cho hiện `.certificate-print`/`.invoice-print` nên phiếu báo cáo (GĐ18b) in ra trang trắng; thêm `.report-print` (định vị tuyệt đối để in được nhiều trang) và `@page A4 portrait`.
+  2. **Bỏ số liệu bịa:** phần "Đánh giá năng lực" cũ dùng % cố định (75/80/65) và nhận xét HLV soạn sẵn — thay bằng dữ liệu thật: bài tập, quiz, chuyên cần, ván đấu, giải đấu gần nhất (mỗi mục giới hạn số dòng, rỗng thì ghi "Chưa có dữ liệu").
+  3. **White-label trên phiếu:** logo, địa chỉ, điện thoại học viện (từ 22a); khoảng thời gian đang lọc; tên HLV ký là người đang xem (staff).
+  4. **Tên tệp PDF:** đặt tiêu đề trang `phieu-bao-cao-<username>-<ngày>` khi in, trả lại sau `afterprint`. Nhận xét HLV để trống thì bản in có dòng kẻ viết tay. Toàn bộ chữ qua i18n vi/en.
+  5. **Kiểm thử:** `PrintableReportCard.test.tsx` viết lại (5 test).
+- **Ghi chú:** "Xuất PDF" dùng hộp thoại in của trình duyệt (Lưu dưới dạng PDF), không thêm thư viện tạo PDF.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

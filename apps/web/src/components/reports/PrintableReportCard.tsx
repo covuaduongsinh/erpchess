@@ -1,297 +1,293 @@
 import type { StudentDetailedReport } from '@erpchess/domain';
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
+import { formatDate } from '../../lib/format';
+import { useT } from '../../lib/use-t';
 import { Button } from '../ui';
+
+/** Thông tin học viện in ở đầu phiếu (white-label, Giai đoạn 22a/22b). */
+export type ReportAcademy = {
+  name: string;
+  logoUrl?: string | null;
+  address?: string;
+  phone?: string;
+};
 
 export interface PrintableReportCardProps {
   report: StudentDetailedReport;
-  academyName: string;
+  academy: ReportAcademy;
   levelName?: string;
   batchName?: string;
+  /** Khoảng thời gian của báo cáo, vd. "Tháng này". */
+  periodLabel?: string;
+  /** Tên HLV ký phiếu (người đang xem nếu là staff). */
+  signerName?: string;
   onClose: () => void;
 }
 
+const MAX_ROWS = { assignments: 8, quizzes: 5, classrooms: 8, games: 6, tournaments: 3 } as const;
+
+/** Tên tệp gợi ý khi lưu PDF: trình duyệt lấy theo tiêu đề trang. */
+export function reportFileTitle(username: string, date = new Date()): string {
+  const day = date.toISOString().slice(0, 10);
+  return `phieu-bao-cao-${username}-${day}`;
+}
+
+/**
+ * Phiếu báo cáo học viên khổ A4 (Giai đoạn 18b, làm lại ở 22b): chỉ dùng số liệu thật của học viên.
+ * "Xuất PDF" dùng hộp thoại in của trình duyệt (chọn "Lưu dưới dạng PDF").
+ */
 export function PrintableReportCard({
   report,
-  academyName,
+  academy,
   levelName,
   batchName,
+  periodLabel,
+  signerName,
   onClose,
 }: PrintableReportCardProps) {
+  const { t, i18n } = useT();
   const { student, summary } = report;
-  const [coachNote, setCoachNote] = useState(
-    'Học viên có tinh thần học tập nghiêm túc, khả năng nhận biết đòn chiến thuật tốt. Cần rèn luyện thêm kỹ năng tính toán sâu các biến phức tạp và kỹ thuật tàn cuộc cơ bản.',
-  );
+  const [coachNote, setCoachNote] = useState('');
+  const date = (iso: string) => formatDate(iso, i18n.language);
 
   const handlePrint = () => {
+    // Đặt tiêu đề trang thành tên tệp gợi ý, trả lại sau khi in xong
+    const previous = document.title;
+    document.title = reportFileTitle(student.username);
+    const restore = () => {
+      document.title = previous;
+      window.removeEventListener('afterprint', restore);
+    };
+    window.addEventListener('afterprint', restore);
     window.print();
   };
 
-  const winRate =
-    summary.games.totalGames > 0
-      ? (
-          ((summary.games.wins + summary.games.draws * 0.5) / summary.games.totalGames) *
-          100
-        ).toFixed(1)
+  const { games } = summary;
+  const scoreRate =
+    games.totalGames > 0
+      ? (((games.wins + games.draws * 0.5) / games.totalGames) * 100).toFixed(1)
       : '0.0';
-
-  const dateStr = new Date().toLocaleDateString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  const rating = games.ratings.rapid ?? games.ratings.blitz ?? games.ratings.classical;
+  const contactLine = [academy.address, academy.phone].filter(Boolean).join(' · ');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto print:p-0 print:bg-white print:static print:inset-auto">
-      {/* Container A4 preview */}
-      <div className="relative w-full max-w-4xl rounded-2xl bg-white p-6 shadow-2xl text-slate-800 print:max-w-none print:shadow-none print:p-8 print:w-full">
-        {/* Thanh công cụ thao tác (ẩn khi in) */}
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-xs print:static print:inset-auto print:bg-white print:p-0">
+      <style>{'@media print { @page { size: A4 portrait; margin: 12mm; } }'}</style>
+      <div className="relative w-full max-w-4xl rounded-2xl bg-white p-6 text-slate-800 shadow-2xl print:max-w-none print:p-0 print:shadow-none">
         <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-4 print:hidden">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">📄</span>
-            <h2 className="font-bold text-slate-800 text-lg">Xem trước Phiếu điểm In ấn (A4)</h2>
+          <div className="flex flex-col">
+            <h2 className="text-lg font-bold text-slate-800">{t('reports.printPreview')}</h2>
+            <p className="text-xs text-text-muted">{t('reports.printHint')}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button
-              onClick={handlePrint}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <span>🖨️</span>
-              In / Xuất PDF
+            <Button variant="cta" onClick={handlePrint}>
+              {t('reports.printPdf')}
             </Button>
-            <Button
-              variant="ghost"
-              onClick={onClose}
-              className="text-slate-500 hover:text-slate-800"
-            >
-              Đóng
+            <Button variant="ghost" onClick={onClose}>
+              {t('reports.printClose')}
             </Button>
           </div>
         </div>
 
-        {/* PHIẾU BÁO CÁO CHUẨN IN ẤN (A4 PRINTABLE AREA) */}
-        <div
-          id="printable-report"
-          className="border-4 border-slate-800/10 rounded-xl p-8 bg-gradient-to-b from-blue-50/20 via-white to-slate-50/30 print:border-none print:p-0"
-        >
-          {/* Header Báo cáo */}
-          <div className="flex items-center justify-between border-b-2 border-slate-900 pb-5">
+        <article id="printable-report" className="report-print flex flex-col gap-5 bg-white">
+          <header className="flex items-center justify-between gap-4 border-b-2 border-slate-900 pb-4">
             <div className="flex items-center gap-3">
-              <div className="flex size-14 items-center justify-center rounded-xl bg-slate-900 text-white text-2xl font-black shadow-md">
-                ♔
-              </div>
+              {academy.logoUrl ? (
+                <img src={academy.logoUrl} alt="" className="size-14 rounded-lg object-contain" />
+              ) : (
+                <div className="flex size-14 items-center justify-center rounded-lg bg-primary text-2xl font-black text-text-on-primary">
+                  ♔
+                </div>
+              )}
               <div>
-                <h1 className="font-extrabold text-xl uppercase tracking-wider text-slate-900">
-                  {academyName || 'HỌC VIỆN CỜ VUA'}
+                <h1 className="text-xl font-extrabold tracking-wide text-slate-900 uppercase">
+                  {academy.name}
                 </h1>
-                <p className="text-xs font-medium text-slate-500">
-                  Hệ sinh thái Đào tạo Cờ vua Chuẩn Quốc tế FIDE
+                {contactLine && <p className="text-xs text-slate-500">{contactLine}</p>}
+              </div>
+            </div>
+            <div className="text-right text-xs text-slate-500">
+              <p>
+                {t('reports.printIssued')}: {date(new Date().toISOString())}
+              </p>
+              {periodLabel && (
+                <p>
+                  {t('reports.dateRange')}: {periodLabel}
                 </p>
-              </div>
+              )}
             </div>
-            <div className="text-right">
-              <span className="inline-block rounded-full bg-blue-100 px-3 py-1 font-bold text-blue-800 text-xs uppercase tracking-wider">
-                Official Report
-              </span>
-              <p className="mt-1 text-xs text-slate-500">Ngày xuất: {dateStr}</p>
-            </div>
+          </header>
+
+          <h2 className="text-center text-2xl font-black tracking-tight text-slate-900 uppercase">
+            {t('reports.printTitle')}
+          </h2>
+
+          <dl className="grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm sm:grid-cols-4">
+            <Info label={t('reports.colStudent')} value={student.displayName} strong />
+            <Info label={t('reports.printAccount')} value={`@${student.username}`} />
+            <Info label={t('reports.colLevel')} value={levelName || '—'} />
+            <Info label={t('reports.printBatch')} value={batchName || '—'} />
+          </dl>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Metric
+              label={t('reports.tabAssignments')}
+              value={`${summary.assignments.completed}/${summary.assignments.totalAssigned}`}
+              sub={`${t('reports.printSolvedRate')}: ${summary.assignments.solvedRate}%`}
+            />
+            <Metric
+              label={t('reports.tabQuizzes')}
+              value={summary.quizzes.avgScore.toFixed(0)}
+              sub={`${t('reports.printDone')}: ${summary.quizzes.completed}/${summary.quizzes.totalAssigned}`}
+            />
+            <Metric
+              label={t('reports.tabAttendance')}
+              value={`${summary.classrooms.attendanceRate}%`}
+              sub={`${summary.classrooms.presentCount}/${summary.classrooms.totalSessions}`}
+            />
+            <Metric
+              label={t('reports.tabGames')}
+              value={rating ? String(rating) : '—'}
+              sub={`${t('reports.printScoreRate')}: ${scoreRate}% (${games.totalGames})`}
+            />
           </div>
 
-          {/* Tiêu đề chính */}
-          <div className="my-6 text-center">
-            <h2 className="font-black text-2xl uppercase tracking-tight text-slate-900">
-              PHIẾU BÁO CÁO KẾT QUẢ HỌC TẬP
-            </h2>
-            <p className="text-sm text-slate-500">Student Progress & Chess Assessment Report</p>
-          </div>
-
-          {/* Thông tin học viên */}
-          <div className="grid grid-cols-2 gap-4 rounded-lg bg-slate-100/70 p-4 sm:grid-cols-4 text-sm mb-6 border border-slate-200">
-            <div>
-              <span className="block text-xs font-medium text-slate-500 uppercase">Học viên</span>
-              <span className="font-bold text-slate-900 text-base">{student.displayName}</span>
-            </div>
-            <div>
-              <span className="block text-xs font-medium text-slate-500 uppercase">Tài khoản</span>
-              <span className="font-semibold text-slate-700">@{student.username}</span>
-            </div>
-            <div>
-              <span className="block text-xs font-medium text-slate-500 uppercase">
-                Cấp độ đào tạo
-              </span>
-              <span className="font-semibold text-blue-700">{levelName || 'Cơ bản'}</span>
-            </div>
-            <div>
-              <span className="block text-xs font-medium text-slate-500 uppercase">
-                Lớp (Batch)
-              </span>
-              <span className="font-semibold text-slate-800">{batchName || 'Lớp tiêu chuẩn'}</span>
-            </div>
-          </div>
-
-          {/* 4 Thẻ Chỉ số Cốt lõi */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-6">
-            {/* Card Bài tập */}
-            <div className="rounded-xl border border-blue-200 bg-blue-50/40 p-4">
-              <div className="flex items-center justify-between text-blue-700 mb-1">
-                <span className="text-xs font-bold uppercase tracking-wider">Bài tập</span>
-                <span className="text-base">🧩</span>
-              </div>
-              <div className="text-2xl font-black text-slate-900">
-                {summary.assignments.completed}/{summary.assignments.totalAssigned}
-              </div>
-              <div className="mt-1 text-xs text-slate-600">
-                Giải đúng:{' '}
-                <span className="font-semibold text-green-700">
-                  {summary.assignments.solvedRate}%
-                </span>
-              </div>
-            </div>
-
-            {/* Card Quiz */}
-            <div className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
-              <div className="flex items-center justify-between text-indigo-700 mb-1">
-                <span className="text-xs font-bold uppercase tracking-wider">Trắc nghiệm</span>
-                <span className="text-base">📝</span>
-              </div>
-              <div className="text-2xl font-black text-slate-900">
-                {summary.quizzes.avgScore.toFixed(0)}{' '}
-                <span className="text-xs font-normal text-slate-500">điểm TB</span>
-              </div>
-              <div className="mt-1 text-xs text-slate-600">
-                Đã làm:{' '}
-                <span className="font-semibold text-indigo-700">
-                  {summary.quizzes.completed} bài
-                </span>
-              </div>
-            </div>
-
-            {/* Card Chuyên cần */}
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/40 p-4">
-              <div className="flex items-center justify-between text-emerald-700 mb-1">
-                <span className="text-xs font-bold uppercase tracking-wider">Chuyên cần</span>
-                <span className="text-base">🏫</span>
-              </div>
-              <div className="text-2xl font-black text-slate-900">
-                {summary.classrooms.attendanceRate}%
-              </div>
-              <div className="mt-1 text-xs text-slate-600">
-                Có mặt:{' '}
-                <span className="font-semibold text-emerald-700">
-                  {summary.classrooms.presentCount}/{summary.classrooms.totalSessions} buổi
-                </span>
-              </div>
-            </div>
-
-            {/* Card Thi đấu Elo */}
-            <div className="rounded-xl border border-amber-200 bg-amber-50/40 p-4">
-              <div className="flex items-center justify-between text-amber-700 mb-1">
-                <span className="text-xs font-bold uppercase tracking-wider">Hệ số Elo</span>
-                <span className="text-base">⚔️</span>
-              </div>
-              <div className="text-2xl font-black text-slate-900">
-                {summary.games.ratings.rapid ?? 1200}{' '}
-                <span className="text-xs font-normal text-slate-500">Rapid</span>
-              </div>
-              <div className="mt-1 text-xs text-slate-600">
-                Tỷ lệ thắng: <span className="font-semibold text-amber-700">{winRate}%</span> (
-                {summary.games.totalGames} ván)
-              </div>
-            </div>
-          </div>
-
-          {/* Biểu đồ Năng lực Kỹ thuật Cờ vua */}
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
-              <span>📊</span>
-              Đánh giá Trực quan Năng lực Cờ vua (Skill Assessment)
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-xs">
-              <div>
-                <div className="flex justify-between font-semibold mb-1 text-slate-700">
-                  <span>Khai cuộc (Opening Knowledge)</span>
-                  <span className="text-blue-700">75%</span>
-                </div>
-                <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                  <div className="h-full bg-blue-600 rounded-full" style={{ width: '75%' }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between font-semibold mb-1 text-slate-700">
-                  <span>Chiến thuật & Đòn phối hợp (Tactics)</span>
-                  <span className="text-green-700">
-                    {Math.max(50, Math.min(100, Math.round(summary.assignments.solvedRate)))}%
-                  </span>
-                </div>
-                <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                  <div
-                    className="h-full bg-green-600 rounded-full"
-                    style={{
-                      width: `${Math.max(50, Math.min(100, Math.round(summary.assignments.solvedRate)))}%`,
-                    }}
+          <div className="grid gap-4 sm:grid-cols-2 print:grid-cols-2">
+            <Section title={t('reports.tabAssignments')} empty={report.assignments.length === 0}>
+              {report.assignments.slice(0, MAX_ROWS.assignments).map((a) => (
+                <Row key={a.id} left={a.title} right={a.solved ? '✓' : '✗'} />
+              ))}
+            </Section>
+            <Section title={t('reports.tabQuizzes')} empty={report.quizzes.length === 0}>
+              {report.quizzes.slice(0, MAX_ROWS.quizzes).map((q) => (
+                <Row key={q.id} left={q.title} right={`${q.score}/${q.maxScore}`} />
+              ))}
+            </Section>
+            <Section title={t('reports.tabAttendance')} empty={report.classrooms.length === 0}>
+              {report.classrooms.slice(0, MAX_ROWS.classrooms).map((c) => (
+                <Row
+                  key={c.id}
+                  left={`${date(c.startsAt)} · ${c.title}`}
+                  right={t(`reports.printStatus_${c.status}`)}
+                />
+              ))}
+            </Section>
+            <Section title={t('reports.tabGames')} empty={report.games.length === 0}>
+              {report.games.slice(0, MAX_ROWS.games).map((g) => (
+                <Row
+                  key={g.id}
+                  left={`${date(g.playedAt)} · ${g.color === 'white' ? '♔' : '♚'} ${g.opponent}`}
+                  right={g.result}
+                />
+              ))}
+            </Section>
+            {report.tournaments.length > 0 && (
+              <Section title={t('reports.tabTournaments')} empty={false}>
+                {report.tournaments.slice(0, MAX_ROWS.tournaments).map((tr) => (
+                  <Row
+                    key={tr.id}
+                    left={tr.title}
+                    right={
+                      tr.rank ? `#${tr.rank}/${tr.totalPlayers} · ${tr.points}` : String(tr.points)
+                    }
                   />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between font-semibold mb-1 text-slate-700">
-                  <span>Tính toán Chiều sâu (Calculation)</span>
-                  <span className="text-indigo-700">80%</span>
-                </div>
-                <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                  <div className="h-full bg-indigo-600 rounded-full" style={{ width: '80%' }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between font-semibold mb-1 text-slate-700">
-                  <span>Kỹ thuật Tàn cuộc (Endgame Mastery)</span>
-                  <span className="text-amber-700">65%</span>
-                </div>
-                <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                  <div className="h-full bg-amber-600 rounded-full" style={{ width: '65%' }} />
-                </div>
-              </div>
-            </div>
+                ))}
+              </Section>
+            )}
           </div>
 
-          {/* Nhận xét Huấn luyện viên */}
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider mb-2 flex items-center gap-2">
-              <span>💬</span>
-              Nhận xét & Lộ trình của Huấn luyện viên
+          <section className="rounded-lg border border-slate-200 p-4">
+            <h3 className="mb-2 text-sm font-bold tracking-wider text-slate-900 uppercase">
+              {t('reports.printCoachNote')}
             </h3>
             <textarea
               value={coachNote}
               onChange={(e) => setCoachNote(e.target.value)}
               rows={3}
-              className="w-full rounded-lg border border-slate-200 bg-slate-50/50 p-2.5 text-xs text-slate-800 focus:outline-hidden focus:ring-1 focus:ring-blue-500 print:border-none print:bg-transparent print:p-0 print:resize-none"
+              placeholder={t('reports.printCoachNotePlaceholder')}
+              aria-label={t('reports.printCoachNote')}
+              className="w-full rounded-md border border-slate-200 p-2 text-sm print:hidden"
             />
-          </div>
+            {/* Bản in: nhận xét đã gõ, hoặc dòng kẻ để HLV viết tay */}
+            <div className="hidden text-sm whitespace-pre-wrap print:block">
+              {coachNote || (
+                <div className="flex flex-col gap-6 pt-4">
+                  <span className="border-b border-dotted border-slate-400" />
+                  <span className="border-b border-dotted border-slate-400" />
+                  <span className="border-b border-dotted border-slate-400" />
+                </div>
+              )}
+            </div>
+          </section>
 
-          {/* Phần Chữ ký & Xác nhận */}
-          <div className="mt-8 pt-4 border-t border-slate-200 grid grid-cols-2 text-center text-xs">
+          <footer className="grid grid-cols-2 pt-2 text-center text-xs">
             <div>
-              <p className="font-semibold text-slate-500 uppercase tracking-wider">
-                Học viên / Phụ huynh
+              <p className="font-semibold tracking-wider text-slate-500 uppercase">
+                {t('reports.printSignStudent')}
               </p>
-              <div className="h-16 flex items-center justify-center italic text-slate-400">
-                (Ký và ghi rõ họ tên)
-              </div>
+              <div className="h-16" />
               <p className="font-medium text-slate-700">{student.displayName}</p>
             </div>
             <div>
-              <p className="font-semibold text-slate-500 uppercase tracking-wider">
-                Huấn luyện viên Trưởng
+              <p className="font-semibold tracking-wider text-slate-500 uppercase">
+                {t('reports.printSignCoach')}
               </p>
-              <div className="h-16 flex items-center justify-center font-serif text-lg font-bold text-blue-900">
-                Đã duyệt & Xác nhận
-              </div>
-              <p className="font-medium text-slate-700">Ban Huấn Luyện {academyName}</p>
+              <div className="h-16" />
+              <p className="font-medium text-slate-700">{signerName || academy.name}</p>
             </div>
-          </div>
-        </div>
+          </footer>
+        </article>
       </div>
     </div>
+  );
+}
+
+function Info({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+  return (
+    <div>
+      <dt className="text-xs text-slate-500 uppercase">{label}</dt>
+      <dd className={strong ? 'text-base font-bold text-slate-900' : 'font-semibold'}>{value}</dd>
+    </div>
+  );
+}
+
+function Metric({ label, value, sub }: { label: string; value: string; sub: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 p-3">
+      <p className="text-xs font-bold tracking-wider text-primary uppercase">{label}</p>
+      <p className="text-2xl font-black text-slate-900">{value}</p>
+      <p className="text-xs text-slate-600">{sub}</p>
+    </div>
+  );
+}
+
+function Section({
+  title,
+  empty,
+  children,
+}: {
+  title: string;
+  empty: boolean;
+  children: ReactNode;
+}) {
+  const { t } = useT();
+  return (
+    <section className="rounded-lg border border-slate-200 p-3 break-inside-avoid">
+      <h3 className="mb-2 text-xs font-bold tracking-wider text-slate-900 uppercase">{title}</h3>
+      {empty ? (
+        <p className="text-xs text-slate-400">{t('reports.printNoData')}</p>
+      ) : (
+        <ul className="flex flex-col divide-y divide-slate-100 text-xs">{children}</ul>
+      )}
+    </section>
+  );
+}
+
+function Row({ left, right }: { left: string; right: string }) {
+  return (
+    <li className="flex justify-between gap-2 py-1">
+      <span className="truncate">{left}</span>
+      <span className="shrink-0 font-semibold">{right}</span>
+    </li>
   );
 }
