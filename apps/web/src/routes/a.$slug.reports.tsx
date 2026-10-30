@@ -143,6 +143,19 @@ function ReportsPage() {
     [batches, selectedBatchId],
   );
 
+  // Dữ liệu in trên phiếu báo cáo: khoảng thời gian đang lọc và HLV ký phiếu
+  const periodLabel =
+    preset === 'custom'
+      ? [customFrom, customTo].filter(Boolean).join(' → ') || undefined
+      : {
+          all: t('reports.presetAll'),
+          month: t('reports.presetMonth'),
+          quarter: t('reports.presetQuarter'),
+          year: t('reports.presetYear'),
+        }[preset];
+  const me = members.data?.find((m) => m.profile.id === session.user.id);
+  const signerName = me ? me.profile.display_name || me.profile.username || undefined : undefined;
+
   // Xuất CSV
   const handleExportCsv = () => {
     const dateStr = new Date().toISOString().slice(0, 10);
@@ -318,9 +331,16 @@ function ReportsPage() {
       {showPrintModal && details.data && (
         <PrintableReportCard
           report={details.data}
-          academyName={academy.name}
+          academy={{
+            name: academy.name,
+            logoUrl: academy.logo_url,
+            address: (academy.contact as { address?: string } | null)?.address,
+            phone: (academy.contact as { phone?: string } | null)?.phone,
+          }}
           levelName={currentLevelName}
           batchName={currentBatchName}
+          periodLabel={periodLabel}
+          signerName={staff ? signerName : undefined}
           onClose={() => setShowPrintModal(false)}
         />
       )}

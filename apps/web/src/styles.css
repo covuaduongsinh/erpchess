@@ -20,8 +20,8 @@ body {
     -10px 0;
 }
 
-/* In chứng chỉ / hoá đơn: chỉ in khung cần in. Khổ giấy đặt ngay trong trang tương ứng
-   (chứng chỉ A4 ngang, hoá đơn A4 dọc). */
+/* In chứng chỉ / hoá đơn / phiếu báo cáo: chỉ in khung cần in. Khổ giấy đặt ngay trong trang
+   tương ứng (chứng chỉ A4 ngang, hoá đơn và phiếu báo cáo A4 dọc). */
 @media print {
   body * {
     visibility: hidden;
@@ -29,13 +29,24 @@ body {
   .certificate-print,
   .certificate-print *,
   .invoice-print,
-  .invoice-print * {
+  .invoice-print *,
+  .report-print,
+  .report-print * {
     visibility: visible;
   }
   .certificate-print,
   .invoice-print {
     position: fixed;
     inset: 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  /* Phiếu báo cáo có thể dài hơn một trang nên không cố định vào khung trang như hoá đơn */
+  .report-print {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
