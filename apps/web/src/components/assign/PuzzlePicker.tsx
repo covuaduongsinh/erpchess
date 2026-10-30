@@ -1,10 +1,10 @@
 import type { PuzzleRow } from '@erpchess/api';
 import { usePuzzles } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { puzzleSideToMove } from '@erpchess/chess-core';
 import { useMemo, useState } from 'react';
 import { useAcademy } from '../../lib/academy-context';
 import { useT, useThemeLabel } from '../../lib/use-t';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { ErrorText, Spinner } from '../ui';
 
 /** Chọn puzzle từ thư viện (lọc chủ đề, xem trước). Dùng cho bài tập, Exercise, Quiz. */
@@ -85,10 +85,11 @@ export function PuzzlePicker({
           <p className="text-xs font-bold tracking-[0.05em] text-text-muted uppercase">
             {t('assignments.preview')}
           </p>
-          <Board
+          <PreferredBoard
             fen={shown.fen}
             orientation={puzzleSideToMove(shown)}
             coordinates={false}
+            sound={false}
             label={shown.title}
           />
           <p className="text-sm">{shown.title}</p>

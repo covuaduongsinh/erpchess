@@ -1,4 +1,3 @@
-import { Board } from '@erpchess/board-web';
 import { type GameTree, type MoveNode, parsePgn } from '@erpchess/chess-core';
 import type { Score } from '@erpchess/engine';
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -6,6 +5,7 @@ import { useT } from '../../lib/use-t';
 import { EngineLines } from '../analysis/EngineLines';
 import { EvalBar } from '../analysis/EvalBar';
 import { MoveList } from '../analysis/MoveList';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { Button } from '../ui';
 
 /**
@@ -100,7 +100,7 @@ export function GameViewer({
           </div>
         )}
         <div className="flex-1">
-          <Board
+          <PreferredBoard
             fen={node.fen}
             orientation={orientation}
             lastMove={move ? [move.uci.slice(0, 2), move.uci.slice(2, 4)] : undefined}

@@ -1,9 +1,9 @@
 import { useGameMutations } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { inCheck, kingSquare, legalDests, START_FEN } from '@erpchess/chess-core';
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import { PreferredBoard } from '../components/board/PreferredBoard';
 import { useBotGame } from '../components/play/useBotGame';
 import { Button, Card } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
@@ -266,7 +266,7 @@ function BotBoard({ setup, onNew }: { setup: Setup; onNew: () => void }) {
       <Card title={botTitle}>
         <div className="flex flex-col items-center gap-4">
           <div className="w-full max-w-[520px]">
-            <Board
+            <PreferredBoard
               fen={game.fen}
               orientation={setup.color}
               movable={canMove ? { color: setup.color, dests: legalDests(game.fen) } : undefined}

@@ -198,6 +198,15 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
      - Tích hợp Command Palette `Ctrl+K` truy cập nhanh vào Tùy biến bàn cờ (`nav-board-preferences`).
   5. **Kiểm thử tự động:** Hoàn tất 4 unit tests mới (`BoardPreferencesCard.test.tsx`), toàn bộ 76 unit tests của `@erpchess/web` pass 100%, 11/11 packages typecheck passed, 100% Biome linting clean.
 
+### **PR 20b: Áp dụng tùy chọn bàn cờ cho mọi trang, âm thanh và tự xoay bàn** (✅ ĐÃ HOÀN THÀNH)
+
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **`PreferredBoard` (`apps/web/src/components/board/PreferredBoard.tsx`):** lớp bọc `<Board>` đọc `useBoardPreferences`, truyền `theme`/`coordinates`; prop truyền vào luôn thắng cài đặt (bàn thu nhỏ giữ `coordinates={false}`). Thay cho `<Board>` ở 15 file web: phân tích, ván online, đấu bot, lớp học (room/replay), simul, giải đấu, bài tập, quiz, study.
+  2. **Âm thanh nước đi (`apps/web/src/lib/board-sound.ts`):** tổng hợp bằng WebAudio (không dùng file âm thanh), 3 loại: đi quân, ăn quân (số quân giảm), chiếu. Chỉ phát khi FEN đổi kèm `lastMove`, không phát ở lần vẽ đầu; tôn trọng `soundEnabled`; prop `sound={false}` tắt hẳn cho lưới nhiều bàn và ảnh thu nhỏ.
+  3. **Tự xoay bàn theo lượt:** `autoFlipOrientation` áp dụng ở bàn phân tích (một người đi cả hai bên); nút lật thủ công vẫn hoạt động (đảo so với bên đến lượt), EvalBar xoay theo. Ván online, lớp học, simul giữ hướng theo màu quân.
+  4. **Kiểm thử tự động:** thêm `PreferredBoard.test.tsx` (6 test) và `board-sound.test.ts` (4 test).
+- **Còn lại cho PR 20c:** đồng bộ cài đặt lên hồ sơ server, bộ quân cờ (piece set), áp dụng cài đặt cho mobile.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

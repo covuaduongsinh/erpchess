@@ -1,6 +1,5 @@
 import { type ActivityAttempt, resolveMediaUrl, type SubmitActivityResult } from '@erpchess/api';
 import { useErpClient, useSubmitActivity } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import {
   captureDests,
   captureTargets,
@@ -16,6 +15,7 @@ import { type Activity, type ActivityPayload, videoEmbed } from '@erpchess/domai
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { getEngine } from '../../lib/engine';
 import { useT } from '../../lib/use-t';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { PuzzleSolver } from '../puzzle/PuzzleSolver';
 import { Button, ErrorText } from '../ui';
 import { GameViewer } from './GameViewer';
@@ -91,7 +91,7 @@ export function ActivityPlayer({ studyId, activity, attempt }: Props) {
           <Markdown source={activity.payload.body} />
           {activity.payload.fen && (
             <div className="max-w-sm">
-              <Board
+              <PreferredBoard
                 fen={activity.payload.fen}
                 label={t('activity.explanation')}
                 drawings={{ arrows: activity.payload.arrows ?? [], highlights: [] }}
@@ -192,7 +192,7 @@ export function Mcq({
       <p className="text-lg font-medium">{payload.question}</p>
       {payload.fen && (
         <div className="max-w-sm">
-          <Board fen={payload.fen} label={payload.question} />
+          <PreferredBoard fen={payload.fen} label={payload.question} />
         </div>
       )}
       <div className="grid gap-2 sm:grid-cols-2">
@@ -242,7 +242,7 @@ export function Capture({
     <div className="flex flex-col gap-3">
       <p className="text-sm">{t('player.captureGoal', { count: remaining })}</p>
       <div className="max-w-md">
-        <Board
+        <PreferredBoard
           fen={fen}
           orientation={sideToMove(payload.fen)}
           lastMove={last ? [last.slice(0, 2), last.slice(2, 4)] : undefined}
@@ -402,7 +402,7 @@ export function EngineGame({
         {payload.goal === 'win' ? t('player.engineGoalWin') : t('player.engineGoalDraw')}
       </p>
       <div className="max-w-md">
-        <Board
+        <PreferredBoard
           fen={fen}
           orientation={payload.side}
           lastMove={lastMove ? [lastMove.slice(0, 2), lastMove.slice(2, 4)] : undefined}

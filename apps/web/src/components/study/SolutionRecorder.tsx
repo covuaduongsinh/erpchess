@@ -1,7 +1,7 @@
-import { Board } from '@erpchess/board-web';
 import { inCheck, kingSquare, legalDests, playMove, sanLine } from '@erpchess/chess-core';
 import { useMemo } from 'react';
 import { useT } from '../../lib/use-t';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { Button } from '../ui';
 
 /**
@@ -29,7 +29,7 @@ export function SolutionRecorder({
 
   return (
     <div className="flex flex-col gap-2">
-      <Board
+      <PreferredBoard
         fen={current}
         orientation={fen.split(' ')[1] === 'b' ? 'b' : 'w'}
         lastMove={last ? [last.slice(0, 2), last.slice(2, 4)] : undefined}

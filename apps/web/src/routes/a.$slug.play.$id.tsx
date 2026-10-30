@@ -1,8 +1,8 @@
 import { useGame, useGameAction, useMembers } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { inCheck, kingSquare, legalDests, replayGame } from '@erpchess/chess-core';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { PreferredBoard } from '../components/board/PreferredBoard';
 import { GameClock } from '../components/play/GameClock';
 import { actionErrorKey, resultText } from '../components/play/gameText';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
@@ -87,7 +87,7 @@ function GamePage() {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="mx-auto flex w-full max-w-[600px] flex-col gap-2">
           {playerRow(top)}
-          <Board
+          <PreferredBoard
             fen={replay.fen}
             orientation={orientation}
             lastMove={lastUci ? [lastUci.slice(0, 2), lastUci.slice(2, 4)] : undefined}

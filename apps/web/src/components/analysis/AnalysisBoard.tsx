@@ -1,4 +1,4 @@
-import { Board, type Drawings } from '@erpchess/board-web';
+import type { Drawings } from '@erpchess/board-web';
 import {
   gameStatus,
   inCheck,
@@ -13,7 +13,9 @@ import { useGameTree } from '@erpchess/chess-core/react';
 import type { Score } from '@erpchess/engine';
 import type { TranslationKey } from '@erpchess/i18n';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useBoardPreferences } from '../../lib/use-board-preferences';
 import { useT } from '../../lib/use-t';
+import { autoFlipOrientation, PreferredBoard } from '../board/PreferredBoard';
 import { Button, Card } from '../ui';
 import { EngineLines } from './EngineLines';
 import { EvalBar } from './EvalBar';
@@ -29,6 +31,7 @@ export function AnalysisBoard({
   notation?: MoveNotation;
 }) {
   const { t } = useT();
+  const { preferences } = useBoardPreferences();
   const game = useGameTree(initialFen);
   const { tree, current } = game;
   const [orientation, setOrientation] = useState<'w' | 'b'>('w');
@@ -49,6 +52,7 @@ export function AnalysisBoard({
   const status = gameStatus(fen);
   const dests = useMemo(() => legalDests(fen), [fen]);
   const lastMove = current.id === 'root' ? undefined : moveSquares(current as MoveNode);
+  const boardOrientation = autoFlipOrientation(orientation, side, preferences.autoFlip);
 
   const drawings = drawState.nodeId === current.id ? drawState.drawings : NO_DRAWINGS;
   const setDrawings = (d: Drawings) => setDrawState({ nodeId: current.id, drawings: d });
@@ -79,12 +83,12 @@ export function AnalysisBoard({
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
       <div className="flex gap-2">
         {engineOn && (
-          <EvalBar score={bestScore} orientation={orientation} label={t('analysis.eval')} />
+          <EvalBar score={bestScore} orientation={boardOrientation} label={t('analysis.eval')} />
         )}
         <div className="flex-1">
-          <Board
+          <PreferredBoard
             fen={fen}
-            orientation={orientation}
+            orientation={boardOrientation}
             lastMove={lastMove}
             check={inCheck(fen) ? kingSquare(fen) : undefined}
             movable={status === 'ongoing' ? { color: side, dests } : undefined}

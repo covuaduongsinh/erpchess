@@ -5,12 +5,12 @@ import {
   useQuizPuzzle,
   useQuizQuestions,
 } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { inCheck, kingSquare, legalDests, sideToMove } from '@erpchess/chess-core';
 import { quizStatus } from '@erpchess/domain';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { formatRemaining } from '../../lib/format';
 import { useT } from '../../lib/use-t';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { Capture, Mcq } from '../study/ActivityPlayer';
 import { Button, Card, ErrorText, Spinner } from '../ui';
 
@@ -393,7 +393,7 @@ function QuizPuzzle({
   return (
     <div className="flex flex-col gap-3">
       <div className="max-w-md">
-        <Board
+        <PreferredBoard
           fen={state.fen}
           orientation={side}
           lastMove={state.lastMove}
