@@ -9,6 +9,7 @@ export * from './databases';
 export * from './games';
 export * from './leads';
 export * from './locations';
+export * from './masterbase';
 export * from './notifications';
 export * from './practice';
 export * from './presence';

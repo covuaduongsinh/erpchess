@@ -284,6 +284,16 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   3. **Web:** trang `/a/$slug/locations` (tab staff), lọc Tất cả/Trung tâm/Trường học/Khác + tìm, thẻ địa điểm có huy hiệu cơ sở chính, số lớp tại đây, xoá hai bước; form thêm/sửa; form tạo Batch có Hình thức học + chọn địa điểm, thẻ Batch hiện hình thức và địa điểm. `ErrorText` dịch được mã lỗi của `Error` thường.
   4. **Kiểm thử:** domain (6), API (5), web `LocationFormModal.test.tsx` (2).
 
+### **PR 23b: Masterbase — kho ván cao thủ** (🟡 HẠ TẦNG XONG, CHƯA CÓ DỮ LIỆU)
+
+- **Cơ sở đặc tả:** quan sát lại tab Masterbase ở `/board` bằng REA (bật/tắt từng bộ lọc để thấy ngữ nghĩa), ghi vào `rea/spec/choi-giai-dau.md`.
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261031000032_masterbase.sql` — `masterbase_games` (dùng chung toàn hệ thống, cột `source` ghi nguồn + giấy phép), `masterbase_positions` (khoá thế cờ = 3 trường đầu FEN, chỉ 40 nửa nước đầu để vừa gói Supabase), RLS chỉ đọc cho người đã đăng nhập, RPC `search_masterbase` (thế cờ, số nửa nước tối đa, Elo tối thiểu của cả hai bên, phân trang kèm tổng). pgTAP `24_masterbase.sql` (6). Đã chạy thử trên Supabase (5 phép lọc đúng) rồi rollback.
+  2. **chess-core:** `positionKey`, `masterbaseFilter` (thế khởi đầu không lọc; "< 20 nước" = ≤ 39 nửa nước); test đối chiếu khoá giữa chess-core và chess.js.
+  3. **Script nạp:** `packages/chess-core/scripts/masterbase-export.mjs <in.pgn> <out> --source "<nguồn + giấy phép>"` → `games.csv` + `positions.csv`, nạp bằng `\copy` với kết nối service role (hướng dẫn ở đầu script).
+  4. **Web:** `MasterbasePanel` trong bàn phân tích (chỉ khi đã đăng nhập): ba nút lọc như Chesslang, bảng 20 ván/trang, chọn ván để nạp PGN vào bàn.
+- **Việc còn lại (cần chủ dự án quyết định):** chọn bộ ván có giấy phép mở để nạp (ví dụ một bộ CC0 trích từ kho của Lichess), kích thước phải vừa gói Supabase (gói Free 500 MB).
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

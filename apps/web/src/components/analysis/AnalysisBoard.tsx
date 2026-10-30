@@ -19,6 +19,7 @@ import { autoFlipOrientation, PreferredBoard } from '../board/PreferredBoard';
 import { Button, Card } from '../ui';
 import { EngineLines } from './EngineLines';
 import { EvalBar } from './EvalBar';
+import { MasterbasePanel } from './MasterbasePanel';
 import { MoveList } from './MoveList';
 
 const NO_DRAWINGS: Drawings = { arrows: [], highlights: [] };
@@ -27,10 +28,13 @@ export function AnalysisBoard({
   initialFen,
   initialPgn,
   notation = 'letters',
+  showMasterbase = false,
 }: {
   initialFen?: string;
   /** Ván PGN nạp sẵn khi mở (vd. thẻ ván chia sẻ trong chat). */
   initialPgn?: string;
+  /** Hiện kho ván cao thủ (cần đăng nhập vì `search_masterbase` không mở cho khách). */
+  showMasterbase?: boolean;
   notation?: MoveNotation;
 }) {
   const { t } = useT();
@@ -145,6 +149,8 @@ export function AnalysisBoard({
             <EngineLines fen={fen} onPlay={game.play} onScore={onScore} notation={notation} />
           )}
         </Card>
+
+        {showMasterbase && <MasterbasePanel fen={fen} onLoadPgn={(pgn) => game.load(pgn)} />}
 
         <Card title={t('analysis.moves')}>
           {tree.root.children.length === 0 ? (

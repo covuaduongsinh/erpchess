@@ -29,6 +29,7 @@ export {
 } from './game';
 export { type GameSummary, gameSummary, splitPgn } from './games';
 export { type GameResult, glicko2Update, newRating, type Rating } from './glicko2';
+export { MASTERBASE_INDEX_PLIES, masterbaseFilter, positionKey } from './masterbase';
 export {
   FIGURINE_MAP,
   formatSan,

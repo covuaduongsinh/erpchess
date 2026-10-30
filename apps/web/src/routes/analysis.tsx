@@ -29,5 +29,13 @@ function AnalysisPage() {
   const { session } = useSession();
   const profileQuery = useProfile(session?.user?.id);
   const notation = (profileQuery.data?.move_notation as MoveNotation) ?? 'letters';
-  return <AnalysisBoard key={pgn ?? fen} initialFen={fen} initialPgn={pgn} notation={notation} />;
+  return (
+    <AnalysisBoard
+      key={pgn ?? fen}
+      initialFen={fen}
+      initialPgn={pgn}
+      notation={notation}
+      showMasterbase={!!session}
+    />
+  );
 }
