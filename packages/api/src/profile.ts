@@ -25,6 +25,8 @@ export async function updateProfile(
   if (patch.country !== undefined) updateData.country = patch.country;
   if (patch.bio !== undefined) updateData.bio = patch.bio;
   if (patch.boardPreferences !== undefined) updateData.board_preferences = patch.boardPreferences;
+  if (patch.chesscomUsername !== undefined) updateData.chesscom_username = patch.chesscomUsername;
+  if (patch.lichessUsername !== undefined) updateData.lichess_username = patch.lichessUsername;
 
   return unwrap(
     await client.from('profiles').update(updateData).eq('id', userId).select('*').single(),

@@ -1333,6 +1333,8 @@ export type Database = {
           created_by: string | null
           id: string
           name: string
+          sync_cursor: number | null
+          sync_source: string | null
           visibility: string
         }
         Insert: {
@@ -1341,6 +1343,8 @@ export type Database = {
           created_by?: string | null
           id?: string
           name: string
+          sync_cursor?: number | null
+          sync_source?: string | null
           visibility?: string
         }
         Update: {
@@ -1349,6 +1353,8 @@ export type Database = {
           created_by?: string | null
           id?: string
           name?: string
+          sync_cursor?: number | null
+          sync_source?: string | null
           visibility?: string
         }
         Relationships: [
@@ -2541,10 +2547,12 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           board_preferences: Json
+          chesscom_username: string | null
           country: string | null
           created_at: string
           display_name: string
           id: string
+          lichess_username: string | null
           locale: string
           move_notation: string
           timezone: string
@@ -2555,10 +2563,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           board_preferences?: Json
+          chesscom_username?: string | null
           country?: string | null
           created_at?: string
           display_name?: string
           id: string
+          lichess_username?: string | null
           locale?: string
           move_notation?: string
           timezone?: string
@@ -2569,10 +2579,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           board_preferences?: Json
+          chesscom_username?: string | null
           country?: string | null
           created_at?: string
           display_name?: string
           id?: string
+          lichess_username?: string | null
           locale?: string
           move_notation?: string
           timezone?: string

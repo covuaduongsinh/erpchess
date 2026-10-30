@@ -294,6 +294,15 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   4. **Web:** `MasterbasePanel` trong bàn phân tích (chỉ khi đã đăng nhập): ba nút lọc như Chesslang, bảng 20 ván/trang, chọn ván để nạp PGN vào bàn.
 - **Việc còn lại (cần chủ dự án quyết định):** chọn bộ ván có giấy phép mở để nạp (ví dụ một bộ CC0 trích từ kho của Lichess), kích thước phải vừa gói Supabase (gói Free 500 MB).
 
+### **PR 23c: Đồng bộ ván Chess.com / Lichess** (✅ ĐÃ HOÀN THÀNH)
+
+- **Cơ sở đặc tả:** quan sát lại khối "Sync Games" ở Preferences của Chesslang bằng REA.
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261031000033_game_sync.sql` — `profiles.chesscom_username`/`lichess_username` (kiểm định dạng), `game_databases.sync_source`/`sync_cursor`, CSDL đồng bộ bắt buộc riêng tư và duy nhất theo (học viện, người, nguồn); học viên được tạo/ghi CSDL đồng bộ của mình (`create or replace` hàm `can_edit_database`, `alter policy` — không DROP). pgTAP `25_game_sync.sql` (6). Đã chạy thử trên Supabase rồi rollback.
+  2. **API** (`game-sync.ts`): gọi thẳng API công khai (cả hai cho phép CORS) — Chess.com duyệt kho theo tháng từ mới về cũ, dừng khi đủ hoặc khi tháng cũ hơn mốc; Lichess dùng tham số `since`; tối đa 200 ván/lần; `syncGames` tạo CSDL nếu chưa có, nhập PGN, dời mốc.
+  3. **Web:** hồ sơ có thẻ lưu username; trang Database (mở cho mọi vai trò trừ phụ huynh) có thẻ đồng bộ, CSDL đồng bộ gắn nhãn "⟳ đồng bộ"; học viên không thấy form tạo CSDL.
+  4. **Kiểm thử:** API 7 (giả lập `fetch`), web 4.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

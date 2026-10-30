@@ -49,6 +49,9 @@ function AcademyLayout({ session }: { session: Session }) {
       ? [{ to: '/a/$slug/billing', label: t('bill.title'), exact: false }]
       : []),
     { to: '/a/$slug/chat', label: t('chat.title'), exact: false },
+    ...(academy.role !== 'parent'
+      ? [{ to: '/a/$slug/database', label: t('database.title'), exact: false }]
+      : []),
     { to: '/a/$slug/reports', label: t('reports.navReports'), exact: false },
     ...(academy.role === 'owner'
       ? [{ to: '/a/$slug/notifications', label: t('notify.title'), exact: false }]
@@ -62,7 +65,6 @@ function AcademyLayout({ session }: { session: Session }) {
           { to: '/a/$slug/students', label: t('students.title'), exact: false },
           { to: '/a/$slug/levels', label: t('levels.title'), exact: false },
           { to: '/a/$slug/locations', label: t('location.title'), exact: false },
-          { to: '/a/$slug/database', label: t('database.title'), exact: false },
         ]
       : []),
   ] as const;
