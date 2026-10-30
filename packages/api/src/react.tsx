@@ -45,6 +45,7 @@ import * as databases from './databases';
 import * as games from './games';
 import * as leads from './leads';
 import * as locations from './locations';
+import * as masterbase from './masterbase';
 import * as notifications from './notifications';
 import * as practice from './practice';
 import * as presence from './presence';
@@ -385,6 +386,18 @@ export function useUpdateGroup(academyId: string) {
     mutationFn: ({ id, patch }: { id: string; patch: api.GroupPatch }) =>
       api.updateGroup(client, id, patch),
     onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.groups(academyId) }),
+  });
+}
+
+/** Masterbase (Giai đoạn 23b): giữ trang cũ trong lúc tải trang mới để bảng không nhấp nháy. */
+export function useMasterbase(q: masterbase.MasterbaseQuery, enabled = true) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['masterbase', q.position, q.maxPlies, q.minElo, q.page],
+    queryFn: () => masterbase.searchMasterbase(client, q),
+    enabled,
+    placeholderData: (prev) => prev,
+    staleTime: 60_000,
   });
 }
 

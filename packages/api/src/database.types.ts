@@ -2017,6 +2017,80 @@ export type Database = {
           },
         ]
       }
+      masterbase_games: {
+        Row: {
+          black: string
+          black_elo: number | null
+          date: string
+          eco: string
+          event: string
+          id: number
+          imported_at: string
+          pgn: string
+          ply_count: number
+          result: string
+          site: string
+          source: string
+          white: string
+          white_elo: number | null
+        }
+        Insert: {
+          black?: string
+          black_elo?: number | null
+          date?: string
+          eco?: string
+          event?: string
+          id: number
+          imported_at?: string
+          pgn: string
+          ply_count?: number
+          result?: string
+          site?: string
+          source: string
+          white?: string
+          white_elo?: number | null
+        }
+        Update: {
+          black?: string
+          black_elo?: number | null
+          date?: string
+          eco?: string
+          event?: string
+          id?: number
+          imported_at?: string
+          pgn?: string
+          ply_count?: number
+          result?: string
+          site?: string
+          source?: string
+          white?: string
+          white_elo?: number | null
+        }
+        Relationships: []
+      }
+      masterbase_positions: {
+        Row: {
+          game_id: number
+          position_key: string
+        }
+        Insert: {
+          game_id: number
+          position_key: string
+        }
+        Update: {
+          game_id?: number
+          position_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "masterbase_positions_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "masterbase_games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memberships: {
         Row: {
           academy_id: string
@@ -3828,6 +3902,28 @@ export type Database = {
           p_starts: string
         }
         Returns: string
+      }
+      search_masterbase: {
+        Args: {
+          p_limit?: number
+          p_max_plies?: number | null
+          p_min_elo?: number | null
+          p_offset?: number
+          p_position?: string | null
+        }
+        Returns: {
+          black: string
+          black_elo: number | null
+          date: string
+          eco: string
+          event: string
+          id: number
+          ply_count: number
+          result: string
+          total: number
+          white: string
+          white_elo: number | null
+        }[]
       }
       set_main_location: { Args: { p_location: string }; Returns: undefined }
       set_student_level: {

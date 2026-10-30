@@ -46,6 +46,7 @@
   - Điều hướng nước đi, hiện thời gian mỗi nước.
 - **Tab:**
   - Masterbase: tìm ván cao thủ; lọc ván dưới 20 nước, Elo trên 2500, hoặc theo thế cờ trên bàn.
+    - Quan sát lại bằng REA (2026-10-31): bảng phân trang (khoảng 16 triệu ván) với cột Ngày, Trắng, Elo Trắng, Đen, Elo Đen, Kết quả, ECO; ba nút lọc bật/tắt độc lập trên toàn kho (dưới 20 nước còn khoảng 1,15 triệu ván; Elo trên 2500 còn khoảng 1,3 triệu; theo thế cờ ở thế khởi đầu thì không thu hẹp). Chọn một ván hiện khung xem trước: hai kỳ thủ, giải, ngày, kết quả, tên khai cuộc và danh sách nước.
   - Bàn mới.
   - PDF (AI).
   - CSDL của tôi.
