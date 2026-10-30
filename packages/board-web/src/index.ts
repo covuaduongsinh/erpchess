@@ -20,4 +20,4 @@ export {
   squareColor,
   squareToGrid,
 } from './geometry';
-export { CELTIC, pieceLabel } from './pieces';
+export { CELTIC, PIECE_SETS, type PieceSet, pieceLabel, SPATIAL } from './pieces';

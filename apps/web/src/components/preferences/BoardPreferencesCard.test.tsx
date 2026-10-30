@@ -23,6 +23,8 @@ vi.mock('../../lib/use-t', () => ({
       if (key === 'profile.boardSound') return 'Âm thanh nước đi';
       if (key === 'profile.boardAutoFlip') return 'Tự động xoay bàn cờ theo lượt';
       if (key === 'profile.liveBoardPreview') return 'Bàn cờ xem trước';
+      if (key === 'profile.boardPieceSet_celtic') return 'Celtic';
+      if (key === 'profile.boardPieceSet_spatial') return 'Spatial';
       return key;
     },
     i18n: { language: 'vi' },
@@ -37,8 +39,25 @@ vi.mock('@erpchess/board-web', () => ({
     blue: { light: '#DEE3E6', dark: '#8CA2AD', name: 'Xanh Đại dương' },
     charcoal: { light: '#E0E0E0', dark: '#4E545C', name: 'Xám Kim loại' },
   },
-  Board: ({ theme, coordinates }: { theme?: string; coordinates?: boolean }) => (
-    <div data-testid="live-board-preview" data-theme={theme} data-coords={coordinates}>
+  PIECE_SETS: {
+    celtic: { wN: 'celtic-wN.svg' },
+    spatial: { wN: 'spatial-wN.svg' },
+  },
+  Board: ({
+    theme,
+    coordinates,
+    pieceSet,
+  }: {
+    theme?: string;
+    coordinates?: boolean;
+    pieceSet?: string;
+  }) => (
+    <div
+      data-testid="live-board-preview"
+      data-theme={theme}
+      data-coords={coordinates}
+      data-pieces={pieceSet}
+    >
       Live Preview
     </div>
   ),
@@ -95,5 +114,15 @@ describe('BoardPreferencesCard', () => {
     fireEvent.click(resetBtn);
 
     expect(preview.getAttribute('data-theme')).toBe('navy');
+  });
+
+  it('changes piece set when clicking a piece set button', () => {
+    render(<BoardPreferencesCard />);
+
+    const preview = screen.getByTestId('live-board-preview');
+    expect(preview.getAttribute('data-pieces')).toBe('celtic');
+
+    fireEvent.click(screen.getByRole('button', { name: /Spatial/i }));
+    expect(preview.getAttribute('data-pieces')).toBe('spatial');
   });
 });

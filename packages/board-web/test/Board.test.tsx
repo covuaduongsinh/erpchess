@@ -2,6 +2,7 @@ import { legalDests, START_FEN } from '@erpchess/chess-core';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Board, type Drawings } from '../src/Board';
+import { PIECE_SETS } from '../src/pieces';
 
 afterEach(cleanup);
 
@@ -23,6 +24,15 @@ describe('Board', () => {
     expect(container.querySelector('[data-at="e1"]')?.getAttribute('data-piece')).toBe('wK');
     rerender(<Board fen={START_FEN} hiddenSquares={['e1', 'd1']} />);
     expect(container.querySelectorAll('[data-piece]')).toHaveLength(30);
+  });
+
+  it('đổi bộ quân theo prop pieceSet, mặc định celtic', () => {
+    const { container, rerender } = render(<Board fen={START_FEN} />);
+    const href = () => container.querySelector('[data-at="e1"]')?.getAttribute('href');
+    expect(href()).toBe(PIECE_SETS.celtic.wK);
+    rerender(<Board fen={START_FEN} pieceSet="spatial" />);
+    expect(href()).toBe(PIECE_SETS.spatial.wK);
+    expect(PIECE_SETS.spatial.wK).not.toBe(PIECE_SETS.celtic.wK);
   });
 
   it('bấm quân rồi bấm ô đích thì đi; hiện các ô có thể đi', () => {

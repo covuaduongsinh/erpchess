@@ -1,35 +1,32 @@
-import type { BoardTheme } from '@erpchess/board-web';
+import {
+  type BoardPreferences,
+  DEFAULT_BOARD_PREFERENCES,
+  normalizeBoardPreferences,
+} from '@erpchess/domain';
 import { useCallback, useEffect, useState } from 'react';
 
-export interface BoardPreferences {
-  theme: BoardTheme;
-  coordinates: boolean;
-  soundEnabled: boolean;
-  autoFlip: boolean;
-}
-
-export const DEFAULT_BOARD_PREFERENCES: BoardPreferences = {
-  theme: 'navy',
-  coordinates: true,
-  soundEnabled: true,
-  autoFlip: false,
-};
+export type { BoardPreferences };
+export { DEFAULT_BOARD_PREFERENCES };
 
 const STORAGE_KEY = 'erpchess_board_pref';
-const EVENT_KEY = 'erpchess-board-pref-change';
+export const BOARD_PREF_EVENT = 'erpchess-board-pref-change';
+
+/** Có cài đặt đã lưu trên máy này chưa (để biết có nên đẩy lên server khi server còn trống). */
+export function hasStoredBoardPreferences(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return localStorage.getItem(STORAGE_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
 
 export function getStoredBoardPreferences(): BoardPreferences {
   if (typeof window === 'undefined') return DEFAULT_BOARD_PREFERENCES;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_BOARD_PREFERENCES;
-    const parsed = JSON.parse(raw) as Partial<BoardPreferences>;
-    return {
-      theme: parsed.theme ?? DEFAULT_BOARD_PREFERENCES.theme,
-      coordinates: parsed.coordinates ?? DEFAULT_BOARD_PREFERENCES.coordinates,
-      soundEnabled: parsed.soundEnabled ?? DEFAULT_BOARD_PREFERENCES.soundEnabled,
-      autoFlip: parsed.autoFlip ?? DEFAULT_BOARD_PREFERENCES.autoFlip,
-    };
+    return normalizeBoardPreferences(JSON.parse(raw));
   } catch {
     return DEFAULT_BOARD_PREFERENCES;
   }
@@ -39,7 +36,7 @@ export function saveStoredBoardPreferences(prefs: BoardPreferences): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
-    window.dispatchEvent(new CustomEvent(EVENT_KEY, { detail: prefs }));
+    window.dispatchEvent(new CustomEvent(BOARD_PREF_EVENT, { detail: prefs }));
   } catch {
     // Ignore localStorage write failures
   }
@@ -57,9 +54,9 @@ export function useBoardPreferences() {
       }
     };
 
-    window.addEventListener(EVENT_KEY as never, handleStorageChange);
+    window.addEventListener(BOARD_PREF_EVENT as never, handleStorageChange);
     return () => {
-      window.removeEventListener(EVENT_KEY as never, handleStorageChange);
+      window.removeEventListener(BOARD_PREF_EVENT as never, handleStorageChange);
     };
   }, []);
 
@@ -72,8 +69,15 @@ export function useBoardPreferences() {
   }, []);
 
   const setTheme = useCallback(
-    (theme: BoardTheme) => {
+    (theme: BoardPreferences['theme']) => {
       updatePreferences({ theme });
+    },
+    [updatePreferences],
+  );
+
+  const setPieceSet = useCallback(
+    (pieceSet: BoardPreferences['pieceSet']) => {
+      updatePreferences({ pieceSet });
     },
     [updatePreferences],
   );
@@ -107,6 +111,7 @@ export function useBoardPreferences() {
   return {
     preferences,
     setTheme,
+    setPieceSet,
     setCoordinates,
     setSoundEnabled,
     setAutoFlip,

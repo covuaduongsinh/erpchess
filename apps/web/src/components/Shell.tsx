@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { useT } from '../lib/use-t';
 import { CommandPalette } from './CommandPalette';
 import { NotificationBell } from './NotificationBell';
+import { BoardPreferencesSync } from './preferences/BoardPreferencesSync';
 import { Button } from './ui';
 
 /** Khung chung: thanh trên cùng (logo, thanh tìm kiếm Command Palette, ngôn ngữ, đăng xuất) và vùng nội dung. */
@@ -57,6 +58,7 @@ export function Shell({ children }: { children: ReactNode }) {
             </Link>
           )}
           {session && <NotificationBell userId={session.user.id} />}
+          {session && <BoardPreferencesSync key={session.user.id} userId={session.user.id} />}
           {session && (
             <Button variant="ghost" className="text-white" onClick={() => void signOut(client)}>
               {t('common.signOut')}
