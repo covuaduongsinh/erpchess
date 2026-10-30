@@ -1,4 +1,3 @@
-import { Board } from '@erpchess/board-web';
 import {
   inCheck,
   kingSquare,
@@ -11,6 +10,7 @@ import { usePuzzleSession } from '@erpchess/chess-core/react';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useT } from '../../lib/use-t';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { Button } from '../ui';
 
 /**
@@ -35,7 +35,7 @@ export function PuzzleSolver({
 
   return (
     <div className="flex flex-col gap-3">
-      <Board
+      <PreferredBoard
         fen={session.fen}
         orientation={side}
         lastMove={session.lastMove}

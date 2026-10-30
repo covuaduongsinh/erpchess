@@ -1,8 +1,8 @@
 import type { GameRow } from '@erpchess/api';
-import { Board } from '@erpchess/board-web';
 import { replayGame } from '@erpchess/chess-core';
 import { Link } from '@tanstack/react-router';
 import { useT } from '../../lib/use-t';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { resultText } from '../play/gameText';
 
 export interface TournamentLiveBoardGridProps {
@@ -72,10 +72,11 @@ export function TournamentLiveBoardGrid({
               params={{ slug, id: g.id }}
               className="block cursor-pointer overflow-hidden rounded-lg hover:opacity-95"
             >
-              <Board
+              <PreferredBoard
                 fen={replay?.fen ?? g.fen}
                 orientation="w"
                 coordinates={false}
+                sound={false}
                 lastMove={
                   g.moves.length
                     ? [g.moves.at(-1)?.slice(0, 2) ?? '', g.moves.at(-1)?.slice(2, 4) ?? '']

@@ -1,8 +1,8 @@
 import { replayAt } from '@erpchess/api';
 import { useClassroom, useClassroomEvents } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import { PreferredBoard } from '../components/board/PreferredBoard';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
@@ -45,7 +45,7 @@ function ReplayPage() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="flex flex-col gap-3">
             <div className="mx-auto w-full max-w-[560px]">
-              <Board
+              <PreferredBoard
                 fen={frame.fen}
                 lastMove={frame.lastMove ?? undefined}
                 drawings={frame.drawings}

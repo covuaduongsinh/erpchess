@@ -5,12 +5,13 @@ import {
   usePracticeMutations,
   usePracticeResults,
 } from '@erpchess/api/react';
-import { Board, BoardEditor } from '@erpchess/board-web';
+import { BoardEditor } from '@erpchess/board-web';
 import { isValidFen, START_FEN } from '@erpchess/chess-core';
 import { isStaff } from '@erpchess/domain';
 import { BOT_LEVELS } from '@erpchess/engine';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useMemo, useState } from 'react';
+import { PreferredBoard } from '../components/board/PreferredBoard';
 import { EngineGame } from '../components/study/ActivityPlayer';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
@@ -179,10 +180,11 @@ function ChapterPage() {
                     }`}
                   >
                     <div className="w-14 shrink-0 rounded-sm overflow-hidden shadow-xs">
-                      <Board
+                      <PreferredBoard
                         fen={p.fen}
                         orientation={p.side === 'b' ? 'b' : 'w'}
                         coordinates={false}
+                        sound={false}
                         label={p.title || `#${originalIndex + 1}`}
                       />
                     </div>

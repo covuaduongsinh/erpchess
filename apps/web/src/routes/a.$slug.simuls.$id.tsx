@@ -1,9 +1,9 @@
 import type { GameRow } from '@erpchess/api';
 import { useMembers, useSimul, useSimulMutations } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { replayGame } from '@erpchess/chess-core';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
+import { PreferredBoard } from '../components/board/PreferredBoard';
 import { resultText } from '../components/play/gameText';
 import { SimulQuickPlayModal } from '../components/simul/SimulQuickPlayModal';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
@@ -251,10 +251,11 @@ function SimulPage() {
                 }}
                 className="w-full text-left cursor-pointer overflow-hidden rounded-lg hover:opacity-95"
               >
-                <Board
+                <PreferredBoard
                   fen={replay?.fen ?? g.fen}
                   orientation={g.white_id === s.host_id ? 'w' : 'b'}
                   coordinates={false}
+                  sound={false}
                   lastMove={
                     g.moves.length
                       ? [g.moves.at(-1)?.slice(0, 2) ?? '', g.moves.at(-1)?.slice(2, 4) ?? '']

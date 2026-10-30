@@ -1,10 +1,10 @@
 import type { GameRow } from '@erpchess/api';
 import { useGameAction } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { inCheck, kingSquare, legalDests, replayGame } from '@erpchess/chess-core';
 import { Link } from '@tanstack/react-router';
 import { useMemo, useState } from 'react';
 import { useT } from '../../lib/use-t';
+import { PreferredBoard } from '../board/PreferredBoard';
 import { Button, ErrorText } from '../ui';
 
 export interface SimulQuickPlayModalProps {
@@ -100,7 +100,7 @@ export function SimulQuickPlayModal({
 
         {/* Bàn cờ tương tác */}
         <div className="mx-auto w-full max-w-sm">
-          <Board
+          <PreferredBoard
             fen={currentFen}
             orientation={hostSide}
             lastMove={lastMove}

@@ -1,6 +1,5 @@
 import type { RoomChat, RoomDrawings } from '@erpchess/api';
 import { useClassroom, useClassroomRoom, useJoinClassroom, useMembers } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-web';
 import { legalDests, sideToMove } from '@erpchess/chess-core';
 import { isStaff } from '@erpchess/domain';
 import type { Score } from '@erpchess/engine';
@@ -8,6 +7,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { EngineLines } from '../components/analysis/EngineLines';
 import { EvalBar } from '../components/analysis/EvalBar';
+import { PreferredBoard } from '../components/board/PreferredBoard';
 import { ClassroomRoster } from '../components/classroom/ClassroomRoster';
 import { ClassroomToolbar } from '../components/classroom/ClassroomToolbar';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
@@ -249,7 +249,7 @@ function RoomPage() {
             )}
 
             <div className="w-full max-w-[640px]">
-              <Board
+              <PreferredBoard
                 fen={snapshot.fen}
                 orientation={orientation}
                 lastMove={snapshot.lastMove ?? undefined}
