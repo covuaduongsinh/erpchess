@@ -70,6 +70,9 @@ export function ErrorText({ error }: { error: unknown }) {
     if (known) message = t(known);
     else if (code === 'username_taken') message = t('students.usernameTaken');
     else if (code === 'lichess_not_found') message = t('database.lichessNotFound');
+    else if (code === 'sync_not_found') message = t('gameSync.sync_not_found');
+    else if (code === 'sync_unreachable') message = t('gameSync.sync_unreachable');
+    else if (code?.startsWith('sync_')) message = t('gameSync.sync_error');
     else if (code === 'lichess_unreachable' || code === 'lichess_error')
       message = t('database.lichessUnavailable');
     else if (code === '23505') message = t('academy.slugTaken');

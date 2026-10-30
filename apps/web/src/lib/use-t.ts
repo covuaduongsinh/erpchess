@@ -17,6 +17,8 @@ export function validationKey(message: string): TranslationKey | null {
   if (message === 'hours') return 'location.invalidHours';
   if (message === 'workingDays') return 'location.invalidWorkingDays';
   if (message === 'location') return 'location.needLocation';
+  if (message === 'chesscom') return 'gameSync.invalidChesscom';
+  if (message === 'lichess') return 'gameSync.invalidLichess';
   const known = ['username', 'pin', 'displayName', 'slug', 'name', 'email', 'password'] as const;
   return (known as readonly string[]).includes(message)
     ? (`validation.${message}` as TranslationKey)

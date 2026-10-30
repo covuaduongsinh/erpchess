@@ -60,6 +60,7 @@
 - **Bố cục ba cột:** danh sách CSDL, danh sách ván (ngày, Trắng, Đen, kết quả), trình xem ván.
 - **Tải PGN lên.**
 - **Đồng bộ ván Chess.com / Lichess** theo ID người dùng (ở mục Preferences).
+  - Quan sát lại bằng REA (2026-10-31): trang Preferences có khối "Sync Games" gồm ô username Chess.com và Lichess, mỗi ô có nút đồng bộ riêng, một nút lưu cả hai ID; ghi chú rằng đồng bộ có thể mất vài phút và ván đồng bộ nằm trong kho ván của người dùng để phân tích bằng công cụ bàn cờ.
 
 ## Ánh xạ sang erpchess
 

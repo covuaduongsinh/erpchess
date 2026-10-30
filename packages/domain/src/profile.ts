@@ -68,6 +68,19 @@ export const updateProfileSchema = z.object({
   country: z.string().max(64).nullable().optional(),
   bio: z.string().max(500).nullable().optional(),
   boardPreferences: boardPreferencesSchema.optional(),
+  // Đồng bộ ván (Giai đoạn 23c); chuỗi rỗng = bỏ liên kết
+  chesscomUsername: z
+    .string()
+    .trim()
+    .refine((v) => v === '' || /^[A-Za-z0-9_-]{3,25}$/.test(v), 'chesscom')
+    .transform((v) => v || null)
+    .optional(),
+  lichessUsername: z
+    .string()
+    .trim()
+    .refine((v) => v === '' || /^[A-Za-z0-9][A-Za-z0-9_-]{1,29}$/.test(v), 'lichess')
+    .transform((v) => v || null)
+    .optional(),
 });
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

@@ -6,8 +6,10 @@ import {
   lichessUsername,
 } from '@erpchess/api';
 import { useDatabaseMutations, useDatabases, useGamePgn, useGames } from '@erpchess/api/react';
+import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
+import { GameSyncCard } from '../components/database/GameSyncCards';
 import { GameViewer } from '../components/study/GameViewer';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
@@ -21,7 +23,8 @@ const PAGE_SIZE = 50;
 
 function DatabasePage() {
   const { t } = useT();
-  const { academy } = useAcademy();
+  const { academy, session } = useAcademy();
+  const staff = isStaff(academy.role);
   const dbs = useDatabases(academy.id);
   const [selected, setSelected] = useState<string | null>(null);
   const [gameId, setGameId] = useState<string | null>(null);
@@ -30,6 +33,16 @@ function DatabasePage() {
   return (
     <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
       <div className="flex flex-col gap-6">
+        {academy.role !== 'parent' && (
+          <GameSyncCard
+            academyId={academy.id}
+            userId={session.user.id}
+            onSynced={(id) => {
+              setSelected(id);
+              setGameId(null);
+            }}
+          />
+        )}
         <Card title={t('database.title')}>
           {dbs.isPending ? (
             <Spinner />
@@ -52,14 +65,18 @@ function DatabasePage() {
                   >
                     <span className="font-medium">{d.name}</span>
                     <span className="text-xs text-text-muted">
-                      {d.visibility === 'academy' ? t('database.shared') : t('database.private')}
+                      {d.sync_source
+                        ? `⟳ ${t('gameSync.synced')}`
+                        : d.visibility === 'academy'
+                          ? t('database.shared')
+                          : t('database.private')}
                     </span>
                   </button>
                 </li>
               ))}
             </ul>
           )}
-          <CreateDatabaseForm onCreated={setSelected} />
+          {staff && <CreateDatabaseForm onCreated={setSelected} />}
         </Card>
         {current && <ImportCard key={current.id} database={current} />}
       </div>

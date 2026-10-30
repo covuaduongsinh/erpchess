@@ -42,6 +42,7 @@ import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
 import * as courses from './courses';
 import * as databases from './databases';
+import * as gameSync from './game-sync';
 import * as games from './games';
 import * as leads from './leads';
 import * as locations from './locations';
@@ -398,6 +399,20 @@ export function useMasterbase(q: masterbase.MasterbaseQuery, enabled = true) {
     enabled,
     placeholderData: (prev) => prev,
     staleTime: 60_000,
+  });
+}
+
+/** Đồng bộ ván Chess.com / Lichess vào CSDL riêng (Giai đoạn 23c). */
+export function useSyncGames(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { source: gameSync.SyncSource; username: string }) =>
+      gameSync.syncGames(client, { academyId, userId, ...v }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: databaseKeys.list(academyId) });
+      void qc.invalidateQueries({ queryKey: ['database-games'] });
+    },
   });
 }
 
