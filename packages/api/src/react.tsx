@@ -1287,6 +1287,11 @@ export function useGameMutations(academyId: string, userId: string) {
         games.createPairing(client, userId, { ...v, academyId }),
       onSuccess: refresh,
     }),
+    challenge: useMutation({
+      mutationFn: (v: Omit<Parameters<typeof games.createChallenge>[1], 'academyId'>) =>
+        games.createChallenge(client, { ...v, academyId }),
+      onSuccess: refresh,
+    }),
     saveBot: useMutation({
       mutationFn: (v: Omit<Parameters<typeof games.saveBotGame>[2], 'academyId'>) =>
         games.saveBotGame(client, userId, { ...v, academyId }),

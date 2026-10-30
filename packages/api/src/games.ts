@@ -59,6 +59,33 @@ export async function createPairing(
   );
 }
 
+/**
+ * Thách đấu một thành viên khác (học viên tự thách đấu được): đi qua RPC `create_challenge` vì RLS
+ * chỉ cho staff chèn ván trực tiếp. Trả id ván mới.
+ */
+export async function createChallenge(
+  client: ErpClient,
+  v: {
+    academyId: string;
+    opponentId: string;
+    color: 'w' | 'b' | 'random';
+    baseMs: number | null;
+    incMs: number;
+    rated: boolean;
+  },
+): Promise<string> {
+  return unwrap(
+    await client.rpc('create_challenge', {
+      p_academy: v.academyId,
+      p_opponent: v.opponentId,
+      p_color: v.color,
+      p_base_ms: v.baseMs,
+      p_inc_ms: v.incMs,
+      p_rated: v.rated,
+    }),
+  );
+}
+
 export async function fetchGames(
   client: ErpClient,
   academyId: string,

@@ -267,7 +267,7 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   3. **Web:** `QuickPairCard` trên trang Thi đấu (owner/coach/student): chọn mức thời gian, đếm giây chờ, hiện Elo và khoảng đang tìm, nút huỷ; ghép xong vào thẳng ván. Hook `useQuickPair` gọi lại mỗi 2 giây, rời trang khi đang chờ thì tự rời hàng đợi, huỷ đúng lúc vừa được ghép thì vẫn vào ván.
   4. **Kiểm thử:** pgTAP `20_match_queue.sql` (7), `quick-pair.test.ts` (4), `QuickPairCard.test.tsx` (5).
 - **Chưa làm:** tìm trận nhanh trên mobile; chế độ Arena.
-- **Lỗi có từ trước (chưa sửa):** `ChallengeModal` cho học viên thách đấu chèn trực tiếp vào `games`, nhưng RLS chỉ cho staff ghép cặp → học viên tự thách đấu bị từ chối.
+- **Lỗi có từ trước:** `ChallengeModal` cho học viên thách đấu chèn trực tiếp vào `games`, nhưng RLS chỉ cho staff ghép cặp → học viên tự thách đấu bị từ chối. **Đã sửa** ở PR sau: migration `20261031000029_create_challenge.sql` thêm RPC `create_challenge` (security definer; người gọi là một trong hai kỳ thủ, cả hai là owner/coach/student của học viện, màu ngẫu nhiên do server bốc, tối đa 3 ván đang diễn ra do mình mở, không giới hạn thời gian thì không tính rating); `ChallengeModal` gọi mutation `challenge` mới; test API + pgTAP `21_create_challenge.sql`.
 
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 

@@ -3565,6 +3565,17 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_challenge: {
+        Args: {
+          p_academy: string
+          p_base_ms: number | null
+          p_color: string
+          p_inc_ms: number
+          p_opponent: string
+          p_rated: boolean
+        }
+        Returns: string
+      }
       create_invitation: {
         Args: {
           p_academy: string

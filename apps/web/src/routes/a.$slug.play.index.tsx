@@ -196,7 +196,7 @@ function ChallengeModal({
   onClose: () => void;
 }) {
   const { academy, session } = useAcademy();
-  const { pair } = useGameMutations(academy.id, session.user.id);
+  const { challenge } = useGameMutations(academy.id, session.user.id);
   const navigate = useNavigate();
 
   const [preset, setPreset] = useState<string>(TIME_PRESETS[1].id); // 5+0
@@ -205,21 +205,21 @@ function ChallengeModal({
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const isWhite = color === 'random' ? Math.random() < 0.5 : color === 'w';
     const tc = TIME_PRESETS.find((p) => p.id === preset);
 
-    pair.mutate(
+    // Màu ngẫu nhiên do server bốc thăm
+    challenge.mutate(
       {
-        whiteId: isWhite ? session.user.id : opponent.id,
-        blackId: isWhite ? opponent.id : session.user.id,
+        opponentId: opponent.id,
+        color,
         baseMs: tc?.baseMs ?? null,
         incMs: tc?.incMs ?? 0,
         rated: rated && !!tc,
       },
       {
-        onSuccess: (g) => {
+        onSuccess: (id) => {
           onClose();
-          void navigate({ to: '/a/$slug/play/$id', params: { slug: academy.slug, id: g.id } });
+          void navigate({ to: '/a/$slug/play/$id', params: { slug: academy.slug, id } });
         },
       },
     );
@@ -313,16 +313,16 @@ function ChallengeModal({
             Tính Elo rating ván đấu này
           </label>
 
-          <ErrorText error={pair.error} />
+          <ErrorText error={challenge.error} />
 
           <div className="mt-2 flex gap-3">
             <Button
               type="submit"
               variant="cta"
               className="flex-1 py-2.5 font-bold"
-              disabled={pair.isPending}
+              disabled={challenge.isPending}
             >
-              {pair.isPending ? 'Đang tạo ván...' : 'Bắt đầu ván đấu'}
+              {challenge.isPending ? 'Đang tạo ván...' : 'Bắt đầu ván đấu'}
             </Button>
             <Button type="button" variant="ghost" onClick={onClose}>
               Huỷ
