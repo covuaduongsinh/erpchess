@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { ErpClient } from './client';
-import { cancelQuickPair, parseQuickPair, quickPair } from './games';
+import { cancelQuickPair, createChallenge, parseQuickPair, quickPair } from './games';
 
 const ACADEMY = '00000000-0000-0000-0000-0000000000a1';
 const GAME = '00000000-0000-0000-0000-0000000000g1';
@@ -48,5 +48,28 @@ describe('quickPair / cancelQuickPair', () => {
     await expect(
       quickPair(fakeClient(rpc), ACADEMY, { baseMs: 300_000, incMs: 0 }),
     ).rejects.toBeTruthy();
+  });
+});
+
+describe('createChallenge', () => {
+  it('gọi RPC create_challenge và trả id ván', async () => {
+    const rpc = vi.fn().mockResolvedValue({ data: GAME, error: null });
+    const id = await createChallenge(fakeClient(rpc), {
+      academyId: ACADEMY,
+      opponentId: 'u2',
+      color: 'random',
+      baseMs: null,
+      incMs: 0,
+      rated: false,
+    });
+    expect(id).toBe(GAME);
+    expect(rpc).toHaveBeenCalledWith('create_challenge', {
+      p_academy: ACADEMY,
+      p_opponent: 'u2',
+      p_color: 'random',
+      p_base_ms: null,
+      p_inc_ms: 0,
+      p_rated: false,
+    });
   });
 });
