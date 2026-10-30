@@ -728,6 +728,13 @@ export const en: Resource = {
     todayGames: 'Games today',
     onlineStudents: 'Students online ({{count}})',
     noneOnline: 'No students online.',
+    quickPairTitle: 'Quick pairing',
+    quickPairHint:
+      'Get matched with the academy player closest to your rating, same time control. Rated game.',
+    quickPairStart: 'Find a game',
+    quickPairSearching: 'Looking for an opponent… {{seconds}}s',
+    quickPairWindow: 'Your rating {{rating}} · searching within ±{{window}}',
+    quickPairCancel: 'Cancel',
     liveGames: 'Live games',
     noLive: 'No live games.',
     history: 'Game history',

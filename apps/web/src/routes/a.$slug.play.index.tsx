@@ -4,6 +4,7 @@ import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 import { resultText } from '../components/play/gameText';
+import { QuickPairCard } from '../components/play/QuickPairCard';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
@@ -26,6 +27,7 @@ function PlayPage() {
   const [since] = useState(startOfToday);
   const [player, setPlayer] = useState('');
   const [challengeTarget, setChallengeTarget] = useState<{ id: string; name: string } | null>(null);
+  const navigate = useNavigate();
 
   const live = usePlayGames(academy.id, { status: ['active'] });
   const today = usePlayGames(academy.id, { since });
@@ -129,6 +131,14 @@ function PlayPage() {
         </div>
 
         <div className="flex flex-col gap-6">
+          {academy.role !== 'parent' && (
+            <QuickPairCard
+              academyId={academy.id}
+              onMatched={(id) =>
+                void navigate({ to: '/a/$slug/play/$id', params: { slug: academy.slug, id } })
+              }
+            />
+          )}
           {/* Học viên Online + Thách đấu nhanh */}
           <Card title={t('play.onlineStudents', { count: onlineStudents.length })}>
             {onlineStudents.length === 0 ? (

@@ -140,3 +140,50 @@ export function subscribeGame(
     void client.removeChannel(channel);
   };
 }
+
+/** Trạng thái hàng đợi tìm trận nhanh (Giai đoạn 22c), đọc từ RPC `quick_pair`. */
+export type QuickPairState =
+  | { status: 'waiting'; rating: number; window: number; waitedMs: number }
+  | { status: 'matched'; gameId: string }
+  | { status: 'cancelled' };
+
+export function parseQuickPair(raw: unknown): QuickPairState {
+  const r = (raw ?? {}) as Record<string, unknown>;
+  if (r.status === 'matched' && typeof r.game_id === 'string') {
+    return { status: 'matched', gameId: r.game_id };
+  }
+  if (r.status === 'waiting') {
+    return {
+      status: 'waiting',
+      rating: Math.round(Number(r.rating) || 0),
+      window: Number(r.window) || 0,
+      waitedMs: Number(r.waited_ms) || 0,
+    };
+  }
+  return { status: 'cancelled' };
+}
+
+/** Xếp hàng (hoặc báo còn chờ) và thử ghép với người gần Elo nhất cùng mức thời gian. */
+export async function quickPair(
+  client: ErpClient,
+  academyId: string,
+  tc: { baseMs: number; incMs: number },
+): Promise<QuickPairState> {
+  return parseQuickPair(
+    unwrap(
+      await client.rpc('quick_pair', {
+        p_academy: academyId,
+        p_base_ms: tc.baseMs,
+        p_inc_ms: tc.incMs,
+      }),
+    ),
+  );
+}
+
+/** Rời hàng đợi; trả `matched` nếu đã kịp được ghép trước khi huỷ. */
+export async function cancelQuickPair(
+  client: ErpClient,
+  academyId: string,
+): Promise<QuickPairState> {
+  return parseQuickPair(unwrap(await client.rpc('cancel_quick_pair', { p_academy: academyId })));
+}

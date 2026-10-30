@@ -1876,6 +1876,70 @@ export type Database = {
           },
         ]
       }
+      match_queue: {
+        Row: {
+          academy_id: string
+          base_ms: number
+          created_at: string
+          game_id: string | null
+          heartbeat_at: string
+          id: string
+          inc_ms: number
+          rating: number
+          seen_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          academy_id: string
+          base_ms: number
+          created_at?: string
+          game_id?: string | null
+          heartbeat_at?: string
+          id?: string
+          inc_ms?: number
+          rating: number
+          seen_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          academy_id?: string
+          base_ms?: number
+          created_at?: string
+          game_id?: string | null
+          heartbeat_at?: string
+          id?: string
+          inc_ms?: number
+          rating?: number
+          seen_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_queue_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_queue_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_queue_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memberships: {
         Row: {
           academy_id: string
@@ -3479,6 +3543,7 @@ export type Database = {
           wrong_penalty: number
         }[]
       }
+      cancel_quick_pair: { Args: { p_academy: string }; Returns: Json }
       classroom_join: { Args: { p_classroom: string }; Returns: string }
       create_academy: {
         Args: { p_name: string; p_slug: string }
@@ -3616,6 +3681,10 @@ export type Database = {
           moves: string[]
           puzzle_id: string
         }[]
+      }
+      quick_pair: {
+        Args: { p_academy: string; p_base_ms: number; p_inc_ms: number }
+        Returns: Json
       }
       quiz_item_for_student: {
         Args: { p_item: string; p_student: string }
