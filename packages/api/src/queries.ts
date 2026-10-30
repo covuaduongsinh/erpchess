@@ -604,12 +604,38 @@ export async function updateAcademyProfile(
 ) {
   const v = academyProfileSchema.parse(input);
   const socials = Object.fromEntries(Object.entries(v.socials).filter(([, url]) => url));
+  const contact = Object.fromEntries(Object.entries(v.contact).filter(([, value]) => value));
   unwrap(
     await client
       .from('academies')
-      .update({ name: v.name, description: v.description, logo_url: v.logoUrl, socials })
+      .update({
+        name: v.name,
+        description: v.description,
+        logo_url: v.logoUrl,
+        favicon_url: v.faviconUrl,
+        brand_color: v.brandColor,
+        socials,
+        contact,
+      })
       .eq('id', academyId),
   );
+}
+
+/** Tải logo/favicon lên bucket công khai `academy-branding`, trả link https để lưu vào hồ sơ. */
+export async function uploadAcademyBranding(
+  client: ErpClient,
+  academyId: string,
+  kind: 'logo' | 'favicon',
+  file: File | Blob,
+  name: string,
+): Promise<string> {
+  const ext = (name.toLowerCase().match(/\.(png|jpe?g|webp|svg|ico)$/)?.[1] ?? 'png').replace(
+    'jpeg',
+    'jpg',
+  );
+  const path = `${academyId}/${kind}-${Date.now()}.${ext}`;
+  unwrap(await client.storage.from('academy-branding').upload(path, file, { upsert: false }));
+  return client.storage.from('academy-branding').getPublicUrl(path).data.publicUrl;
 }
 
 export type ImportResult = { username: string; ok: boolean; error?: string };

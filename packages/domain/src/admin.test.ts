@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   academyProfileSchema,
+  brandColorVars,
   levelForRating,
   levelSchema,
   levelTemplate,
@@ -70,5 +71,38 @@ describe('academyProfileSchema', () => {
       academyProfileSchema.parse({ name: 'CLB', socials: { facebook: 'https://fb.com/clb' } })
         .socials.facebook,
     ).toBe('https://fb.com/clb');
+  });
+});
+
+describe('white-label học viện', () => {
+  it('màu thương hiệu: rỗng thành null, chỉ nhận #RRGGBB', () => {
+    expect(academyProfileSchema.parse({ name: 'CLB' }).brandColor).toBeNull();
+    expect(academyProfileSchema.parse({ name: 'CLB', brandColor: '#AA00ff' }).brandColor).toBe(
+      '#aa00ff',
+    );
+    expect(academyProfileSchema.safeParse({ name: 'CLB', brandColor: 'red' }).success).toBe(false);
+    expect(academyProfileSchema.safeParse({ name: 'CLB', brandColor: '#fff' }).success).toBe(false);
+  });
+
+  it('liên hệ: số điện thoại phải hợp lệ, mặc định rỗng', () => {
+    expect(academyProfileSchema.parse({ name: 'CLB' }).contact).toEqual({
+      address: '',
+      phone: '',
+      zalo: '',
+    });
+    expect(
+      academyProfileSchema.safeParse({ name: 'CLB', contact: { phone: '+84 912 345 678' } })
+        .success,
+    ).toBe(true);
+    expect(
+      academyProfileSchema.safeParse({ name: 'CLB', contact: { zalo: 'gọi tôi' } }).success,
+    ).toBe(false);
+  });
+
+  it('brandColorVars chọn màu chữ đọc được theo độ sáng nền', () => {
+    expect(brandColorVars(null)).toBeNull();
+    expect(brandColorVars('#xyz')).toBeNull();
+    expect(brandColorVars('#2B3990')).toEqual({ primary: '#2b3990', onPrimary: '#ffffff' });
+    expect(brandColorVars('#FBB040')?.onPrimary).toBe('#1c1917');
   });
 });

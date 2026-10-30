@@ -77,8 +77,29 @@ describe('quản trị học viện', () => {
       name: 'CLB Dương Sinh',
       description: '',
       logo_url: null,
+      favicon_url: null,
+      brand_color: null,
       socials: { facebook: 'https://facebook.com/clb' },
+      contact: {},
     });
+  });
+
+  it('updateAcademyProfile lưu màu thương hiệu (chữ thường) và liên hệ không rỗng', async () => {
+    const eq = vi.fn().mockResolvedValue({ data: null, error: null });
+    const update = vi.fn(() => ({ eq }));
+    await updateAcademyProfile(fakeClient({ from: () => ({ update }) }), ACADEMY, {
+      name: 'CLB Dương Sinh',
+      faviconUrl: 'https://cdn.vn/f.png',
+      brandColor: '#C0392B',
+      contact: { address: '12 Lê Lợi, Hà Nội', phone: '0912 345 678', zalo: '' },
+    });
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        favicon_url: 'https://cdn.vn/f.png',
+        brand_color: '#c0392b',
+        contact: { address: '12 Lê Lợi, Hà Nội', phone: '0912 345 678' },
+      }),
+    );
   });
 });
 

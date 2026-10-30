@@ -19,9 +19,12 @@ export type Database = {
     Tables: {
       academies: {
         Row: {
+          brand_color: string | null
+          contact: Json
           created_at: string
           created_by: string | null
           description: string
+          favicon_url: string | null
           id: string
           leads_enabled: boolean
           logo_url: string | null
@@ -30,9 +33,12 @@ export type Database = {
           socials: Json
         }
         Insert: {
+          brand_color?: string | null
+          contact?: Json
           created_at?: string
           created_by?: string | null
           description?: string
+          favicon_url?: string | null
           id?: string
           leads_enabled?: boolean
           logo_url?: string | null
@@ -41,9 +47,12 @@ export type Database = {
           socials?: Json
         }
         Update: {
+          brand_color?: string | null
+          contact?: Json
           created_at?: string
           created_by?: string | null
           description?: string
+          favicon_url?: string | null
           id?: string
           leads_enabled?: boolean
           logo_url?: string | null
