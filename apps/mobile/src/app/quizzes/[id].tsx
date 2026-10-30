@@ -8,7 +8,6 @@ import {
   useQuizQuestions,
   useSession,
 } from '@erpchess/api/react';
-import { Board } from '@erpchess/board-native';
 import { inCheck, kingSquare, legalDests, sideToMove } from '@erpchess/chess-core';
 import { quizStatus } from '@erpchess/domain';
 import { colors, radius, spacing } from '@erpchess/ui-tokens';
@@ -16,6 +15,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Capture, Mcq } from '@/components/ActivityPlayer';
+import { PreferredBoard } from '@/components/PreferredBoard';
 import { Button, Card, ErrorText, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -188,7 +188,7 @@ function QuizPuzzle({
   const dests = useMemo(() => legalDests(state.fen), [state.fen]);
   return (
     <View style={{ gap: spacing.sm }}>
-      <Board
+      <PreferredBoard
         fen={state.fen}
         orientation={side}
         lastMove={state.lastMove}

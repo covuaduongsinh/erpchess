@@ -1,4 +1,3 @@
-import { Board } from '@erpchess/board-native';
 import {
   inCheck,
   kingSquare,
@@ -11,6 +10,7 @@ import { usePuzzleSession } from '@erpchess/chess-core/react';
 import { colors, spacing } from '@erpchess/ui-tokens';
 import { type ReactNode, useMemo } from 'react';
 import { Text, View } from 'react-native';
+import { PreferredBoard } from '@/components/PreferredBoard';
 import { Button, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -32,7 +32,7 @@ export function PuzzleSolver({
 
   return (
     <View style={{ gap: spacing.sm }}>
-      <Board
+      <PreferredBoard
         fen={session.fen}
         orientation={side}
         lastMove={session.lastMove ? [session.lastMove[0], session.lastMove[1]] : undefined}

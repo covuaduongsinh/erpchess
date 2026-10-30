@@ -1272,6 +1272,8 @@ export const en: Resource = {
     boardPieceSet_celtic: 'Celtic',
     boardPieceSet_spatial: 'Spatial',
     boardSyncHint: 'Settings are saved to your account and synced across devices',
+    boardOn: 'On',
+    boardOff: 'Off',
     commandPreferences: 'Preferences & Board Customizer',
   },
   reports: {
