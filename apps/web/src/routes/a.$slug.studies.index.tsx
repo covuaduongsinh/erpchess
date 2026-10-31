@@ -8,6 +8,7 @@ import {
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
+import { LichessImportDialog } from '../components/study/LichessImportDialog';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
@@ -25,9 +26,11 @@ function StudiesPage() {
   const [scope, setScope] = useState<StudyScope>(staff ? 'mine' : 'academy');
   const [search, setSearch] = useState('');
   const studies = useStudies({ scope, academyId: academy.id, userId: session.user.id, search });
+  const [importing, setImporting] = useState(false);
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+      {importing && <LichessImportDialog onClose={() => setImporting(false)} />}
       <Card title={t('studies.title')}>
         <div className="flex flex-wrap items-end gap-3">
           <div role="tablist" className="flex gap-1">
@@ -51,6 +54,11 @@ function StudiesPage() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
+          {staff && (
+            <Button variant="ghost" onClick={() => setImporting(true)}>
+              {t('lichessImport.open')}
+            </Button>
+          )}
           {staff && (
             <Link
               to="/a/$slug/studies/new"

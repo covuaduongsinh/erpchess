@@ -47,6 +47,7 @@ import * as databases from './databases';
 import * as gameSync from './game-sync';
 import * as games from './games';
 import * as leads from './leads';
+import * as lichessStudies from './lichess-studies';
 import * as locations from './locations';
 import * as masterbase from './masterbase';
 import * as notifications from './notifications';
@@ -490,6 +491,23 @@ export function useQuickPair(academyId: string, onMatched: (gameId: string) => v
   );
 
   return { state, start, cancel };
+}
+
+/** Nhập hàng loạt study Lichess công khai (Giai đoạn 24c); `progress` là số study đã xử lý. */
+export function useImportLichessStudies(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const mutation = useMutation({
+    mutationFn: (ids: readonly string[]) => {
+      setProgress({ done: 0, total: ids.length });
+      return lichessStudies.importLichessStudies(client, userId, academyId, ids, (done, total) =>
+        setProgress({ done, total }),
+      );
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['studies'] }),
+  });
+  return { ...mutation, progress };
 }
 
 /** Lịch quiz tự động (Giai đoạn 24b). */

@@ -52,3 +52,10 @@ Study là **chuỗi hoạt động có thứ tự**. Đây là nguồn nội dun
 - **Chấm bài:**
   - Phía server cho các loại `puzzle`, `capture`, `mcq`.
   - Các loại `explanation`, `video`, `game_viewer`, `html` chỉ ghi "đã xem".
+
+## Nhập từ Lichess và cấu hình mặc định (quan sát lại bằng REA, 2026-10-31)
+
+- **Nhập hàng loạt từ Lichess:** hộp thoại hai tab.
+  - "Study của tôi": cần kết nối tài khoản Lichess (OAuth) để thấy cả study riêng tư/không công khai.
+  - "Study công khai": nhập tên người dùng, link hồ sơ hoặc dán link study; duyệt danh sách và chọn nhiều study; mỗi study Lichess thành một study riêng.
+- **Cấu hình hoạt động mặc định của học viện** (`study/settings/activity-defaults`): với từng loại hoạt động (puzzle, trắc nghiệm, giải thích, bắt quân, đánh với máy, video, xem ván, walkthrough, tính toán, trang HTML) đặt điểm, số lần thử tối đa, giới hạn thời gian, điểm trừ mỗi lần sai; có nút về mặc định của ứng dụng; HLV vẫn chỉnh riêng từng hoạt động.

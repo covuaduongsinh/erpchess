@@ -9,6 +9,7 @@ export * from './databases';
 export * from './game-sync';
 export * from './games';
 export * from './leads';
+export * from './lichess-studies';
 export * from './locations';
 export * from './masterbase';
 export * from './notifications';
