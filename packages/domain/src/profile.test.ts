@@ -4,6 +4,7 @@ import {
   DEFAULT_BOARD_PREFERENCES,
   moveNotationSchema,
   normalizeBoardPreferences,
+  pickBoardPreferences,
   updateProfileSchema,
 } from './profile';
 
@@ -56,5 +57,14 @@ describe('profile schema', () => {
         boardPreferences: { ...DEFAULT_BOARD_PREFERENCES, theme: 'pink' },
       }).success,
     ).toBe(false);
+  });
+
+  it('pickBoardPreferences: cá nhân trước, rồi mặc định học viện, rồi mặc định hệ thống', () => {
+    expect(pickBoardPreferences({ theme: 'wood' }, [{ theme: 'green' }]).theme).toBe('wood');
+    expect(pickBoardPreferences({}, [{}, { theme: 'green', pieceSet: 'spatial' }])).toMatchObject({
+      theme: 'green',
+      pieceSet: 'spatial',
+    });
+    expect(pickBoardPreferences(null, [])).toEqual(DEFAULT_BOARD_PREFERENCES);
   });
 });

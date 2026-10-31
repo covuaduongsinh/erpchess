@@ -1,12 +1,19 @@
-import { useProfile, useSession } from '@erpchess/api/react';
+import { useMyAcademies, useProfile, useSession } from '@erpchess/api/react';
 import { Board, type NativeBoardProps } from '@erpchess/board-native';
-import { type BoardPreferences, normalizeBoardPreferences } from '@erpchess/domain';
+import { type BoardPreferences, pickBoardPreferences } from '@erpchess/domain';
 
-/** Tùy chọn bàn cờ của người đang đăng nhập, đọc từ `profiles.board_preferences` (Giai đoạn 20d). */
+/**
+ * Bàn cờ của người đang đăng nhập (Giai đoạn 20d): `profiles.board_preferences`; chưa tự chỉnh thì
+ * dùng bàn cờ mặc định của học viện mình tham gia (Giai đoạn 24a).
+ */
 export function useBoardPreferences(): BoardPreferences {
   const { session } = useSession();
   const profile = useProfile(session?.user.id);
-  return normalizeBoardPreferences(profile.data?.board_preferences);
+  const academies = useMyAcademies(session?.user.id);
+  return pickBoardPreferences(
+    profile.data?.board_preferences,
+    (academies.data ?? []).map((a) => a.board_defaults),
+  );
 }
 
 /** Bàn cờ áp dụng cài đặt cá nhân (theme, bộ quân, tọa độ); prop truyền vào luôn thắng cài đặt. */

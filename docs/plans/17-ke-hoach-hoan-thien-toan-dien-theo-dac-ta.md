@@ -332,6 +332,14 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   4. **Kiểm thử:** API 2, web PreferredBoard thêm 2.
 - **Chưa làm:** mobile chưa áp mặc định của học viện.
 
+## 6e. Giai đoạn 24: Hoàn thiện các mục làm được không cần dịch vụ ngoài
+
+### **PR 24a: White-label trên mobile** (✅ ĐÃ HOÀN THÀNH)
+
+- `pickBoardPreferences` (domain, có test): cài đặt cá nhân → mặc định của học viện → mặc định hệ thống; mobile `useBoardPreferences` dùng hàm này với `board_defaults` của các học viện mình tham gia.
+- Màn học viện trên mobile: thanh tiêu đề theo màu thương hiệu (`brandColorVars`), logo, thông tin liên hệ (điện thoại/Zalo chạm để gọi).
+- Không có migration.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
