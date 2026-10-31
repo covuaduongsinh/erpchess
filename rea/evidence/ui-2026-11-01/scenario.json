@@ -1,0 +1,345 @@
+{
+  "browser": {
+    "executable_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "headless": true,
+    "mode": "launch"
+  },
+  "actions": [
+    {
+      "step_id": "login_form",
+      "locator": {
+        "selector": "#username",
+        "kind": "css"
+      },
+      "state": "visible",
+      "timeout_ms": 30000,
+      "action": "wait_for"
+    },
+    {
+      "step_id": "fill_user",
+      "value": {
+        "secret_id": "cl_user",
+        "source": "secret"
+      },
+      "locator": {
+        "selector": "#username",
+        "kind": "css"
+      },
+      "timeout_ms": 10000,
+      "action": "fill"
+    },
+    {
+      "step_id": "fill_pass",
+      "value": {
+        "secret_id": "cl_pass",
+        "source": "secret"
+      },
+      "locator": {
+        "selector": "#password",
+        "kind": "css"
+      },
+      "timeout_ms": 10000,
+      "action": "fill"
+    },
+    {
+      "step_id": "submit",
+      "locator": {
+        "selector": "button[type=submit]",
+        "kind": "css"
+      },
+      "timeout_ms": 15000,
+      "action": "click"
+    },
+    {
+      "step_id": "after_login",
+      "duration_ms": 8000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_dashboard",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/dashboard"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_dashboard",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_administration_students",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/students"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_administration_students",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_batches",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/batches"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_batches",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_classes",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/classes"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_classes",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_calendar",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/calendar"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_calendar",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_study",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/study"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_study",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_assignment",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/assignment"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_assignment",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_quiz_list",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/quiz/list"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_quiz_list",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_practice",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/practice"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_practice",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_game_area",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/game-area"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_game_area",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_tournaments",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/tournaments"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_tournaments",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_simul",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/simul"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_simul",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_board",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/board"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_board",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_database",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/database"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_database",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_reports",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/reports"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_reports",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_chat",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/chat"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_chat",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_preferences",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/preferences"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_preferences",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "step_id": "go_p_course",
+      "timeout_ms": 45000,
+      "wait_until": "load",
+      "destination": {
+        "url": "https://platform.chesslang.com/course"
+      },
+      "action": "goto"
+    },
+    {
+      "step_id": "shot_p_course",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    }
+  ],
+  "start_url": {
+    "url": "https://platform.chesslang.com/dashboard"
+  },
+  "capture": {
+    "after_each_step": [
+      "screenshot",
+      "url"
+    ],
+    "at_end": [
+      "url"
+    ]
+  },
+  "environment": {
+    "color_scheme": "light",
+    "service_workers": "allow",
+    "reduced_motion": "reduce",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "viewport": {
+      "device_scale_factor": 1,
+      "width": 1440,
+      "height": 900
+    },
+    "locale": "en-US"
+  },
+  "secrets": [
+    {
+      "secret_id": "cl_user",
+      "environment_variable": "CL_USER"
+    },
+    {
+      "secret_id": "cl_pass",
+      "environment_variable": "CL_PASS"
+    }
+  ]
+}

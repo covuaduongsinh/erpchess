@@ -32,3 +32,6 @@ packages/engine/wasm/.obj/
 # Log UCI thật dùng làm dữ liệu test (đã thay đường dẫn máy)
 !packages/engine/test/fixtures/*.log
 apps/web/public/engine/
+
+# Evidence REA cỡ lớn (ảnh base64), giữ ngoài git
+rea/evidence/**/capture.json
