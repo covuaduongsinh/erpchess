@@ -303,6 +303,16 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   3. **Web:** hồ sơ có thẻ lưu username; trang Database (mở cho mọi vai trò trừ phụ huynh) có thẻ đồng bộ, CSDL đồng bộ gắn nhãn "⟳ đồng bộ"; học viên không thấy form tạo CSDL.
   4. **Kiểm thử:** API 7 (giả lập `fetch`), web 4.
 
+### **PR 23d: Trang đăng nhập riêng của học viện** (✅ ĐÃ HOÀN THÀNH)
+
+- **Cơ sở đặc tả:** quan sát lại trang Branding của Chesslang bằng REA (6 tab, ghi vào `rea/spec/quan-tri.md`). Chesslang gắn trang đăng nhập riêng vào tên miền riêng; erpchess phục vụ ở đường dẫn `/login/<slug>` nên không cần DNS.
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261031000034_academy_login_page.sql` — `academies.login_background_url`, `login_sections` (tối đa 4 mục, ≤ 4 KB); bucket `academy-branding` nâng lên 3 MB; RPC `academy_login_branding(slug)` mở cho khách (chỉ trường hiển thị công khai). pgTAP `26_academy_login_page.sql` (5). Đã chạy thử trên Supabase rồi rollback.
+  2. **Domain/API:** `loginSectionSchema`; `academyProfileSchema` nhận `loginBackgroundUrl`/`loginSections`; `fetchLoginBranding` chuẩn hoá và bỏ mục sai; `useLoginBranding`.
+  3. **Web:** tách `LoginForm` dùng chung; route `/login/$slug` (bố cục hai cột, ảnh nền, logo, giới thiệu, các mục, màu thương hiệu, favicon; mặc định tab học viên, đăng nhập xong vào học viện; slug sai vẫn đăng nhập được). Thẻ Branding có phần chỉnh trang đăng nhập (ảnh nền tải lên/dán link, thêm/xoá mục) và luôn gửi kèm cấu hình này để lưu thẻ không xoá mất.
+  4. **Kiểm thử:** API 2, web BrandingCard thêm 1.
+- **Chưa làm:** tên miền riêng, theme bàn cờ mặc định cho cả học viện, thư viện ảnh cho ván trực tiếp.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

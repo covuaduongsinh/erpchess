@@ -1,5 +1,5 @@
 import { useUpdateAcademyProfile, useUploadAcademyBranding } from '@erpchess/api/react';
-import { brandColorVars, contactKeys, socialKeys } from '@erpchess/domain';
+import { brandColorVars, contactKeys, type LoginSection, socialKeys } from '@erpchess/domain';
 import { type ChangeEvent, type FormEvent, useState } from 'react';
 import { useAcademy } from '../../lib/academy-context';
 import { useT } from '../../lib/use-t';
@@ -8,6 +8,9 @@ import { Button, Card, ErrorText, Field } from '../ui';
 const DEFAULT_BRAND = '#2b3990';
 const IMAGE_ACCEPT = 'image/png,image/jpeg,image/webp,image/svg+xml,image/x-icon';
 const MAX_IMAGE_BYTES = 1024 * 1024;
+// Ảnh nền trang đăng nhập được phép lớn hơn (giới hạn bucket 3 MB)
+const MAX_BACKGROUND_BYTES = 3 * 1024 * 1024;
+const MAX_LOGIN_SECTIONS = 4;
 
 /** Thông tin và thương hiệu học viện (white-label, Giai đoạn 22a): chỉ chủ học viện thấy. */
 export function BrandingCard() {
@@ -20,22 +23,33 @@ export function BrandingCard() {
   const [logoUrl, setLogoUrl] = useState(academy.logo_url ?? '');
   const [faviconUrl, setFaviconUrl] = useState(academy.favicon_url ?? '');
   const [brandColor, setBrandColor] = useState(academy.brand_color ?? '');
+  const [loginBg, setLoginBg] = useState(academy.login_background_url ?? '');
+  const [sections, setSections] = useState<LoginSection[]>(
+    Array.isArray(academy.login_sections) ? (academy.login_sections as LoginSection[]) : [],
+  );
   const [fileError, setFileError] = useState<string | null>(null);
   const preview = brandColorVars(brandColor);
 
-  function onFile(kind: 'logo' | 'favicon') {
+  function onFile(kind: 'logo' | 'favicon' | 'login') {
     return (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       e.target.value = '';
       if (!file) return;
-      if (file.size > MAX_IMAGE_BYTES) {
+      if (file.size > (kind === 'login' ? MAX_BACKGROUND_BYTES : MAX_IMAGE_BYTES)) {
         setFileError(t('branding.fileTooLarge'));
         return;
       }
       setFileError(null);
       upload.mutate(
         { kind, file },
-        { onSuccess: (url) => (kind === 'logo' ? setLogoUrl(url) : setFaviconUrl(url)) },
+        {
+          onSuccess: (url) =>
+            kind === 'logo'
+              ? setLogoUrl(url)
+              : kind === 'favicon'
+                ? setFaviconUrl(url)
+                : setLoginBg(url),
+        },
       );
     };
   }
@@ -56,6 +70,9 @@ export function BrandingCard() {
         phone: text('phone'),
         zalo: text('contactZalo'),
       },
+      // Luôn gửi kèm để lưu thẻ này không xoá cấu hình trang đăng nhập
+      loginBackgroundUrl: loginBg,
+      loginSections: sections.filter((s) => s.title.trim()),
     });
   }
 
@@ -169,6 +186,57 @@ export function BrandingCard() {
           />
         </fieldset>
 
+        <fieldset className="flex flex-col gap-3">
+          <legend className="mb-2 text-sm font-medium">{t('loginPage.title')}</legend>
+          <p className="text-xs text-text-muted">
+            {t('loginPage.hint')}{' '}
+            <a
+              href={`/login/${academy.slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="font-mono text-primary underline"
+            >
+              /login/{academy.slug}
+            </a>
+          </p>
+          <Field
+            label={t('loginPage.background')}
+            type="url"
+            value={loginBg}
+            onChange={(e) => setLoginBg(e.target.value)}
+          />
+          <label className="cursor-pointer self-start text-sm text-primary underline">
+            {t('loginPage.uploadBackground')}
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={onFile('login')}
+              className="sr-only"
+              aria-label={t('loginPage.uploadBackground')}
+            />
+          </label>
+          {sections.map((s, i) => (
+            <LoginSectionEditor
+              // biome-ignore lint/suspicious/noArrayIndexKey: mục chỉ thêm ở cuối hoặc xoá, không sắp lại
+              key={i}
+              index={i}
+              section={s}
+              onChange={(next) => setSections((cur) => cur.map((x, j) => (j === i ? next : x)))}
+              onRemove={() => setSections((cur) => cur.filter((_, j) => j !== i))}
+            />
+          ))}
+          {sections.length < MAX_LOGIN_SECTIONS && (
+            <Button
+              type="button"
+              variant="ghost"
+              className="self-start text-sm"
+              onClick={() => setSections((cur) => [...cur, { title: '', body: '' }])}
+            >
+              + {t('loginPage.addSection')}
+            </Button>
+          )}
+        </fieldset>
+
         <fieldset className="grid gap-3 sm:grid-cols-2">
           <legend className="mb-2 text-sm font-medium">{t('branding.socials')}</legend>
           {socialKeys.map((k) => (
@@ -202,6 +270,43 @@ export function BrandingCard() {
         </Button>
       </form>
     </Card>
+  );
+}
+
+function LoginSectionEditor({
+  index,
+  section,
+  onChange,
+  onRemove,
+}: {
+  index: number;
+  section: LoginSection;
+  onChange: (next: LoginSection) => void;
+  onRemove: () => void;
+}) {
+  const { t } = useT();
+  return (
+    <div className="flex flex-col gap-2 rounded-md border border-text-muted/20 p-3">
+      <Field
+        label={t('loginPage.sectionTitle', { n: index + 1 })}
+        maxLength={80}
+        value={section.title}
+        onChange={(e) => onChange({ ...section, title: e.target.value })}
+      />
+      <label className="flex flex-col gap-1 text-sm">
+        <span className="font-medium">{t('loginPage.sectionBody')}</span>
+        <textarea
+          rows={2}
+          maxLength={600}
+          value={section.body}
+          onChange={(e) => onChange({ ...section, body: e.target.value })}
+          className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base"
+        />
+      </label>
+      <button type="button" onClick={onRemove} className="self-start text-xs text-danger underline">
+        {t('loginPage.removeSection')}
+      </button>
+    </div>
   );
 }
 

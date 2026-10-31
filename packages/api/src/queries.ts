@@ -17,8 +17,10 @@ import {
   groupNameSchema,
   initialRatingSchema,
   type LevelInput,
+  type LoginSection,
   levelSchema,
   levelTemplate,
+  loginSectionSchema,
   modeNeedsLocation,
   pinSchema,
   type RatingCategory,
@@ -631,6 +633,8 @@ export async function updateAcademyProfile(
         brand_color: v.brandColor,
         socials,
         contact,
+        login_background_url: v.loginBackgroundUrl,
+        login_sections: v.loginSections,
       })
       .eq('id', academyId),
   );
@@ -640,7 +644,7 @@ export async function updateAcademyProfile(
 export async function uploadAcademyBranding(
   client: ErpClient,
   academyId: string,
-  kind: 'logo' | 'favicon',
+  kind: 'logo' | 'favicon' | 'login',
   file: File | Blob,
   name: string,
 ): Promise<string> {
@@ -704,4 +708,43 @@ export async function fetchGroupMemberships(
       .eq('groups.academy_id', academyId),
   );
   return rows.map((r) => ({ groupId: r.group_id, studentId: r.student_id }));
+}
+
+/** Thông tin công khai cho trang đăng nhập riêng `/login/<slug>` (Giai đoạn 23d). */
+export type LoginBranding = {
+  name: string;
+  slug: string;
+  description: string;
+  logoUrl: string | null;
+  faviconUrl: string | null;
+  brandColor: string | null;
+  backgroundUrl: string | null;
+  sections: LoginSection[];
+};
+
+/** Khách chưa đăng nhập gọi được; slug không tồn tại thì trả null. */
+export async function fetchLoginBranding(
+  client: ErpClient,
+  slug: string,
+): Promise<LoginBranding | null> {
+  const raw = unwrap(await client.rpc('academy_login_branding', { p_slug: slug })) as Record<
+    string,
+    unknown
+  > | null;
+  if (!raw) return null;
+  const str = (v: unknown) => (typeof v === 'string' && v ? v : null);
+  const sections = Array.isArray(raw.login_sections) ? raw.login_sections : [];
+  return {
+    name: String(raw.name ?? ''),
+    slug: String(raw.slug ?? slug),
+    description: String(raw.description ?? ''),
+    logoUrl: str(raw.logo_url),
+    faviconUrl: str(raw.favicon_url),
+    brandColor: str(raw.brand_color),
+    backgroundUrl: str(raw.login_background_url),
+    sections: sections.flatMap((s) => {
+      const r = loginSectionSchema.safeParse(s);
+      return r.success ? [r.data] : [];
+    }),
+  };
 }

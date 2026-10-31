@@ -27,6 +27,8 @@ export type Database = {
           favicon_url: string | null
           id: string
           leads_enabled: boolean
+          login_background_url: string | null
+          login_sections: Json
           logo_url: string | null
           name: string
           slug: string
@@ -41,6 +43,8 @@ export type Database = {
           favicon_url?: string | null
           id?: string
           leads_enabled?: boolean
+          login_background_url?: string | null
+          login_sections?: Json
           logo_url?: string | null
           name: string
           slug: string
@@ -55,6 +59,8 @@ export type Database = {
           favicon_url?: string | null
           id?: string
           leads_enabled?: boolean
+          login_background_url?: string | null
+          login_sections?: Json
           logo_url?: string | null
           name?: string
           slug?: string
@@ -3683,6 +3689,7 @@ export type Database = {
           tries: number
         }[]
       }
+      academy_login_branding: { Args: { p_slug: string }; Returns: Json }
       academy_stats: {
         Args: { p_academy: string }
         Returns: {

@@ -73,6 +73,13 @@ const optionalHttpsUrl = z
   .refine((v) => v === '' || /^https:\/\/[^\s/$.?#][^\s]*$/i.test(v), 'url');
 
 export const contactKeys = ['address', 'phone', 'zalo'] as const;
+
+/** Một mục nội dung trên trang đăng nhập riêng (vd. "Lịch khai giảng", "Học phí"). */
+export const loginSectionSchema = z.object({
+  title: z.string().trim().min(1, 'loginSection').max(80, 'loginSection'),
+  body: z.string().trim().max(600, 'loginSection').default(''),
+});
+export type LoginSection = z.output<typeof loginSectionSchema>;
 export type ContactKey = (typeof contactKeys)[number];
 
 /** Màu thương hiệu dạng #RRGGBB; chuỗi rỗng = dùng màu mặc định. */
@@ -105,6 +112,9 @@ export const academyProfileSchema = z.object({
         .default(''),
     })
     .default({ address: '', phone: '', zalo: '' }),
+  // Trang đăng nhập riêng (Giai đoạn 23d)
+  loginBackgroundUrl: optionalHttpsUrl.default('').transform((v) => v || null),
+  loginSections: z.array(loginSectionSchema).max(4, 'loginSections').default([]),
 });
 
 /**

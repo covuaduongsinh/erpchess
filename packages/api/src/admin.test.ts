@@ -81,6 +81,8 @@ describe('quản trị học viện', () => {
       brand_color: null,
       socials: { facebook: 'https://facebook.com/clb' },
       contact: {},
+      login_background_url: null,
+      login_sections: [],
     });
   });
 
