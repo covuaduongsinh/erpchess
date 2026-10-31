@@ -54,6 +54,22 @@ export function normalizeBoardPreferences(raw: unknown): BoardPreferences {
   return result;
 }
 
+const isNonEmptyObject = (v: unknown): v is Record<string, unknown> =>
+  !!v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length > 0;
+
+/**
+ * Chọn bàn cờ hiển thị (Giai đoạn 23f/24a): người dùng đã tự chỉnh thì dùng của mình; chưa thì dùng
+ * mặc định của học viện đầu tiên có đặt; không có gì thì mặc định hệ thống.
+ */
+export function pickBoardPreferences(
+  personal: unknown,
+  academyDefaults: readonly unknown[] = [],
+): BoardPreferences {
+  if (isNonEmptyObject(personal)) return normalizeBoardPreferences(personal);
+  const academy = academyDefaults.find(isNonEmptyObject);
+  return normalizeBoardPreferences(academy);
+}
+
 export const updateProfileSchema = z.object({
   displayName: z.string().trim().min(1, 'displayName').max(80, 'displayName').optional(),
   username: z

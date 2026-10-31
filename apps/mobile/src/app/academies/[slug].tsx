@@ -30,6 +30,8 @@ import {
 } from '@erpchess/api/react';
 import {
   academyRoles,
+  brandColorVars,
+  contactKeys,
   formatMoney,
   isStaff,
   type Period,
@@ -44,6 +46,7 @@ import { colors, radius, spacing } from '@erpchess/ui-tokens';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
+  Image,
   Linking,
   Pressable,
   RefreshControl,
@@ -80,6 +83,7 @@ export default function AcademyScreen() {
   if (academies.isPending) return <Spinner />;
   if (!academy) return <Muted>{t('academy.none')}</Muted>;
   const staff = isStaff(academy.role);
+  const brand = brandColorVars(academy.brand_color);
 
   return (
     <ScrollView
@@ -95,8 +99,20 @@ export default function AcademyScreen() {
         />
       }
     >
-      <Stack.Screen options={{ title: academy.name }} />
-      <Muted>{t(`role.${academy.role}`)}</Muted>
+      <Stack.Screen
+        options={{
+          title: academy.name,
+          // Màu thương hiệu của học viện cho thanh tiêu đề (Giai đoạn 24a)
+          ...(brand
+            ? { headerStyle: { backgroundColor: brand.primary }, headerTintColor: brand.onPrimary }
+            : {}),
+        }}
+      />
+      <AcademyHeader
+        logoUrl={academy.logo_url}
+        role={t(`role.${academy.role}`)}
+        contact={academy.contact}
+      />
       <MobileQuickActions slug={academy.slug} />
       {academy.role === 'student' && <MyLevel academyId={academy.id} userId={session?.user.id} />}
 
@@ -977,3 +993,55 @@ const quickStyles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+/** Logo, vai trò và thông tin liên hệ của học viện (white-label trên mobile, Giai đoạn 24a). */
+function AcademyHeader({
+  logoUrl,
+  role,
+  contact,
+}: {
+  logoUrl: string | null;
+  role: string;
+  contact: unknown;
+}) {
+  const { t } = useT();
+  const info = (contact ?? {}) as Partial<Record<(typeof contactKeys)[number], string>>;
+  const rows = contactKeys.filter((k) => info[k]);
+  const label = {
+    address: 'branding.address',
+    phone: 'branding.phone',
+    zalo: 'branding.zaloHotline',
+  } as const;
+  return (
+    <View style={{ gap: spacing.xs }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+        {logoUrl ? (
+          <Image
+            source={{ uri: logoUrl }}
+            accessibilityIgnoresInvertColors
+            style={{ width: 40, height: 40, borderRadius: radius.md }}
+            resizeMode="contain"
+          />
+        ) : null}
+        <Muted>{role}</Muted>
+      </View>
+      {rows.map((k) =>
+        k === 'address' ? (
+          <Text key={k} style={styles.hint}>
+            {`${t(label[k])}: ${info[k]}`}
+          </Text>
+        ) : (
+          <Pressable
+            key={k}
+            accessibilityRole="link"
+            onPress={() => void Linking.openURL(`tel:${info[k]?.replace(/[^+\d]/g, '')}`)}
+          >
+            <Text style={[styles.text, { color: colors.primary }]}>
+              {`${t(label[k])}: ${info[k]}`}
+            </Text>
+          </Pressable>
+        ),
+      )}
+    </View>
+  );
+}
