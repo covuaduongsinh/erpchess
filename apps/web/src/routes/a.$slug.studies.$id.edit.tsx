@@ -3,6 +3,7 @@ import { useLevels, useStudy, useStudyMutations } from '@erpchess/api/react';
 import {
   type ActivityKind,
   activityKinds,
+  defaultsForKind,
   estimateMinutes,
   type StudyVisibility,
   studyVisibilities,
@@ -145,6 +146,11 @@ function EditStudyPage() {
                 initial={
                   editing.mode === 'edit' && !editing.activity.invalid
                     ? editing.activity
+                    : undefined
+                }
+                defaults={
+                  editing.mode === 'new'
+                    ? defaultsForKind(academy.activity_defaults, editing.kind)
                     : undefined
                 }
                 academyId={academy.id}

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { activityInputSchema, estimateMinutes, scoreActivity, studyInputSchema } from './study';
+import {
+  APP_ACTIVITY_DEFAULTS,
+  activityInputSchema,
+  defaultsForKind,
+  estimateMinutes,
+  scoreActivity,
+  studyInputSchema,
+} from './study';
 
 const FEN = '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1';
 
@@ -77,5 +84,22 @@ describe('estimateMinutes', () => {
   it('cộng giới hạn giờ hoặc thời lượng mặc định', () => {
     expect(estimateMinutes([{ kind: 'mcq' }, { kind: 'puzzle', timeLimitS: 75 }])).toBe(2);
     expect(estimateMinutes([])).toBe(1);
+  });
+});
+
+describe('defaultsForKind', () => {
+  it('lấy của học viện nếu hợp lệ, không thì mặc định ứng dụng', () => {
+    const raw = {
+      puzzle: { points: 20, maxAttempts: 3, timeLimitS: null, wrongPenalty: 2 },
+      mcq: { points: -1 },
+    };
+    expect(defaultsForKind(raw, 'puzzle')).toEqual({
+      points: 20,
+      maxAttempts: 3,
+      timeLimitS: null,
+      wrongPenalty: 2,
+    });
+    expect(defaultsForKind(raw, 'mcq')).toEqual(APP_ACTIVITY_DEFAULTS);
+    expect(defaultsForKind(null, 'video')).toEqual(APP_ACTIVITY_DEFAULTS);
   });
 });

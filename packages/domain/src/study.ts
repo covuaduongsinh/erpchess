@@ -103,6 +103,39 @@ export type ActivityInput = z.input<typeof activityInputSchema>;
 export type Activity = z.output<typeof activityInputSchema>;
 export type ActivityPayload<K extends ActivityKind> = Extract<Activity, { kind: K }>['payload'];
 
+/** Thông số chấm của một hoạt động (Giai đoạn 24d: mặc định theo loại cho cả học viện). */
+export const activitySettingsSchema = z.object({
+  points: z.int().min(0).max(1000),
+  maxAttempts: z.int().min(1).max(100).nullable(),
+  timeLimitS: z.int().min(5).max(7200).nullable(),
+  wrongPenalty: z.int().min(0).max(1000),
+});
+export type ActivitySettings = z.infer<typeof activitySettingsSchema>;
+
+/** Mặc định của ứng dụng khi học viện chưa đặt. */
+export const APP_ACTIVITY_DEFAULTS: ActivitySettings = {
+  points: 10,
+  maxAttempts: null,
+  timeLimitS: null,
+  wrongPenalty: 0,
+};
+
+export const activityDefaultsSchema = z.partialRecord(
+  z.enum(activityKinds),
+  activitySettingsSchema,
+);
+export type ActivityDefaults = z.infer<typeof activityDefaultsSchema>;
+
+/** Mặc định cho một loại hoạt động: lấy của học viện nếu hợp lệ, không thì của ứng dụng. */
+export function defaultsForKind(raw: unknown, kind: ActivityKind): ActivitySettings {
+  const entry =
+    raw && typeof raw === 'object' && !Array.isArray(raw)
+      ? (raw as Record<string, unknown>)[kind]
+      : undefined;
+  const parsed = activitySettingsSchema.safeParse(entry);
+  return parsed.success ? parsed.data : APP_ACTIVITY_DEFAULTS;
+}
+
 export const studyInputSchema = z.object({
   academyId: z.uuid(),
   title: z.string().trim().min(1, 'title').max(160, 'title'),

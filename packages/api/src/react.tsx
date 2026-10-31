@@ -3,6 +3,7 @@
 import { playMove } from '@erpchess/chess-core';
 import type {
   AcademyProfileInput,
+  ActivityDefaults,
   ActivityInput,
   AttendanceStatus,
   BoardPreferences,
@@ -677,6 +678,17 @@ export function useUpdateAcademyProfile(academyId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: AcademyProfileInput) => api.updateAcademyProfile(client, academyId, input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+/** Hoạt động mặc định theo loại cho cả học viện (Giai đoạn 24d). */
+export function useUpdateAcademyActivityDefaults(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (defaults: ActivityDefaults) =>
+      api.updateAcademyActivityDefaults(client, academyId, defaults),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
   });
 }

@@ -13,6 +13,8 @@ import {
   type Activity,
   type ActivityInput,
   type ActivityKind,
+  type ActivitySettings,
+  APP_ACTIVITY_DEFAULTS,
   activityInputSchema,
 } from '@erpchess/domain';
 import { BOT_LEVELS } from '@erpchess/engine';
@@ -45,13 +47,27 @@ type Draft = {
   pgn: string;
 };
 
-function initialDraft(kind: ActivityKind, a?: Activity): Draft {
+function initialDraft(kind: ActivityKind, a?: Activity, defaults?: ActivitySettings): Draft {
+  // Hoạt động mới lấy thông số mặc định của học viện (Giai đoạn 24d)
+  const d = defaults ?? APP_ACTIVITY_DEFAULTS;
   const base: Draft = {
     title: a?.title ?? '',
-    points: a?.points ?? 10,
-    maxAttempts: a?.maxAttempts ? String(a.maxAttempts) : '',
-    wrongPenalty: a?.wrongPenalty ?? 0,
-    timeLimitS: a?.timeLimitS ? String(a.timeLimitS) : '',
+    points: a ? a.points : d.points,
+    maxAttempts: a
+      ? a.maxAttempts
+        ? String(a.maxAttempts)
+        : ''
+      : d.maxAttempts
+        ? String(d.maxAttempts)
+        : '',
+    wrongPenalty: a ? a.wrongPenalty : d.wrongPenalty,
+    timeLimitS: a
+      ? a.timeLimitS
+        ? String(a.timeLimitS)
+        : ''
+      : d.timeLimitS
+        ? String(d.timeLimitS)
+        : '',
     fen: kind === 'capture' ? CAPTURE_SAMPLE : START_FEN,
     moves: [],
     question: '',
@@ -164,6 +180,7 @@ function buildInput(kind: ActivityKind, d: Draft): ActivityInput | TranslationKe
 export function ActivityEditor({
   kind,
   initial,
+  defaults,
   academyId,
   studyId,
   saving,
@@ -173,6 +190,8 @@ export function ActivityEditor({
 }: {
   kind: ActivityKind;
   initial?: Activity;
+  /** Thông số mặc định cho hoạt động mới (của học viện). */
+  defaults?: ActivitySettings;
   academyId: string;
   studyId: string;
   saving: boolean;
@@ -181,7 +200,7 @@ export function ActivityEditor({
   onCancel: () => void;
 }) {
   const { t } = useT();
-  const [d, setD] = useState<Draft>(() => initialDraft(kind, initial));
+  const [d, setD] = useState<Draft>(() => initialDraft(kind, initial, defaults));
   const [problem, setProblem] = useState<TranslationKey | null>(null);
   const [schemaError, setSchemaError] = useState<unknown>(null);
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
