@@ -732,6 +732,7 @@ export const vi = {
     quickPairSearching: 'Đang tìm đối thủ… {{seconds}} giây',
     quickPairWindow: 'Elo của bạn {{rating}} · tìm trong khoảng ±{{window}}',
     quickPairCancel: 'Huỷ tìm',
+    challenge: 'Thách đấu',
     liveGames: 'Ván đang diễn ra',
     noLive: 'Không có ván nào đang diễn ra.',
     history: 'Lịch sử ván',
