@@ -340,6 +340,15 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
 - Màn học viện trên mobile: thanh tiêu đề theo màu thương hiệu (`brandColorVars`), logo, thông tin liên hệ (điện thoại/Zalo chạm để gọi).
 - Không có migration.
 
+### **PR 24b: Lịch quiz tự động** (✅ ĐÃ HOÀN THÀNH)
+
+- **Cơ sở đặc tả:** REA, Quiz → tab Automated Quiz và form tạo lịch (ghi vào `rea/spec/quiz-bai-tap-luyen.md`).
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261031000036_quiz_schedules.sql` — `quiz_schedules` (thứ, giờ, múi giờ, hết hạn, chuỗi study, con trỏ, số giờ mở bài, bật/tắt), `quiz_schedule_targets`, `quizzes.schedule_id`; `private.fire_quiz_schedule` chép hoạt động puzzle/mcq/capture của study kế tiếp thành quiz `auto` và giao bài (study không có câu chấm được thì vẫn dời con trỏ); `private.run_quiz_schedules` + cron 5 phút (theo múi giờ của lịch, mỗi ngày tối đa một lần); RPC `run_quiz_schedule_now` cho staff. pgTAP `28_quiz_schedules.sql` (6). Đã chạy thử trên Supabase với study mẫu rồi rollback (giao 1 quiz 2 câu, lần chạy thứ hai trong ngày không giao trùng).
+  2. **Domain/API:** `quizScheduleSchema`, `nextScheduledStudy`; `fetchQuizSchedules`/`createQuizSchedule`/`setQuizScheduleActive`/`deleteQuizSchedule`/`runQuizScheduleNow` + hook.
+  3. **Web:** nút "⏰ Lịch quiz tự động" ở trang Quiz mở `QuizSchedulesPanel` (danh sách, study lần tới, giao ngay, tạm dừng/chạy lại, xoá hai bước; form tạo với chuỗi study theo thứ tự và chọn nhóm/học viên).
+  4. **Kiểm thử:** domain 3, API 3, web 2.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

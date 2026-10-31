@@ -35,3 +35,12 @@
 
 - **Chương luyện:** mỗi chương chứa các thế cờ để luyện. Có hai tab riêng tư và công khai.
 - **Hình thức luyện:** đi tiếp từ thế cờ với engine, hoặc giải theo đáp án.
+
+## Automated Quiz (quan sát lại bằng REA, 2026-10-31)
+
+- Trang Quiz có tab riêng "Automated Quiz" (lịch giao quiz tự động).
+- Form tạo lịch:
+  - Thông tin: tên lịch.
+  - Giao cho: nhóm và/hoặc học viên.
+  - Lịch: các thứ trong tuần (bắt buộc ít nhất một), giờ, múi giờ, ngày hết hạn (không bắt buộc; sau ngày này không tạo quiz mới).
+  - Chuỗi study: thứ tự các study dùng cho các lần giao (nạp từ study có sẵn).

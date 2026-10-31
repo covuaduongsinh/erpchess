@@ -13,6 +13,7 @@ import type {
   LocationInput,
   PracticePositionInput,
   QuizInput,
+  QuizScheduleInput,
   RatingCategory,
   StudentCsvRow,
   StudyInput,
@@ -54,6 +55,7 @@ import * as presence from './presence';
 import * as profile from './profile';
 import * as api from './queries';
 import { ApiError } from './queries';
+import * as quizSchedules from './quiz-schedules';
 import * as quizzes from './quizzes';
 import type { ReportDateFilter } from './reports';
 import * as reports from './reports';
@@ -488,6 +490,45 @@ export function useQuickPair(academyId: string, onMatched: (gameId: string) => v
   );
 
   return { state, start, cancel };
+}
+
+/** Lịch quiz tự động (Giai đoạn 24b). */
+export function useQuizSchedules(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['quiz-schedules', academyId ?? ''],
+    queryFn: () => quizSchedules.fetchQuizSchedules(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useQuizScheduleMutations(academyId: string, userId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  const refresh = () => {
+    void qc.invalidateQueries({ queryKey: ['quiz-schedules', academyId] });
+    void qc.invalidateQueries({ queryKey: ['quizzes', academyId] });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (input: QuizScheduleInput) =>
+        quizSchedules.createQuizSchedule(client, academyId, userId, input),
+      onSuccess: refresh,
+    }),
+    setActive: useMutation({
+      mutationFn: ({ id, active }: { id: string; active: boolean }) =>
+        quizSchedules.setQuizScheduleActive(client, id, active),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => quizSchedules.deleteQuizSchedule(client, id),
+      onSuccess: refresh,
+    }),
+    runNow: useMutation({
+      mutationFn: (id: string) => quizSchedules.runQuizScheduleNow(client, id),
+      onSuccess: refresh,
+    }),
+  };
 }
 
 /** Trang đăng nhập riêng của học viện (Giai đoạn 23d). */
