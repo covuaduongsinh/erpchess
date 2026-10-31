@@ -313,6 +313,14 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   4. **Kiểm thử:** API 2, web BrandingCard thêm 1.
 - **Chưa làm:** tên miền riêng, theme bàn cờ mặc định cho cả học viện, thư viện ảnh cho ván trực tiếp.
 
+### **PR 23e: Thi đấu trên mobile — tìm trận nhanh và thách đấu** (✅ ĐÃ HOÀN THÀNH)
+
+- **Đối chiếu REA:** form tạo giải của Chesslang chỉ có Swiss, Quad, Swiss Team (không có Arena) — erpchess đã đủ (thêm cả vòng tròn), nên **bỏ Arena** khỏi kế hoạch để bám nền tảng gốc.
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. Hook `useQuickPair` chuyển từ web sang `@erpchess/api/react` để web và mobile dùng chung; test web giờ chạy thật hook, chỉ giả lập `client.rpc`.
+  2. **Mobile** (`apps/mobile/src/components/PlayCards.tsx`): thẻ Tìm trận nhanh (chọn mức thời gian, đếm giây, Elo và khoảng tìm, huỷ) và thẻ Thách đấu người đang online (presence học viện, màu bốc thăm phía server qua `create_challenge`); ghép/tạo xong vào thẳng màn ván.
+  3. i18n `play.challenge` vi/en.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:

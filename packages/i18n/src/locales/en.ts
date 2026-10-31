@@ -735,6 +735,7 @@ export const en: Resource = {
     quickPairSearching: 'Looking for an opponent… {{seconds}}s',
     quickPairWindow: 'Your rating {{rating}} · searching within ±{{window}}',
     quickPairCancel: 'Cancel',
+    challenge: 'Challenge',
     liveGames: 'Live games',
     noLive: 'No live games.',
     history: 'Game history',

@@ -53,6 +53,7 @@ import {
   View,
 } from 'react-native';
 import { chatPreview } from '@/components/ChatMessageBody';
+import { ChallengeCard, QuickPairCard } from '@/components/PlayCards';
 import { Button, Card, ErrorText, Field, Muted, Spinner, styles } from '@/components/ui';
 import { useT } from '@/lib/use-t';
 
@@ -64,8 +65,8 @@ export default function AcademyScreen() {
   const academy = academies.data?.find((a) => a.slug === slug);
   const members = useMembers(academy?.id);
   const groups = useGroups(academy?.id);
-  // Mở màn học viện là báo mình đang online (HLV thấy ở Game Area để ghép cặp)
-  useAcademyPresence(
+  // Mở màn học viện là báo mình đang online (HLV thấy ở Game Area để ghép cặp, người khác thách đấu)
+  const online = useAcademyPresence(
     academy?.id,
     session
       ? {
@@ -105,6 +106,12 @@ export default function AcademyScreen() {
 
       <QuizzesCard academyId={academy.id} />
       <MyGamesCard academyId={academy.id} />
+      {academy.role !== 'parent' && session ? (
+        <>
+          <QuickPairCard academyId={academy.id} />
+          <ChallengeCard academyId={academy.id} userId={session.user.id} online={online} />
+        </>
+      ) : null}
       <TournamentsCard academyId={academy.id} />
       <ClassesCard academyId={academy.id} />
       <PracticeCard academyId={academy.id} />
