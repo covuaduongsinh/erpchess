@@ -1229,6 +1229,12 @@ export const vi = {
     note: 'Ghi chú',
     add: 'Thêm',
   },
+  boardDefaults: {
+    title: 'Bàn cờ mặc định của học viện',
+    hint: 'Áp cho mọi bàn cờ trong học viện (thi đấu, lớp học, simul, giải đấu…). Thành viên đã tự chỉnh bàn cờ trong hồ sơ thì vẫn dùng lựa chọn của mình.',
+    saved: 'Đã lưu bàn cờ mặc định.',
+    clear: 'Bỏ mặc định của học viện',
+  },
   loginPage: {
     title: 'Trang đăng nhập riêng',
     hint: 'Học viên và phụ huynh đăng nhập qua trang mang thương hiệu học viện tại',

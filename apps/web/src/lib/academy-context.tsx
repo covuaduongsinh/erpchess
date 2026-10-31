@@ -11,6 +11,11 @@ export type AcademyContextValue = {
 
 export const AcademyContext = createContext<AcademyContextValue | null>(null);
 
+/** Học viện đang mở, hoặc null khi ở ngoài route /a/$slug (vd. trang phân tích chung). */
+export function useOptionalAcademy(): AcademyContextValue | null {
+  return use(AcademyContext);
+}
+
 export function useAcademy(): AcademyContextValue {
   const value = use(AcademyContext);
   if (!value) throw new Error('useAcademy phải nằm trong route /a/$slug');

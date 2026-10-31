@@ -19,6 +19,7 @@ import {
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useMemo, useState } from 'react';
+import { AcademyBoardDefaultsCard } from '../components/academy/AcademyBoardDefaultsCard';
 import { AcademyContactCard, BrandingCard } from '../components/academy/BrandingCard';
 import { QuickSessionModal } from '../components/dashboard/QuickSessionModal';
 import { WeeklyActivityChart } from '../components/dashboard/WeeklyActivityChart';
@@ -63,6 +64,7 @@ function OverviewPage() {
         <AcademyContactCard />
         {academy.role === 'owner' && <InviteCoachCard />}
         {academy.role === 'owner' && <BrandingCard />}
+        {academy.role === 'owner' && <AcademyBoardDefaultsCard />}
       </div>
 
       {staff && (

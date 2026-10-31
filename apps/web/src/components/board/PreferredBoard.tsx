@@ -1,7 +1,9 @@
 import { Board, type BoardProps } from '@erpchess/board-web';
+import { normalizeBoardPreferences } from '@erpchess/domain';
 import { useEffect, useRef } from 'react';
+import { useOptionalAcademy } from '../../lib/academy-context';
 import { classifyBoardSound, playBoardSound } from '../../lib/board-sound';
-import { useBoardPreferences } from '../../lib/use-board-preferences';
+import { hasStoredBoardPreferences, useBoardPreferences } from '../../lib/use-board-preferences';
 
 export type PreferredBoardProps = BoardProps & {
   /** Tắt hẳn âm thanh cho bàn này (lưới nhiều bàn, ảnh thu nhỏ). Mặc định theo cài đặt. */
@@ -20,6 +22,15 @@ export function PreferredBoard({
   ...rest
 }: PreferredBoardProps) {
   const { preferences } = useBoardPreferences();
+  // Chưa tự chỉnh bàn cờ thì dùng mặc định của học viện đang mở (Giai đoạn 23f)
+  const academyDefaults = useOptionalAcademy()?.academy.board_defaults;
+  const look =
+    !hasStoredBoardPreferences() &&
+    academyDefaults &&
+    typeof academyDefaults === 'object' &&
+    Object.keys(academyDefaults).length > 0
+      ? normalizeBoardPreferences(academyDefaults)
+      : preferences;
   const soundOn = sound ?? preferences.soundEnabled;
   const { fen, lastMove, check } = rest;
   const prevFenRef = useRef<string | null>(null);
@@ -35,9 +46,9 @@ export function PreferredBoard({
   return (
     <Board
       {...rest}
-      theme={theme ?? preferences.theme}
-      pieceSet={pieceSet ?? preferences.pieceSet}
-      coordinates={coordinates ?? preferences.coordinates}
+      theme={theme ?? look.theme}
+      pieceSet={pieceSet ?? look.pieceSet}
+      coordinates={coordinates ?? look.coordinates}
     />
   );
 }

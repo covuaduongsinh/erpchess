@@ -19,6 +19,7 @@ export type Database = {
     Tables: {
       academies: {
         Row: {
+          board_defaults: Json
           brand_color: string | null
           contact: Json
           created_at: string
@@ -35,6 +36,7 @@ export type Database = {
           socials: Json
         }
         Insert: {
+          board_defaults?: Json
           brand_color?: string | null
           contact?: Json
           created_at?: string
@@ -51,6 +53,7 @@ export type Database = {
           socials?: Json
         }
         Update: {
+          board_defaults?: Json
           brand_color?: string | null
           contact?: Json
           created_at?: string

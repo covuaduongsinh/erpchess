@@ -321,6 +321,17 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   2. **Mobile** (`apps/mobile/src/components/PlayCards.tsx`): thẻ Tìm trận nhanh (chọn mức thời gian, đếm giây, Elo và khoảng tìm, huỷ) và thẻ Thách đấu người đang online (presence học viện, màu bốc thăm phía server qua `create_challenge`); ghép/tạo xong vào thẳng màn ván.
   3. i18n `play.challenge` vi/en.
 
+### **PR 23f: Bàn cờ mặc định của học viện** (✅ ĐÃ HOÀN THÀNH)
+
+- **Cơ sở đặc tả:** REA, Branding → Platform Branding → Board Preferences (đặt theme bàn cờ mặc định cho mọi thành viên).
+- **Khác Chesslang có chủ đích:** thành viên đã tự chỉnh bàn cờ trong hồ sơ (GĐ20) vẫn dùng của mình; chưa chỉnh thì dùng mặc định của học viện.
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261031000035_academy_board_defaults.sql` — `academies.board_defaults` jsonb (object, ≤ 1 KB). pgTAP `27_academy_board_defaults.sql`.
+  2. **API:** `updateAcademyBoardDefaults` (kiểm bằng `boardPreferencesSchema`, `null` = bỏ mặc định; lưu riêng để không ghi đè form Branding) + `useUpdateAcademyBoardDefaults`.
+  3. **Web:** `PreferredBoard` đọc học viện đang mở (`useOptionalAcademy`) và dùng mặc định khi người dùng chưa có cài đặt riêng; thẻ `AcademyBoardDefaultsCard` cho chủ học viện (theme, bộ quân, tọa độ, xem trước, bỏ mặc định).
+  4. **Kiểm thử:** API 2, web PreferredBoard thêm 2.
+- **Chưa làm:** mobile chưa áp mặc định của học viện.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
