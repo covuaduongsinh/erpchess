@@ -16,6 +16,7 @@ export * from './practice';
 export * from './presence';
 export * from './profile';
 export * from './queries';
+export * from './quiz-schedules';
 export * from './quizzes';
 export * from './reports';
 export * from './room';

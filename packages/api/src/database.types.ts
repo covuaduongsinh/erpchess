@@ -2764,6 +2764,86 @@ export type Database = {
           },
         ]
       }
+      quiz_schedule_targets: {
+        Row: {
+          group_id: string | null
+          id: string
+          schedule_id: string
+          student_id: string | null
+        }
+        Insert: {
+          group_id?: string | null
+          id?: string
+          schedule_id: string
+          student_id?: string | null
+        }
+        Update: {
+          group_id?: string | null
+          id?: string
+          schedule_id?: string
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_schedule_targets_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_schedules: {
+        Row: {
+          academy_id: string
+          active: boolean
+          at_time: string
+          created_at: string
+          created_by: string | null
+          days: number[]
+          expires_on: string | null
+          id: string
+          last_run_at: string | null
+          name: string
+          next_index: number
+          open_hours: number
+          study_ids: string[]
+          timezone: string
+        }
+        Insert: {
+          academy_id: string
+          active?: boolean
+          at_time: string
+          created_at?: string
+          created_by?: string | null
+          days: number[]
+          expires_on?: string | null
+          id?: string
+          last_run_at?: string | null
+          name: string
+          next_index?: number
+          open_hours?: number
+          study_ids: string[]
+          timezone?: string
+        }
+        Update: {
+          academy_id?: string
+          active?: boolean
+          at_time?: string
+          created_at?: string
+          created_by?: string | null
+          days?: number[]
+          expires_on?: string | null
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          next_index?: number
+          open_hours?: number
+          study_ids?: string[]
+          timezone?: string
+        }
+        Relationships: []
+      }
       quiz_targets: {
         Row: {
           group_id: string | null
@@ -2817,6 +2897,7 @@ export type Database = {
           id: string
           level_id: string | null
           open_to_all: boolean
+          schedule_id: string | null
           starts_at: string | null
           title: string
           topics: string[]
@@ -2830,6 +2911,7 @@ export type Database = {
           id?: string
           level_id?: string | null
           open_to_all?: boolean
+          schedule_id?: string | null
           starts_at?: string | null
           title: string
           topics?: string[]
@@ -2843,6 +2925,7 @@ export type Database = {
           id?: string
           level_id?: string | null
           open_to_all?: boolean
+          schedule_id?: string | null
           starts_at?: string | null
           title?: string
           topics?: string[]
@@ -3916,6 +3999,7 @@ export type Database = {
       }
       revoke_certificate: { Args: { p_id: string }; Returns: undefined }
       run_fee_reminders_now: { Args: { p_academy: string }; Returns: number }
+      run_quiz_schedule_now: { Args: { p_schedule: string }; Returns: string }
       schedule_trial: {
         Args: {
           p_coach?: string

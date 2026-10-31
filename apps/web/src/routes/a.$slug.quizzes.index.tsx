@@ -3,6 +3,7 @@ import { isStaff, type QuizStatus, quizStatus } from '@erpchess/domain';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { AutoQuiz } from '../components/quiz/AutoQuiz';
+import { QuizSchedulesPanel } from '../components/quiz/QuizSchedulesPanel';
 import { Button, Card, ErrorText, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
@@ -28,7 +29,19 @@ function QuizzesPage() {
   const quizzes = useQuizzes(academy.id);
   const [filter, setFilter] = useState<Filter>('all');
   const [auto, setAuto] = useState(false);
+  const [schedules, setSchedules] = useState(false);
   const navigate = useNavigate();
+
+  if (schedules) {
+    return (
+      <div className="flex max-w-2xl flex-col gap-3">
+        <Button variant="ghost" className="self-start" onClick={() => setSchedules(false)}>
+          ← {t('quiz.title')}
+        </Button>
+        <QuizSchedulesPanel />
+      </div>
+    );
+  }
 
   if (auto) {
     return (
@@ -63,7 +76,12 @@ function QuizzesPage() {
           ))}
         </div>
         {staff && (
-          <Button variant="ghost" className="ml-auto" onClick={() => setAuto(true)}>
+          <Button variant="ghost" className="ml-auto" onClick={() => setSchedules(true)}>
+            ⏰ {t('quizSchedule.title')}
+          </Button>
+        )}
+        {staff && (
+          <Button variant="ghost" onClick={() => setAuto(true)}>
             {t('quiz.auto')}
           </Button>
         )}

@@ -105,6 +105,7 @@ export * from './periods';
 export * from './practice';
 export * from './profile';
 export * from './quiz';
+export * from './quiz-schedule';
 export * from './reports';
 export * from './study';
 export * from './tournament';
