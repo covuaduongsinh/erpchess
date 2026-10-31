@@ -46,6 +46,16 @@
   - Thương hiệu khi phát ván trực tiếp.
   - Tên miền riêng (white label).
 
+## Branding (quan sát lại bằng REA, 2026-10-31)
+
+- Trang Branding có sáu tab:
+  - **Academy Details:** tên, mô tả, link mạng xã hội.
+  - **Platform Branding:** màu chủ đạo (bảng màu gợi ý hoặc tự chọn) kèm xem trước nút; giao diện sáng/tối/theo hệ thống; theme bàn cờ mặc định áp cho mọi thành viên.
+  - **Logo & Favicon:** tải lên logo (hiện ở thanh bên) và favicon (tab trình duyệt).
+  - **Login Page:** logo, ảnh nền và các mục nội dung tự thêm của trang đăng nhập; chỉ lưu được khi đã gắn tên miền riêng.
+  - **Live Games Branding:** thư viện ảnh của học viện dùng khi phát ván trực tiếp.
+  - **White Label Domains:** gắn tên miền riêng (gói đang xem cho một tên miền).
+
 ## Location
 
 Quan sát lại bằng REA qua Chrome CDP ngày 2026-10-31 (chỉ mở trang và form rồi huỷ, không lưu).

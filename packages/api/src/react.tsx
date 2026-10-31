@@ -390,6 +390,16 @@ export function useUpdateGroup(academyId: string) {
   });
 }
 
+/** Trang đăng nhập riêng của học viện (Giai đoạn 23d). */
+export function useLoginBranding(slug: string) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['login-branding', slug],
+    queryFn: () => api.fetchLoginBranding(client, slug),
+    staleTime: 5 * 60_000,
+  });
+}
+
 /** Masterbase (Giai đoạn 23b): giữ trang cũ trong lúc tải trang mới để bảng không nhấp nháy. */
 export function useMasterbase(q: masterbase.MasterbaseQuery, enabled = true) {
   const client = useErpClient();
@@ -516,7 +526,7 @@ export function useUpdateAcademyProfile(academyId: string) {
 export function useUploadAcademyBranding(academyId: string) {
   const client = useErpClient();
   return useMutation({
-    mutationFn: ({ kind, file }: { kind: 'logo' | 'favicon'; file: File }) =>
+    mutationFn: ({ kind, file }: { kind: 'logo' | 'favicon' | 'login'; file: File }) =>
       api.uploadAcademyBranding(client, academyId, kind, file, file.name),
   });
 }

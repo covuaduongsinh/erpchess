@@ -40,6 +40,9 @@ beforeEach(() => {
     brand_color: null,
     socials: {},
     contact: {},
+    login_background_url: 'https://cdn.vn/bg.jpg',
+    login_sections: [{ title: 'Lịch khai giảng', body: 'Thứ 7' }],
+    slug: 'duong-sinh',
     role: 'owner',
   };
 });
@@ -79,6 +82,27 @@ describe('BrandingCard', () => {
     expect(uploadMutate).toHaveBeenCalledWith(
       { kind: 'logo', file: logo },
       expect.objectContaining({ onSuccess: expect.any(Function) }),
+    );
+  });
+});
+
+describe('BrandingCard login page', () => {
+  it('keeps login settings when saving and lets the owner add a section', () => {
+    render(<BrandingCard />);
+    expect(screen.getByText('/login/duong-sinh')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /loginPage.addSection/ }));
+    fireEvent.change(screen.getAllByLabelText(/loginPage.sectionTitle/)[1] as HTMLElement, {
+      target: { value: 'Học phí' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'common.save' }));
+    expect(updateMutate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        loginBackgroundUrl: 'https://cdn.vn/bg.jpg',
+        loginSections: [
+          { title: 'Lịch khai giảng', body: 'Thứ 7' },
+          { title: 'Học phí', body: '' },
+        ],
+      }),
     );
   });
 });
