@@ -69,6 +69,7 @@ export {
 } from './rules';
 export { nextOccurrence } from './schedule';
 export { type ChessShare, detectChessShare } from './share';
+export { chapterToActivity, type ImportedActivity, lichessStudyName } from './study-import';
 export {
   type Pairing,
   pairSwiss,

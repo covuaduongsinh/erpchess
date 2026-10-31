@@ -349,6 +349,16 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   3. **Web:** nút "⏰ Lịch quiz tự động" ở trang Quiz mở `QuizSchedulesPanel` (danh sách, study lần tới, giao ngay, tạm dừng/chạy lại, xoá hai bước; form tạo với chuỗi study theo thứ tự và chọn nhóm/học viên).
   4. **Kiểm thử:** domain 3, API 3, web 2.
 
+### **PR 24c: Nhập hàng loạt study Lichess** (✅ ĐÃ HOÀN THÀNH)
+
+- **Cơ sở đặc tả:** REA, Study → "Import from Lichess" (tab Public studies) và trang cấu hình hoạt động mặc định (ghi vào `rea/spec/hoc-lieu-study.md`; cấu hình mặc định làm ở PR sau).
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **chess-core:** `chapterToActivity` (chương từ thế cờ riêng với 1–39 nửa nước, số lẻ → puzzle; còn lại → xem ván; chương trống/hỏng bỏ qua), `lichessStudyName`.
+  2. **API** `lichess-studies.ts`: `parseLichessStudyInput`, `listLichessStudies` (NDJSON `api/study/by/{user}`), `importLichessStudies` (mỗi study một học liệu, một study lỗi không dừng lô, báo tiến độ) + hook `useImportLichessStudies`.
+  3. **Web:** nút "Nhập từ Lichess" ở trang Học liệu (staff) mở `LichessImportDialog`: tìm theo tên/@tên/link, chọn nhiều, nhập, kết quả từng study.
+  4. **Kiểm thử:** chess-core 4, API 4, web 3. Không có migration.
+- **Chưa làm:** tab "Study của tôi" (cần OAuth Lichess).
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
