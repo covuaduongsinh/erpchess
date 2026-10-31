@@ -5,7 +5,9 @@
 import {
   type AcademyProfileInput,
   type AcademyRole,
+  type ActivityDefaults,
   academyProfileSchema,
+  activityDefaultsSchema,
   type BatchMode,
   type BoardPreferences,
   boardPreferencesSchema,
@@ -723,6 +725,16 @@ export async function updateAcademyBoardDefaults(
 ) {
   const value = prefs ? boardPreferencesSchema.parse(prefs) : {};
   unwrap(await client.from('academies').update({ board_defaults: value }).eq('id', academyId));
+}
+
+/** Hoạt động mặc định theo loại cho cả học viện (Giai đoạn 24d); lưu riêng như bàn cờ mặc định. */
+export async function updateAcademyActivityDefaults(
+  client: ErpClient,
+  academyId: string,
+  defaults: ActivityDefaults,
+) {
+  const value = activityDefaultsSchema.parse(defaults);
+  unwrap(await client.from('academies').update({ activity_defaults: value }).eq('id', academyId));
 }
 
 /** Thông tin công khai cho trang đăng nhập riêng `/login/<slug>` (Giai đoạn 23d). */

@@ -1,15 +1,17 @@
+import type { ActivitySettings } from '@erpchess/domain';
 import { createI18n } from '@erpchess/i18n';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ActivityEditor } from './ActivityEditor';
 
-function setup(kind: 'mcq' | 'capture') {
+function setup(kind: 'mcq' | 'capture', defaults?: ActivitySettings) {
   const onSave = vi.fn();
   render(
     <I18nextProvider i18n={createI18n('vi')}>
       <ActivityEditor
         kind={kind}
+        defaults={defaults}
         academyId="a"
         studyId="s"
         saving={false}
@@ -54,5 +56,16 @@ describe('ActivityEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Lưu hoạt động' }));
     expect(screen.getByRole('alert').textContent).toBe('Chưa có quân đối phương để bắt.');
     expect(onSave).toHaveBeenCalledTimes(1);
+  });
+
+  it('hoạt động mới lấy thông số mặc định của học viện', () => {
+    const onSave = setup('mcq', { points: 25, maxAttempts: 2, timeLimitS: 60, wrongPenalty: 5 });
+    fireEvent.change(screen.getByLabelText('Câu hỏi'), { target: { value: 'Quân nào đi chéo?' } });
+    fireEvent.change(screen.getByLabelText('Phương án 1'), { target: { value: 'Xe' } });
+    fireEvent.change(screen.getByLabelText('Phương án 2'), { target: { value: 'Tượng' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Lưu hoạt động' }));
+    expect(onSave).toHaveBeenCalledWith(
+      expect.objectContaining({ points: 25, maxAttempts: 2, timeLimitS: 60, wrongPenalty: 5 }),
+    );
   });
 });

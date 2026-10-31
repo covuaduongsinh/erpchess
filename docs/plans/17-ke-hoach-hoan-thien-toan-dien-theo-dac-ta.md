@@ -359,6 +359,16 @@ Giai đoạn 20 hiện thực hóa các yêu cầu tại `docs/dacta/07-bao-cao-
   4. **Kiểm thử:** chess-core 4, API 4, web 3. Không có migration.
 - **Chưa làm:** tab "Study của tôi" (cần OAuth Lichess).
 
+### **PR 24d: Hoạt động mặc định của học viện** (✅ ĐÃ HOÀN THÀNH)
+
+- **Cơ sở đặc tả:** REA, Study → Default config (`study/settings/activity-defaults`).
+- **Mục tiêu & Kết quả nghiệm thu:**
+  1. **DB:** migration `20261031000037_activity_defaults.sql` — `academies.activity_defaults` jsonb (≤ 4 KB). pgTAP `29_activity_defaults.sql`.
+  2. **Domain/API:** `activitySettingsSchema`, `APP_ACTIVITY_DEFAULTS`, `activityDefaultsSchema`, `defaultsForKind`; `updateAcademyActivityDefaults` (lưu riêng) + hook.
+  3. **Web:** trang `/a/$slug/studies/defaults` (bảng 7 loại hoạt động: điểm, số lần thử tối đa, giới hạn giây, điểm trừ mỗi lần sai, về mặc định; chủ học viện sửa, staff khác chỉ xem); nút "⚙ Cấu hình mặc định" ở trang Học liệu; `ActivityEditor` nhận `defaults` cho hoạt động mới.
+  4. **Kiểm thử:** domain 1, API 1, web ActivityEditor thêm 1.
+- **Ghi chú:** Chesslang có thêm loại walkthrough, tính toán, trang HTML — erpchess chưa có các loại hoạt động này.
+
 ## 7. Quy trình Kiểm thử & Nghiệm thu (Verification Gate)
 
 Mỗi PR trước khi tạo và merge phải vượt qua toàn bộ các bước kiểm tra tự động:
