@@ -7,6 +7,8 @@ import {
   type AcademyRole,
   academyProfileSchema,
   type BatchMode,
+  type BoardPreferences,
+  boardPreferencesSchema,
   type CreateAcademyInput,
   type CreateAssignmentInput,
   type CreateStudentInput,
@@ -708,6 +710,19 @@ export async function fetchGroupMemberships(
       .eq('groups.academy_id', academyId),
   );
   return rows.map((r) => ({ groupId: r.group_id, studentId: r.student_id }));
+}
+
+/**
+ * Bàn cờ mặc định của học viện (Giai đoạn 23f); `null` là bỏ mặc định. Lưu riêng, không qua
+ * `updateAcademyProfile`, để hai form không ghi đè nhau.
+ */
+export async function updateAcademyBoardDefaults(
+  client: ErpClient,
+  academyId: string,
+  prefs: BoardPreferences | null,
+) {
+  const value = prefs ? boardPreferencesSchema.parse(prefs) : {};
+  unwrap(await client.from('academies').update({ board_defaults: value }).eq('id', academyId));
 }
 
 /** Thông tin công khai cho trang đăng nhập riêng `/login/<slug>` (Giai đoạn 23d). */

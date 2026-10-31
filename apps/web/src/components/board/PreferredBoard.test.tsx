@@ -1,5 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { AcademyContextValue } from '../../lib/academy-context';
+import { AcademyContext } from '../../lib/academy-context';
 import { saveStoredBoardPreferences } from '../../lib/use-board-preferences';
 import { autoFlipOrientation, PreferredBoard } from './PreferredBoard';
 
@@ -86,6 +88,43 @@ describe('PreferredBoard', () => {
     const second = render(<PreferredBoard fen={START} sound={false} />);
     second.rerender(<PreferredBoard fen={AFTER_E4} lastMove={['e2', 'e4']} sound={false} />);
     expect(playBoardSound).not.toHaveBeenCalled();
+  });
+});
+
+describe('PreferredBoard academy defaults', () => {
+  const inAcademy = (defaults: Record<string, unknown>) =>
+    ({
+      academy: { board_defaults: defaults },
+      session: {},
+    }) as unknown as AcademyContextValue;
+
+  it('uses the academy default board when the member has not customised theirs', () => {
+    render(
+      <AcademyContext
+        value={inAcademy({ theme: 'green', pieceSet: 'spatial', coordinates: false })}
+      >
+        <PreferredBoard fen={START} />
+      </AcademyContext>,
+    );
+    const board = screen.getByTestId('board');
+    expect(board.getAttribute('data-theme')).toBe('green');
+    expect(board.getAttribute('data-coords')).toBe('false');
+  });
+
+  it("keeps the member's own board once they customised it", () => {
+    saveStoredBoardPreferences({
+      theme: 'wood',
+      pieceSet: 'celtic',
+      coordinates: true,
+      soundEnabled: true,
+      autoFlip: false,
+    });
+    render(
+      <AcademyContext value={inAcademy({ theme: 'green' })}>
+        <PreferredBoard fen={START} />
+      </AcademyContext>,
+    );
+    expect(screen.getByTestId('board').getAttribute('data-theme')).toBe('wood');
   });
 });
 

@@ -1232,6 +1232,12 @@ export const en: Resource = {
     note: 'Note',
     add: 'Add',
   },
+  boardDefaults: {
+    title: 'Academy default board',
+    hint: 'Applies to every board in the academy (games, classes, simuls, tournaments…). Members who customised their board in their profile keep their own choice.',
+    saved: 'Default board saved.',
+    clear: 'Remove academy default',
+  },
   loginPage: {
     title: 'Academy login page',
     hint: 'Students and parents sign in through a page with your academy branding at',

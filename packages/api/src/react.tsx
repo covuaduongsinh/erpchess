@@ -5,6 +5,7 @@ import type {
   AcademyProfileInput,
   ActivityInput,
   AttendanceStatus,
+  BoardPreferences,
   ClassroomInput,
   CourseInput,
   ExerciseInput,
@@ -617,6 +618,17 @@ export function useUpdateAcademyProfile(academyId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: AcademyProfileInput) => api.updateAcademyProfile(client, academyId, input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+/** Bàn cờ mặc định cho cả học viện (Giai đoạn 23f). */
+export function useUpdateAcademyBoardDefaults(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (prefs: BoardPreferences | null) =>
+      api.updateAcademyBoardDefaults(client, academyId, prefs),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
   });
 }
