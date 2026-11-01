@@ -43,7 +43,7 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 
 ### PR 26a: Trang Rating và FIDE (có migration) — ✅ #83
 
-> **Kết quả:** migration `20261101000041_fide_rating.sql` (cột `fide_*`, RPC `set_academy_fide_enabled` và `set_member_fide`, không nới RLS) + pgTAP `33`; trang `/a/$slug/rating`; cột FIDE ở bảng và thẻ lưới học viên; dòng FIDE ở báo cáo và phiếu in. Ảnh REA ở `rea/evidence/ui-2026-11-01/gd26a/` (FIDE tắt) và `gd26d/` (FIDE bật). Chưa gọi API của FIDE (nhập tay). pgTAP trên cloud: 33 = 20/21 (lỗi ở test, đã sửa; xem mục 4b).
+> **Kết quả:** migration `20261101000041_fide_rating.sql` (cột `fide_*`, RPC `set_academy_fide_enabled` và `set_member_fide`, không nới RLS) + pgTAP `33`; trang `/a/$slug/rating`; cột FIDE ở bảng và thẻ lưới học viên; dòng FIDE ở báo cáo và phiếu in. Ảnh REA ở `rea/evidence/ui-2026-11-01/gd26a/` (FIDE tắt) và `gd26d/` (FIDE bật). Chưa gọi API của FIDE (nhập tay). pgTAP trên cloud: 33 = 21/21 sau khi sửa test (trước đó 20/21; xem mục 4b).
 - **DB:**
   - `academies.fide_enabled boolean default false`.
   - `memberships`: thêm `fide_id text` (kiểm số), `fide_standard`/`fide_rapid`/`fide_blitz int` (khoảng 1000–3000, cho phép null).
@@ -100,7 +100,7 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 
 - **Thẻ "Lượt làm bài 7 ngày"** (PR #79): `academy_stats.attempts_week` đếm bài tập + quiz + học liệu, khớp biểu đồ (migration `…039` + pgTAP `31`).
 - **Sửa lưới mobile** (#78) và tab Học phí một hàng; seed dữ liệu mẫu `scripts/seed-ui-demo.mjs` (idempotent, chỉ học viện `thu-nghiem-ui`).
-- **pgTAP trên `erpchess-dev`** (chủ dự án chạy sau khi áp): 31 = 8/8, 32 = 8/8, 33 = 20/21 (tổng 36/37). Ca hỏng là test 7 của `33_fide_rating.sql`: đọc `academies.fide_enabled` của học viện B khi đang đăng nhập owner A, RLS ẩn dòng nên trả NULL thay vì `false`; migration đúng. Đã sửa test (đọc dưới vai trò postgres) nên kỳ vọng 37/37, chờ chủ dự án chạy lại. Kiểm gián tiếp bằng API cũng đạt: `attempts_week` khớp tổng biểu đồ, báo cáo toàn học viện chạy được, FIDE ghi/đọc đúng.
+- **pgTAP trên `erpchess-dev`** (chủ dự án chạy): 31 = 8/8, 32 = 8/8, 33 = 21/21 (tổng 37/37). Lần chạy đầu 33 = 20/21 do test 7 của `33_fide_rating.sql` đọc `academies.fide_enabled` của học viện B khi đang đăng nhập owner A (RLS ẩn dòng nên trả NULL thay vì `false`); migration đúng, test đã sửa (đọc dưới vai trò postgres) và chạy lại đạt. Kiểm gián tiếp bằng API cũng đạt: `attempts_week` khớp tổng biểu đồ, báo cáo toàn học viện chạy được, FIDE ghi/đọc đúng.
 
 ## 5. Thứ tự đề xuất
 

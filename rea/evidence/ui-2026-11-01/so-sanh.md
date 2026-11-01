@@ -183,7 +183,7 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 
 Chủ dự án đã áp migration `20261101000039`, `…040`, `…041` lên `erpchess-dev`. Seed (`scripts/seed-ui-demo.mjs`) bật FIDE cho `thu-nghiem-ui` và nhập FIDE mẫu cho 5 học viên qua `set_member_fide` bằng tài khoản thử (đi qua RLS như người dùng thật).
 
-**Kiểm gián tiếp bằng API** (tôi không có công cụ chạy pgTAP; chủ dự án đã chạy: 31 = 8/8, 32 = 8/8, 33 = 20/21, ca hỏng là lỗi test đã sửa):
+**Kiểm gián tiếp bằng API** (tôi không có công cụ chạy pgTAP; chủ dự án đã chạy: 31 = 8/8, 32 = 8/8, 33 = 21/21 sau khi sửa test 7 (trước đó 20/21)):
 
 | Migration | Kiểm | Kết quả |
 | --- | --- | --- |
