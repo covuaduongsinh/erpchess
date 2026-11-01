@@ -1,4 +1,4 @@
-import { CalendarDays, LayoutGrid, List, Search } from 'lucide-react';
+import { CalendarDays, LayoutGrid, List, Search, Table2 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { quickPeriods, quickRange } from '../../lib/quick-range';
 import { useT } from '../../lib/use-t';
@@ -182,9 +182,9 @@ export function StatusChips<V extends string>({
   );
 }
 
-export type ViewMode = 'list' | 'grid' | 'calendar';
+export type ViewMode = 'list' | 'grid' | 'table' | 'calendar';
 
-const viewIcons = { list: List, grid: LayoutGrid, calendar: CalendarDays } as const;
+const viewIcons = { list: List, grid: LayoutGrid, table: Table2, calendar: CalendarDays } as const;
 
 /** Nút chuyển chế độ xem; chỉ truyền `views` mà trang thực sự hỗ trợ để không có nút chết. */
 export function ViewToggle({
@@ -200,6 +200,7 @@ export function ViewToggle({
   const labels = {
     list: t('ui.viewList'),
     grid: t('ui.viewGrid'),
+    table: t('ui.viewTable'),
     calendar: t('ui.viewCalendar'),
   } as const;
   return (

@@ -1,18 +1,31 @@
 import type { TournamentSummary } from '@erpchess/api';
 import { useMembers, useTournaments } from '@erpchess/api/react';
-import {
-  type CalendarRange,
-  calendarRange,
-  calendarRanges,
-  isStaff,
-  weekDays,
-} from '@erpchess/domain';
+import { calendarRange, isStaff, weekDays } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { Trophy } from 'lucide-react';
+import { Plus, Search, Trophy } from 'lucide-react';
 import { useState } from 'react';
-import { Button, Card, EmptyState, ErrorText, PageHeader, Spinner } from '../components/ui';
+import {
+  Button,
+  Card,
+  type DateRange,
+  DateRangeFields,
+  EmptyState,
+  ErrorText,
+  FilterBar,
+  PageHeader,
+  Pagination,
+  PeriodQuickPick,
+  SearchInput,
+  SelectField,
+  Spinner,
+  StatCard,
+  StatusChips,
+  type ViewMode,
+  ViewToggle,
+} from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
+import { inDateRange, paginate } from '../lib/list-tools';
 import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/tournaments/')({
@@ -20,9 +33,9 @@ export const Route = createFileRoute('/a/$slug/tournaments/')({
 });
 
 const STATUSES = ['all', 'active', 'upcoming', 'finished'] as const;
-const VIEWS = ['list', 'table', 'calendar'] as const;
 const SORTS = ['date', 'name', 'players'] as const;
 type Status = (typeof STATUSES)[number];
+type Sort = (typeof SORTS)[number];
 
 function timeLabel(t: TournamentSummary, unlimited: string) {
   return t.base_ms === null ? unlimited : `${t.base_ms / 60_000}+${t.inc_ms / 1000}`;
@@ -36,21 +49,27 @@ function TournamentsPage() {
   const members = useMembers(academy.id);
   const [q, setQ] = useState('');
   const [status, setStatus] = useState<Status>('all');
-  const [range, setRange] = useState<CalendarRange | ''>('');
-  const [sort, setSort] = useState<(typeof SORTS)[number]>('date');
-  const [view, setView] = useState<(typeof VIEWS)[number]>('list');
+  const [range, setRange] = useState<DateRange>({ from: '', to: '' });
+  const [sort, setSort] = useState<Sort>('date');
+  const [view, setView] = useState<ViewMode>('list');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const name = (id: string) =>
     members.data?.find((m) => m.profile.id === id)?.profile.display_name ?? '';
 
+  // Mọi thay đổi bộ lọc đưa về trang 1
+  const reset =
+    <T,>(set: (v: T) => void) =>
+    (v: T) => {
+      set(v);
+      setPage(1);
+    };
+
   const needle = q.trim().toLowerCase();
-  const r = range ? calendarRange(range) : null;
-  const shown = (list.data ?? [])
+  const all = list.data ?? [];
+  const shown = all
     .filter((x) => status === 'all' || x.status === status)
-    .filter((x) => {
-      if (!r) return true;
-      const at = x.starts_at ? new Date(x.starts_at) : new Date(x.created_at);
-      return at >= r.from && at < r.to;
-    })
+    .filter((x) => inDateRange(x.starts_at ?? x.created_at, range.from, range.to))
     .filter(
       (x) =>
         !needle ||
@@ -65,16 +84,17 @@ function TournamentsPage() {
           ? b.playerIds.length - a.playerIds.length
           : (b.starts_at ?? b.created_at).localeCompare(a.starts_at ?? a.created_at),
     );
-  const pill =
-    'rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary';
-  const select = 'rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm';
+  const filtered = needle !== '' || status !== 'all' || range.from !== '' || range.to !== '';
+  const count = (s: string) => all.filter((x) => x.status === s).length;
+  const paged = view === 'calendar' ? shown : paginate(shown, page, pageSize);
 
   const createLink = staff && (
     <Link
       to="/a/$slug/tournaments/new"
       params={{ slug: academy.slug }}
-      className="rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
+      className="inline-flex items-center gap-2 rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
     >
+      <Plus className="size-4" aria-hidden="true" />
       {t('tournament.create')}
     </Link>
   );
@@ -82,87 +102,103 @@ function TournamentsPage() {
   return (
     <>
       <PageHeader icon={Trophy} title={t('tournament.title')} actions={createLink} />
-      <Card>
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            type="search"
-            aria-label={t('tournament.search')}
-            placeholder={t('tournament.search')}
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            className="min-w-0 flex-1 rounded-md border border-text-muted/30 bg-white px-3 py-2"
-          />
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <div role="tablist" className="flex gap-1">
-            {STATUSES.map((s) => (
-              <button
-                key={s}
-                type="button"
-                role="tab"
-                aria-selected={status === s}
-                onClick={() => setStatus(s)}
-                className={pill}
-              >
-                {t(`tournament.${s}`)}
-              </button>
-            ))}
-          </div>
-          <select
-            aria-label={t('classroom.from')}
-            value={range}
-            onChange={(e) => setRange(e.target.value as CalendarRange | '')}
-            className={select}
-          >
-            <option value="">{t('tournament.all')}</option>
-            {calendarRanges.map((k) => (
-              <option key={k} value={k}>
-                {t(`classroom.range_${k}`)}
-              </option>
-            ))}
-          </select>
-          <select
-            aria-label={t('tournament.sort_date')}
-            value={sort}
-            onChange={(e) => setSort(e.target.value as (typeof SORTS)[number])}
-            className={select}
-          >
-            {SORTS.map((s) => (
-              <option key={s} value={s}>
-                {t(`tournament.sort_${s}`)}
-              </option>
-            ))}
-          </select>
-          <div role="tablist" className="ml-auto flex gap-1">
-            {VIEWS.map((v) => (
-              <button
-                key={v}
-                type="button"
-                role="tab"
-                aria-selected={view === v}
-                onClick={() => setView(v)}
-                className={pill}
-              >
-                {t(`tournament.view_${v}`)}
-              </button>
-            ))}
-          </div>
-        </div>
-        {list.isPending ? (
-          <Spinner />
-        ) : list.error ? (
-          <ErrorText error={list.error} />
-        ) : shown.length === 0 && view !== 'calendar' ? (
-          <EmptyState icon={Trophy} title={t('tournament.none')} action={createLink} />
-        ) : view === 'list' ? (
-          <ListView items={shown} />
-        ) : view === 'table' ? (
-          <TableView items={shown} />
-        ) : (
-          <CalendarView items={shown} />
-        )}
-      </Card>
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <StatCard accent="blue" icon={Trophy} label={t('simul.total')} value={all.length} />
+        <StatCard accent="green" label={t('tournament.active')} value={count('active')} />
+        <StatCard accent="orange" label={t('tournament.upcoming')} value={count('upcoming')} />
+        <StatCard accent="gray" label={t('tournament.finished')} value={count('finished')} />
+      </div>
+      <FilterBar>
+        <SearchInput value={q} onChange={reset(setQ)} placeholder={t('tournament.search')} />
+        <DateRangeFields value={range} onChange={reset(setRange)} />
+        <PeriodQuickPick onPick={reset(setRange)} />
+        <SelectField
+          label={t('learnPage.sort')}
+          value={sort}
+          onChange={reset(setSort)}
+          options={SORTS.map((s) => ({ value: s, label: t(`tournament.sort_${s}`) }))}
+        />
+        <StatusChips
+          value={status}
+          onChange={reset(setStatus)}
+          options={STATUSES.map((s) => ({ value: s, label: t(`tournament.${s}`) }))}
+        />
+        <ViewToggle value={view} onChange={setView} views={['list', 'grid', 'table', 'calendar']} />
+      </FilterBar>
+      {list.isPending ? (
+        <Spinner />
+      ) : list.error ? (
+        <ErrorText error={list.error} />
+      ) : shown.length === 0 && view !== 'calendar' ? (
+        <EmptyState
+          dashed
+          icon={filtered ? Search : Trophy}
+          title={filtered ? t('learnPage.noMatch') : t('tournament.none')}
+          action={filtered ? undefined : createLink}
+        />
+      ) : (
+        <Card>
+          {view === 'list' ? (
+            <ListView items={paged} />
+          ) : view === 'grid' ? (
+            <GridView items={paged} />
+          ) : view === 'table' ? (
+            <TableView items={paged} />
+          ) : (
+            <CalendarView items={shown} />
+          )}
+          {view !== 'calendar' && (
+            <Pagination
+              page={page}
+              pageSize={pageSize}
+              total={shown.length}
+              onPageChange={setPage}
+              onPageSizeChange={(n) => {
+                setPageSize(n);
+                setPage(1);
+              }}
+            />
+          )}
+        </Card>
+      )}
     </>
+  );
+}
+
+/** Chế độ lưới: mỗi giải một thẻ. */
+function GridView({ items }: { items: TournamentSummary[] }) {
+  const { t, i18n } = useT();
+  const { academy } = useAcademy();
+  return (
+    <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {items.map((x) => (
+        <li key={x.id} className="flex flex-col gap-2 rounded-lg border border-border p-4">
+          <Link
+            to="/a/$slug/tournaments/$id"
+            params={{ slug: academy.slug, id: x.id }}
+            className="font-semibold text-primary hover:underline"
+          >
+            {x.title}
+          </Link>
+          <span className="text-sm text-text-muted">
+            {t(`tournament.format_${x.format as 'swiss'}`)} ·{' '}
+            {timeLabel(x, t('tournament.unlimited'))}
+          </span>
+          <span className="text-sm text-text-muted">
+            {t('tournament.playerCount', { count: x.playerIds.length })}
+            {x.location && ` · ${x.location}`}
+          </span>
+          {x.starts_at && (
+            <span className="text-xs text-text-muted">
+              {formatDateTime(x.starts_at, i18n.language)}
+            </span>
+          )}
+          <span className="mt-auto text-sm font-medium">
+            {t(`tournament.${x.status as 'active'}`)}
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
