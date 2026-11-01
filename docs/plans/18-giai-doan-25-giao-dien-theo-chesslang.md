@@ -158,12 +158,17 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 
 ### PR 25e: Áp dụng: nhóm Thi đấu và Bàn cờ (chia làm 25e-1 và 25e-2)
 
-**25e-1 (Khu thi đấu, Giải đấu, Simul):**
+**25e-1 (Khu thi đấu, Giải đấu, Simul) ✅ ĐÃ HOÀN THÀNH & MERGE #70:**
 - **Khu thi đấu:** `PageHeader` (liên kết Simul, Giải đấu; nút **Ghép cặp** cho staff bật/tắt biểu mẫu ghép cặp); 4 `StatCard stacked` theo vai trò, mỗi thẻ có chú thích phạm vi: học viên xem phạm vi "của tôi" (Ván hôm nay của tôi, Cầm Trắng, Cầm Đen, Tổng ván của tôi trong 50 ván kết thúc gần nhất); staff và phụ huynh xem toàn học viện (Ván hôm nay, Đang diễn ra, Đã xong hôm nay, Học viên online); tất cả tính từ dữ liệu đã tải; banner **Đánh với máy** nền gradient màu chính kèm họa tiết ô cờ `.chess-pattern` và hai chip thật (7 mức độ, Elo 800 – 2600+), nút tới `/a/$slug/play/bot`; `QuickPairCard` cạnh banner; `Tabs` pills Học viên (danh sách học viên kèm chấm online) / Lịch sử ván / Ván đang diễn ra; cột phải Học viên online có `EmptyState` và thách đấu nhanh.
 - **Giải đấu:** `FilterBar` (tìm, khoảng ngày + T/Q/N, sắp xếp, chip trạng thái), `ViewToggle` danh sách / lưới / bảng / lịch (lịch và bảng là chế độ đã có, thêm chế độ lưới), 4 `StatCard`, `Pagination`, `EmptyState` có CTA.
 - **Simul:** cùng mẫu (thẻ số liệu, tìm, khoảng ngày + T/Q/N, chip trạng thái, danh sách/lưới, phân trang, `EmptyState` có CTA).
 - **Khác Chesslang có chủ đích:** thẻ Cầm Trắng/Cầm Đen chỉ dành cho học viên (phạm vi "của tôi"), staff xem các thẻ toàn học viện vì không thêm RPC; chip cấp độ của banner là chip thông tin (trang đánh với máy tự có bộ chọn mức Elo); Simul chưa có chế độ lịch.
-- **25e-2 (sau):** Bàn cờ phân tích (`/analysis`, `AnalysisBoard`).
+  **25e-2 (Bàn cờ phân tích):**
+
+- **Bố cục 2 cột toàn chiều rộng:** bàn cờ bên trái (không vượt chiều cao màn hình để thanh công cụ luôn trong tầm nhìn), panel phải rộng 360–440 px.
+- **Thanh công cụ icon dưới bàn** (`role="toolbar"`, mỗi nút có nhãn truy cập và tooltip): về đầu, lùi, tới, về cuối, lật bàn, xoá nét vẽ (khoá khi chưa có nét vẽ), bật/tắt engine. Phím tắt ← → ↑ ↓ và F giữ nguyên; trạng thái ván (chiếu hết, hoà) hiện cuối thanh.
+- **Panel phải:** `PageHeader` kiểu gọn (`compact`) và `Tabs` pills **Phân tích** (danh sách nước, chú thích, đưa lên nhánh chính, xoá) / **Engine** / **Masterbase** (chỉ khi đã đăng nhập, chỉ nạp khi chọn tab). Engine vẫn chạy khi chuyển tab để thanh đánh giá cạnh bàn không đứng. Ô dán FEN/PGN và nút sao chép nằm dưới tab, luôn hiện; mở PGN thành công thì quay về tab Phân tích.
+- **Khác Chesslang có chủ đích:** không có tab "AI PDF" (theo kế hoạch); chưa có tab "Bàn mới" riêng vì việc tạo ván mới chính là ô dán FEN/PGN luôn hiện; chưa có tab "CSDL của tôi" và nút "Lưu ván" vì trang phân tích chưa có tính năng lưu ván vào CSDL (cần tính năng mới, không phải việc giao diện).
 
 - **Khu thi đấu** (`a.$slug.play.index.tsx`):
   - `PageHeader` có nút Ghép cặp.
