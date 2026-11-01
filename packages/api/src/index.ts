@@ -22,6 +22,7 @@ export * from './quizzes';
 export * from './reports';
 export * from './room';
 export * from './simuls';
+export * from './stats';
 export { isStudentEmail, STUDENT_EMAIL_DOMAIN, studentEmail } from './student';
 export * from './studies';
 export * from './tournaments';

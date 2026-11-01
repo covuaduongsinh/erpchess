@@ -70,6 +70,7 @@ import {
   snapshotFromState,
 } from './room';
 import * as simuls from './simuls';
+import * as stats from './stats';
 import type { StudyScope } from './studies';
 import * as studies from './studies';
 import * as tournaments from './tournaments';
@@ -669,6 +670,36 @@ export function useAcademyStats(academyId: string | undefined) {
   return useQuery({
     queryKey: queryKeys.stats(academyId ?? ''),
     queryFn: () => api.fetchAcademyStats(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+/** Số liệu từng ngày (nhân sự) cho biểu đồ tuần ở Tổng quan. `from`/`to` là `YYYY-MM-DD`. */
+export function useDailyStats(academyId: string | undefined, from: string, to: string) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['daily-stats', academyId ?? '', from, to],
+    queryFn: () => stats.fetchDailyStats(client, academyId ?? '', from, to),
+    enabled: !!academyId,
+  });
+}
+
+/** Bảng xếp hạng quiz toàn học viện trong [from, to). */
+export function useAcademyQuizBoard(academyId: string | undefined, from: Date, to: Date) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['quiz-leaderboard', academyId ?? '', from.toISOString(), to.toISOString()],
+    queryFn: () => stats.fetchAcademyQuizBoard(client, academyId ?? '', from, to),
+    enabled: !!academyId,
+  });
+}
+
+/** Tổng quiz, quiz đang giao và quiz đã bắt đầu (nhân sự). */
+export function useQuizStarted(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['quiz-started', academyId ?? ''],
+    queryFn: () => stats.fetchQuizStarted(client, academyId ?? ''),
     enabled: !!academyId,
   });
 }

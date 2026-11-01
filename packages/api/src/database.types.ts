@@ -3767,6 +3767,35 @@ export type Database = {
       }
     }
     Functions: {
+      academy_daily_stats: {
+        Args: { p_academy: string; p_from: string; p_to: string; p_tz?: string }
+        Returns: {
+          attempts: number
+          attendance_present: number
+          attendance_total: number
+          on_date: string
+          quiz_completions: number
+        }[]
+      }
+      academy_quiz_leaderboard: {
+        Args: { p_academy: string; p_from: string; p_to: string }
+        Returns: {
+          avatar_url: string
+          correct: number
+          completed: number
+          display_name: string
+          points: number
+          student_id: string
+        }[]
+      }
+      academy_quiz_started: {
+        Args: { p_academy: string }
+        Returns: {
+          open_quizzes: number
+          started_quizzes: number
+          total_quizzes: number
+        }[]
+      }
       academy_leaderboard: {
         Args: { p_academy: string; p_from: string; p_to: string }
         Returns: {
