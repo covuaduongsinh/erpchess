@@ -1,6 +1,6 @@
 # Giai đoạn 27: Gửi email (Resend), nạp Masterbase từ broadcast Lichess, kho puzzle tìm và thêm hàng loạt
 
-> **Trạng thái:** lập kế hoạch 2026-11-02, chưa triển khai.
+> **Trạng thái (2026-11-02):** code xong cả ba PR. 27a ✅ #86 (migration 42 đã áp). 27b ✅ script #87, dữ liệu chờ nạp. 27c ✅ #88 (migration 43 đã áp, pgTAP 35 đạt 18/18), dữ liệu chờ nạp. 27d: script `scripts/db-load-csv.mjs` để nạp CSV bằng `DATABASE_URL` (máy không có `psql`). Sau khi nạp: chụp REA Masterbase và kho puzzle có dữ liệu.
 > **Tiếp nối:** Giai đoạn 26 (`19-giai-doan-26-quan-tri-hoc-vien-theo-chesslang.md`): 26a–26c xong, PR #78–#84.
 > **Quyết định của chủ dự án (2026-11-02):**
 > - Gửi email dùng **Resend**.
@@ -94,6 +94,21 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
   - Mỗi puzzle chép thành một hoạt động puzzle, dùng cấu hình mặc định của học viện (24d).
 - **Cần chủ dự án:** chạy lệnh nạp như ở 27b.
 
+> **Đã làm (PR #88, đã merge):** migration `20261102000043_puzzle_bank.sql` (đã áp, pgTAP 35 đạt 18/18), `scripts/puzzle-bank-import.mjs`, `PuzzleBankModal` trong trình soạn study. Dry-run thật: 6.193.530 dòng đọc, 3.292.767 đạt lọc, chọn 149.680 puzzle, CSV 27,0 MB, ước tính 55 MB trong DB. Ảnh REA hiện mới chụp được modal trống; chụp lại sau khi nạp.
+
+### PR 27d: Nạp CSV vào Postgres (không migration)
+
+- **Vì sao:** máy không có `psql`, nên `\copy` ở 27b/27c không chạy được.
+- **Script `scripts/db-load-csv.mjs`** (thư viện `postgres` 4.0.0, ghim phiên bản; test bằng PGlite): lệnh con `puzzle-bank` và `masterbase` (games trước positions). Đọc `DATABASE_URL` từ biến môi trường, không nhận mật khẩu qua tham số, không in chuỗi kết nối. Mỗi lô một giao dịch: `COPY` vào bảng tạm rồi `insert … on conflict do nothing`, nên chạy lại không trùng. Có `--dry-run`, in tiến độ, số dòng và `pg_total_relation_size` sau khi nạp.
+- **Dữ liệu đã tạo trên máy dev (`out/`, gitignore):** puzzle 149.680 dòng (27,0 MB); Masterbase 2026-04..2026-09: 23.815 ván (44,5 MB) và 960.404 thế (58,4 MB), ước tính 183 MB trong DB. Cộng kho puzzle ~55 MB và DB hiện 24 MB còn khoảng 262 MB, dưới trần 500 MB của gói Free.
+- **Cần chủ dự án** (PowerShell, chuỗi kết nối ở Dashboard → Project Settings → Database; dùng Session pooler nếu chỉ có IPv4):
+
+  ```powershell
+  $env:DATABASE_URL = 'postgresql://postgres.<ref>:<mật-khẩu>@<host>:5432/postgres'
+  node scripts/db-load-csv.mjs puzzle-bank
+  node scripts/db-load-csv.mjs masterbase
+  ```
+
 ### Để sau (ghi lại, không làm trong GĐ27)
 
 - **PayOS:** chờ chủ dự án có tài khoản. Thẻ ở trang Tích hợp giữ "Sắp có".
@@ -102,6 +117,6 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 
 ## 3. Thứ tự đề xuất
 
-27a (email) → 27b (Masterbase) → 27c (kho puzzle).
+27a (email) → 27b (Masterbase) → 27c (kho puzzle) → 27d (nạp CSV).
 - 27a phụ thuộc khoá Resend, nhưng vẫn viết code và test với `fetch` giả lập trước được. Chỉ phần gửi thật chờ khoá.
 - 27b và 27c dùng chung cách nạp dữ liệu lớn, nên làm liền nhau.
