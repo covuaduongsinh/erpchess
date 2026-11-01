@@ -50,7 +50,7 @@ function NewAssignmentPage() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
       <Card title={t('assignments.pickPuzzles')}>
         <PuzzlePicker selected={puzzleIds} onToggle={(id) => setPuzzleIds((l) => toggle(l, id))} />
       </Card>

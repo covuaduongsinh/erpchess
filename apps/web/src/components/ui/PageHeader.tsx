@@ -31,7 +31,7 @@ export function PageHeader({
           <Icon className={compact ? 'size-5' : 'size-6'} aria-hidden="true" />
         </span>
       )}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className={`flex flex-1 flex-col ${compact ? 'min-w-0' : 'min-w-[12rem]'}`}>
         <h1 className={`truncate font-bold text-text ${compact ? 'text-lg' : 'text-2xl'}`}>
           {title}
         </h1>

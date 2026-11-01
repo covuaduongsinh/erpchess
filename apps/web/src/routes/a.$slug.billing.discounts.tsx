@@ -37,7 +37,7 @@ function DiscountsPage() {
   return (
     <div className="flex flex-col gap-4">
       <BillingHeader />
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {stats.map((s) => (
           <div key={s.label} className="rounded-lg bg-surface p-4 shadow-sm">
             <p className="text-2xl font-bold text-primary">{s.value}</p>
@@ -45,7 +45,7 @@ function DiscountsPage() {
           </div>
         ))}
       </div>
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <Card title={t('bill.discounts')}>
           <select
             value={kind}

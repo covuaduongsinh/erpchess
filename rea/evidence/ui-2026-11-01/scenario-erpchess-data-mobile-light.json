@@ -329,6 +329,155 @@
    "action": "wait_for_timeout"
   },
   {
+   "step_id": "go_giam_gia",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/billing/discounts"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_giam_gia",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_cap_do",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/levels"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_cap_do",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_cap_do_sua",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/levels"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_cap_do_sua",
+   "locator": {
+    "selector": "button:has-text('Cơ bản')",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_cap_do_sua",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_hoc_phi_goi",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/billing/plans"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_hoc_phi_goi",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_lich",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/calendar"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_lich",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_dia_diem",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/locations"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_dia_diem",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_lead",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/leads"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_lead",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_thiet_lap",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/settings"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_thiet_lap",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_nhom",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/groups"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_nhom",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_choi_co",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/play"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_choi_co",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
    "step_id": "go_simul",
    "timeout_ms": 60000,
    "wait_until": "load",

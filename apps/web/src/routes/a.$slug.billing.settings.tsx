@@ -55,7 +55,7 @@ function SettingsForm({ initial }: { initial: ReturnType<typeof useBilling>['dat
 
   const year = new Date().getFullYear();
   return (
-    <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-2">
+    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <Card title={t('bill.general')}>
         <label className="flex flex-col gap-1 text-sm">
           <span className="font-medium">{t('bill.defaultCurrency')}</span>

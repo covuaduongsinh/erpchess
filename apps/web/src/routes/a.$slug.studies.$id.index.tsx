@@ -62,7 +62,7 @@ function StudyPlayerPage() {
       {activities.length === 0 ? (
         <p className="text-text-muted">{t('studies.noActivities')}</p>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
           <ol className="flex flex-row flex-wrap gap-1 lg:flex-col">
             {activities.map((a, i) => {
               const attempt = byActivity.get(a.id);

@@ -78,6 +78,16 @@ DATA_PAGES = [
     ('lop_hoc', f'{A}/classes', None),
     ('lop_hoc_quy', f'{A}/classes', "button:text-is('Quý')"),
     ('bai_tap', '/assignment/exercise', None),
+    ('giam_gia', f'{A}/billing/discounts', None),
+    ('cap_do', f'{A}/levels', None),
+    ('cap_do_sua', f'{A}/levels', "button:has-text('Cơ bản')"),
+    ('hoc_phi_goi', f'{A}/billing/plans', None),
+    ('lich', f'{A}/calendar', None),
+    ('dia_diem', f'{A}/locations', None),
+    ('lead', f'{A}/leads', None),
+    ('thiet_lap', f'{A}/settings', None),
+    ('nhom', f'{A}/groups', None),
+    ('choi_co', f'{A}/play', None),
     ('simul', '/simul', None),
 ]
 DATA = '--data' in sys.argv

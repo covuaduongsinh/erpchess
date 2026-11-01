@@ -32,7 +32,7 @@ export function PuzzlePicker({
   const shown = preview ?? list[0];
 
   return (
-    <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_240px]">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_240px]">
       <div className="flex flex-col gap-3">
         <label className="flex flex-col gap-1 text-sm">
           <span className="font-medium">{t('assignments.theme')}</span>

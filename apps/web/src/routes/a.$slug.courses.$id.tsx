@@ -244,7 +244,7 @@ function CourseEditor({ course }: { course: CourseDetail }) {
         <ErrorText error={m.update.error ?? m.remove.error} />
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card title={t('course.studies')}>
           {items.length === 0 && <p className="text-text-muted">{t('course.noStudies')}</p>}
           <ol className="flex flex-col gap-2">

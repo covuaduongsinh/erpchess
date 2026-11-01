@@ -78,7 +78,7 @@ function LocationsPage() {
           title={(locations.data ?? []).length === 0 ? t('location.none') : t('location.noMatch')}
         />
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {rows.map((l) => (
             <Card key={l.id}>
               <div className="flex items-start justify-between gap-2">

@@ -81,7 +81,7 @@ export function ClassroomForm({ onDone }: { onDone: () => void }) {
 
   const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2';
   return (
-    <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
       <Card title={t('classroom.create')}>
         <Field
           label={t('classroom.name')}

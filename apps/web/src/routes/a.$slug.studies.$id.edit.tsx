@@ -52,7 +52,7 @@ function EditStudyPage() {
         ← {t('studies.title')}
       </Link>
       <StudyDetailsForm key={study.data.updated_at} />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
         <Card title={t('studies.activities')}>
           <p className="text-sm text-text-muted">
             {t('studies.activityCount', { count: activities.length })} ·{' '}
@@ -244,7 +244,7 @@ function StudyDetailsForm() {
 
   return (
     <Card title={s.title}>
-      <form onSubmit={onSubmit} className="grid gap-4 md:grid-cols-2">
+      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Field
           label={t('studies.studyTitle')}
           name="title"

@@ -262,7 +262,7 @@ function BotBoard({ setup, onNew }: { setup: Setup; onNew: () => void }) {
   const botTitle = setup.elo ? `Bot Arasan (Elo ${setup.elo})` : 'Bot Arasan Tối thượng';
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
       <Card title={botTitle}>
         <div className="flex flex-col items-center gap-4">
           <div className="w-full max-w-[520px]">

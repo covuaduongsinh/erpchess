@@ -66,7 +66,7 @@ function ChatPage() {
         title={t('chat.title')}
         subtitle={t('learnPage.chatSubtitle')}
       />
-      <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
         <div className="flex flex-col gap-4">
           <Card>
             <input

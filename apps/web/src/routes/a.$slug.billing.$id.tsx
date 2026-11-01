@@ -69,7 +69,7 @@ function InvoicePage() {
       </div>
       <ErrorText error={voidInvoice.error} />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         {pub.data ? <InvoiceSheet inv={pub.data} /> : <p>{t('bill.noInvoices')}</p>}
         <div className="flex flex-col gap-6 print:hidden">
           {owner && d.status === 'open' && (

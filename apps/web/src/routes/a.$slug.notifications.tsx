@@ -25,7 +25,7 @@ function NotificationsPage() {
   return (
     <>
       <PageHeader icon={Bell} title={t('notify.title')} subtitle={t('notify.subtitle')} />
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <CategoriesCard />
         <ReminderCard />
       </div>

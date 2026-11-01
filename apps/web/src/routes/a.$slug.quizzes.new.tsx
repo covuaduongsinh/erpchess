@@ -66,7 +66,7 @@ function NewQuizPage() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
       <Card title={t('quiz.content')}>
         <div role="tablist" className="flex gap-1">
           {(['study', 'puzzles'] as const).map((s) => (

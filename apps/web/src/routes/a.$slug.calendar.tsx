@@ -170,7 +170,7 @@ function CalendarPage() {
         {events.isPending ? (
           <Spinner />
         ) : (
-          <div className="grid gap-2 md:grid-cols-7">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-7">
             {days.map((d) => {
               const dayEvents = list.filter(
                 (e) => new Date(e.starts_at).toDateString() === d.toDateString(),
@@ -213,7 +213,7 @@ function CalendarPage() {
         )}
         <ErrorText error={events.error ?? classes.error} />
       </Card>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <NewEvent coaches={coaches.map((m) => m.profile)} />
         <Availability coaches={coaches.map((m) => m.profile)} />
         <FindFree name={name} />

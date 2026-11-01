@@ -51,7 +51,7 @@ function GroupsPage() {
   return (
     <>
       <PageHeader icon={UsersRound} title={t('nav.groups')} subtitle={t('groups.subtitle')} />
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card>
           {groups.isPending ? (
             <Spinner />
@@ -72,16 +72,16 @@ function GroupsPage() {
                       disabled={!staff}
                       className="flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left hover:bg-bg aria-pressed:bg-primary/10"
                     >
-                      <span className="flex items-center gap-2">
+                      <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
                         <span className="font-medium">{g.name}</span>
                         {g.kind === 'batch' && (
-                          <span className="rounded bg-primary/10 px-1.5 text-xs font-bold text-primary uppercase">
+                          <span className="rounded bg-primary/10 px-1.5 text-xs font-bold whitespace-nowrap text-primary uppercase">
                             {t('groups.kindBatch')}
                           </span>
                         )}
                         {level && (
                           <span
-                            className="rounded px-1.5 text-xs text-white"
+                            className="rounded px-1.5 text-xs whitespace-nowrap text-white"
                             style={{ backgroundColor: level.color }}
                           >
                             {level.name}
@@ -89,7 +89,7 @@ function GroupsPage() {
                         )}
                       </span>
                       {staff && (
-                        <span className="text-sm text-text-muted">
+                        <span className="shrink-0 text-sm whitespace-nowrap text-text-muted">
                           {t('groups.studentCount', { count: g.studentCount })}
                         </span>
                       )}
@@ -109,7 +109,12 @@ function GroupsPage() {
                   required
                 />
               </div>
-              <Button type="submit" variant="cta" disabled={createGroup.isPending}>
+              <Button
+                type="submit"
+                variant="cta"
+                className="shrink-0 whitespace-nowrap"
+                disabled={createGroup.isPending}
+              >
                 {t('groups.create')}
               </Button>
             </form>
