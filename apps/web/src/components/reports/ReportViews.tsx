@@ -95,9 +95,9 @@ export function AllStudentsReportView({
                     <span className="font-medium">{s.gamesWdl}</span>
                     <span className="ml-1 text-xs text-text-muted">(Tổng {s.gamesTotal})</span>
                   </td>
-                  <td className="py-3 px-3">{s.blitzRating}</td>
-                  <td className="py-3 px-3">{s.rapidRating}</td>
-                  <td className="py-3 px-3">{s.classicalRating}</td>
+                  <td className="py-3 px-3">{s.blitzRating ?? t('reports.noRating')}</td>
+                  <td className="py-3 px-3">{s.rapidRating ?? t('reports.noRating')}</td>
+                  <td className="py-3 px-3">{s.classicalRating ?? t('reports.noRating')}</td>
                   <td className="py-3 px-3 text-right">
                     <Button
                       variant="ghost"
@@ -179,8 +179,8 @@ export function SingleStudentReportView({
             {summary.games.wins}W / {summary.games.draws}D / {summary.games.losses}L
           </div>
           <div className="text-xs text-text-muted">
-            Blitz: {summary.games.ratings.blitz ?? '-'} · Rapid:{' '}
-            {summary.games.ratings.rapid ?? '-'}
+            Blitz: {summary.games.ratings.blitz ?? t('reports.noRating')} · Rapid:{' '}
+            {summary.games.ratings.rapid ?? t('reports.noRating')}
           </div>
         </Card>
 
@@ -271,9 +271,9 @@ export function SingleStudentReportView({
                   {summary.games.losses}
                 </p>
                 <p>
-                  Rating: Blitz {summary.games.ratings.blitz ?? '-'} | Rapid{' '}
-                  {summary.games.ratings.rapid ?? '-'} | Classical{' '}
-                  {summary.games.ratings.classical ?? '-'}
+                  Rating: Blitz {summary.games.ratings.blitz ?? t('reports.noRating')} | Rapid{' '}
+                  {summary.games.ratings.rapid ?? t('reports.noRating')} | Classical{' '}
+                  {summary.games.ratings.classical ?? t('reports.noRating')}
                 </p>
               </div>
             </div>

@@ -132,10 +132,32 @@ export type AcademyStudentSummary = {
   sessionsTotal: number;
   gamesTotal: number;
   gamesWdl: string;
-  blitzRating: number;
-  rapidRating: number;
-  classicalRating: number;
+  /** `null` = chưa có rating (chưa có dòng trong `ratings`); không phải 1200. */
+  blitzRating: number | null;
+  rapidRating: number | null;
+  classicalRating: number | null;
 };
+
+/**
+ * RPC `get_academy_students_report` điền 1200 cho học viên chưa có dòng rating nào, nên bảng Báo cáo
+ * lệch với trang Học viên ("Chưa có"). Lấy số thật từ bảng `ratings`: có dòng thì dùng số đó,
+ * không có thì `null`.
+ */
+export function withRealRatings(
+  students: readonly AcademyStudentSummary[],
+  rows: readonly { student_id: string; category: string; rating: number }[],
+): AcademyStudentSummary[] {
+  const pick = (id: string, category: string) => {
+    const r = rows.find((x) => x.student_id === id && x.category === category);
+    return r ? Math.round(Number(r.rating)) : null;
+  };
+  return students.map((s) => ({
+    ...s,
+    blitzRating: pick(s.studentId, 'blitz'),
+    rapidRating: pick(s.studentId, 'rapid'),
+    classicalRating: pick(s.studentId, 'classical'),
+  }));
+}
 
 const UTF8_BOM = '\uFEFF';
 
@@ -185,7 +207,7 @@ export function studentDetailedReportToCsv(report: StudentDetailedReport): strin
     [
       'Ván đấu',
       `Thắng ${summary.games.wins} / Hoà ${summary.games.draws} / Thua ${summary.games.losses} (Tổng ${summary.games.totalGames})`,
-      `Blitz: ${summary.games.ratings.blitz ?? '-'} | Rapid: ${summary.games.ratings.rapid ?? '-'} | Classical: ${summary.games.ratings.classical ?? '-'}`,
+      `Blitz: ${summary.games.ratings.blitz ?? ''} | Rapid: ${summary.games.ratings.rapid ?? ''} | Classical: ${summary.games.ratings.classical ?? ''}`,
     ],
     [
       'Giải đấu',
@@ -285,9 +307,9 @@ export function academyStudentsReportToCsv(students: AcademyStudentSummary[]): s
       s.attendanceRate.toFixed(1),
       String(s.gamesTotal),
       s.gamesWdl,
-      String(s.blitzRating),
-      String(s.rapidRating),
-      String(s.classicalRating),
+      s.blitzRating === null ? '' : String(s.blitzRating),
+      s.rapidRating === null ? '' : String(s.rapidRating),
+      s.classicalRating === null ? '' : String(s.classicalRating),
     ]),
   ];
 

@@ -592,5 +592,23 @@ const fchk = await c
 console.log(
   `kiểm 41: ${fchk.error ? `LỖI ${fchk.error.message}` : `${fchk.count} học viên đã có mã FIDE`}`,
 );
+// --- Elo nội bộ ban đầu (HLV nhập tay) cho 2 học viên; các học viên còn lại chưa có rating để thấy "Chưa có" ---
+const INITIAL = [
+  ['an.nguyen', 'rapid', 1350],
+  ['an.nguyen', 'blitz', 1300],
+  ['binh.tran', 'rapid', 1180],
+];
+const { data: haveRatings } = await c
+  .from('ratings')
+  .select('student_id, category')
+  .eq('academy_id', A);
+for (const [username, category, rating] of INITIAL) {
+  const uid = idOf[username];
+  if (!uid || haveRatings?.some((r) => r.student_id === uid && r.category === category)) continue;
+  note(
+    `Elo ${category} ${username}`,
+    await c.from('ratings').upsert({ academy_id: A, student_id: uid, category, rating, rd: 350 }),
+  );
+}
 console.log('xong');
 process.exit(0);

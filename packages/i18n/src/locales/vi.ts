@@ -1851,6 +1851,7 @@ export const vi = {
     fromDate: 'Từ ngày',
     toDate: 'Đến ngày',
     exportCsv: 'Xuất CSV',
+    noRating: 'Chưa có',
     tabsLabel: 'Kiểu xem báo cáo',
     tabByStudent: 'Theo học viên',
     tabWholeAcademy: 'Toàn học viện',

@@ -49,6 +49,9 @@ vi.mock('@erpchess/api/react', () => ({
   }),
   useLevels: () => ({ data: [{ id: 'l1', name: 'Cơ bản' }] }),
   useGroupStudentIds: () => ({ data: h.batchIds }),
+  useRatings: () => ({
+    data: [{ student_id: 's1', category: 'rapid', rating: 1234.4 }],
+  }),
   useAcademyStudentsReport: () => ({
     data: [summary('s1', 'Nguyễn Văn An', 'an'), summary('s2', 'Trần Thị Bình', 'binh')],
     isPending: false,
@@ -69,12 +72,24 @@ vi.mock('./ReportViews', () => ({
     students,
     onSelectStudent,
   }: {
-    students: { studentId: string }[];
+    students: {
+      studentId: string;
+      blitzRating: number | null;
+      rapidRating: number | null;
+      classicalRating: number | null;
+    }[];
     onSelectStudent: (id: string) => void;
   }) => (
-    <button type="button" onClick={() => onSelectStudent('s2')}>
-      {`Bảng ${students.length} học viên`}
-    </button>
+    <div>
+      <button type="button" onClick={() => onSelectStudent('s2')}>
+        {`Bảng ${students.length} học viên`}
+      </button>
+      {students.map((s) => (
+        <p
+          key={s.studentId}
+        >{`${s.studentId}: ${s.blitzRating}/${s.rapidRating}/${s.classicalRating}`}</p>
+      ))}
+    </div>
   ),
   SingleStudentReportView: () => <div>Chi tiết báo cáo</div>,
 }));
@@ -240,6 +255,13 @@ describe('trang Báo cáo theo học viên', () => {
     // chọn một học viên trong bảng thì sang tab Theo học viên với ?student=
     fireEvent.click(screen.getByRole('button', { name: 'Bảng 2 học viên' }));
     expect(h.navigate).toHaveBeenLastCalledWith({ search: { student: 's2' } });
+  });
+
+  it('toàn học viện: rating lấy từ bảng ratings, học viên chưa có dòng thì null (không phải 1200 của RPC)', async () => {
+    vi.spyOn(Route, 'useSearch').mockReturnValue({ view: 'academy' });
+    renderPage();
+    expect(await screen.findByText('s1: null/1234/null', {}, SLOW)).toBeTruthy();
+    expect(screen.getByText('s2: null/null/null')).toBeTruthy();
   });
 
   it('khoảng ngày: nút nhanh có aria-pressed; Tuỳ chỉnh hiện hai ô ngày', async () => {
