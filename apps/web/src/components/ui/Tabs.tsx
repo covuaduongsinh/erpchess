@@ -48,12 +48,12 @@ export function Tabs<V extends string>({
 
   const list =
     variant === 'underline'
-      ? 'flex gap-1 border-b border-border'
+      ? 'flex gap-1 overflow-x-auto border-b border-border'
       : 'inline-flex flex-wrap gap-1 rounded-full bg-text-muted/10 p-1';
   const tab =
     variant === 'underline'
-      ? '-mb-px flex items-center gap-2 border-b-2 border-transparent px-4 py-2 text-text-muted hover:text-text aria-selected:border-primary aria-selected:font-medium aria-selected:text-primary'
-      : 'flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-text-muted hover:text-text aria-selected:bg-primary aria-selected:font-medium aria-selected:text-text-on-primary';
+      ? '-mb-px flex shrink-0 items-center gap-2 whitespace-nowrap border-b-2 border-transparent px-4 py-2 text-text-muted hover:text-text aria-selected:border-primary aria-selected:font-medium aria-selected:text-primary'
+      : 'flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-1.5 text-sm text-text-muted hover:text-text aria-selected:bg-primary aria-selected:font-medium aria-selected:text-text-on-primary';
 
   return (
     <div role="tablist" aria-label={ariaLabel} onKeyDown={onKeyDown} className={list}>

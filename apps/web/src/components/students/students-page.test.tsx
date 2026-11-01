@@ -81,7 +81,7 @@ describe('trang Học viên', () => {
     expect(screen.getByText('Nguyễn Văn An')).toBeTruthy();
     expect(screen.queryByText('HLV Cường')).toBeNull();
     // Cột lớp lấy từ danh sách thành viên nhóm (trước đây luôn trống)
-    expect(screen.getByText('🏫 Lớp U10')).toBeTruthy();
+    expect(screen.getAllByText('Lớp U10').length).toBeGreaterThan(1);
   });
 
   it('chuyển danh sách ↔ lưới bằng ViewToggle', async () => {

@@ -353,7 +353,7 @@ export function AppSidebar({
                   type="button"
                   aria-pressed={i18n.language === lng}
                   onClick={() => void i18n.changeLanguage(lng)}
-                  className="rounded-md px-2 py-1 text-xs font-medium text-text-muted hover:bg-primary/5 aria-pressed:bg-primary/10 aria-pressed:text-primary"
+                  className="rounded-md px-2 py-1 text-xs font-medium text-text-muted hover:bg-primary/5 aria-pressed:bg-primary aria-pressed:text-text-on-primary"
                 >
                   {lng.toUpperCase()}
                 </button>

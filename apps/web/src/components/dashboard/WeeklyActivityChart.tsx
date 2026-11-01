@@ -25,7 +25,7 @@ export function WeeklyActivityChart({
   data,
   totalSolved,
   trendPercent,
-  title = '📊 Hoạt động giải bài tập trong tuần',
+  title = 'Hoạt động giải bài tập trong tuần',
   subtitle = 'Tần suất giải thế cờ và nộp bài tập của học viên toàn học viện',
   unit = 'bài',
 }: WeeklyActivityChartProps) {

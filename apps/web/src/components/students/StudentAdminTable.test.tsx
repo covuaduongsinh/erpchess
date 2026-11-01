@@ -72,7 +72,7 @@ describe('StudentAdminTable', () => {
     expect(screen.getByText('@an_nguyen')).toBeTruthy();
     expect(screen.getByText('Trần Thị Bình')).toBeTruthy();
     expect(screen.getAllByText('Gold Kiwi').length).toBeGreaterThan(0);
-    expect(screen.getByText('🏫 Lớp U10 Nâng Cao')).toBeTruthy();
+    expect(screen.getByText('Lớp U10 Nâng Cao')).toBeTruthy();
   });
 
   it('lọc học viên theo từ khóa tìm kiếm', () => {

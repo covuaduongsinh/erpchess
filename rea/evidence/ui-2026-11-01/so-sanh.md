@@ -56,3 +56,40 @@ python rea/evidence/ui-2026-11-01/extract-shots.py rea/evidence/ui-2026-11-01/25
 ```
 
 Ghi chú vận hành: một lần chạy `desktop-dark` bị REA báo `cleanup_incomplete` (hết hạn 30 giây khi dọn dẹp trình duyệt); chạy lại ngay thì đạt. `capture.json` (nặng) bị `.gitignore`.
+
+## 6. Nghiệm thu có dữ liệu mẫu (2026-11-01, lần hai)
+
+**Dữ liệu:** `scripts/seed-ui-demo.mjs` (idempotent, chỉ ghi vào học viện `thu-nghiem-ui` bằng tài khoản thử qua RLS, không DELETE, không khoá admin) nạp: 8 học viên (có tên rất dài để thử tràn chữ), 2 batch + 1 nhóm, 2 cấp độ đã xếp cho cả 8 học viên, 2 quiz (1 đang mở có 5 học viên làm bài, 1 đã đóng — quá hạn nên máy chủ không nhận bài), 1 giải Swiss sắp tới, 1 simul sắp tới, 2 buổi học, 1 bài tập giao cho nhóm và batch. Mọi nội dung tự soạn.
+
+**Ảnh:** `data/{desktop-light,desktop-dark,mobile-light}/shot_*.png` — tổng quan, học viên (danh sách + lưới), batch, quiz, quiz bảng xếp hạng, giải đấu, khu thi đấu, bài tập, simul. Sinh bằng `python make-scenarios.py --data`. Đã xem từng ảnh desktop sáng; desktop tối: Tổng quan, Quiz, Học viên; mobile sáng: Tổng quan, Học viên (lưới), Quiz bảng xếp hạng.
+
+| Trang | Khi có dữ liệu | Kết quả |
+| --- | --- | --- |
+| Tổng quan | Podium có 3 người + hàng thứ 4; thẻ số 8 học viên / 1 giải; biểu đồ có cột | Khớp. Tên dài bị cắt "…" ở podium (chấp nhận được) |
+| Học viên (lưới, bảng) | 8 thẻ/hàng, tên 31 ký tự bị cắt "…" trong lưới, hiện đủ trong bảng; thẻ "Đã phân cấp" 8/8 | Khớp |
+| Batch | 2 batch có HLV, sĩ số, hình thức | Đã sửa (mục 7) |
+| Quiz + Bảng xếp hạng | Thẻ 2 / 1 đang mở / 1 đóng / 100% đã bắt đầu; danh sách 2 quiz; podium + xếp hạng điểm | Khớp |
+| Giải đấu, Simul | 1 dòng mỗi trang, phân trang "1–1 / 1" | Khớp |
+| Khu thi đấu | Danh sách 8 học viên (ngoại tuyến), 0 ván | Khớp |
+
+## 7. Lỗi tìm thấy khi có dữ liệu và đã sửa
+
+| # | Lỗi (thấy trong ảnh) | Sửa |
+| --- | --- | --- |
+| 5 | Trang Batch liệt kê cả **nhóm thường** (hiện 3 thẻ thay vì 2); batch tạo từ trang này lại thành nhóm thường | Lọc `kind = 'batch'`; khi tạo gán `kind: 'batch'` |
+| 6 | Trang Batch dùng emoji màu (👨‍🏫 👥 📍 📅) và chữ cứng tiếng Việt ("Huấn luyện viên", "Quản lý học viên", "Xem lịch lớp") | Icon lucide + khoá i18n vi/en |
+| 7 | Huy hiệu cấp độ và chip lớp trong bảng học viên dùng emoji, nền sáng chói trong chế độ tối | Icon `Award`/`Users`, màu theo token và biến thể `dark:` |
+| 8 | Tiêu đề biểu đồ Tổng quan có emoji (📊 🧑‍🏫 🏁) | Bỏ emoji |
+| 9 | Mobile: tab Quiz xuống dòng 2–3 chữ mỗi tab ("Bảng xếp hạng" thành 3 dòng) | `Tabs` không xuống dòng, cuộn ngang khi hẹp |
+| 10 | Chế độ tối: nút VI/EN đang chọn gần như không khác nút không chọn | Nút đang chọn nền `primary` đặc, chữ `text-on-primary` |
+| 11 | Thẻ "Lượt làm bài 7 ngày" (0) lệch biểu đồ ngay dưới (5 lượt) | Đổi nhãn thành "Bài tập đã làm 7 ngày" cho đúng nghĩa (RPC chỉ đếm bài tập) |
+
+## 8. Lỗi lớn còn lại (cần quyết định/migration, chưa sửa)
+
+- **Thẻ "Bài tập đã làm 7 ngày"** chỉ đếm bài tập; muốn gồm cả quiz và hoạt động học liệu như biểu đồ thì phải sửa RPC `academy_stats` (cần migration, chủ dự án áp).
+- **Quiz đã đóng chưa có lượt làm** vì máy chủ từ chối bài nộp quá hạn; muốn ảnh quiz đóng có điểm phải tạo quiz đang mở, cho làm rồi đợi hết hạn.
+- `LevelBadge` còn chuỗi cứng "Chưa phân cấp" / "Cấp độ: …" (chưa qua i18n).
+- Chưa có dữ liệu cho ván đấu, ván đang diễn ra, học viên online, điểm danh (cần phiên đăng nhập học viên đồng thời).
+- Ảnh tối chỉ xem 3 trang; mobile tối chưa chụp lần này.
+
+Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-2026-11-01/make-scenarios.py --data` và chụp như mục 5 với tên kịch bản `scenario-erpchess-data-<biến thể>.json`, thư mục `data/<biến thể>`.

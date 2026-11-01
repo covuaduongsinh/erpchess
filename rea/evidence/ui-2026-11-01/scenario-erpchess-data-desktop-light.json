@@ -1,0 +1,260 @@
+{
+ "browser": {
+  "executable_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "headless": true,
+  "mode": "launch"
+ },
+ "actions": [
+  {
+   "step_id": "login_form",
+   "locator": {
+    "selector": "input[name=email]",
+    "kind": "css"
+   },
+   "state": "visible",
+   "timeout_ms": 60000,
+   "action": "wait_for"
+  },
+  {
+   "step_id": "fill_user",
+   "value": {
+    "secret_id": "erp_user",
+    "source": "secret"
+   },
+   "locator": {
+    "selector": "input[name=email]",
+    "kind": "css"
+   },
+   "timeout_ms": 10000,
+   "action": "fill"
+  },
+  {
+   "step_id": "fill_pass",
+   "value": {
+    "secret_id": "erp_pass",
+    "source": "secret"
+   },
+   "locator": {
+    "selector": "input[name=password]",
+    "kind": "css"
+   },
+   "timeout_ms": 10000,
+   "action": "fill"
+  },
+  {
+   "step_id": "submit",
+   "locator": {
+    "selector": "button[type=submit]",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "after_login",
+   "duration_ms": 8000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_tong_quan",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/dashboard"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_tong_quan",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_hoc_vien_danh_sach",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/administration/students"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_hoc_vien_danh_sach",
+   "locator": {
+    "selector": "button[aria-label='Danh sách']",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_hoc_vien_danh_sach",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_hoc_vien_luoi",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/administration/students"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_hoc_vien_luoi",
+   "locator": {
+    "selector": "button[aria-label='Lưới']",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_hoc_vien_luoi",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_batch",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/batches"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_batch",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_quiz",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/quiz/list"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_quiz",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_quiz_bxh",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/quiz/list"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_quiz_bxh",
+   "locator": {
+    "selector": "[role=tab]:nth-of-type(3)",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_quiz_bxh",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_giai_dau",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/tournaments"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_giai_dau",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_khu_thi_dau",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/game-area"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_khu_thi_dau",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_bai_tap",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/assignment/exercise"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_bai_tap",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_simul",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/simul"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_simul",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  }
+ ],
+ "start_url": {
+  "url": "http://localhost:4173/login"
+ },
+ "capture": {
+  "after_each_step": [
+   "screenshot",
+   "url"
+  ],
+  "at_end": [
+   "url"
+  ]
+ },
+ "environment": {
+  "color_scheme": "light",
+  "service_workers": "allow",
+  "reduced_motion": "reduce",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "viewport": {
+   "device_scale_factor": 1,
+   "width": 1440,
+   "height": 900
+  },
+  "locale": "vi-VN"
+ },
+ "secrets": [
+  {
+   "secret_id": "erp_user",
+   "environment_variable": "ERP_TEST_EMAIL"
+  },
+  {
+   "secret_id": "erp_pass",
+   "environment_variable": "ERP_TEST_PASSWORD"
+  }
+ ]
+}
