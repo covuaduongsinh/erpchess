@@ -71,11 +71,20 @@ DATA_PAGES = [
     ('quiz', '/quiz/list', None),
     ('quiz_bxh', '/quiz/list', "[role=tab]:nth-of-type(3)"),
     ('giai_dau', '/tournaments', None),
+    ('tong_quan_diem_danh', '/dashboard', "[role=tablist][aria-label='Thống kê theo ngày'] button:nth-child(2)"),
     ('khu_thi_dau', '/game-area', None),
+    ('khu_thi_dau_lich_su', '/game-area', "[role=tab]:nth-of-type(2)"),
+    ('khu_thi_dau_dang_dau', '/game-area', "[role=tab]:nth-of-type(3)"),
+    ('lop_hoc', f'{A}/classes', None),
+    ('lop_hoc_quy', f'{A}/classes', "button:text-is('Quý')"),
     ('bai_tap', '/assignment/exercise', None),
     ('simul', '/simul', None),
 ]
 DATA = '--data' in sys.argv
+# `--only=a,b`: chỉ giữ các trang này (chụp bổ sung nhanh, không chụp lại cả bộ)
+ONLY = next((a.split('=', 1)[1].split(',') for a in sys.argv if a.startswith('--only=')), None)
+if ONLY:
+    DATA_PAGES = [p for p in DATA_PAGES if p[0] in ONLY]
 
 
 def build(name: str, width: int, height: int, scheme: str, mobile: bool) -> None:

@@ -1,7 +1,7 @@
 import type { Member } from '@erpchess/api';
 import { useCreateInvitation, useSetStudentLevel } from '@erpchess/api/react';
 import type { RatingCategory } from '@erpchess/domain';
-import { UserPlus } from 'lucide-react';
+import { Pencil, UserPlus } from 'lucide-react';
 import { useState } from 'react';
 import { useT } from '../../lib/use-t';
 import { InviteLink } from '../InviteLink';
@@ -30,6 +30,8 @@ export function StudentGrid({
   const setLevel = useSetStudentLevel(academyId);
   const invite = useCreateInvitation(academyId);
   const [invitedFor, setInvitedFor] = useState<string | null>(null);
+  // Chỉ một thẻ mở ô chọn cấp độ tại một thời điểm
+  const [editingLevelFor, setEditingLevelFor] = useState<string | null>(null);
   const levelName = new Map(levels.map((l) => [l.id, l.name]));
 
   return (
@@ -71,23 +73,42 @@ export function StudentGrid({
                 />
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <LevelBadge name={levelId ? levelName.get(levelId) : null} />
-                <select
-                  aria-label={t('studentsPage.changeLevel', { name: profile.display_name })}
-                  value={levelId ?? ''}
-                  disabled={setLevel.isPending}
-                  onChange={(e) =>
-                    setLevel.mutate({ studentId: profile.id, levelId: e.target.value || null })
-                  }
-                  className="rounded-md border border-border bg-surface px-2 py-1 text-xs"
-                >
-                  <option value="">{t('studentsPage.noLevelFilter')}</option>
-                  {levels.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {l.name}
-                    </option>
-                  ))}
-                </select>
+                {editingLevelFor === profile.id ? (
+                  <select
+                    // biome-ignore lint/a11y/noAutofocus: người dùng vừa bấm huy hiệu để đổi cấp độ
+                    autoFocus
+                    aria-label={t('studentsPage.changeLevel', { name: profile.display_name })}
+                    value={levelId ?? ''}
+                    disabled={setLevel.isPending}
+                    onChange={(e) => {
+                      setLevel.mutate({ studentId: profile.id, levelId: e.target.value || null });
+                      setEditingLevelFor(null);
+                    }}
+                    onBlur={() => setEditingLevelFor(null)}
+                    className="rounded-md border border-border bg-surface px-2 py-1 text-xs"
+                  >
+                    <option value="">{t('studentsPage.noLevelFilter')}</option>
+                    {levels.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <button
+                    type="button"
+                    aria-label={t('studentsPage.changeLevel', { name: profile.display_name })}
+                    title={t('studentsPage.changeLevel', { name: profile.display_name })}
+                    onClick={() => setEditingLevelFor(profile.id)}
+                    className="group inline-flex items-center gap-1 rounded-full"
+                  >
+                    <LevelBadge name={levelId ? levelName.get(levelId) : null} />
+                    <Pencil
+                      className="size-3 text-text-muted opacity-60 group-hover:opacity-100"
+                      aria-hidden="true"
+                    />
+                  </button>
+                )}
               </div>
               <dl className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1 text-sm">
                 <dt className="text-text-muted">{t('studentsPage.group')}</dt>

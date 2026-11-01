@@ -93,3 +93,33 @@ Ghi chú vận hành: một lần chạy `desktop-dark` bị REA báo `cleanup_i
 - Ảnh tối chỉ xem 3 trang; mobile tối chưa chụp lần này.
 
 Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-2026-11-01/make-scenarios.py --data` và chụp như mục 5 với tên kịch bản `scenario-erpchess-data-<biến thể>.json`, thư mục `data/<biến thể>`.
+
+## 9. Dọn mục nhỏ còn lại của GĐ25 (2026-11-01, lần ba)
+
+**Dữ liệu bổ sung** (`scripts/seed-ui-demo.mjs`, vẫn idempotent, chỉ học viện thử, tài khoản học viên mẫu đăng nhập thật, qua RPC `create_challenge` và Edge Function `game-move`, không lách quyền): 4 ván đấu (1 ván chiếu hết, 1 ván đầu hàng — cả hai đã xong — và 2 ván còn mở), điểm danh cho 2 buổi học đã diễn ra (có mặt, muộn, vắng, có phép), thêm buổi học ba hôm trước.
+
+**Ảnh:** `data/{desktop-light,desktop-dark,mobile-light,mobile-dark}/shot_*.png`, thêm `shot_khu_thi_dau_lich_su`, `shot_khu_thi_dau_dang_dau`, `shot_lop_hoc`, `shot_lop_hoc_quy` (khoảng Quý để thấy buổi đã qua), `shot_tong_quan_diem_danh` (biểu đồ Điểm danh). Mobile tối nay đã chụp đủ.
+
+| Trang | Khi có dữ liệu | Kết quả |
+| --- | --- | --- |
+| Khu thi đấu | 4 ván hôm nay, 2 đang diễn ra, 2 đã xong; Lịch sử ván ghi "Trắng thắng · đầu hàng", "Đen thắng · chiếu hết"; Ván đang diễn ra liệt kê 2 ván | Khớp |
+| Lớp học (Quý) | 3 buổi: "Có mặt 4 · Vắng 1" cho hai buổi đã qua, "Có mặt 0 · Vắng 0" cho buổi chưa tới | Khớp |
+| Tổng quan, biểu đồ Điểm danh | Tiêu đề "Lượt có mặt theo ngày", 8 lượt (không tính có phép) | Khớp |
+| Mobile tối | Tổng quan, Học viên, Quiz/Bảng xếp hạng, Khu thi đấu, Lớp học đều đọc được; podium, thẻ số liệu và badge giữ tương phản | Khớp |
+
+### Đã sửa
+
+| # | Việc/lỗi | Sửa |
+| --- | --- | --- |
+| 12 | `LevelBadge` còn chuỗi cứng ("Chưa phân cấp", tooltip "Cấp độ: …") | Khoá i18n `studentsPage.levelBadgeNone/levelBadgeTitle` (vi/en) + test hai ngôn ngữ |
+| 13 | Thẻ học viên dạng lưới hiện cấp độ hai lần (huy hiệu và ô chọn) | Chỉ hiện huy hiệu kèm biểu tượng bút; bấm vào mới mở ô chọn, chọn xong quay lại huy hiệu; giữ nguyên thao tác đổi cấp độ + test |
+| 14 | Mobile: thanh trên trong suốt đè lên nội dung khi cuộn (nút menu chồng lên banner) | Nền `bg/85` + `backdrop-blur` |
+| 15 | Mobile: tab dạng viên thuốc xuống hai dòng, khung bo tròn méo | Tab một hàng, cuộn ngang khi hẹp |
+| 16 | Mobile: Lớp học, ba thẻ số liệu tràn ngang, chữ bị cắt ("Trực tiếp") | Một cột trên màn hẹp, ba cột từ `sm` |
+
+### Còn lại
+
+- Sửa `academy_stats` để thẻ 7 ngày gồm quiz/học liệu (cần migration, chủ dự án quyết định).
+- Học viên online và buổi học đang diễn ra cần phiên đồng thời nên chưa có ảnh.
+- Quiz đã đóng chưa có lượt làm (máy chủ từ chối bài quá hạn).
+- Trang `billing/discounts`, `levels`, `play` còn `grid-cols-3` cố định; chưa kiểm trên mobile.
