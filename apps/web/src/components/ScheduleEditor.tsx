@@ -31,7 +31,7 @@ export function ScheduleEditor({
             aria-label={`${legend} ${i + 1}`}
             value={slot.day}
             onChange={(e) => setSlot(i, { day: Number(e.target.value) })}
-            className="rounded-md border border-text-muted/30 bg-white px-2 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-2 py-2"
           >
             {WEEKDAYS.map((d) => (
               <option key={d} value={d}>
@@ -44,7 +44,7 @@ export function ScheduleEditor({
             aria-label={legend}
             value={slot.start}
             onChange={(e) => setSlot(i, { start: e.target.value })}
-            className="rounded-md border border-text-muted/30 bg-white px-2 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-2 py-2"
             required
           />
           <input
@@ -55,7 +55,7 @@ export function ScheduleEditor({
             step={15}
             value={slot.minutes}
             onChange={(e) => setSlot(i, { minutes: Number(e.target.value) })}
-            className="w-24 rounded-md border border-text-muted/30 bg-white px-2 py-2"
+            className="w-24 rounded-md border border-text-muted/30 bg-surface px-2 py-2"
           />
           <Button
             variant="ghost"

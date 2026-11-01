@@ -131,12 +131,12 @@ export function QuickSessionModal({
         aria-hidden="true"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-lg rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl">
+      <div className="relative z-10 w-full max-w-lg rounded-2xl border border-border bg-surface p-6 shadow-2xl">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+          className="absolute top-4 right-4 rounded-lg p-1.5 text-text-muted hover:bg-primary-soft hover:text-text"
           aria-label="Đóng"
         >
           ✕
@@ -148,7 +148,7 @@ export function QuickSessionModal({
             🏫
           </span>
           <div>
-            <h2 id="quick-session-title" className="font-bold text-gray-900 text-lg">
+            <h2 id="quick-session-title" className="font-bold text-text text-lg">
               Tạo Lớp học Nhanh
             </h2>
             <p className="text-xs text-text-muted">
@@ -174,7 +174,7 @@ export function QuickSessionModal({
               <select
                 value={kind}
                 onChange={(e) => setKind(e.target.value as 'online' | 'offline')}
-                className="w-full rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+                className="w-full rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
               >
                 <option value="online">🌐 Trực tuyến (LiveKit)</option>
                 <option value="offline">🏫 Trực tiếp tại CLB</option>
@@ -186,7 +186,7 @@ export function QuickSessionModal({
               <select
                 value={minutes}
                 onChange={(e) => setMinutes(Number(e.target.value))}
-                className="w-full rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+                className="w-full rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
               >
                 <option value={45}>45 phút</option>
                 <option value={60}>60 phút (1 tiếng)</option>
@@ -203,7 +203,7 @@ export function QuickSessionModal({
               <select
                 value={coachId}
                 onChange={(e) => setCoachId(e.target.value)}
-                className="w-full rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+                className="w-full rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
               >
                 {coaches.length > 0 ? (
                   coaches.map((c) => (
@@ -222,7 +222,7 @@ export function QuickSessionModal({
               <select
                 value={groupId}
                 onChange={(e) => setGroupId(e.target.value)}
-                className="w-full rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+                className="w-full rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
               >
                 <option value="">-- Cả học viện / Mở --</option>
                 {groups.map((g) => (
@@ -245,12 +245,12 @@ export function QuickSessionModal({
 
           {/* Checkbox mở phòng ngay */}
           {kind === 'online' && (
-            <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-xs text-text cursor-pointer">
               <input
                 type="checkbox"
                 checked={openImmediately}
                 onChange={(e) => setOpenImmediately(e.target.checked)}
-                className="size-4 rounded-sm border-gray-300 text-primary focus:ring-primary"
+                className="size-4 rounded-sm border-border text-primary focus:ring-primary"
               />
               <span>Tự động chuyển vào phòng học trực tuyến ngay sau khi tạo</span>
             </label>
@@ -259,7 +259,7 @@ export function QuickSessionModal({
           {create.error && <ErrorText error={create.error} />}
 
           {/* Buttons */}
-          <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
+          <div className="mt-2 flex items-center justify-end gap-3 border-t border-border pt-4">
             <Button type="button" variant="ghost" onClick={onClose}>
               Hủy
             </Button>

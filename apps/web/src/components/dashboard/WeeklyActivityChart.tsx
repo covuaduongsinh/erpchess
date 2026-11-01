@@ -48,13 +48,11 @@ export function WeeklyActivityChart({
   }, [data, totalSolved]);
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-xs">
+    <div className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-5 shadow-xs">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <h3 className="font-bold text-base text-gray-900">
-            📊 Hoạt động giải bài tập trong tuần
-          </h3>
+          <h3 className="font-bold text-base text-text">📊 Hoạt động giải bài tập trong tuần</h3>
           <p className="text-xs text-text-muted">
             Tần suất giải thế cờ và nộp bài tập của học viên toàn học viện
           </p>
@@ -86,9 +84,7 @@ export function WeeklyActivityChart({
               {/* Number Badge above Bar */}
               <span
                 className={`mb-1.5 text-xs font-semibold transition-colors ${
-                  item.isToday
-                    ? 'text-primary font-bold'
-                    : 'text-text-muted group-hover:text-gray-900'
+                  item.isToday ? 'text-primary font-bold' : 'text-text-muted group-hover:text-text'
                 }`}
               >
                 {item.count}
@@ -110,7 +106,7 @@ export function WeeklyActivityChart({
                   className={`text-xs font-medium ${
                     item.isToday
                       ? 'rounded-full bg-primary/10 px-1.5 font-bold text-primary'
-                      : 'text-gray-600'
+                      : 'text-text'
                   }`}
                 >
                   {item.day}
@@ -122,15 +118,15 @@ export function WeeklyActivityChart({
       </div>
 
       {/* Footer Stats Summary */}
-      <div className="flex flex-wrap items-center justify-between border-t border-gray-100 pt-3 text-xs text-text-muted">
+      <div className="flex flex-wrap items-center justify-between border-t border-border pt-3 text-xs text-text-muted">
         <div>
           <span>Trung bình: </span>
-          <strong className="text-gray-800">{avgPerDay}</strong> bài/ngày
+          <strong className="text-text">{avgPerDay}</strong> bài/ngày
         </div>
         {bestDay && (
           <div>
             <span>Tích cực nhất: </span>
-            <strong className="text-gray-800">{bestDay.label}</strong> ({bestDay.count} bài)
+            <strong className="text-text">{bestDay.label}</strong> ({bestDay.count} bài)
           </div>
         )}
       </div>

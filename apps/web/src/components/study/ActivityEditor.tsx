@@ -284,7 +284,7 @@ export function ActivityEditor({
                       d.options.map((o, j) => (j === i ? e.target.value : o)),
                     )
                   }
-                  className="flex-1 rounded-md border border-text-muted/30 bg-white px-3 py-1"
+                  className="flex-1 rounded-md border border-text-muted/30 bg-surface px-3 py-1"
                 />
                 {d.options.length > 2 && (
                   <Button
@@ -326,7 +326,7 @@ export function ActivityEditor({
               value={d.body}
               onChange={(e) => set('body', e.target.value)}
               rows={8}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
             />
             <span className="text-xs text-text-muted">{t('studies.markdownHint')}</span>
           </label>
@@ -349,7 +349,7 @@ export function ActivityEditor({
               <select
                 value={d.side}
                 onChange={(e) => set('side', e.target.value === 'b' ? 'b' : 'w')}
-                className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+                className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
               >
                 <option value="w">{t('studies.white')}</option>
                 <option value="b">{t('studies.black')}</option>
@@ -360,7 +360,7 @@ export function ActivityEditor({
               <select
                 value={d.elo}
                 onChange={(e) => set('elo', e.target.value)}
-                className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+                className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
               >
                 {BOT_LEVELS.map(({ id, elo }) => (
                   <option key={id} value={elo === null ? '' : String(elo)}>
@@ -374,7 +374,7 @@ export function ActivityEditor({
               <select
                 value={d.goal}
                 onChange={(e) => set('goal', e.target.value === 'draw' ? 'draw' : 'win')}
-                className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+                className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
               >
                 <option value="win">{t('studies.goalWin')}</option>
                 <option value="draw">{t('studies.goalDraw')}</option>
@@ -402,7 +402,7 @@ export function ActivityEditor({
             value={d.pgn}
             onChange={(e) => set('pgn', e.target.value)}
             rows={8}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 font-mono text-xs"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 font-mono text-xs"
           />
         </label>
       );
@@ -533,7 +533,7 @@ function PuzzleFields({
             onMoves(p.moves);
             setStep('solution');
           }}
-          className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+          className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
         >
           <option value="">—</option>
           {puzzles.data?.map((p) => (

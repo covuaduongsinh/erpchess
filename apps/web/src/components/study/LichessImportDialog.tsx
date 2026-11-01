@@ -65,7 +65,7 @@ export function LichessImportDialog({ onClose }: { onClose: () => void }) {
         onClick={onClose}
         className="fixed inset-0 bg-black/50"
       />
-      <div className="relative z-10 my-8 flex w-full max-w-xl flex-col gap-4 rounded-xl bg-white p-6 shadow-2xl">
+      <div className="relative z-10 my-8 flex w-full max-w-xl flex-col gap-4 rounded-xl bg-surface p-6 shadow-2xl">
         <h2 className="text-lg font-bold text-primary">{t('lichessImport.title')}</h2>
         <p className="text-sm text-text-muted">{t('lichessImport.hint')}</p>
         <form onSubmit={browse} className="flex items-end gap-2">

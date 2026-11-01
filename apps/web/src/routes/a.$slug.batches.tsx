@@ -88,11 +88,11 @@ function BatchesPage() {
             return (
               <div
                 key={batch.id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-5 shadow-xs transition-all hover:border-blue-300 hover:shadow-md"
+                className="group relative flex flex-col justify-between rounded-2xl border border-border bg-surface p-5 shadow-xs transition-all hover:border-blue-300 hover:shadow-md"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-bold text-gray-900 text-lg group-hover:text-primary transition-colors">
+                    <h3 className="font-bold text-text text-lg group-hover:text-primary transition-colors">
                       {batch.name}
                     </h3>
                     <LevelBadge name={level?.name} size="sm" />
@@ -106,7 +106,7 @@ function BatchesPage() {
                       </span>
                       <span>
                         Huấn luyện viên:{' '}
-                        <strong className="text-gray-800">
+                        <strong className="text-text">
                           {coach?.profile.display_name || 'Chưa phân công'}
                         </strong>
                       </span>
@@ -134,7 +134,7 @@ function BatchesPage() {
                         {batch.location_id && (
                           <>
                             {' · '}
-                            <strong className="text-gray-800">
+                            <strong className="text-text">
                               {locations.data?.find((l) => l.id === batch.location_id)?.name ?? '—'}
                             </strong>
                           </>
@@ -151,7 +151,7 @@ function BatchesPage() {
                           {parsedSchedule.map((s) => (
                             <span
                               key={`${s.day}-${s.start}`}
-                              className="rounded-md bg-gray-100 px-2 py-0.5 font-medium text-gray-700 text-xs"
+                              className="rounded-md bg-bg px-2 py-0.5 font-medium text-text text-xs"
                             >
                               T{s.day + 1}: {s.start} ({s.minutes}m)
                             </span>
@@ -163,7 +163,7 @@ function BatchesPage() {
                 </div>
 
                 {/* Quick Actions Footer */}
-                <div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-3">
+                <div className="mt-5 flex items-center justify-between border-t border-border pt-3">
                   <button
                     type="button"
                     onClick={() => setActiveBatchId(batch.id)}
@@ -175,7 +175,7 @@ function BatchesPage() {
                   <Link
                     to="/a/$slug/classes"
                     params={{ slug }}
-                    className="rounded-md bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100"
+                    className="rounded-md bg-bg px-2.5 py-1 text-xs font-medium text-text hover:bg-primary-soft"
                   >
                     Xem lịch lớp
                   </Link>
@@ -272,8 +272,8 @@ function CreateBatchModal({
         aria-hidden="true"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-        <h3 className="font-bold text-gray-900 text-lg mb-4">Tạo Lớp học / Batch Mới</h3>
+      <div className="relative z-10 w-full max-w-md rounded-2xl bg-surface p-6 shadow-2xl">
+        <h3 className="font-bold text-text text-lg mb-4">Tạo Lớp học / Batch Mới</h3>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Field
@@ -289,7 +289,7 @@ function CreateBatchModal({
             <select
               value={levelId}
               onChange={(e) => setLevelId(e.target.value)}
-              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+              className="rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
             >
               <option value="">-- Chưa chọn cấp độ --</option>
               {levels.map((l) => (
@@ -305,7 +305,7 @@ function CreateBatchModal({
             <select
               value={coachId}
               onChange={(e) => setCoachId(e.target.value)}
-              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+              className="rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
             >
               {coaches.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -320,7 +320,7 @@ function CreateBatchModal({
             <select
               value={mode}
               onChange={(e) => setMode(e.target.value as BatchMode)}
-              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+              className="rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
             >
               {batchModes.map((m) => (
                 <option key={m} value={m}>
@@ -340,7 +340,7 @@ function CreateBatchModal({
                   value={locationId}
                   required
                   onChange={(e) => setLocationId(e.target.value)}
-                  className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
+                  className="rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-hidden"
                 >
                   <option value="">{t('location.pickLocation')}</option>
                   {locations.map((l) => (
@@ -355,7 +355,7 @@ function CreateBatchModal({
           {create.error && <ErrorText error={create.error} />}
           {update.error && <ErrorText error={update.error} />}
 
-          <div className="mt-2 flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
+          <div className="mt-2 flex items-center justify-end gap-3 border-t border-border pt-4">
             <Button type="button" variant="ghost" onClick={onClose}>
               Hủy
             </Button>
@@ -407,10 +407,10 @@ function BatchRosterModal({
         aria-hidden="true"
         onClick={onClose}
       />
-      <div className="relative z-10 flex max-h-[85vh] w-full max-w-lg flex-col rounded-2xl bg-white p-6 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+      <div className="relative z-10 flex max-h-[85vh] w-full max-w-lg flex-col rounded-2xl bg-surface p-6 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-border pb-3">
           <div>
-            <h3 className="font-bold text-gray-900 text-lg">Sĩ số: {batch.name}</h3>
+            <h3 className="font-bold text-text text-lg">Sĩ số: {batch.name}</h3>
             <p className="text-xs text-text-muted">
               Đang có {inBatchSet.size} học viên trong lớp này
             </p>
@@ -418,7 +418,7 @@ function BatchRosterModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-gray-400 hover:bg-gray-100"
+            className="rounded-lg p-1 text-text-muted hover:bg-primary-soft"
           >
             ✕
           </button>
@@ -431,12 +431,12 @@ function BatchRosterModal({
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Tìm học viên để thêm/bớt..."
-            className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-primary focus:outline-hidden"
+            className="w-full rounded-lg border border-border px-3 py-1.5 text-sm focus:border-primary focus:outline-hidden"
           />
         </div>
 
         {/* Student list */}
-        <div className="flex-1 overflow-y-auto divide-y divide-gray-100 pr-1">
+        <div className="flex-1 overflow-y-auto divide-y divide-border pr-1">
           {visibleStudents.map((s) => {
             const inBatch = inBatchSet.has(s.profile.id);
             return (
@@ -445,9 +445,7 @@ function BatchRosterModal({
                   <div className="flex size-7 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-700">
                     {s.profile.display_name.charAt(0)}
                   </div>
-                  <span className="font-medium text-sm text-gray-800">
-                    {s.profile.display_name}
-                  </span>
+                  <span className="font-medium text-sm text-text">{s.profile.display_name}</span>
                 </div>
                 <button
                   type="button"
@@ -471,7 +469,7 @@ function BatchRosterModal({
           })}
         </div>
 
-        <div className="mt-4 border-t border-gray-100 pt-3 text-right">
+        <div className="mt-4 border-t border-border pt-3 text-right">
           <Button variant="primary" onClick={onClose}>
             Xong
           </Button>

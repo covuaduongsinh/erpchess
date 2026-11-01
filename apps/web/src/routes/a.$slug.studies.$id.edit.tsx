@@ -257,7 +257,7 @@ function StudyDetailsForm() {
           <select
             name="levelId"
             defaultValue={s.level_id ?? ''}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             <option value="">{t('groups.noLevel')}</option>
             {levels.data?.map((l) => (
@@ -274,7 +274,7 @@ function StudyDetailsForm() {
             rows={2}
             maxLength={2000}
             defaultValue={s.description}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           />
         </label>
         <fieldset className="flex flex-wrap gap-4 text-sm">

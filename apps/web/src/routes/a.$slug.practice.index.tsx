@@ -105,7 +105,7 @@ function PracticePage() {
                 type="checkbox"
                 checked={shared}
                 onChange={(e) => setShared(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-primary"
+                className="h-4 w-4 rounded border-border text-primary"
               />
               {t('database.shareWithAcademy')}
             </label>
@@ -144,7 +144,7 @@ function PracticePage() {
             {shown.map((c) => (
               <div
                 key={c.id}
-                className="group relative flex flex-col justify-between rounded-xl border border-text-muted/15 bg-white p-4 shadow-xs transition hover:border-primary/40 hover:shadow-md"
+                className="group relative flex flex-col justify-between rounded-xl border border-text-muted/15 bg-surface p-4 shadow-xs transition hover:border-primary/40 hover:shadow-md"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2">

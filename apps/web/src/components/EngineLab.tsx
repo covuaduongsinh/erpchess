@@ -108,7 +108,7 @@ function EnginePanel({ engine }: { engine: UciEngine }) {
           <select
             value={multiPv}
             onChange={(e) => setMultiPv(Number(e.target.value))}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             {[1, 2, 3, 4, 5].map((n) => (
               <option key={n} value={n}>
@@ -129,7 +129,7 @@ function EnginePanel({ engine }: { engine: UciEngine }) {
           <select
             value={elo}
             onChange={(e) => setElo(Number(e.target.value))}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             {BOT_LEVELS.map((l) => (
               <option key={l.id} value={l.elo ?? 3450}>

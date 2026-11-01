@@ -1,6 +1,6 @@
 import { useSession } from '@erpchess/api/react';
 import { languages } from '@erpchess/i18n';
-import { colors, fontSize, radius, spacing } from '@erpchess/ui-tokens';
+import { colors, fontSize, nativeColors, radius, spacing } from '@erpchess/ui-tokens';
 import { Redirect, router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing.lg,
     paddingHorizontal: spacing.md,
-    backgroundColor: colors.bg,
+    backgroundColor: nativeColors.appBg,
   },
   slogan: {
     fontSize: fontSize.subtitle,

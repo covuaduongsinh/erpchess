@@ -41,7 +41,7 @@ export function NotificationBell({ userId }: { userId: string }) {
         )}
       </button>
       {open && (
-        <div className="absolute right-0 z-20 mt-2 flex max-h-[70vh] w-80 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-lg bg-white text-text shadow-lg">
+        <div className="absolute right-0 z-20 mt-2 flex max-h-[70vh] w-80 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-lg bg-surface text-text shadow-lg">
           <div className="flex items-center justify-between border-b border-text-muted/15 px-4 py-2">
             <span className="font-bold text-primary">{t('notify.title')}</span>
             {unread > 0 && (

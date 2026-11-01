@@ -39,7 +39,7 @@ export function Exercises() {
     <Card title={t('exercise.title')}>
       <div className="flex flex-col gap-4">
         {/* Thanh công cụ: Tạo bài tập & Bộ lọc tìm kiếm */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
           <Button variant="cta" onClick={() => setCreating(true)}>
             + {t('exercise.create')}
           </Button>
@@ -51,14 +51,14 @@ export function Exercises() {
               placeholder="Tìm theo tên bài tập, thẻ tag..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-900 placeholder:text-gray-400 focus:border-primary focus:outline-hidden"
+              className="rounded-md border border-border bg-surface px-3 py-1.5 text-xs text-text placeholder:text-text-muted focus:border-primary focus:outline-hidden"
             />
 
             <select
               aria-label="Lọc theo cấp độ"
               value={selectedLevelId}
               onChange={(e) => setSelectedLevelId(e.target.value)}
-              className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-900 focus:border-primary focus:outline-hidden"
+              className="rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs text-text focus:border-primary focus:outline-hidden"
             >
               <option value="">Tất cả cấp độ</option>
               {levels.data?.map((l) => (
@@ -81,7 +81,7 @@ export function Exercises() {
               : 'Không tìm thấy bài tập nào phù hợp với bộ lọc.'}
           </p>
         ) : (
-          <ul className="flex flex-col divide-y divide-gray-100">
+          <ul className="flex flex-col divide-y divide-border">
             {filteredExercises.map((e) => {
               const levelName = levels.data?.find((l) => l.id === e.level_id)?.name;
 
@@ -94,7 +94,7 @@ export function Exercises() {
                       </span>
                       <div className="flex flex-col min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-gray-900 text-sm">{e.title}</span>
+                          <span className="font-semibold text-text text-sm">{e.title}</span>
                           {levelName && (
                             <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 border border-blue-200">
                               {levelName}
@@ -102,7 +102,7 @@ export function Exercises() {
                           )}
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted mt-1">
-                          <span className="font-medium text-gray-700">
+                          <span className="font-medium text-text">
                             {t('assignments.puzzleCount', { count: e.puzzleIds.length })}
                           </span>
                           <span>·</span>
@@ -114,7 +114,7 @@ export function Exercises() {
                                 {e.tags.map((tag) => (
                                   <span
                                     key={tag}
-                                    className="rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600"
+                                    className="rounded-md bg-bg px-1.5 py-0.5 text-[10px] text-text"
                                   >
                                     #{tag}
                                   </span>
@@ -178,7 +178,7 @@ function AssignForm({ exercise, onDone }: { exercise: ExerciseSummary; onDone: (
   return (
     <form
       onSubmit={onSubmit}
-      className="flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50/70 p-4"
+      className="flex flex-col gap-3 rounded-lg border border-border bg-bg/70 p-4"
     >
       <TargetPicker
         groupIds={groupIds}
@@ -258,7 +258,7 @@ function ExerciseForm({ onDone }: { onDone: () => void }) {
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             maxLength={2000}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -266,7 +266,7 @@ function ExerciseForm({ onDone }: { onDone: () => void }) {
           <select
             value={levelId}
             onChange={(e) => setLevelId(e.target.value)}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             <option value="">{t('groups.noLevel')}</option>
             {levels.data?.map((l) => (

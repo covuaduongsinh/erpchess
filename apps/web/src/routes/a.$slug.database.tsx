@@ -209,7 +209,7 @@ function ImportCard({ database }: { database: GameDatabase }) {
               value={text}
               onChange={(e) => setText(e.target.value)}
               rows={4}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-2 font-mono text-xs"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 font-mono text-xs"
             />
           </label>
           <Button

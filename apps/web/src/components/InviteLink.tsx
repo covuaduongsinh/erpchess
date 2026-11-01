@@ -12,7 +12,7 @@ export function InviteLink({ token }: { token: string }) {
     <div className="flex flex-col gap-2 rounded-md bg-bg p-3 text-sm">
       <span>{t('academy.inviteLink')}</span>
       <div className="flex items-center gap-2">
-        <code className="flex-1 truncate rounded-sm bg-white px-2 py-1">{url}</code>
+        <code className="flex-1 truncate rounded-sm bg-surface px-2 py-1">{url}</code>
         <Button
           variant="ghost"
           onClick={() => {

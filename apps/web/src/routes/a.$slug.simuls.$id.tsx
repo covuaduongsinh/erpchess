@@ -166,7 +166,7 @@ function SimulPage() {
             className={`px-3 py-1.5 rounded-lg transition-all ${
               boardFilter === 'all'
                 ? 'bg-primary text-white shadow-xs'
-                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
+                : 'bg-surface dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
             }`}
           >
             {t('simul.filterAll', { count: boards.length })}
@@ -177,7 +177,7 @@ function SimulPage() {
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 ${
               boardFilter === 'my_turn'
                 ? 'bg-orange text-white shadow-xs font-bold'
-                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
+                : 'bg-surface dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
             }`}
           >
             <span>⚡</span>
@@ -189,7 +189,7 @@ function SimulPage() {
             className={`px-3 py-1.5 rounded-lg transition-all ${
               boardFilter === 'opponent_turn'
                 ? 'bg-primary text-white shadow-xs'
-                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
+                : 'bg-surface dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
             }`}
           >
             {t('simul.filterOpponentTurn', { count: activeOpponentBoards.length })}
@@ -200,7 +200,7 @@ function SimulPage() {
             className={`px-3 py-1.5 rounded-lg transition-all ${
               boardFilter === 'finished'
                 ? 'bg-primary text-white shadow-xs'
-                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
+                : 'bg-surface dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-muted/10'
             }`}
           >
             {t('simul.filterDone', { count: finishedBoards.length })}
@@ -219,7 +219,7 @@ function SimulPage() {
           return (
             <div
               key={g.id}
-              className={`flex flex-col gap-2 rounded-xl bg-white dark:bg-slate-800/80 p-3 shadow-xs border transition-all ${
+              className={`flex flex-col gap-2 rounded-xl bg-surface dark:bg-slate-800/80 p-3 shadow-xs border transition-all ${
                 isHostTurn
                   ? 'border-orange ring-2 ring-orange/40 shadow-md'
                   : 'border-slate-200 dark:border-slate-700 hover:border-primary/50'

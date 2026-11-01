@@ -87,7 +87,7 @@ export function BrandingCard() {
             rows={3}
             maxLength={2000}
             defaultValue={academy.description}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base"
           />
         </label>
 
@@ -300,7 +300,7 @@ function LoginSectionEditor({
           maxLength={600}
           value={section.body}
           onChange={(e) => onChange({ ...section, body: e.target.value })}
-          className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base"
+          className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base"
         />
       </label>
       <button type="button" onClick={onRemove} className="self-start text-xs text-danger underline">

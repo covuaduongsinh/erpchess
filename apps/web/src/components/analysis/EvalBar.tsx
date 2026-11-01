@@ -30,7 +30,7 @@ export function EvalBar({
         }`}
       >
         <div
-          className="bg-white transition-[height] duration-300"
+          className="bg-surface transition-[height] duration-300"
           style={{ height: `${white}%` }}
         />
         <span

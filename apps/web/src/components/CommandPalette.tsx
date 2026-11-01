@@ -388,9 +388,9 @@ export function CommandPalette() {
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="relative z-10 flex max-h-[80vh] w-full max-w-xl flex-col rounded-xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden pointer-events-auto">
+          <div className="relative z-10 flex max-h-[80vh] w-full max-w-xl flex-col rounded-xl bg-surface shadow-2xl ring-1 ring-black/5 overflow-hidden pointer-events-auto">
             {/* Thanh Input tìm kiếm */}
-            <div className="flex items-center border-b border-gray-100 px-4 py-3">
+            <div className="flex items-center border-b border-border px-4 py-3">
               <span className="mr-3 text-lg opacity-50" aria-hidden="true">
                 🔍
               </span>
@@ -404,9 +404,9 @@ export function CommandPalette() {
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Nhập tên trang, lớp học, tính năng... (ESC để đóng)"
-                className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400"
+                className="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-muted"
               />
-              <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-500 font-mono">
+              <span className="rounded bg-bg px-1.5 py-0.5 text-[10px] text-text-muted font-mono">
                 ESC
               </span>
             </div>
@@ -414,7 +414,7 @@ export function CommandPalette() {
             {/* Danh sách kết quả */}
             <div className="flex-1 overflow-y-auto p-2">
               {filteredItems.length === 0 ? (
-                <div className="p-8 text-center text-sm text-gray-500">
+                <div className="p-8 text-center text-sm text-text-muted">
                   Không tìm thấy kết quả phù hợp cho &ldquo;{query}&rdquo;
                 </div>
               ) : (
@@ -430,7 +430,7 @@ export function CommandPalette() {
                           className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                             isSelected
                               ? 'bg-primary text-text-on-primary'
-                              : 'text-gray-700 hover:bg-gray-100'
+                              : 'text-text hover:bg-primary-soft'
                           }`}
                         >
                           <span className="text-lg" aria-hidden="true">
@@ -441,7 +441,7 @@ export function CommandPalette() {
                             {item.subtitle && (
                               <span
                                 className={`text-xs ${
-                                  isSelected ? 'text-white/80' : 'text-gray-400'
+                                  isSelected ? 'text-white/80' : 'text-text-muted'
                                 }`}
                               >
                                 {item.subtitle}
@@ -460,19 +460,19 @@ export function CommandPalette() {
             </div>
 
             {/* Footer gợi ý phím tắt */}
-            <div className="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-4 py-2 text-[11px] text-gray-500">
+            <div className="flex items-center justify-between border-t border-border bg-bg px-4 py-2 text-[11px] text-text-muted">
               <div className="flex gap-3">
                 <span>
-                  <kbd className="rounded bg-white px-1 py-0.5 ring-1 ring-gray-200 font-mono">
+                  <kbd className="rounded bg-surface px-1 py-0.5 ring-1 ring-border font-mono">
                     ↑
                   </kbd>{' '}
-                  <kbd className="rounded bg-white px-1 py-0.5 ring-1 ring-gray-200 font-mono">
+                  <kbd className="rounded bg-surface px-1 py-0.5 ring-1 ring-border font-mono">
                     ↓
                   </kbd>{' '}
                   Di chuyển
                 </span>
                 <span>
-                  <kbd className="rounded bg-white px-1 py-0.5 ring-1 ring-gray-200 font-mono">
+                  <kbd className="rounded bg-surface px-1 py-0.5 ring-1 ring-border font-mono">
                     ↵
                   </kbd>{' '}
                   Mở

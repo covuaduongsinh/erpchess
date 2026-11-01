@@ -88,7 +88,7 @@ export function TournamentLiveBoardGrid({
             <div className="mt-2.5 flex flex-col gap-1 text-xs">
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5 truncate font-medium text-slate-800 dark:text-slate-200">
-                  <span className="h-2.5 w-2.5 rounded-sm border border-slate-400 bg-white inline-block shrink-0" />
+                  <span className="h-2.5 w-2.5 rounded-sm border border-slate-400 bg-surface inline-block shrink-0" />
                   <span className="truncate">{whiteName}</span>
                 </span>
                 <span className="font-mono text-[11px] text-text-muted">

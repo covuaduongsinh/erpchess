@@ -140,7 +140,7 @@ function PlanForm({ plan, onDone }: { plan: Plan | null; onDone: () => void }) {
     );
   }
 
-  const select = 'rounded-md border border-text-muted/30 bg-white px-3 py-2';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2';
   return (
     <Card title={plan ? t('bill.editPlan') : t('bill.newPlan')}>
       <form onSubmit={onSubmit} className="flex flex-col gap-3 text-sm">

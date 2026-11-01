@@ -85,7 +85,7 @@ function ChapterPage() {
 
         {/* Thanh tiến độ chương */}
         {c.positions.length > 0 && (
-          <div className="flex min-w-[220px] flex-col gap-1 rounded-lg border border-primary/20 bg-white p-3 shadow-xs">
+          <div className="flex min-w-[220px] flex-col gap-1 rounded-lg border border-primary/20 bg-surface p-3 shadow-xs">
             <div className="flex justify-between text-xs font-medium">
               <span className="text-text-muted">Tiến độ của bạn</span>
               <span className="text-primary font-bold">
@@ -112,7 +112,7 @@ function ChapterPage() {
                 onClick={() => setFilter('all')}
                 className={`flex-1 rounded-sm py-1 font-medium transition ${
                   filter === 'all'
-                    ? 'bg-white shadow-xs text-primary'
+                    ? 'bg-surface shadow-xs text-primary'
                     : 'text-text-muted hover:text-text'
                 }`}
               >
@@ -123,7 +123,7 @@ function ChapterPage() {
                 onClick={() => setFilter('todo')}
                 className={`flex-1 rounded-sm py-1 font-medium transition ${
                   filter === 'todo'
-                    ? 'bg-white shadow-xs text-primary'
+                    ? 'bg-surface shadow-xs text-primary'
                     : 'text-text-muted hover:text-text'
                 }`}
               >
@@ -134,7 +134,7 @@ function ChapterPage() {
                 onClick={() => setFilter('done')}
                 className={`flex-1 rounded-sm py-1 font-medium transition ${
                   filter === 'done'
-                    ? 'bg-white shadow-xs text-primary'
+                    ? 'bg-surface shadow-xs text-primary'
                     : 'text-text-muted hover:text-text'
                 }`}
               >
@@ -249,7 +249,7 @@ function ChapterPage() {
               />
 
               {/* Thanh điều hướng bài trước / bài tiếp theo */}
-              <div className="flex items-center justify-between gap-2 rounded-lg border border-text-muted/15 bg-white p-3 shadow-xs">
+              <div className="flex items-center justify-between gap-2 rounded-lg border border-text-muted/15 bg-surface p-3 shadow-xs">
                 <Button
                   variant="ghost"
                   disabled={!prevPosition}
@@ -436,7 +436,7 @@ function AddPosition({
             <select
               value={elo}
               onChange={(e) => setElo(e.target.value)}
-              className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+              className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
             >
               {BOT_LEVELS.map(({ id, elo: e }) => (
                 <option key={id} value={e === null ? '' : String(e)}>
@@ -450,7 +450,7 @@ function AddPosition({
             <select
               value={goal}
               onChange={(e) => setGoal(e.target.value === 'draw' ? 'draw' : 'win')}
-              className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+              className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
             >
               <option value="win">{t('studies.goalWin')}</option>
               <option value="draw">{t('studies.goalDraw')}</option>

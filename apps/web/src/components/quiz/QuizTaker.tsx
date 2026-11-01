@@ -265,7 +265,7 @@ function QuizSummaryCard({
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full max-w-lg">
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+        <div className="p-4 rounded-xl bg-surface dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
           <span className="block text-xs uppercase font-semibold text-text-muted">
             {t('reports.score')}
           </span>
@@ -273,13 +273,13 @@ function QuizSummaryCard({
             {score}/{max}
           </span>
         </div>
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+        <div className="p-4 rounded-xl bg-surface dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
           <span className="block text-xs uppercase font-semibold text-text-muted">
             {t('quiz.accuracy', { percent: accuracy }).split(':')[0]}
           </span>
           <span className="text-2xl font-black text-green">{accuracy}%</span>
         </div>
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs col-span-2 sm:col-span-1">
+        <div className="p-4 rounded-xl bg-surface dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs col-span-2 sm:col-span-1">
           <span className="block text-xs uppercase font-semibold text-text-muted">
             {t('quiz.report')}
           </span>

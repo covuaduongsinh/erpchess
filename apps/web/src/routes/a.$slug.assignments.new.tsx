@@ -71,7 +71,7 @@ function NewAssignmentPage() {
               onChange={(e) => setInstructions(e.target.value)}
               rows={3}
               maxLength={2000}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base"
             />
           </label>
           <Field

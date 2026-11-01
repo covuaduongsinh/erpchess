@@ -490,7 +490,7 @@ function CreateStudentCard() {
           <span className="font-medium">{t('students.group')}</span>
           <select
             name="groupId"
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base"
           >
             <option value="">{t('students.noGroup')}</option>
             {groups.data?.map((g) => (

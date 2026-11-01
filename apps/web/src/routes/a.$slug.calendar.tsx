@@ -34,7 +34,7 @@ const KIND_STYLE: Record<CalendarEventKind, string> = {
   other: 'border-text-muted bg-text-muted/10',
 };
 const WEEKDAYS = [1, 2, 3, 4, 5, 6, 0] as const;
-const select = 'rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm';
+const select = 'rounded-md border border-text-muted/30 bg-surface px-2 py-1 text-sm';
 
 function hhmm(iso: string, locale: string) {
   return new Date(iso).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });

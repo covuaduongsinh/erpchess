@@ -39,7 +39,7 @@ function DiscountsPage() {
       <BillingHeader />
       <div className="grid grid-cols-3 gap-3">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-lg bg-white p-4 shadow-sm">
+          <div key={s.label} className="rounded-lg bg-surface p-4 shadow-sm">
             <p className="text-2xl font-bold text-primary">{s.value}</p>
             <p className="text-sm text-text-muted">{s.label}</p>
           </div>
@@ -50,7 +50,7 @@ function DiscountsPage() {
           <select
             value={kind}
             onChange={(e) => setKind(e.target.value)}
-            className="self-start rounded-md border border-text-muted/30 bg-white px-2 py-2 text-sm"
+            className="self-start rounded-md border border-text-muted/30 bg-surface px-2 py-2 text-sm"
           >
             <option value="">{t('bill.allKinds')}</option>
             {discountKinds.map((k) => (
@@ -159,7 +159,7 @@ function DiscountForm() {
     );
   }
 
-  const select = 'rounded-md border border-text-muted/30 bg-white px-3 py-2';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2';
   return (
     <Card title={t('bill.newDiscount')}>
       <form onSubmit={onSubmit} className="flex flex-col gap-3 text-sm">

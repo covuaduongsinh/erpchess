@@ -85,7 +85,7 @@ export function GameViewer({
                 setEngineOn(e.target.checked);
                 if (!e.target.checked) setBestScore(null);
               }}
-              className="h-4 w-4 rounded border-gray-300 text-primary"
+              className="h-4 w-4 rounded border-border text-primary"
             />
             <span>⚡ Phân tích Arasan NNUE</span>
           </label>
@@ -110,7 +110,7 @@ export function GameViewer({
       </div>
 
       {engineOn && (
-        <div className="rounded-lg border border-text-muted/15 bg-white p-3 text-xs">
+        <div className="rounded-lg border border-text-muted/15 bg-surface p-3 text-xs">
           <EngineLines fen={node.fen} onPlay={() => {}} onScore={onScore} />
         </div>
       )}

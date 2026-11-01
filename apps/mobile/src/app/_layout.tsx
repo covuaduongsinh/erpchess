@@ -1,5 +1,5 @@
 import { ErpProvider } from '@erpchess/api/react';
-import { colors } from '@erpchess/ui-tokens';
+import { colors, nativeColors } from '@erpchess/ui-tokens';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -28,7 +28,7 @@ export default function RootLayout() {
               screenOptions={{
                 headerStyle: { backgroundColor: colors.primary },
                 headerTintColor: colors.textOnPrimary,
-                contentStyle: { backgroundColor: colors.bg },
+                contentStyle: { backgroundColor: nativeColors.appBg },
               }}
             >
               <Stack.Screen name="index" options={{ headerShown: false }} />

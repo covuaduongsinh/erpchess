@@ -95,7 +95,7 @@ function IssueCertificate() {
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
             required
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             <option value="">{t('cert.pickStudent')}</option>
             {students.map((m) => (

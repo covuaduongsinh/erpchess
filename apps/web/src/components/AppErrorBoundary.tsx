@@ -65,7 +65,7 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
             </p>
 
             {process.env.NODE_ENV !== 'production' && this.state.error && (
-              <pre className="max-h-40 overflow-auto rounded bg-gray-100 p-2 text-xs text-red-600">
+              <pre className="max-h-40 overflow-auto rounded bg-bg p-2 text-xs text-red-600">
                 {this.state.error.message}
                 {this.state.error.stack ? `\n\n${this.state.error.stack}` : ''}
               </pre>

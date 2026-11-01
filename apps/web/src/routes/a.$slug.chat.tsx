@@ -73,7 +73,7 @@ function ChatPage() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder={t('chat.search')}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm"
             />
             <div className="flex flex-wrap gap-1">
               {(['', 'unread', 'group', 'batch', 'coach', 'student'] as const).map((f) => (
@@ -147,7 +147,7 @@ function NewChat({ onOpened }: { onOpened: (id: string) => void }) {
   const others = (members.data ?? []).filter(
     (m) => m.profile.id !== session.user.id && (staff || isStaff(m.role)),
   );
-  const select = 'rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm';
 
   return (
     <Card title={t('chat.new')}>
@@ -228,7 +228,7 @@ function ChatPane({ conversation }: { conversation: Conversation }) {
   }
 
   return (
-    <section className="flex h-[70vh] flex-col rounded-lg bg-white shadow-sm">
+    <section className="flex h-[70vh] flex-col rounded-lg bg-surface shadow-sm">
       <header className="border-b border-text-muted/15 px-5 py-3">
         <h2 className="font-bold text-primary">{conversationTitle(conversation)}</h2>
         <p className="text-xs text-text-muted">
@@ -280,7 +280,7 @@ function ChatPane({ conversation }: { conversation: Conversation }) {
           rows={text.includes('\n') ? 4 : 1}
           placeholder={t('chat.placeholder')}
           aria-label={t('chat.placeholder')}
-          className="min-w-0 flex-1 resize-none rounded-md border border-text-muted/30 bg-white px-3 py-2"
+          className="min-w-0 flex-1 resize-none rounded-md border border-text-muted/30 bg-surface px-3 py-2"
         />
         <Button type="submit" disabled={send.isPending || !text.trim()}>
           {t('chat.send')}

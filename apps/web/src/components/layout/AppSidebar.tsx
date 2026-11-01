@@ -10,9 +10,11 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Plus,
+  Sun,
   UserCircle,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import type { Theme } from '../../lib/theme';
 import { useT } from '../../lib/use-t';
 import {
   buildChatItem,
@@ -39,6 +41,9 @@ export type AppSidebarProps = {
   onCloseDrawer: () => void;
   /** Số tin chat chưa đọc, 0 thì không hiện. */
   unreadChat?: number;
+  /** Giao diện hiện tại và hàm đổi sáng/tối. */
+  theme?: Theme;
+  onToggleTheme?: () => void;
   signedIn: boolean;
   onSignOut: () => void;
 };
@@ -58,6 +63,8 @@ export function AppSidebar({
   drawerOpen,
   onCloseDrawer,
   unreadChat = 0,
+  theme = 'light',
+  onToggleTheme,
   signedIn,
   onSignOut,
 }: AppSidebarProps) {
@@ -181,7 +188,7 @@ export function AppSidebar({
         aria-label={t('nav.mainNav')}
         data-open={drawerOpen}
         data-collapsed={collapsed}
-        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-text-muted/15 bg-white transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0 lg:transition-[width] ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-text-muted/15 bg-surface transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0 lg:transition-[width] ${
           drawerOpen ? 'translate-x-0' : '-translate-x-full'
         } ${collapsed ? 'lg:w-20' : 'lg:w-64'}`}
       >
@@ -233,7 +240,7 @@ export function AppSidebar({
           {switcherOpen && (
             <div
               role="menu"
-              className="absolute top-full left-3 z-50 mt-1 flex w-60 flex-col gap-1 rounded-lg border border-text-muted/15 bg-white p-2 shadow-lg"
+              className="absolute top-full left-3 z-50 mt-1 flex w-60 flex-col gap-1 rounded-lg border border-text-muted/15 bg-surface p-2 shadow-lg"
             >
               {academies.map((a) => (
                 <Link
@@ -315,16 +322,21 @@ export function AppSidebar({
               <span className={hide}>{t('nav.profile')}</span>
             </Link>
           )}
-          {/* Chỉ đặt chỗ: công tắc sáng/tối làm thật ở PR sau */}
+          {/* Công tắc sáng/tối: lưu localStorage, mặc định theo hệ thống (lib/theme.ts) */}
           <button
             type="button"
-            disabled
-            title={t('nav.themeSoon')}
-            aria-label={t('nav.theme')}
-            className={`${linkBase} cursor-not-allowed opacity-60 ${collapsed ? 'lg:justify-center lg:px-2' : ''}`}
+            role="switch"
+            aria-checked={theme === 'dark'}
+            onClick={onToggleTheme}
+            title={collapsed ? t('nav.darkMode') : undefined}
+            className={`${linkBase} w-full ${collapsed ? 'lg:justify-center lg:px-2' : ''}`}
           >
-            <Moon className="size-5 shrink-0" aria-hidden="true" />
-            <span className={hide}>{t('nav.theme')}</span>
+            {theme === 'dark' ? (
+              <Sun className="size-5 shrink-0" aria-hidden="true" />
+            ) : (
+              <Moon className="size-5 shrink-0" aria-hidden="true" />
+            )}
+            <span className={hide}>{t('nav.darkMode')}</span>
           </button>
           <fieldset
             className={`m-0 flex items-center gap-1 border-0 px-3 py-1 ${collapsed ? 'lg:flex-col lg:px-0' : ''}`}

@@ -138,7 +138,7 @@ function SetupForm({ onStart }: { onStart: (s: Setup) => void }) {
               className={`flex flex-col justify-between rounded-xl border p-4 text-left transition-all ${
                 isSelected
                   ? 'border-primary bg-primary/5 shadow-md ring-2 ring-primary'
-                  : 'border-text-muted/20 bg-white hover:border-primary/50 hover:shadow-xs'
+                  : 'border-text-muted/20 bg-surface hover:border-primary/50 hover:shadow-xs'
               }`}
             >
               <div>
@@ -180,10 +180,10 @@ function SetupForm({ onStart }: { onStart: (s: Setup) => void }) {
               className={`flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition ${
                 color === 'w'
                   ? 'border-primary bg-primary text-white shadow-xs'
-                  : 'border-text-muted/20 bg-white text-text hover:bg-bg'
+                  : 'border-text-muted/20 bg-surface text-text hover:bg-bg'
               }`}
             >
-              <span className="inline-block size-4 rounded-full border border-gray-300 bg-white" />
+              <span className="inline-block size-4 rounded-full border border-border bg-surface" />
               {t('play.white')} (Đi trước)
             </button>
             <button
@@ -192,7 +192,7 @@ function SetupForm({ onStart }: { onStart: (s: Setup) => void }) {
               className={`flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition ${
                 color === 'b'
                   ? 'border-primary bg-primary text-white shadow-xs'
-                  : 'border-text-muted/20 bg-white text-text hover:bg-bg'
+                  : 'border-text-muted/20 bg-surface text-text hover:bg-bg'
               }`}
             >
               <span className="inline-block size-4 rounded-full bg-black" />
@@ -204,7 +204,7 @@ function SetupForm({ onStart }: { onStart: (s: Setup) => void }) {
               className={`flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition ${
                 color === 'random'
                   ? 'border-primary bg-primary text-white shadow-xs'
-                  : 'border-text-muted/20 bg-white text-text hover:bg-bg'
+                  : 'border-text-muted/20 bg-surface text-text hover:bg-bg'
               }`}
             >
               <span>🎲</span>

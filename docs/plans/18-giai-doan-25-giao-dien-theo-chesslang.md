@@ -163,7 +163,7 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 - **Giải đấu:** `FilterBar` (tìm, khoảng ngày + T/Q/N, sắp xếp, chip trạng thái), `ViewToggle` danh sách / lưới / bảng / lịch (lịch và bảng là chế độ đã có, thêm chế độ lưới), 4 `StatCard`, `Pagination`, `EmptyState` có CTA.
 - **Simul:** cùng mẫu (thẻ số liệu, tìm, khoảng ngày + T/Q/N, chip trạng thái, danh sách/lưới, phân trang, `EmptyState` có CTA).
 - **Khác Chesslang có chủ đích:** thẻ Cầm Trắng/Cầm Đen chỉ dành cho học viên (phạm vi "của tôi"), staff xem các thẻ toàn học viện vì không thêm RPC; chip cấp độ của banner là chip thông tin (trang đánh với máy tự có bộ chọn mức Elo); Simul chưa có chế độ lịch.
-  **25e-2 (Bàn cờ phân tích):**
+  **25e-2 (Bàn cờ phân tích) ✅ ĐÃ HOÀN THÀNH & MERGE #71:**
 
 - **Bố cục 2 cột toàn chiều rộng:** bàn cờ bên trái (không vượt chiều cao màn hình để thanh công cụ luôn trong tầm nhìn), panel phải rộng 360–440 px.
 - **Thanh công cụ icon dưới bàn** (`role="toolbar"`, mỗi nút có nhãn truy cập và tooltip): về đầu, lùi, tới, về cuối, lật bàn, xoá nét vẽ (khoá khi chưa có nét vẽ), bật/tắt engine. Phím tắt ← → ↑ ↓ và F giữ nguyên; trạng thái ván (chiếu hết, hoà) hiện cuối thanh.
@@ -189,6 +189,14 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 
 ### PR 25f: Chế độ tối, trang 404, hoàn thiện và đối chiếu bằng REA
 
+**Đã làm trong PR 25f (đối chiếu bằng ảnh để bước riêng):**
+- **Chế độ tối chạy thật:** `lib/theme.ts` (`useTheme`): mặc định theo `prefers-color-scheme` (tự đổi khi hệ thống đổi), bấm công tắc thì lưu `localStorage` (`erpchess.theme`), theo dõi đổi từ tab khác; gắn class `.dark` và `color-scheme` lên `<html>`. Script nhỏ trong `index.html` gắn `.dark` trước khi vẽ nên không nháy. Công tắc Sáng/Tối ở đáy sidebar (`role="switch"`) và ở thanh đầu trang khách. `@custom-variant dark` làm các lớp `dark:` có sẵn của Tailwind theo class `.dark` thay vì theo hệ điều hành.
+- **Rà màu cứng:** `bg-white` đổi sang `bg-surface` và các `text/border/divide/ring-gray-*`, `bg-gray-50/100` đổi sang token ở khoảng 70 tệp (layout, `components/ui`, các trang 25a–25e). Giữ nguyên có chủ đích: tệp in (hoá đơn, chứng chỉ, phiếu báo cáo, vẫn nền trắng như giấy), `text-white` và lớp phủ `bg-white/xx` trên nền màu, màu ngữ nghĩa (xanh/vàng/đỏ nhạt), khối slate đã có cặp `dark:`. Bàn cờ giữ theme bàn cờ riêng. `--color-white` không còn bị đổi trong `.dark` (chữ trắng trên nền màu giữ nguyên).
+- **Chữ màu chính trong chế độ tối:** chữ `text-primary` (navy) gần như không đọc được trên nền tối (phát hiện khi chụp thử trang đăng nhập và 404), nên trong `.dark` chữ này được trộn 40% với trắng, tính ngay tại phần tử nên màu thương hiệu học viện cũng được làm sáng theo. Ảnh chụp thật hai trang khách ở chế độ tối nằm ở `rea/evidence/ui-2026-11-01/25f-khach-toi/`.
+- **Trang 404:** `notFoundComponent` của router gốc (`components/NotFound.tsx`): số 404 cách điệu bằng họa tiết ô cờ, nút Về tổng quan (hoặc Về trang chủ khi chưa có học viện) / Quay lại / Tải lại, liên kết nhanh Bàn cờ, Luyện tập, Học liệu, Giải đấu theo học viện gần nhất (`useCurrentAcademy`, tách từ `AppLayout`).
+- **Mobile Expo:** thêm `nativeColors` / `darkNativeColors` (bản hex của `primary-soft`, `app-bg`, tính trong oklab giống `color-mix`, có test đối chiếu); màn hình gốc, trang chủ và nền các màn dùng `app-bg`. Không đổi điều hướng.
+- **Kịch bản REA:** `make-scenarios.py` sinh 4 kịch bản (desktop/mobile x sáng/tối, 26 trang gồm cả 404, mobile có ảnh drawer) cho các trang 25a–25f. Chưa chạy được vì tài khoản thử chưa xác nhận email; không lách. Việc chụp, tệp `so-sanh.md` và ghi các chỗ còn khác Chesslang là bước riêng sau khi tài khoản dùng được.
+
 - **Chế độ tối:**
   - Lưu theo người dùng vào `localStorage`, mặc định theo hệ thống.
   - Gắn class `.dark` lên `<html>`. Các thành phần của 25b dùng biến token nên đổi theo.
@@ -205,6 +213,7 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 
 - **Việc:** thêm RPC thống kê theo ngày (bài làm, điểm danh, hoàn thành quiz), nối lại biểu đồ tuần ở Tổng quan kèm `DateRangeFields`, nút Tuần trước/Tuần sau và hàng Hoạt động quiz.
 - **Bổ sung từ 25d-1:** thẻ "% quiz đã bắt đầu" ở trang Quiz và tab "Bảng xếp hạng quiz toàn học viện" (hiện chỉ có bảng xếp hạng từng quiz trong trang chi tiết) cần số liệu tổng hợp phía server; làm cùng đợt RPC này.
+- **Bổ sung từ 25e-2:** **Lưu ván từ bàn phân tích vào CSDL của tôi** (tab "CSDL của tôi" và nút "Lưu ván" ở trang phân tích); cần chọn CSDL đích và ghi PGN, có thể cần API/RPC mới.
 - **Lưu ý:** có migration nên cần chủ dự án duyệt rồi áp lên Supabase cloud (CI không tự áp). Khi nối lại, `WeeklyActivityChart` phải nhận dữ liệu thật và bỏ dữ liệu mẫu mặc định.
 
 ## 4. Rủi ro và cách xử lý
