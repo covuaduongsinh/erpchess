@@ -7,10 +7,30 @@ import {
 } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Download, FileText, Library, Plus, Search, Settings } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { LichessImportDialog } from '../components/study/LichessImportDialog';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import {
+  Button,
+  Card,
+  type DateRange,
+  DateRangeFields,
+  EmptyState,
+  ErrorText,
+  Field,
+  FilterBar,
+  PageHeader,
+  Pagination,
+  PeriodQuickPick,
+  SearchInput,
+  SelectField,
+  Spinner,
+  Tabs,
+  type ViewMode,
+  ViewToggle,
+} from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
+import { inDateRange, paginate } from '../lib/list-tools';
 import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/studies/')({
@@ -18,86 +38,184 @@ export const Route = createFileRoute('/a/$slug/studies/')({
 });
 
 const SCOPES: StudyScope[] = ['mine', 'academy', 'public'];
+type Sort = 'newest' | 'oldest' | 'title';
 
 function StudiesPage() {
   const { t } = useT();
   const { academy, session } = useAcademy();
   const staff = isStaff(academy.role);
+  const [tab, setTab] = useState<'list' | 'collections'>('list');
   const [scope, setScope] = useState<StudyScope>(staff ? 'mine' : 'academy');
   const [search, setSearch] = useState('');
-  const studies = useStudies({ scope, academyId: academy.id, userId: session.user.id, search });
+  const [range, setRange] = useState<DateRange>({ from: '', to: '' });
+  const [sort, setSort] = useState<Sort>('newest');
+  const [view, setView] = useState<ViewMode>('list');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [importing, setImporting] = useState(false);
 
+  const base = { academyId: academy.id, userId: session.user.id };
+  const byScope = {
+    mine: useStudies({ scope: 'mine', ...base }),
+    academy: useStudies({ scope: 'academy', ...base }),
+    public: useStudies({ scope: 'public', ...base }),
+  };
+  const studies = byScope[scope];
+  const visibleScopes = SCOPES.filter((s) => staff || s !== 'mine');
+
+  // Mọi thay đổi bộ lọc đưa về trang 1
+  const reset =
+    <T,>(set: (v: T) => void) =>
+    (v: T) => {
+      set(v);
+      setPage(1);
+    };
+
+  const needle = search.trim().toLowerCase();
+  const shown = (studies.data ?? [])
+    .filter(
+      (x) =>
+        (!needle || `${x.title} ${x.description}`.toLowerCase().includes(needle)) &&
+        inDateRange(x.created_at, range.from, range.to),
+    )
+    .sort((a, b) =>
+      sort === 'title'
+        ? a.title.localeCompare(b.title)
+        : sort === 'oldest'
+          ? a.created_at.localeCompare(b.created_at)
+          : b.created_at.localeCompare(a.created_at),
+    );
+  const filtered = needle !== '' || range.from !== '' || range.to !== '';
+
+  const headerActions = staff && (
+    <>
+      <Link
+        to="/a/$slug/studies/defaults"
+        params={{ slug: academy.slug }}
+        className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 font-medium hover:bg-primary-soft"
+      >
+        <Settings className="size-4" aria-hidden="true" />
+        {t('activityDefaults.open')}
+      </Link>
+      <Button variant="secondary" icon={Download} onClick={() => setImporting(true)}>
+        {t('lichessImport.open')}
+      </Button>
+      <Link
+        to="/a/$slug/studies/new"
+        params={{ slug: academy.slug }}
+        className="inline-flex items-center gap-2 rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
+      >
+        <Plus className="size-4" aria-hidden="true" />
+        {t('studies.create')}
+      </Link>
+    </>
+  );
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+    <>
       {importing && <LichessImportDialog onClose={() => setImporting(false)} />}
-      <Card title={t('studies.title')}>
-        <div className="flex flex-wrap items-end gap-3">
-          <div role="tablist" className="flex gap-1">
-            {SCOPES.filter((s) => staff || s !== 'mine').map((s) => (
-              <button
-                key={s}
-                type="button"
-                role="tab"
-                aria-selected={scope === s}
-                onClick={() => setScope(s)}
-                className="rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary"
-              >
-                {t(`studies.scope_${s}`)}
-              </button>
-            ))}
-          </div>
-          <div className="min-w-48 flex-1">
-            <Field
-              label={t('studies.search')}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          {staff && (
-            <Link
-              to="/a/$slug/studies/defaults"
-              params={{ slug: academy.slug }}
-              className="rounded-md px-3 py-2 text-sm text-primary hover:bg-primary/10"
-            >
-              ⚙ {t('activityDefaults.open')}
-            </Link>
-          )}
-          {staff && (
-            <Button variant="ghost" onClick={() => setImporting(true)}>
-              {t('lichessImport.open')}
-            </Button>
-          )}
-          {staff && (
-            <Link
-              to="/a/$slug/studies/new"
-              params={{ slug: academy.slug }}
-              className="rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
-            >
-              {t('studies.create')}
-            </Link>
-          )}
+      <PageHeader
+        icon={FileText}
+        title={t('studies.title')}
+        subtitle={t('learnPage.studiesSubtitle')}
+        actions={headerActions}
+      />
+      {staff && (
+        <Tabs
+          variant="underline"
+          value={tab}
+          onChange={setTab}
+          items={[
+            { value: 'list', label: t('learnPage.studiesTabList'), icon: FileText },
+            { value: 'collections', label: t('learnPage.studiesTabCollections'), icon: Library },
+          ]}
+        />
+      )}
+      {staff && tab === 'collections' ? (
+        <div className="max-w-xl">
+          <CollectionsCard />
         </div>
-        {studies.isPending ? (
-          <Spinner />
-        ) : studies.error ? (
-          <ErrorText error={studies.error} />
-        ) : studies.data.length === 0 ? (
-          <p className="text-text-muted">{t('studies.none')}</p>
-        ) : (
-          <ul className="flex flex-col divide-y divide-text-muted/15">
-            {studies.data.map((s) => (
-              <StudyRow key={s.id} study={s} />
-            ))}
-          </ul>
-        )}
-      </Card>
-      {staff && <CollectionsCard />}
-    </div>
+      ) : (
+        <>
+          <div className="flex flex-wrap items-center gap-3">
+            <Tabs
+              variant="pills"
+              ariaLabel={t('learnPage.scopeGroup')}
+              value={scope}
+              onChange={reset(setScope)}
+              items={visibleScopes.map((s) => ({
+                value: s,
+                label: t(`studies.scope_${s}`),
+                count: byScope[s].data?.length,
+              }))}
+            />
+            <span className="text-sm font-medium text-text-muted">
+              {t('learnPage.studiesTotal', { count: shown.length })}
+            </span>
+          </div>
+          <FilterBar>
+            <SearchInput
+              value={search}
+              onChange={reset(setSearch)}
+              placeholder={t('learnPage.studiesSearch')}
+            />
+            <DateRangeFields value={range} onChange={reset(setRange)} />
+            <PeriodQuickPick onPick={reset(setRange)} />
+            <SelectField
+              label={t('learnPage.sort')}
+              value={sort}
+              onChange={reset(setSort)}
+              options={[
+                { value: 'newest', label: t('learnPage.sortNewest') },
+                { value: 'oldest', label: t('learnPage.sortOldest') },
+                { value: 'title', label: t('learnPage.sortTitle') },
+              ]}
+            />
+            <ViewToggle value={view} onChange={setView} views={['list', 'grid']} />
+          </FilterBar>
+          {studies.isPending ? (
+            <Spinner />
+          ) : studies.error ? (
+            <ErrorText error={studies.error} />
+          ) : shown.length === 0 ? (
+            <EmptyState
+              dashed
+              icon={filtered ? Search : FileText}
+              title={filtered ? t('learnPage.noMatch') : t('studies.none')}
+              description={filtered || !staff ? undefined : t('learnPage.studiesEmptyDesc')}
+            />
+          ) : (
+            <div className="flex flex-col gap-3 rounded-card bg-surface p-5 shadow-sm">
+              <ul
+                className={
+                  view === 'grid'
+                    ? 'grid gap-4 sm:grid-cols-2 xl:grid-cols-3'
+                    : 'flex flex-col divide-y divide-border'
+                }
+              >
+                {paginate(shown, page, pageSize).map((x) => (
+                  <StudyRow key={x.id} study={x} card={view === 'grid'} />
+                ))}
+              </ul>
+              <Pagination
+                page={page}
+                pageSize={pageSize}
+                total={shown.length}
+                onPageChange={setPage}
+                onPageSizeChange={(n) => {
+                  setPageSize(n);
+                  setPage(1);
+                }}
+              />
+            </div>
+          )}
+        </>
+      )}
+    </>
   );
 }
 
-function StudyRow({ study }: { study: StudySummary }) {
+function StudyRow({ study, card = false }: { study: StudySummary; card?: boolean }) {
   const { t } = useT();
   const { academy, session } = useAcademy();
   const { remove } = useStudyMutations(session.user.id);
@@ -108,7 +226,11 @@ function StudyRow({ study }: { study: StudySummary }) {
       (academy.role === 'coach' && study.created_by === session.user.id));
 
   return (
-    <li className="flex flex-wrap items-center justify-between gap-3 py-3">
+    <li
+      className={`flex flex-wrap items-center justify-between gap-3 ${
+        card ? 'rounded-lg border border-border p-4' : 'py-3'
+      }`}
+    >
       <div className="flex flex-col">
         <Link
           to="/a/$slug/studies/$id"

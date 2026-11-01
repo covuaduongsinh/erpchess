@@ -110,7 +110,7 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 - **Không có công tắc "Hiện học viên nghỉ" và lọc theo HLV ở trang Học viên:** dữ liệu thành viên chưa có cờ hoạt động và chưa có HLV phụ trách từng học viên (HLV gắn với nhóm/Batch).
 - **Thẻ Liên hệ (chỉ đọc) giữ ở Tổng quan** để học viên và phụ huynh vẫn xem được.
 
-**25c-2:** trang Học viên (PageHeader, thẻ số liệu, FilterBar dùng chung cho bảng và lưới, ViewToggle danh sách/lưới, menu Thêm học viên có Nhập CSV, Xuất), cùng PageHeader và EmptyState cho Batch, Nhóm, Cấp độ, Địa điểm, Lead, Học phí (billing.*), Thông báo. Sửa lỗi cột Lớp của bảng học viên luôn trống do không truyền danh sách thành viên nhóm.
+**25c-2 ✅ ĐÃ HOÀN THÀNH & MERGE #67.** Trang Học viên (PageHeader, thẻ số liệu, FilterBar dùng chung cho bảng và lưới, ViewToggle danh sách/lưới, menu Thêm học viên có Nhập CSV, Xuất), cùng PageHeader và EmptyState cho Batch, Nhóm, Cấp độ, Địa điểm, Lead, Học phí (billing.*), Thông báo. Sửa lỗi cột Lớp của bảng học viên luôn trống do không truyền danh sách thành viên nhóm.
 - **Tổng quan** (`a.$slug.index.tsx`):
   - `PageHeader` "<Tên học viện> · Tổng quan" và lời chào theo tên người dùng.
   - Hàng **Thao tác nhanh** 3 thẻ lớn: Giải đấu, Học viện → Học viên, Lớp học → modal tạo nhanh đã có. Thẻ đầu tô màu chính.
@@ -127,7 +127,14 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
   - Chế độ bảng giữ `StudentAdminTable`.
 - **Batch, Nhóm, Cấp độ, Địa điểm, Lead, Học phí (billing.\*), Thông báo:** dùng `PageHeader`, `FilterBar`, `EmptyState`, `StatCard` nếu có số liệu. Logic nghiệp vụ giữ nguyên.
 
-### PR 25d: Áp dụng: nhóm Học tập và Nội dung
+### PR 25d: Áp dụng: nhóm Học tập và Nội dung (chia làm 25d-1 và 25d-2)
+
+**25d-1 (Quiz, Bài tập, Học liệu):**
+- **Quiz:** `PageHeader`, 4 `StatCard` số thật (tổng, đang mở, sắp mở, đã đóng), `Tabs` underline Quiz / Quiz tự động (huy hiệu Mới, chỉ staff; chứa `QuizSchedulesPanel` và tạo quiz tự động theo cấp độ), `FilterBar` (tìm, khoảng ngày tạo + T/Q/N, sắp xếp, chip trạng thái), `Pagination`, `EmptyState` có CTA.
+- **Bài tập:** `Tabs` pills Đã giao (có số đếm) / Kho bài tập, tìm và sắp xếp, `EmptyState` nét đứt.
+- **Học liệu:** `Tabs` underline Học liệu / Bộ sưu tập, pills theo nguồn (Của tôi / Học viện / Thư viện chung) có số đếm, tìm, khoảng ngày + T/Q/N, sắp xếp, `ViewToggle` danh sách/lưới, `Pagination`, nút đầu trang Cấu hình mặc định / Nhập từ Lichess / Tạo học liệu.
+- **Khác Chesslang có chủ đích:** chưa có thẻ "% đã bắt đầu", tab "Góc nhìn học viên" và tab "Bảng xếp hạng" của Quiz (chưa có tính năng hay số liệu tổng hợp tương ứng, không bịa); chưa có khối "Bản nháp" của Học liệu (study không có trạng thái nháp); nguồn "Được chia sẻ" của Chesslang ứng với nguồn "Học viện".
+- **25d-2 (sau):** Khoá học, Lớp học (danh sách), Luyện tập, CSDL ván, Báo cáo, Chat.
 
 - **Quiz:**
   - 2 `StatCard inline`: Quiz tự động (badge MỚI), % đã bắt đầu.
