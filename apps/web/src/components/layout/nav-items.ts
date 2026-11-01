@@ -271,8 +271,10 @@ export function findActiveItem(
   return best;
 }
 
-/** Trang tự thu sidebar thành thanh icon: bàn cờ/phân tích, phòng học, ván đấu, simul. */
+/** Trang tự thu sidebar thành thanh icon: bàn cờ/phân tích, phòng học, ván đấu, simul, báo cáo. */
 export function isImmersivePath(pathname: string): boolean {
   if (pathname === '/analysis' || pathname.startsWith('/analysis/')) return true;
+  // Báo cáo: danh sách học viên bên trái + báo cáo chi tiết bên phải cần chiều ngang
+  if (/^\/a\/[^/]+\/reports\/?$/.test(pathname)) return true;
   return /^\/a\/[^/]+\/(classes\/[^/]+\/room|play\/[^/]+|simuls\/[^/]+)\/?$/.test(pathname);
 }

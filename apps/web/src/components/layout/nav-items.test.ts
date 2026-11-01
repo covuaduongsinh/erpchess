@@ -157,6 +157,9 @@ describe('isImmersivePath', () => {
 
   it('các trang danh sách thì không', () => {
     expect(isImmersivePath('/a/clb/play')).toBe(false);
+    expect(isImmersivePath('/a/clb/reports')).toBe(true);
+    expect(isImmersivePath('/a/clb/reports/')).toBe(true);
+    expect(isImmersivePath('/a/clb/reportsx')).toBe(false);
     expect(isImmersivePath('/a/clb/simuls')).toBe(false);
     expect(isImmersivePath('/a/clb/classes/42')).toBe(false);
     expect(isImmersivePath('/a/clb')).toBe(false);
