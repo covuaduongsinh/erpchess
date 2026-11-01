@@ -2,9 +2,10 @@ import type { AssignmentSummary, ProgressRow } from '@erpchess/api';
 import { useAssignments, useProgress } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { ClipboardList } from 'lucide-react';
 import { useState } from 'react';
 import { Exercises } from '../components/assign/Exercises';
-import { Card, ErrorText, Spinner } from '../components/ui';
+import { Card, EmptyState, ErrorText, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -37,6 +38,15 @@ function AssignmentsPage() {
       ))}
     </div>
   );
+  const createLink = staff && (
+    <Link
+      to="/a/$slug/assignments/new"
+      params={{ slug: academy.slug }}
+      className="rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
+    >
+      {t('assignments.create')}
+    </Link>
+  );
   if (staff && tab === 'exercises') {
     return (
       <div className="flex flex-col gap-4">
@@ -47,39 +57,36 @@ function AssignmentsPage() {
   }
 
   return (
-    <Card title={t('assignments.title')}>
-      {tabs}
-      {staff && (
-        <Link
-          to="/a/$slug/assignments/new"
-          params={{ slug: academy.slug }}
-          className="self-start rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
-        >
-          {t('assignments.create')}
-        </Link>
-      )}
-      {assignments.isPending ? (
-        <Spinner />
-      ) : assignments.error ? (
-        <ErrorText error={assignments.error} />
-      ) : assignments.data.length === 0 ? (
-        <p className="text-text-muted">
-          {staff ? t('assignments.none') : t('assignments.noneStudent')}
-        </p>
-      ) : (
-        <ul className="flex flex-col divide-y divide-text-muted/15">
-          {assignments.data.map((a) => (
-            <AssignmentRow
-              key={a.id}
-              assignment={a}
-              staff={staff}
-              // RLS đã giới hạn: học viên chỉ thấy dòng của mình, phụ huynh thấy của con
-              rows={(progress.data ?? []).filter((p) => p.assignmentId === a.id)}
-            />
-          ))}
-        </ul>
-      )}
-    </Card>
+    <>
+      <PageHeader icon={ClipboardList} title={t('assignments.title')} actions={createLink} />
+      <Card>
+        {tabs}
+        {assignments.isPending ? (
+          <Spinner />
+        ) : assignments.error ? (
+          <ErrorText error={assignments.error} />
+        ) : assignments.data.length === 0 ? (
+          <EmptyState
+            dashed
+            icon={ClipboardList}
+            title={staff ? t('assignments.none') : t('assignments.noneStudent')}
+            action={createLink}
+          />
+        ) : (
+          <ul className="flex flex-col divide-y divide-text-muted/15">
+            {assignments.data.map((a) => (
+              <AssignmentRow
+                key={a.id}
+                assignment={a}
+                staff={staff}
+                // RLS đã giới hạn: học viên chỉ thấy dòng của mình, phụ huynh thấy của con
+                rows={(progress.data ?? []).filter((p) => p.assignmentId === a.id)}
+              />
+            ))}
+          </ul>
+        )}
+      </Card>
+    </>
   );
 }
 

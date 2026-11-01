@@ -8,8 +8,9 @@ import {
   weekDays,
 } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Trophy } from 'lucide-react';
 import { useState } from 'react';
-import { Button, Card, ErrorText, Spinner } from '../components/ui';
+import { Button, Card, EmptyState, ErrorText, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -68,96 +69,100 @@ function TournamentsPage() {
     'rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary';
   const select = 'rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm';
 
+  const createLink = staff && (
+    <Link
+      to="/a/$slug/tournaments/new"
+      params={{ slug: academy.slug }}
+      className="rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
+    >
+      {t('tournament.create')}
+    </Link>
+  );
+
   return (
-    <Card title={t('tournament.title')}>
-      <div className="flex flex-wrap items-center gap-2">
-        <input
-          type="search"
-          aria-label={t('tournament.search')}
-          placeholder={t('tournament.search')}
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          className="min-w-0 flex-1 rounded-md border border-text-muted/30 bg-white px-3 py-2"
-        />
-        {staff && (
-          <Link
-            to="/a/$slug/tournaments/new"
-            params={{ slug: academy.slug }}
-            className="rounded-md bg-orange px-4 py-2 font-medium text-white hover:bg-orange-hover"
+    <>
+      <PageHeader icon={Trophy} title={t('tournament.title')} actions={createLink} />
+      <Card>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="search"
+            aria-label={t('tournament.search')}
+            placeholder={t('tournament.search')}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            className="min-w-0 flex-1 rounded-md border border-text-muted/30 bg-white px-3 py-2"
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div role="tablist" className="flex gap-1">
+            {STATUSES.map((s) => (
+              <button
+                key={s}
+                type="button"
+                role="tab"
+                aria-selected={status === s}
+                onClick={() => setStatus(s)}
+                className={pill}
+              >
+                {t(`tournament.${s}`)}
+              </button>
+            ))}
+          </div>
+          <select
+            aria-label={t('classroom.from')}
+            value={range}
+            onChange={(e) => setRange(e.target.value as CalendarRange | '')}
+            className={select}
           >
-            {t('tournament.create')}
-          </Link>
+            <option value="">{t('tournament.all')}</option>
+            {calendarRanges.map((k) => (
+              <option key={k} value={k}>
+                {t(`classroom.range_${k}`)}
+              </option>
+            ))}
+          </select>
+          <select
+            aria-label={t('tournament.sort_date')}
+            value={sort}
+            onChange={(e) => setSort(e.target.value as (typeof SORTS)[number])}
+            className={select}
+          >
+            {SORTS.map((s) => (
+              <option key={s} value={s}>
+                {t(`tournament.sort_${s}`)}
+              </option>
+            ))}
+          </select>
+          <div role="tablist" className="ml-auto flex gap-1">
+            {VIEWS.map((v) => (
+              <button
+                key={v}
+                type="button"
+                role="tab"
+                aria-selected={view === v}
+                onClick={() => setView(v)}
+                className={pill}
+              >
+                {t(`tournament.view_${v}`)}
+              </button>
+            ))}
+          </div>
+        </div>
+        {list.isPending ? (
+          <Spinner />
+        ) : list.error ? (
+          <ErrorText error={list.error} />
+        ) : shown.length === 0 && view !== 'calendar' ? (
+          <EmptyState icon={Trophy} title={t('tournament.none')} action={createLink} />
+        ) : view === 'list' ? (
+          <ListView items={shown} />
+        ) : view === 'table' ? (
+          <TableView items={shown} />
+        ) : (
+          <CalendarView items={shown} />
         )}
-      </div>
-      <div className="flex flex-wrap items-center gap-2">
-        <div role="tablist" className="flex gap-1">
-          {STATUSES.map((s) => (
-            <button
-              key={s}
-              type="button"
-              role="tab"
-              aria-selected={status === s}
-              onClick={() => setStatus(s)}
-              className={pill}
-            >
-              {t(`tournament.${s}`)}
-            </button>
-          ))}
-        </div>
-        <select
-          aria-label={t('classroom.from')}
-          value={range}
-          onChange={(e) => setRange(e.target.value as CalendarRange | '')}
-          className={select}
-        >
-          <option value="">{t('tournament.all')}</option>
-          {calendarRanges.map((k) => (
-            <option key={k} value={k}>
-              {t(`classroom.range_${k}`)}
-            </option>
-          ))}
-        </select>
-        <select
-          aria-label={t('tournament.sort_date')}
-          value={sort}
-          onChange={(e) => setSort(e.target.value as (typeof SORTS)[number])}
-          className={select}
-        >
-          {SORTS.map((s) => (
-            <option key={s} value={s}>
-              {t(`tournament.sort_${s}`)}
-            </option>
-          ))}
-        </select>
-        <div role="tablist" className="ml-auto flex gap-1">
-          {VIEWS.map((v) => (
-            <button
-              key={v}
-              type="button"
-              role="tab"
-              aria-selected={view === v}
-              onClick={() => setView(v)}
-              className={pill}
-            >
-              {t(`tournament.view_${v}`)}
-            </button>
-          ))}
-        </div>
-      </div>
-      {list.isPending ? (
-        <Spinner />
-      ) : list.error ? (
-        <ErrorText error={list.error} />
-      ) : shown.length === 0 && view !== 'calendar' ? (
-        <p className="text-text-muted">{t('tournament.none')}</p>
-      ) : view === 'list' ? (
-        <ListView items={shown} />
-      ) : view === 'table' ? (
-        <TableView items={shown} />
-      ) : (
-        <CalendarView items={shown} />
-      )}
-    </Card>
+      </Card>
+    </>
   );
 }
 
