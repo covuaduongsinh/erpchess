@@ -89,6 +89,15 @@ describe('AppSidebar', () => {
     expect(screen.queryByRole('link', { name: 'Học viên' })).toBeNull();
   });
 
+  it('ở trang Tổng quan: mục Tổng quan sáng và danh sách con Quản trị không tự mở', () => {
+    renderSidebar({ pathname: '/a/clb' });
+    expect(screen.getByRole('link', { name: 'Tổng quan' }).getAttribute('aria-current')).toBe(
+      'page',
+    );
+    expect(screen.getByRole('button', { name: 'Quản trị' })).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Học viên' })).toBeNull();
+  });
+
   it('đang ở trang quản trị thì tự mở sẵn danh sách con', () => {
     renderSidebar({ pathname: '/a/clb/students' });
     const link = screen.getByRole('link', { name: 'Học viên' });

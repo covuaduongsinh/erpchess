@@ -22,7 +22,6 @@ import {
   Library,
   type LucideIcon,
   MapPin,
-  Palette,
   Percent,
   Puzzle,
   Receipt,
@@ -116,7 +115,6 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
         labelKey: 'nav.members',
         items: [
           item('students', '/a/$slug/students', 'students.title', Users),
-          item('coaches', '/a/$slug', 'nav.coaches', School, { exact: true }),
           item('groups', '/a/$slug/groups', 'nav.groups', UsersRound),
           item('batches', '/a/$slug/batches', 'nav.batches', Layers),
         ],
@@ -142,9 +140,6 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
         id: 'academy',
         labelKey: 'nav.academy',
         items: [
-          ...(owner
-            ? [item('branding', '/a/$slug', 'nav.branding', Palette, { exact: true })]
-            : []),
           item('levels', '/a/$slug/levels', 'levels.title', Shield),
           item('locations', '/a/$slug/locations', 'location.title', MapPin),
           item('certificates', '/a/$slug/certificates', 'cert.title', Award),
@@ -230,13 +225,8 @@ export function flattenGroup(group: NavGroup): NavItem[] {
   return group.sections.flatMap((s) => s.items);
 }
 
-/** Nhóm "Quản trị" nếu đường dẫn hiện tại thuộc một mục con của nó. */
-export function groupOfPath(
-  groups: NavGroup[],
-  pathname: string,
-  slug: string | undefined,
-): NavGroup | undefined {
-  const active = findActiveItem(groups, pathname, slug);
+/** Nhóm chứa mục đang mở (suy ra từ chính `active`, không tính lại); Tổng quan/Chat không thuộc nhóm nào. */
+export function groupOfItem(groups: NavGroup[], active: NavItem | undefined): NavGroup | undefined {
   if (!active) return undefined;
   return groups.find((g) => flattenGroup(g).some((i) => i.id === active.id));
 }
@@ -252,14 +242,15 @@ function matches(it: NavItem, pathname: string, slug: string | undefined): boole
   return pathname === target || pathname.startsWith(`${target}/`);
 }
 
-/** Mục đang mở: khớp dài nhất thắng, ngang nhau thì mục đứng trước (nhiều mục cùng trỏ về Tổng quan). */
+/** Mục đang mở: khớp dài nhất thắng, ngang nhau thì mục đứng trước (extra trước, rồi theo thứ tự nhóm). */
 export function findActiveItem(
   groups: NavGroup[],
   pathname: string,
   slug: string | undefined,
   extra: (NavItem | null)[] = [],
 ): NavItem | undefined {
-  const all = [...groups.flatMap(flattenGroup), ...extra.filter((i): i is NavItem => !!i)];
+  // Mục ngoài nhóm (Tổng quan, Chat) đứng trước để thắng khi bằng độ dài
+  const all = [...extra.filter((i): i is NavItem => !!i), ...groups.flatMap(flattenGroup)];
   let best: NavItem | undefined;
   let bestLen = -1;
   for (const it of all) {

@@ -20,7 +20,7 @@ import {
   buildOverviewItem,
   findActiveItem,
   flattenGroup,
-  groupOfPath,
+  groupOfItem,
   type NavGroup,
   type NavItem,
 } from './nav-items';
@@ -68,7 +68,7 @@ export function AppSidebar({
   const overview = buildOverviewItem(role);
   const chat = buildChatItem(role);
   const active = findActiveItem(groups, pathname, slug, [overview, chat]);
-  const activeGroup = groupOfPath(groups, pathname, slug);
+  const activeGroup = groupOfItem(groups, active);
 
   // Đang ở trang quản trị thì tự mở sẵn danh sách con; ra khỏi thì về menu chính.
   const [adminOpen, setAdminOpen] = useState(activeGroup?.id === 'admin');

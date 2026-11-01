@@ -6,7 +6,7 @@ import {
   buildOverviewItem,
   findActiveItem,
   flattenGroup,
-  groupOfPath,
+  groupOfItem,
   isImmersivePath,
 } from './nav-items';
 
@@ -17,7 +17,7 @@ function ids(role: AcademyRole | null, leads = false): string[] {
 }
 
 describe('buildNavGroups', () => {
-  it('chủ học viện thấy toàn bộ mục quản trị, kể cả gói, giảm giá, thông báo, Lead, branding', () => {
+  it('chủ học viện thấy toàn bộ mục quản trị, kể cả gói, giảm giá, thông báo, Lead', () => {
     const all = ids('owner');
     for (const id of [
       'students',
@@ -30,7 +30,6 @@ describe('buildNavGroups', () => {
       'discounts',
       'notifications',
       'reports',
-      'branding',
       'levels',
       'locations',
       'certificates',
@@ -41,9 +40,9 @@ describe('buildNavGroups', () => {
     expect(buildNavGroups('owner').map((g) => g.id)).toEqual(['admin', 'learn', 'play', 'content']);
   });
 
-  it('HLV: ẩn học phí, gói, giảm giá, thông báo, branding; Lead theo leads_enabled', () => {
+  it('HLV: ẩn học phí, gói, giảm giá, thông báo; Lead theo leads_enabled', () => {
     const off = ids('coach', false);
-    for (const id of ['billing', 'plans', 'discounts', 'notifications', 'branding', 'leads'])
+    for (const id of ['billing', 'plans', 'discounts', 'notifications', 'leads'])
       expect(off, id).not.toContain(id);
     for (const id of ['students', 'calendar', 'levels', 'locations', 'database'])
       expect(off, id).toContain(id);
@@ -96,15 +95,25 @@ describe('findActiveItem / groupOfPath', () => {
     expect(findActiveItem(groups, '/a/clb/quizzes/abc', 'clb')?.id).toBe('quizzes');
   });
 
-  it('Tổng quan chỉ sáng khi đúng /a/slug', () => {
+  it('Tổng quan chỉ sáng khi đúng /a/slug và không thuộc nhóm nào', () => {
     const overview = buildOverviewItem('owner');
-    expect(findActiveItem([], '/a/clb', 'clb', [overview])?.id).toBe('overview');
+    expect(findActiveItem(groups, '/a/clb', 'clb', [overview])?.id).toBe('overview');
+    expect(findActiveItem(groups, '/a/clb/', 'clb', [overview])?.id).toBe('overview');
+    expect(
+      groupOfItem(groups, findActiveItem(groups, '/a/clb', 'clb', [overview])),
+    ).toBeUndefined();
     expect(findActiveItem([], '/a/clb/x', 'clb', [overview])).toBeUndefined();
   });
 
-  it('nhiều mục cùng trỏ về /a/slug thì mục đứng trước thắng', () => {
-    expect(findActiveItem(groups, '/a/clb', 'clb')?.id).toBe('coaches');
-    expect(findActiveItem(groups, '/a/clb/', 'clb')?.id).toBe('coaches');
+  it('mục extra thắng mục nhóm khi cùng độ dài', () => {
+    const extra = buildOverviewItem('owner');
+    const dup = buildNavGroups('owner');
+    const first = dup[0]?.sections[0]?.items[0];
+    if (!first || !extra) throw new Error('thiếu dữ liệu');
+    // Giả lập một mục nhóm trỏ trùng Tổng quan
+    first.to = '/a/$slug';
+    first.exact = true;
+    expect(findActiveItem(dup, '/a/clb', 'clb', [extra])?.id).toBe('overview');
   });
 
   it('/analysis sáng Bàn cờ dù không có slug', () => {
@@ -112,8 +121,8 @@ describe('findActiveItem / groupOfPath', () => {
   });
 
   it('trang quản trị thuộc nhóm admin, trang học tập thì không', () => {
-    expect(groupOfPath(groups, '/a/clb/students', 'clb')?.id).toBe('admin');
-    expect(groupOfPath(groups, '/a/clb/quizzes', 'clb')?.id).toBe('learn');
+    expect(groupOfItem(groups, findActiveItem(groups, '/a/clb/students', 'clb'))?.id).toBe('admin');
+    expect(groupOfItem(groups, findActiveItem(groups, '/a/clb/quizzes', 'clb'))?.id).toBe('learn');
   });
 });
 
