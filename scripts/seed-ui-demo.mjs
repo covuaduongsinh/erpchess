@@ -363,5 +363,126 @@ if (hw && puzzle) {
     );
   }
 }
+// --- Điểm danh cho các buổi học đã diễn ra (HLV ghi, đúng như thao tác trên giao diện) ---------
+const pastClass = await ensure(
+  'classrooms',
+  { title: 'Lớp chiến thuật ba hôm trước' },
+  {
+    title: 'Lớp chiến thuật ba hôm trước',
+    kind: 'offline',
+    starts_at: iso(-3 * DAY),
+    minutes: 60,
+    coach_id: me,
+    created_by: me,
+  },
+  'buổi học ba hôm trước',
+);
+const yesterdayClass = await ensure(
+  'classrooms',
+  { title: 'Lớp tàn cuộc chiều qua' },
+  {},
+  'buổi học hôm qua',
+);
+const { data: pupils } = await c
+  .from('profiles')
+  .select('id, username')
+  .in(
+    'username',
+    STUDENTS.map((x) => x[1]),
+  );
+const idOf = Object.fromEntries((pupils ?? []).map((p) => [p.username, p.id]));
+const ATTENDANCE = [
+  [
+    yesterdayClass,
+    {
+      'an.nguyen': 'present',
+      'binh.tran': 'present',
+      'chau.le': 'late',
+      'dung.pham': 'absent',
+      'khoi.vu': 'present',
+    },
+  ],
+  [
+    pastClass,
+    {
+      'an.nguyen': 'present',
+      'binh.tran': 'excused',
+      'chau.le': 'present',
+      'dung.pham': 'present',
+      'khoi.vu': 'present',
+      'han.dang': 'absent',
+    },
+  ],
+];
+for (const [room, marks] of ATTENDANCE) {
+  if (!room) continue;
+  const rows = Object.entries(marks)
+    .filter(([u]) => idOf[u])
+    .map(([u, status]) => ({ classroom_id: room.id, student_id: idOf[u], status, note: '' }));
+  note(
+    `điểm danh ${room.title}`,
+    await c.from('classroom_attendance').upsert(rows, { onConflict: 'classroom_id,student_id' }),
+  );
+}
+
+// --- Ván đấu: vài ván đã xong + 1 ván đang diễn ra (hai học viên đăng nhập thật, qua RPC/Edge Function) ----
+const { count: gameCount } = await c
+  .from('games')
+  .select('id', { count: 'exact', head: true })
+  .eq('academy_id', A);
+if ((gameCount ?? 0) >= 4) {
+  console.log('đã có ván đấu, bỏ qua');
+} else {
+  const sessions = {};
+  const login = async (u) => {
+    if (sessions[u]) return sessions[u];
+    const cl = createClient(url, key);
+    const { error } = await cl.auth.signInWithPassword({
+      email: `${u}@students.erpchess.local`,
+      password: PIN,
+    });
+    if (error) throw new Error(`không đăng nhập được ${u}`);
+    sessions[u] = cl;
+    return cl;
+  };
+  const move = async (cl, gameId, mv, ply) => {
+    const r = await cl.functions.invoke('game-move', {
+      body: { gameId, action: 'move', move: mv, ply },
+    });
+    if (r.error) throw new Error(`nước ${mv}: ${r.error.message}`);
+  };
+  // moves xen kẽ trắng/đen; sau đó (nếu có) một hành động kết thúc do `by` thực hiện
+  async function playGame(white, black, moves, ending) {
+    const cw = await login(white);
+    const cb = await login(black);
+    const gid = await cw.rpc('create_challenge', {
+      p_academy: A,
+      p_opponent: idOf[black],
+      p_color: 'w',
+      p_base_ms: null,
+      p_inc_ms: 0,
+      p_rated: false,
+    });
+    if (gid.error) throw new Error(`thách đấu: ${gid.error.message}`);
+    for (const [i, mv] of moves.entries()) await move(i % 2 === 0 ? cw : cb, gid.data, mv, i);
+    if (ending) {
+      const [by, action] = ending;
+      const cl = by === 'w' ? cw : cb;
+      const r = await cl.functions.invoke('game-move', { body: { gameId: gid.data, action } });
+      if (r.error) throw new Error(`${action}: ${r.error.message}`);
+    }
+    console.log(
+      `ok  ván ${white} - ${black}${ending ? ` (${ending[1]})` : ' (chưa có kết quả hoặc chiếu hết)'}`,
+    );
+  }
+  try {
+    await playGame('an.nguyen', 'binh.tran', ['f2f3', 'e7e5', 'g2g4', 'd8h4'], null); // chiếu hết, đen thắng
+    await playGame('chau.le', 'dung.pham', ['e2e4', 'e7e5'], ['b', 'resign']);
+    await playGame('khoi.vu', 'trang.hoang', ['e2e4', 'e7e5'], null);
+    await playGame('an.nguyen', 'khoi.vu', ['d2d4', 'd7d5', 'c2c4'], null); // đang diễn ra
+  } catch (err) {
+    console.log(`LỖI ván đấu (làm được tới đâu ghi tới đó): ${err.message}`);
+  }
+}
 console.log('xong');
 process.exit(0);

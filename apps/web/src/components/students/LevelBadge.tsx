@@ -1,4 +1,5 @@
 import { Award } from 'lucide-react';
+import { useT } from '../../lib/use-t';
 
 export interface LevelBadgeProps {
   name?: string | null;
@@ -63,6 +64,7 @@ function getLevelPreset(name?: string | null): LevelPreset {
 }
 
 export function LevelBadge({ name, className = '', size = 'md' }: LevelBadgeProps) {
+  const { t } = useT();
   const { badgeClass, borderClass } = getLevelPreset(name);
 
   const sizeClasses = {
@@ -74,10 +76,10 @@ export function LevelBadge({ name, className = '', size = 'md' }: LevelBadgeProp
   return (
     <span
       className={`inline-flex items-center font-medium rounded-full border shadow-2xs whitespace-nowrap transition-transform hover:scale-105 ${badgeClass} ${borderClass} ${sizeClasses} ${className}`}
-      title={name ? `Cấp độ: ${name}` : 'Chưa phân cấp'}
+      title={name ? t('studentsPage.levelBadgeTitle', { name }) : t('studentsPage.levelBadgeNone')}
     >
       <Award aria-hidden="true" className="size-3.5 shrink-0" />
-      <span>{name || 'Chưa phân cấp'}</span>
+      <span>{name || t('studentsPage.levelBadgeNone')}</span>
     </span>
   );
 }

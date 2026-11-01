@@ -360,6 +360,8 @@ export const en: Resource = {
     level: 'Level',
     allLevels: 'All levels',
     noLevelFilter: 'No level yet',
+    levelBadgeNone: 'No level yet',
+    levelBadgeTitle: 'Level: {{name}}',
     sort: 'Sort by',
     sortNameAsc: 'Name A → Z',
     sortNameDesc: 'Name Z → A',

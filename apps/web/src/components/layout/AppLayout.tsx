@@ -127,7 +127,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         onSignOut={() => void signOut(client)}
       />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-12 items-center gap-2 px-4 lg:px-6">
+        <header className="sticky top-0 z-20 flex h-12 items-center gap-2 bg-bg/85 px-4 backdrop-blur lg:px-6">
           <button
             type="button"
             onClick={() => sidebar.setDrawerOpen(true)}

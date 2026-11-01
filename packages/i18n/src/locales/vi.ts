@@ -357,6 +357,8 @@ export const vi = {
     level: 'Cấp độ',
     allLevels: 'Tất cả cấp độ',
     noLevelFilter: 'Chưa phân cấp',
+    levelBadgeNone: 'Chưa phân cấp',
+    levelBadgeTitle: 'Cấp độ: {{name}}',
     sort: 'Sắp xếp',
     sortNameAsc: 'Tên A → Z',
     sortNameDesc: 'Tên Z → A',

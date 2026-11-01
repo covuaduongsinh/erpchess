@@ -181,6 +181,29 @@
    "action": "wait_for_timeout"
   },
   {
+   "step_id": "go_tong_quan_diem_danh",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/dashboard"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_tong_quan_diem_danh",
+   "locator": {
+    "selector": "[role=tablist][aria-label='Thống kê theo ngày'] button:nth-child(2)",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_tong_quan_diem_danh",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
    "step_id": "go_khu_thi_dau",
    "timeout_ms": 60000,
    "wait_until": "load",
@@ -191,6 +214,89 @@
   },
   {
    "step_id": "shot_khu_thi_dau",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_khu_thi_dau_lich_su",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/game-area"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_khu_thi_dau_lich_su",
+   "locator": {
+    "selector": "[role=tab]:nth-of-type(2)",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_khu_thi_dau_lich_su",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_khu_thi_dau_dang_dau",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/game-area"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_khu_thi_dau_dang_dau",
+   "locator": {
+    "selector": "[role=tab]:nth-of-type(3)",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_khu_thi_dau_dang_dau",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_lop_hoc",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/classes"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_lop_hoc",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_lop_hoc_quy",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/classes"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_lop_hoc_quy",
+   "locator": {
+    "selector": "button:text-is('Quý')",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_lop_hoc_quy",
    "duration_ms": 6000,
    "action": "wait_for_timeout"
   },

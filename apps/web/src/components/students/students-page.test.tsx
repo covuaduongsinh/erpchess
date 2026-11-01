@@ -94,10 +94,25 @@ describe('trang Học viên', () => {
     expect(screen.queryByRole('table')).toBeNull();
     // Thẻ học viên: tên, @username, đổi cấp độ, mời phụ huynh
     expect(screen.getByText('@an')).toBeTruthy();
-    expect(screen.getByLabelText('Đổi cấp độ cho Nguyễn Văn An')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Đổi cấp độ cho Nguyễn Văn An' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Mời phụ huynh của Trần Thị Bình' })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Danh sách' }));
     expect(screen.getByRole('table')).toBeTruthy();
+  });
+
+  it('lưới: cấp độ chỉ hiện một lần (huy hiệu); bấm huy hiệu mới mở ô chọn và đổi cấp độ', async () => {
+    mutation.mutate.mockClear();
+    renderPage();
+    await screen.findByRole('table', {}, SLOW);
+    fireEvent.click(screen.getByRole('button', { name: 'Lưới' }));
+    // Chưa bấm: không có ô chọn cấp độ nào
+    expect(screen.queryByRole('combobox', { name: /Đổi cấp độ cho/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Đổi cấp độ cho Trần Thị Bình' }));
+    const select = screen.getByRole('combobox', { name: 'Đổi cấp độ cho Trần Thị Bình' });
+    fireEvent.change(select, { target: { value: 'l1' } });
+    expect(mutation.mutate).toHaveBeenCalledWith({ studentId: 's2', levelId: 'l1' });
+    // Chọn xong thì quay lại huy hiệu
+    expect(screen.queryByRole('combobox', { name: /Đổi cấp độ cho/ })).toBeNull();
   });
 
   it('thanh lọc dùng chung cho cả hai chế độ: tìm kiếm và lọc theo lớp', async () => {
