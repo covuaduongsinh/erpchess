@@ -52,7 +52,7 @@ function InvoicesPage() {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="rounded-md border border-text-muted/30 bg-white px-2 py-2 text-sm"
+                className="rounded-md border border-text-muted/30 bg-surface px-2 py-2 text-sm"
               >
                 <option value="">{t('bill.allStatuses')}</option>
                 {invoiceStatuses.map((s) => (
@@ -65,7 +65,7 @@ function InvoicesPage() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder={t('bill.search')}
-                className="min-w-0 flex-1 rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm"
+                className="min-w-0 flex-1 rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm"
               />
             </div>
           )}
@@ -166,7 +166,7 @@ function CreateInvoice() {
     );
   }
 
-  const select = 'rounded-md border border-text-muted/30 bg-white px-3 py-2';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2';
   return (
     <Card title={t('bill.newInvoice')}>
       <form onSubmit={onSubmit} className="flex flex-col gap-3 text-sm">

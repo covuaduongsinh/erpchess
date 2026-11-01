@@ -420,7 +420,7 @@ function ChallengeModal({
         onClick={onClose}
         className="fixed inset-0 bg-black/50 backdrop-blur-xs"
       />
-      <div className="relative z-10 w-full max-w-md rounded-xl border border-text-muted/20 bg-white p-6 shadow-2xl">
+      <div className="relative z-10 w-full max-w-md rounded-xl border border-text-muted/20 bg-surface p-6 shadow-2xl">
         <div className="flex items-center justify-between border-b border-text-muted/15 pb-3">
           <h3 className="text-lg font-bold text-text">
             Thách đấu với <span className="text-primary">{opponent.name}</span>
@@ -442,7 +442,7 @@ function ChallengeModal({
                   className={`rounded-lg border py-2 text-center text-xs font-semibold transition ${
                     preset === p.id
                       ? 'border-primary bg-primary text-white'
-                      : 'border-text-muted/20 bg-white text-text hover:bg-bg'
+                      : 'border-text-muted/20 bg-surface text-text hover:bg-bg'
                   }`}
                 >
                   {p.id}
@@ -460,7 +460,7 @@ function ChallengeModal({
                 className={`rounded-lg border py-2 text-center text-xs font-semibold transition ${
                   color === 'w'
                     ? 'border-primary bg-primary text-white'
-                    : 'border-text-muted/20 bg-white text-text hover:bg-bg'
+                    : 'border-text-muted/20 bg-surface text-text hover:bg-bg'
                 }`}
               >
                 Trắng
@@ -471,7 +471,7 @@ function ChallengeModal({
                 className={`rounded-lg border py-2 text-center text-xs font-semibold transition ${
                   color === 'random'
                     ? 'border-primary bg-primary text-white'
-                    : 'border-text-muted/20 bg-white text-text hover:bg-bg'
+                    : 'border-text-muted/20 bg-surface text-text hover:bg-bg'
                 }`}
               >
                 🎲 Ngẫu nhiên
@@ -482,7 +482,7 @@ function ChallengeModal({
                 className={`rounded-lg border py-2 text-center text-xs font-semibold transition ${
                   color === 'b'
                     ? 'border-primary bg-primary text-white'
-                    : 'border-text-muted/20 bg-white text-text hover:bg-bg'
+                    : 'border-text-muted/20 bg-surface text-text hover:bg-bg'
                 }`}
               >
                 Đen
@@ -495,7 +495,7 @@ function ChallengeModal({
               type="checkbox"
               checked={rated}
               onChange={(e) => setRated(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-primary"
+              className="h-4 w-4 rounded border-border text-primary"
             />
             Tính Elo rating ván đấu này
           </label>
@@ -575,7 +575,7 @@ function PairForm({ onlineIds }: { onlineIds: Set<string> }) {
   const players = [...(members.data ?? [])]
     .filter((m) => m.role !== 'parent')
     .sort((a, b) => Number(onlineIds.has(b.profile.id)) - Number(onlineIds.has(a.profile.id)));
-  const select = 'rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm';
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();

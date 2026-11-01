@@ -219,7 +219,7 @@ function ReportsPage() {
                   setSelectedStudentId('all');
                 }
               }}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-1.5 text-sm"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-1.5 text-sm"
             >
               <option value="all">{t('reports.allBatches')}</option>
               {batches.map((b) => (
@@ -241,7 +241,7 @@ function ReportsPage() {
               id="select-student"
               value={selectedStudentId}
               onChange={(e) => setSelectedStudentId(e.target.value)}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-1.5 text-sm"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-1.5 text-sm"
             >
               {staff && <option value="all">{t('reports.allStudents')}</option>}
               {filteredStudents.map((s) => (
@@ -273,7 +273,7 @@ function ReportsPage() {
                 className={`border border-text-muted/30 px-3 py-1 text-xs font-medium first:rounded-l-md last:rounded-r-md ${
                   preset === p
                     ? 'bg-primary text-white'
-                    : 'bg-white text-text-muted hover:bg-muted/10'
+                    : 'bg-surface text-text-muted hover:bg-muted/10'
                 }`}
               >
                 {label}
@@ -287,7 +287,7 @@ function ReportsPage() {
                 type="date"
                 value={customFrom}
                 onChange={(e) => setCustomFrom(e.target.value)}
-                className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+                className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
                 aria-label={t('reports.fromDate')}
               />
               <span>→</span>
@@ -295,7 +295,7 @@ function ReportsPage() {
                 type="date"
                 value={customTo}
                 onChange={(e) => setCustomTo(e.target.value)}
-                className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+                className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
                 aria-label={t('reports.toDate')}
               />
             </div>
@@ -375,7 +375,7 @@ function AllStudentsReportView({
           placeholder={t('common.search')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-64 rounded-md border border-text-muted/30 bg-white px-3 py-1.5 text-sm"
+          className="w-64 rounded-md border border-text-muted/30 bg-surface px-3 py-1.5 text-sm"
         />
       </div>
 
@@ -801,7 +801,7 @@ function SingleStudentReportView({
                               ? 'bg-green-100 text-green-800'
                               : g.won === false
                                 ? 'bg-rose-100 text-rose-800'
-                                : 'bg-gray-100 text-gray-800'
+                                : 'bg-bg text-text'
                           }`}
                         >
                           {g.result}

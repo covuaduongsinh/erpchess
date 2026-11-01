@@ -131,7 +131,7 @@ function Moderation({ classroomId }: { classroomId: string }) {
   return (
     <Card title={t('classroom.videoPeople')}>
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between border-b border-gray-100 pb-1">
+        <div className="flex items-center justify-between border-b border-border pb-1">
           <span className="text-xs text-text-muted">Quản trị âm thanh học viên</span>
           <button
             type="button"

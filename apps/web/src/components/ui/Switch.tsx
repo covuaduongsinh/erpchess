@@ -22,7 +22,7 @@ export function Switch({
         className="relative h-6 w-11 shrink-0 rounded-full bg-text-muted/30 transition-colors aria-checked:bg-primary disabled:opacity-50"
       >
         <span
-          className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow transition-transform ${
+          className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-surface shadow transition-transform ${
             checked ? 'translate-x-5' : ''
           }`}
         />

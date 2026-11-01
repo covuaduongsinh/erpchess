@@ -251,7 +251,7 @@ function CreateScheduleForm({
             value=""
             aria-label={t('quizSchedule.addStudy')}
             onChange={(e) => e.target.value && setSequence((cur) => [...cur, e.target.value])}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm"
           >
             <option value="">{t('quizSchedule.addStudy')}</option>
             {[...studies.entries()]

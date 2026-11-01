@@ -57,7 +57,7 @@ export function LoginForm({
               setMode(m);
               setError(null);
             }}
-            className="rounded-sm py-2 aria-selected:bg-white aria-selected:font-medium aria-selected:shadow-sm"
+            className="rounded-sm py-2 aria-selected:bg-surface aria-selected:font-medium aria-selected:shadow-sm"
           >
             {m === 'email' ? t('auth.tabEmail') : t('auth.tabStudent')}
           </button>

@@ -114,7 +114,7 @@ function CourseLearner({ course }: { course: CourseDetail }) {
           return (
             <li key={it.study_id} className="flex items-center gap-3 rounded-md bg-bg px-3 py-2">
               <span
-                className={`flex size-7 items-center justify-center rounded-full text-sm font-bold ${isDone(it.study_id) ? 'bg-green text-white' : 'bg-white text-text-muted'}`}
+                className={`flex size-7 items-center justify-center rounded-full text-sm font-bold ${isDone(it.study_id) ? 'bg-green text-white' : 'bg-surface text-text-muted'}`}
               >
                 {isDone(it.study_id) ? '✓' : i + 1}
               </span>
@@ -167,7 +167,7 @@ function CourseEditor({ course }: { course: CourseDetail }) {
       return next;
     });
   const published = course.status === 'published';
-  const select = 'rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-2 py-1 text-sm';
 
   return (
     <div className="flex flex-col gap-6">

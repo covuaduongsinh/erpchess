@@ -1,17 +1,20 @@
 import { signOut } from '@erpchess/api';
-import { useConversations, useErpClient, useMyAcademies, useSession } from '@erpchess/api/react';
+import { useConversations, useErpClient, useSession } from '@erpchess/api/react';
 import { languages } from '@erpchess/i18n';
-import { Link, useParams, useRouterState } from '@tanstack/react-router';
-import { Menu } from 'lucide-react';
+import { Link, useRouterState } from '@tanstack/react-router';
+import { Menu, Moon, Sun } from 'lucide-react';
 import { type ReactNode, useEffect } from 'react';
 import { academyBrandStyle } from '../../lib/academy-branding';
+import { type Theme, useTheme } from '../../lib/theme';
 import { useT } from '../../lib/use-t';
 import { CommandPalette } from '../CommandPalette';
 import { NotificationBell } from '../NotificationBell';
 import { BoardPreferencesSync } from '../preferences/BoardPreferencesSync';
+import { IconButton } from '../ui';
 import { AppSidebar } from './AppSidebar';
 import { isImmersivePath } from './nav-items';
-import { readLastAcademySlug, saveLastAcademySlug, useSidebarState } from './useSidebarState';
+import { useCurrentAcademy } from './useCurrentAcademy';
+import { useSidebarState } from './useSidebarState';
 
 /** Trang khách: giữ bố cục riêng (không sidebar). */
 function isGuestPath(pathname: string): boolean {
@@ -24,7 +27,15 @@ function isGuestPath(pathname: string): boolean {
 }
 
 /** Khung cho trang chưa đăng nhập: thanh mảnh có logo và chọn ngôn ngữ. */
-function GuestLayout({ children }: { children: ReactNode }) {
+function GuestLayout({
+  children,
+  theme,
+  onToggleTheme,
+}: {
+  children: ReactNode;
+  theme: Theme;
+  onToggleTheme: () => void;
+}) {
   const { t, i18n } = useT();
   return (
     <div className="flex min-h-screen flex-col">
@@ -47,6 +58,13 @@ function GuestLayout({ children }: { children: ReactNode }) {
               {lng.toUpperCase()}
             </button>
           ))}
+          <IconButton
+            icon={theme === 'dark' ? Sun : Moon}
+            label={t('nav.darkMode')}
+            aria-pressed={theme === 'dark'}
+            onClick={onToggleTheme}
+            className="text-text-on-primary hover:bg-white/10 hover:text-text-on-primary"
+          />
         </div>
       </header>
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8">
@@ -65,16 +83,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const client = useErpClient();
   const { session, loading } = useSession();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const params = useParams({ strict: false }) as { slug?: string };
-  const academies = useMyAcademies(session?.user.id);
-  const list = academies.data ?? [];
-
-  // Học viện hiện tại: theo URL, nếu không thì học viện dùng gần nhất, rồi học viện đầu tiên
-  const bySlug = params.slug ? list.find((a) => a.slug === params.slug) : undefined;
-  const academy = bySlug ?? list.find((a) => a.slug === readLastAcademySlug()) ?? list[0] ?? null;
-  useEffect(() => {
-    if (bySlug) saveLastAcademySlug(bySlug.slug);
-  }, [bySlug]);
+  const { academy, academies: list } = useCurrentAcademy();
+  const { theme, toggle: toggleTheme } = useTheme();
 
   const conversations = useConversations(academy?.id);
   const unreadChat = (conversations.data ?? []).reduce((sum, c) => sum + c.unread, 0);
@@ -85,7 +95,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
   useEffect(() => setDrawerOpen(false), [pathname, setDrawerOpen]);
 
   if (loading || !session || isGuestPath(pathname)) {
-    return <GuestLayout>{children}</GuestLayout>;
+    return (
+      <GuestLayout theme={theme} onToggleTheme={toggleTheme}>
+        {children}
+      </GuestLayout>
+    );
   }
 
   const displayName = String(session.user.user_metadata?.display_name ?? session.user.email ?? '');
@@ -107,6 +121,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
         drawerOpen={sidebar.drawerOpen}
         onCloseDrawer={() => sidebar.setDrawerOpen(false)}
         unreadChat={unreadChat}
+        theme={theme}
+        onToggleTheme={toggleTheme}
         signedIn
         onSignOut={() => void signOut(client)}
       />

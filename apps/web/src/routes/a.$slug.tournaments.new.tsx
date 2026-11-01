@@ -76,7 +76,7 @@ function NewTournamentPage() {
   ];
   const assigned = new Set(teams.flatMap((x) => x.playerIds));
   const baseMs = minutes.trim() === '' ? null : Math.round(Number(minutes) * 60_000);
-  const select = 'rounded-md border border-text-muted/30 bg-white px-3 py-2';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2';
 
   function submit() {
     create.mutate(

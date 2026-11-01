@@ -105,12 +105,12 @@ export function StudentAdminTable({
       {showFilters ? (
         <>
           {/* Filter & Search Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface p-4 shadow-xs">
             <div className="flex flex-1 flex-wrap items-center gap-3 min-w-[280px]">
               {/* Ô tìm kiếm */}
               <div className="relative flex-1 min-w-[200px]">
                 <span
-                  className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm"
+                  className="absolute inset-y-0 left-3 flex items-center text-text-muted text-sm"
                   aria-hidden="true"
                 >
                   🔍
@@ -120,7 +120,7 @@ export function StudentAdminTable({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Tìm theo tên học viên, username..."
-                  className="w-full rounded-lg border border-gray-300 py-2 pr-3 pl-9 text-sm focus:border-primary focus:outline-hidden"
+                  className="w-full rounded-lg border border-border py-2 pr-3 pl-9 text-sm focus:border-primary focus:outline-hidden"
                 />
               </div>
 
@@ -128,7 +128,7 @@ export function StudentAdminTable({
               <select
                 value={selectedGroup}
                 onChange={(e) => setSelectedGroup(e.target.value)}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
+                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary focus:outline-hidden"
               >
                 <option value="all">Tất cả lớp / nhóm</option>
                 {groups.map((g) => (
@@ -143,7 +143,7 @@ export function StudentAdminTable({
               <select
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(e.target.value)}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
+                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary focus:outline-hidden"
               >
                 <option value="all">Tất cả cấp độ</option>
                 {levels.map((l) => (
@@ -158,7 +158,7 @@ export function StudentAdminTable({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as RatingCategory)}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
+                className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary focus:outline-hidden"
               >
                 {ratingCategories.map((c) => (
                   <option key={c} value={c}>
@@ -169,7 +169,7 @@ export function StudentAdminTable({
             </div>
 
             <div className="text-xs font-medium text-text-muted">
-              Tổng số: <strong className="text-gray-900">{filteredStudents.length}</strong> /{' '}
+              Tổng số: <strong className="text-text">{filteredStudents.length}</strong> /{' '}
               {students.length} học viên
             </div>
           </div>
@@ -192,9 +192,9 @@ export function StudentAdminTable({
       )}
 
       {/* Student Data Table */}
-      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-xs">
+      <div className="overflow-x-auto rounded-xl border border-border bg-surface shadow-xs">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-gray-200 bg-gray-50/75 text-xs font-semibold text-text-muted uppercase">
+          <thead className="border-b border-border bg-bg/75 text-xs font-semibold text-text-muted uppercase">
             <tr>
               <th scope="col" className="px-4 py-3.5">
                 Học viên
@@ -213,7 +213,7 @@ export function StudentAdminTable({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {filteredStudents.length === 0 ? (
               <tr>
                 <td colSpan={5} className="py-8 text-center text-text-muted">
@@ -235,9 +235,7 @@ export function StudentAdminTable({
                           {profile.display_name.charAt(0).toUpperCase()}
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-semibold text-gray-900">
-                            {profile.display_name}
-                          </span>
+                          <span className="font-semibold text-text">{profile.display_name}</span>
                           {profile.username && (
                             <span className="text-xs text-text-muted">@{profile.username}</span>
                           )}
@@ -259,7 +257,7 @@ export function StudentAdminTable({
                               levelId: e.target.value || null,
                             })
                           }
-                          className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-gray-600 hover:border-gray-300"
+                          className="rounded-md border border-border bg-surface px-2 py-1 text-xs text-text hover:border-border"
                         >
                           <option value="">Chưa phân cấp</option>
                           {levels.map((l) => (
@@ -364,7 +362,7 @@ export function InlineRatingEdit({
         onChange={(e) => setDraft(e.target.value)}
         onBlur={save}
         onKeyDown={(e) => e.key === 'Enter' && save()}
-        className="w-20 rounded-md border border-gray-300 px-2 py-1 font-semibold text-gray-900 text-xs focus:border-primary focus:outline-hidden"
+        className="w-20 rounded-md border border-border px-2 py-1 font-semibold text-text text-xs focus:border-primary focus:outline-hidden"
       />
       {value !== undefined && <span className="font-bold text-emerald-600 text-xs">pts</span>}
     </div>

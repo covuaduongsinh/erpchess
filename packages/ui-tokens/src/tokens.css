@@ -27,7 +27,6 @@
 /* Chế độ tối: gắn class `.dark` lên <html>. Khai báo sẵn từ 25b, công tắc làm ở 25f. */
 .dark {
   --color-bg: #12142a;
-  --color-white: #1c1f3d;
   --color-text: #eceef8;
   --color-text-muted: #a1a7c4;
   --color-board-light: #b7bee3;
@@ -48,4 +47,11 @@
 .dark [data-brand] {
   --color-primary-soft: color-mix(in oklab, var(--color-primary) 22%, #1c1f3d);
   --color-app-bg: color-mix(in oklab, var(--color-primary) 10%, #12142a);
+}
+
+/* Chữ màu chính (navy) gần như không đọc được trên nền tối: làm sáng bằng cách trộn với trắng.
+   Tính tại chính phần tử nên màu thương hiệu học viện cũng được làm sáng theo. */
+.dark .text-primary,
+.dark .hover\:text-primary:hover {
+  color: color-mix(in oklab, var(--color-primary) 40%, white);
 }

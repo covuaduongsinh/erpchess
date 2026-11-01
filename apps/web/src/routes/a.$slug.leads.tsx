@@ -71,7 +71,7 @@ function LeadsPage() {
             type="button"
             aria-pressed={status === st}
             onClick={() => setStatus(status === st ? '' : st)}
-            className="rounded-lg bg-white p-3 text-left shadow-sm aria-pressed:ring-2 aria-pressed:ring-primary"
+            className="rounded-lg bg-surface p-3 text-left shadow-sm aria-pressed:ring-2 aria-pressed:ring-primary"
           >
             <p className="text-2xl font-bold text-primary">
               {all.filter((l) => l.status === st).length}
@@ -86,7 +86,7 @@ function LeadsPage() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder={t('lead.search')}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-sm"
           />
           {list.isPending ? (
             <Spinner />

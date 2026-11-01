@@ -193,7 +193,7 @@ function SimulForm({ onDone }: { onDone: () => void }) {
   const [groupIds, setGroupIds] = useState<string[]>([]);
   const [studentIds, setStudentIds] = useState<string[]>([]);
   const hosts = (members.data ?? []).filter((m) => m.role === 'owner' || m.role === 'coach');
-  const select = 'rounded-md border border-text-muted/30 bg-white px-3 py-2';
+  const select = 'rounded-md border border-text-muted/30 bg-surface px-3 py-2';
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -234,7 +234,7 @@ function SimulForm({ onDone }: { onDone: () => void }) {
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             maxLength={2000}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">

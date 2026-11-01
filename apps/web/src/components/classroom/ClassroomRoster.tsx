@@ -31,7 +31,7 @@ export function ClassroomRoster({
     <Card title={`Thành viên (${peers.length})`}>
       <div className="flex flex-col gap-2">
         {/* Thanh công cụ quản lý nhanh trên đầu Roster */}
-        <div className="flex flex-wrap items-center justify-between gap-1.5 -mt-1 pb-2 border-b border-gray-100 text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-1.5 -mt-1 pb-2 border-b border-border text-xs">
           {/* Nút giơ tay dành cho học viên */}
           {!runner && onToggleRaiseHand && (
             <button
@@ -40,7 +40,7 @@ export function ClassroomRoster({
               className={`flex items-center gap-1 rounded-md px-2.5 py-1 font-semibold transition-all ${
                 isMyHandRaised
                   ? 'bg-amber-100 text-amber-900 border border-amber-300'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-bg text-text hover:bg-primary-soft'
               }`}
             >
               <span>{isMyHandRaised ? '✋ Hạ tay xuống' : '✋ Giơ tay phát biểu'}</span>
@@ -79,7 +79,7 @@ export function ClassroomRoster({
             Chưa có thành viên nào trong phòng.
           </p>
         ) : (
-          <ul className="flex flex-col divide-y divide-gray-100 text-sm">
+          <ul className="flex flex-col divide-y divide-border text-sm">
             {peers.map((peer) => {
               const isMe = peer.userId === currentUserId;
               const hasTurn = currentController === peer.userId;
@@ -89,7 +89,11 @@ export function ClassroomRoster({
                 <li
                   key={peer.userId}
                   className={`flex items-center justify-between py-2 px-1 rounded-md transition-colors ${
-                    hasTurn ? 'bg-green/10' : handRaised ? 'bg-amber-50/70' : 'hover:bg-gray-50'
+                    hasTurn
+                      ? 'bg-green/10'
+                      : handRaised
+                        ? 'bg-amber-50/70'
+                        : 'hover:bg-primary-soft'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
@@ -103,7 +107,7 @@ export function ClassroomRoster({
                     </div>
                     <div className="flex flex-col min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="truncate text-xs font-medium text-gray-900">
+                        <span className="truncate text-xs font-medium text-text">
                           {peer.name}{' '}
                           {isMe && <span className="text-text-muted font-normal">(bạn)</span>}
                         </span>
@@ -153,7 +157,7 @@ export function ClassroomRoster({
                             className={`rounded-md border px-2 py-1 text-[11px] font-medium transition-colors ${
                               handRaised
                                 ? 'border-amber-300 bg-amber-100 text-amber-900 hover:bg-amber-200 font-semibold'
-                                : 'border-gray-200 bg-white text-primary hover:bg-primary/10'
+                                : 'border-border bg-surface text-primary hover:bg-primary/10'
                             }`}
                             title="Cho phép học viên này thao tác trên bàn cờ"
                           >
@@ -170,7 +174,7 @@ export function ClassroomRoster({
         )}
 
         {/* Chú thích quyền đi quân & giơ tay */}
-        <div className="mt-2 rounded-lg bg-gray-50 p-2 text-[11px] text-text-muted">
+        <div className="mt-2 rounded-lg bg-bg p-2 text-[11px] text-text-muted">
           {isCoachOnly ? (
             <p>
               🛡️ <strong>Chế độ mặc định:</strong> Chỉ HLV phụ trách mới có quyền thao tác trên bàn

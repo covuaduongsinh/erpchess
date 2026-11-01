@@ -137,7 +137,7 @@ function RecordPayment({
           <select
             value={method}
             onChange={(e) => setMethod(e.target.value as PaymentMethod)}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             {paymentMethods.map((m) => (
               <option key={m} value={m}>

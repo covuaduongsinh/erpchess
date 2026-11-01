@@ -204,7 +204,7 @@ export function AnalysisBoard({
                     defaultValue={current.comment ?? ''}
                     rows={2}
                     onBlur={(e) => game.mutate((tr) => tr.setComment(current.id, e.target.value))}
-                    className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
+                    className="rounded-md border border-text-muted/30 bg-surface px-2 py-1"
                   />
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -260,7 +260,7 @@ export function AnalysisBoard({
               value={importText}
               onChange={(e) => setImportText(e.target.value)}
               rows={3}
-              className="rounded-md border border-text-muted/30 bg-white px-2 py-1 font-mono text-xs"
+              className="rounded-md border border-text-muted/30 bg-surface px-2 py-1 font-mono text-xs"
             />
           </label>
           {importError ? (

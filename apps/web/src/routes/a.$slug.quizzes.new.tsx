@@ -107,7 +107,7 @@ function NewQuizPage() {
             <select
               value={levelId}
               onChange={(e) => setLevelId(e.target.value)}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
             >
               <option value="">{t('groups.noLevel')}</option>
               {levels.data?.map((l) => (
@@ -238,7 +238,7 @@ function StudySource({
         <select
           value={scope}
           onChange={(e) => setScope(e.target.value as StudyScope)}
-          className="rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm"
+          className="rounded-md border border-text-muted/30 bg-surface px-2 py-1 text-sm"
         >
           {(['mine', 'academy', 'public'] as const).map((s) => (
             <option key={s} value={s}>
@@ -249,7 +249,7 @@ function StudySource({
         <select
           value={studyId}
           onChange={(e) => setStudyId(e.target.value)}
-          className="min-w-48 flex-1 rounded-md border border-text-muted/30 bg-white px-2 py-1 text-sm"
+          className="min-w-48 flex-1 rounded-md border border-text-muted/30 bg-surface px-2 py-1 text-sm"
           aria-label={t('studies.title')}
         >
           <option value="">— {t('studies.title')} —</option>

@@ -146,7 +146,7 @@ function LogCard() {
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="self-start rounded-md border border-text-muted/30 bg-white px-2 py-2 text-sm"
+        className="self-start rounded-md border border-text-muted/30 bg-surface px-2 py-2 text-sm"
       >
         <option value="">{t('notify.allCategories')}</option>
         {notificationCategories.map((c) => (

@@ -28,7 +28,7 @@ export function QuickPairCard({
             aria-pressed={presetId === p.id}
             disabled={searching}
             onClick={() => setPresetId(p.id)}
-            className="rounded-lg border border-text-muted/20 bg-white py-2 text-center text-xs font-semibold text-text transition hover:bg-bg disabled:opacity-60 aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-text-on-primary"
+            className="rounded-lg border border-text-muted/20 bg-surface py-2 text-center text-xs font-semibold text-text transition hover:bg-bg disabled:opacity-60 aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-text-on-primary"
           >
             {p.id}
           </button>

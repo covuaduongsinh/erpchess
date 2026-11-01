@@ -89,7 +89,7 @@ export function CurrencySelect({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`rounded-md border border-text-muted/30 bg-white px-2 py-2 ${className}`}
+      className={`rounded-md border border-text-muted/30 bg-surface px-2 py-2 ${className}`}
     >
       {currencies.map((c) => (
         <option key={c} value={c}>
@@ -128,7 +128,7 @@ export function MoneyInput({
         setText(e.target.value);
         onChange(e.target.value.trim() ? parseMoney(e.target.value, currency) : null);
       }}
-      className="w-full min-w-0 rounded-md border border-text-muted/30 bg-white px-3 py-2"
+      className="w-full min-w-0 rounded-md border border-text-muted/30 bg-surface px-3 py-2"
     />
   );
 }

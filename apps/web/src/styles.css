@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "@erpchess/ui-tokens/tokens.css";
 
+/* Biến thể `dark:` theo class .dark trên <html> (mặc định của Tailwind là theo hệ điều hành) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   @apply bg-bg font-sans text-text antialiased;
 }

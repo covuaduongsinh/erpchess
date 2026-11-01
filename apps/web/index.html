@@ -6,6 +6,22 @@
     <meta name="theme-color" content="#2B3990" />
     <link rel="icon" href="/favicon.png" />
     <title>ERPChess</title>
+    <!-- Gắn class .dark trước khi vẽ để không nháy sáng khi đang ở chế độ tối.
+         Giữ cùng logic và khoá với src/lib/theme.ts (có test kiểm tra). -->
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('erpchess.theme');
+          const dark =
+            stored === 'dark' ||
+            (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch {
+          // localStorage bị chặn: dùng giao diện sáng mặc định
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

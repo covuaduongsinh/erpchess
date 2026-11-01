@@ -14,8 +14,8 @@ function getLevelPreset(name?: string | null): LevelPreset {
   if (!name) {
     return {
       icon: '♟️',
-      badgeClass: 'bg-gray-100 text-gray-600',
-      borderClass: 'border-gray-200',
+      badgeClass: 'bg-bg text-text',
+      borderClass: 'border-border',
     };
   }
 

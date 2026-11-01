@@ -27,7 +27,6 @@ export const colors = {
 export const darkColors = {
   ...colors,
   bg: '#12142A',
-  white: '#1C1F3D',
   text: '#ECEEF8',
   textMuted: '#A1A7C4',
   boardLight: '#B7BEE3',
@@ -49,6 +48,21 @@ export const derivedColors = {
 export const darkDerivedColors = {
   primarySoft: 'color-mix(in oklab, var(--color-primary) 22%, #1c1f3d)',
   appBg: 'color-mix(in oklab, var(--color-primary) 10%, #12142a)',
+} as const satisfies Record<keyof typeof derivedColors, string>;
+
+/**
+ * Bản hex của màu suy ra cho mobile (React Native không có `color-mix`): trộn `primary` với nền
+ * sáng/tối cùng tỉ lệ như `derivedColors` (trộn trong không gian oklab như `color-mix` của CSS).
+ * Test tính lại và kiểm tra hai bản khớp nhau.
+ */
+export const nativeColors = {
+  primarySoft: '#ECEFF7',
+  appBg: '#EFF1F8',
+} as const satisfies Record<keyof typeof derivedColors, string>;
+
+export const darkNativeColors = {
+  primarySoft: '#1F254E',
+  appBg: '#141833',
 } as const satisfies Record<keyof typeof derivedColors, string>;
 
 export const spacing = {

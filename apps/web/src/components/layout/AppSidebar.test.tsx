@@ -162,4 +162,18 @@ describe('AppSidebar', () => {
     expect(screen.queryByRole('link', { name: 'Tổng quan' })).toBeNull();
     expect(screen.getByRole('link', { name: 'Hồ sơ' })).toBeTruthy();
   });
+
+  it('công tắc chế độ tối: role switch, phản ánh theme và gọi callback khi bấm', () => {
+    const { props } = renderSidebar({ theme: 'light', onToggleTheme: vi.fn() });
+    const sw = screen.getByRole('switch', { name: 'Chế độ tối' });
+    expect(sw.getAttribute('aria-checked')).toBe('false');
+    expect(sw.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(sw);
+    expect(props.onToggleTheme).toHaveBeenCalledTimes(1);
+    cleanup();
+    renderSidebar({ theme: 'dark', onToggleTheme: vi.fn() });
+    expect(screen.getByRole('switch', { name: 'Chế độ tối' }).getAttribute('aria-checked')).toBe(
+      'true',
+    );
+  });
 });

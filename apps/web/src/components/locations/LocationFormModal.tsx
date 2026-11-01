@@ -71,7 +71,7 @@ export function LocationFormModal({
       />
       <form
         onSubmit={onSubmit}
-        className="relative z-10 my-8 flex w-full max-w-2xl flex-col gap-4 rounded-xl bg-white p-6 shadow-2xl"
+        className="relative z-10 my-8 flex w-full max-w-2xl flex-col gap-4 rounded-xl bg-surface p-6 shadow-2xl"
       >
         <h2 className="text-lg font-bold text-primary">
           {location ? t('location.edit') : t('location.add')}
@@ -83,7 +83,7 @@ export function LocationFormModal({
             <select
               value={kind}
               onChange={(e) => setKind(e.target.value as LocationKind)}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
             >
               {locationKinds.map((k) => (
                 <option key={k} value={k}>

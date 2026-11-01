@@ -63,7 +63,7 @@ function LocationsPage() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t('location.search')}
           aria-label={t('location.search')}
-          className="ml-auto min-w-48 rounded-md border border-text-muted/30 bg-white px-3 py-1.5 text-sm"
+          className="ml-auto min-w-48 rounded-md border border-text-muted/30 bg-surface px-3 py-1.5 text-sm"
         />
       </div>
 

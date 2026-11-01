@@ -49,14 +49,14 @@ function NewStudyPage() {
             name="description"
             rows={3}
             maxLength={2000}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
           <span className="font-medium">{t('groups.level')}</span>
           <select
             name="levelId"
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             <option value="">{t('groups.noLevel')}</option>
             {levels.data?.map((l) => (

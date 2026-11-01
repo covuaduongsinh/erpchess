@@ -126,7 +126,7 @@ function RoomPage() {
   return (
     <div className="flex flex-col gap-4">
       {/* Thanh tiêu đề phòng học & trạng thái */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
         <div className="flex items-center gap-3">
           <Link
             to="/a/$slug/classes/$id"
@@ -147,14 +147,14 @@ function RoomPage() {
 
         {/* Bộ chọn Chế độ Bố cục (Layout Selector) */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-lg border border-gray-200 bg-gray-50 p-0.5 text-xs">
+          <div className="flex items-center rounded-lg border border-border bg-bg p-0.5 text-xs">
             <button
               type="button"
               onClick={() => setLayoutMode('board')}
               className={`rounded-md px-2.5 py-1 font-medium transition-all ${
                 layoutMode === 'board'
-                  ? 'bg-white text-gray-900 shadow-xs font-semibold'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-surface text-text shadow-xs font-semibold'
+                  : 'text-text hover:text-text'
               }`}
               title="Chế độ Bàn cờ tập trung"
             >
@@ -165,8 +165,8 @@ function RoomPage() {
               onClick={() => setLayoutMode('split')}
               className={`rounded-md px-2.5 py-1 font-medium transition-all ${
                 layoutMode === 'split'
-                  ? 'bg-white text-gray-900 shadow-xs font-semibold'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-surface text-text shadow-xs font-semibold'
+                  : 'text-text hover:text-text'
               }`}
               title="Chế độ Chia đôi màn hình"
             >
@@ -177,8 +177,8 @@ function RoomPage() {
               onClick={() => setLayoutMode('gallery')}
               className={`rounded-md px-2.5 py-1 font-medium transition-all ${
                 layoutMode === 'gallery'
-                  ? 'bg-white text-gray-900 shadow-xs font-semibold'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-surface text-text shadow-xs font-semibold'
+                  : 'text-text hover:text-text'
               }`}
               title="Chế độ Hội nghị Video lớn"
             >
@@ -215,7 +215,7 @@ function RoomPage() {
           ) : (
             <div className="flex flex-col items-center justify-center p-8 text-center gap-3">
               <span className="text-4xl">📹</span>
-              <p className="text-sm font-medium text-gray-900">Chế độ Hội nghị đang được chọn</p>
+              <p className="text-sm font-medium text-text">Chế độ Hội nghị đang được chọn</p>
               <p className="text-xs text-text-muted max-w-md">
                 Bật Video & Micro để tham gia giao lưu trực quan toàn màn hình với thầy và các bạn
                 trong lớp.
@@ -369,7 +369,7 @@ function ChatBox({
     <Card title={t('classroom.chat')}>
       <div className="flex flex-col gap-2">
         {onShareFen && (
-          <div className="flex justify-end -mt-1 pb-1 border-b border-gray-100">
+          <div className="flex justify-end -mt-1 pb-1 border-b border-border">
             <button
               type="button"
               onClick={onShareFen}
@@ -406,7 +406,7 @@ function ChatBox({
                   className={`max-w-[90%] rounded-lg px-3 py-1.5 text-xs leading-relaxed ${
                     isMyMsg
                       ? 'bg-primary text-white rounded-br-none'
-                      : 'bg-gray-100 text-gray-900 rounded-bl-none'
+                      : 'bg-bg text-text rounded-bl-none'
                   } ${
                     isFenMsg
                       ? 'font-mono text-[11px] break-all border border-amber-300 bg-amber-50 text-amber-900'
@@ -422,14 +422,14 @@ function ChatBox({
           })}
         </ul>
 
-        <form onSubmit={onSubmit} className="flex gap-2 pt-2 border-t border-gray-100 mt-2">
+        <form onSubmit={onSubmit} className="flex gap-2 pt-2 border-t border-border mt-2">
           <input
             aria-label={t('classroom.chatPlaceholder')}
             placeholder={t('classroom.chatPlaceholder')}
             value={text}
             maxLength={500}
             onChange={(e) => setText(e.target.value)}
-            className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-900 placeholder:text-gray-400 focus:border-primary focus:outline-hidden"
+            className="min-w-0 flex-1 rounded-md border border-border bg-surface px-3 py-1.5 text-xs text-text placeholder:text-text-muted focus:border-primary focus:outline-hidden"
           />
           <Button
             type="submit"

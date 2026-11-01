@@ -39,7 +39,7 @@ export function PuzzlePicker({
           <select
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2"
+            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
           >
             <option value="">{t('assignments.allThemes')}</option>
             {themes.map((th) => (

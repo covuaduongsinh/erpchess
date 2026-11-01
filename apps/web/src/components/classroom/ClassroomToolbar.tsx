@@ -52,7 +52,7 @@ export function ClassroomToolbar({
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-3 shadow-xs">
+    <div className="flex flex-col gap-2 rounded-xl border border-border bg-surface p-3 shadow-xs">
       <div className="flex flex-wrap items-center justify-between gap-2">
         {/* Nút lật cờ & xóa nét vẽ chung */}
         <div className="flex flex-wrap items-center gap-1.5">
@@ -60,7 +60,7 @@ export function ClassroomToolbar({
             type="button"
             variant="ghost"
             onClick={onToggleFlip}
-            className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-gray-700 hover:bg-gray-100"
+            className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-text hover:bg-primary-soft"
             title="Đổi hướng nhìn bàn cờ Trắng / Đen"
           >
             <span>🔄</span>
@@ -72,7 +72,7 @@ export function ClassroomToolbar({
               type="button"
               variant="ghost"
               onClick={handleClearDrawings}
-              className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-gray-700 hover:bg-gray-100"
+              className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-text hover:bg-primary-soft"
               title="Xóa tất cả mũi tên và ô cờ được tô màu"
             >
               <span>🧹</span>
@@ -88,7 +88,7 @@ export function ClassroomToolbar({
               type="button"
               variant="ghost"
               onClick={handleUndo}
-              className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-gray-700 hover:bg-gray-100"
+              className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-text hover:bg-primary-soft"
               title="Hoàn tác 1 nước đi"
             >
               <span>↩️</span>
@@ -99,7 +99,7 @@ export function ClassroomToolbar({
               type="button"
               variant="ghost"
               onClick={handleReset}
-              className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-gray-700 hover:bg-gray-100"
+              className="flex items-center gap-1 text-xs px-2.5 py-1.5 font-medium text-text hover:bg-primary-soft"
               title="Đặt lại thế cờ ban đầu"
             >
               <span>🔁</span>
@@ -114,7 +114,7 @@ export function ClassroomToolbar({
               className={`flex items-center gap-1 text-xs px-2.5 py-1.5 font-semibold transition-colors ${
                 snapshot.engine
                   ? 'bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-text hover:bg-primary-soft'
               }`}
               title="Bật/Tắt động cơ phân tích Arasan & thanh EvalBar"
             >
@@ -140,7 +140,7 @@ export function ClassroomToolbar({
       {runner && showFenBox && (
         <form
           onSubmit={handleApplyFen}
-          className="flex items-center gap-2 pt-2 border-t border-gray-100"
+          className="flex items-center gap-2 pt-2 border-t border-border"
         >
           <input
             type="text"
@@ -148,7 +148,7 @@ export function ClassroomToolbar({
             placeholder="Dán chuỗi FEN thế cờ (VD: r1bqkbnr/pppp1ppp/...)"
             value={fenInput}
             onChange={(e) => setFenInput(e.target.value)}
-            className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 font-mono text-xs text-gray-900 placeholder:text-gray-400 focus:border-primary focus:outline-hidden"
+            className="flex-1 rounded-md border border-border bg-surface px-3 py-1.5 font-mono text-xs text-text placeholder:text-text-muted focus:border-primary focus:outline-hidden"
           />
           <Button
             type="submit"

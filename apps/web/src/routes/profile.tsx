@@ -135,7 +135,7 @@ function ProfilePage({ session }: { session: Session }) {
             <span className="font-medium">{t('profile.bio')}</span>
             <textarea
               rows={3}
-              className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base outline-primary"
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base outline-primary"
               value={curBio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Giới thiệu ngắn về bạn…"
@@ -154,7 +154,7 @@ function ProfilePage({ session }: { session: Session }) {
                 id="pref-language"
                 value={curLocale}
                 onChange={(e) => setLocale(e.target.value)}
-                className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base outline-primary"
+                className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base outline-primary"
               >
                 <option value="vi">Tiếng Việt (vi)</option>
                 <option value="en">English (en)</option>
@@ -169,7 +169,7 @@ function ProfilePage({ session }: { session: Session }) {
                 id="pref-timezone"
                 value={curTimezone}
                 onChange={(e) => setTimezone(e.target.value)}
-                className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-base outline-primary"
+                className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base outline-primary"
               >
                 {COMMON_TIMEZONES.map((tz) => (
                   <option key={tz.value} value={tz.value}>

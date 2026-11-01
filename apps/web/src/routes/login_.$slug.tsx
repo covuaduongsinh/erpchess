@@ -34,7 +34,7 @@ function AcademyLoginPage() {
   return (
     <div
       style={academyBrandStyle(b.brandColor)}
-      className="grid overflow-hidden rounded-xl bg-white shadow-sm lg:grid-cols-[minmax(0,1fr)_420px]"
+      className="grid overflow-hidden rounded-xl bg-surface shadow-sm lg:grid-cols-[minmax(0,1fr)_420px]"
     >
       <section
         className="relative flex min-h-64 flex-col justify-end gap-4 bg-primary p-8 text-text-on-primary"
@@ -54,7 +54,7 @@ function AcademyLoginPage() {
             <img
               src={b.logoUrl}
               alt=""
-              className="size-14 rounded-lg bg-white object-contain p-1"
+              className="size-14 rounded-lg bg-surface object-contain p-1"
             />
           )}
           <h1 className="text-3xl font-bold">{b.name}</h1>
