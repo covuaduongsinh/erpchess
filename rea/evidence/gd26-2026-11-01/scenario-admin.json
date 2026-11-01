@@ -1,0 +1,233 @@
+{
+  "actions": [
+    {
+      "locator": {
+        "kind": "css",
+        "selector": "#username"
+      },
+      "timeout_ms": 30000,
+      "action": "wait_for",
+      "step_id": "login_form",
+      "state": "visible"
+    },
+    {
+      "locator": {
+        "kind": "css",
+        "selector": "#username"
+      },
+      "value": {
+        "secret_id": "cl_user",
+        "source": "secret"
+      },
+      "action": "fill",
+      "step_id": "fill_user",
+      "timeout_ms": 10000
+    },
+    {
+      "locator": {
+        "kind": "css",
+        "selector": "#password"
+      },
+      "value": {
+        "secret_id": "cl_pass",
+        "source": "secret"
+      },
+      "action": "fill",
+      "step_id": "fill_pass",
+      "timeout_ms": 10000
+    },
+    {
+      "locator": {
+        "kind": "css",
+        "selector": "button[type=submit]"
+      },
+      "action": "click",
+      "step_id": "submit",
+      "timeout_ms": 15000
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "after_login",
+      "duration_ms": 8000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/email"
+      },
+      "action": "goto",
+      "step_id": "go_administration_email",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_email",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/integration"
+      },
+      "action": "goto",
+      "step_id": "go_administration_integration",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_integration",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/rating"
+      },
+      "action": "goto",
+      "step_id": "go_administration_rating",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_rating",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/info"
+      },
+      "action": "goto",
+      "step_id": "go_administration_info",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_info",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/invoices"
+      },
+      "action": "goto",
+      "step_id": "go_administration_invoices",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_invoices",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/billing"
+      },
+      "action": "goto",
+      "step_id": "go_administration_billing",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_billing",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/reminders"
+      },
+      "action": "goto",
+      "step_id": "go_administration_reminders",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_reminders",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/notifications"
+      },
+      "action": "goto",
+      "step_id": "go_administration_notifications",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_notifications",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/coaches"
+      },
+      "action": "goto",
+      "step_id": "go_administration_coaches",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_administration_coaches",
+      "duration_ms": 6000
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/reports"
+      },
+      "action": "goto",
+      "step_id": "go_reports",
+      "timeout_ms": 45000,
+      "wait_until": "load"
+    },
+    {
+      "action": "wait_for_timeout",
+      "step_id": "shot_reports",
+      "duration_ms": 6000
+    }
+  ],
+  "browser": {
+    "headless": true,
+    "mode": "launch",
+    "executable_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+  },
+  "capture": {
+    "at_end": [
+      "url"
+    ],
+    "after_each_step": [
+      "screenshot",
+      "accessibility"
+    ]
+  },
+  "environment": {
+    "locale": "en-US",
+    "service_workers": "allow",
+    "reduced_motion": "reduce",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "viewport": {
+      "height": 1100,
+      "width": 1440,
+      "device_scale_factor": 1
+    },
+    "color_scheme": "light"
+  },
+  "secrets": [
+    {
+      "secret_id": "cl_user",
+      "environment_variable": "CL_USER"
+    },
+    {
+      "secret_id": "cl_pass",
+      "environment_variable": "CL_PASS"
+    }
+  ],
+  "start_url": {
+    "url": "https://platform.chesslang.com/dashboard"
+  }
+}

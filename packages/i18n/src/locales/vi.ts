@@ -108,7 +108,7 @@ export const vi = {
     statClasses: 'Lớp học trong tháng',
     statTournaments: 'Giải đấu',
     statTournamentsHint: '{{active}} đang diễn ra · {{upcoming}} sắp tới · {{finished}} đã xong',
-    statAttempts: 'Bài tập đã làm 7 ngày',
+    statAttempts: 'Lượt làm bài 7 ngày',
     tabStats: 'Thống kê học viện',
     tabSessions: 'Buổi học đang diễn ra',
     upcoming: 'Lịch học sắp tới',

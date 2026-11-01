@@ -1,0 +1,106 @@
+{
+  "environment": {
+    "service_workers": "allow",
+    "locale": "en-US",
+    "viewport": {
+      "height": 1400,
+      "width": 1440,
+      "device_scale_factor": 1
+    },
+    "color_scheme": "light",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "reduced_motion": "reduce"
+  },
+  "capture": {
+    "after_each_step": [],
+    "at_end": [
+      "dom",
+      "url",
+      "screenshot"
+    ]
+  },
+  "start_url": {
+    "url": "https://platform.chesslang.com/dashboard"
+  },
+  "secrets": [
+    {
+      "environment_variable": "CL_USER",
+      "secret_id": "cl_user"
+    },
+    {
+      "environment_variable": "CL_PASS",
+      "secret_id": "cl_pass"
+    }
+  ],
+  "browser": {
+    "headless": true,
+    "executable_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "mode": "launch"
+  },
+  "actions": [
+    {
+      "step_id": "login_form",
+      "locator": {
+        "selector": "#username",
+        "kind": "css"
+      },
+      "state": "visible",
+      "action": "wait_for",
+      "timeout_ms": 30000
+    },
+    {
+      "step_id": "fill_user",
+      "value": {
+        "source": "secret",
+        "secret_id": "cl_user"
+      },
+      "locator": {
+        "selector": "#username",
+        "kind": "css"
+      },
+      "action": "fill",
+      "timeout_ms": 10000
+    },
+    {
+      "step_id": "fill_pass",
+      "value": {
+        "source": "secret",
+        "secret_id": "cl_pass"
+      },
+      "locator": {
+        "selector": "#password",
+        "kind": "css"
+      },
+      "action": "fill",
+      "timeout_ms": 10000
+    },
+    {
+      "step_id": "submit",
+      "locator": {
+        "selector": "button[type=submit]",
+        "kind": "css"
+      },
+      "action": "click",
+      "timeout_ms": 15000
+    },
+    {
+      "step_id": "after_login",
+      "duration_ms": 8000,
+      "action": "wait_for_timeout"
+    },
+    {
+      "destination": {
+        "url": "https://platform.chesslang.com/administration/students"
+      },
+      "step_id": "go_admin",
+      "wait_until": "load",
+      "action": "goto",
+      "timeout_ms": 45000
+    },
+    {
+      "step_id": "settle_admin",
+      "duration_ms": 6000,
+      "action": "wait_for_timeout"
+    }
+  ]
+}
