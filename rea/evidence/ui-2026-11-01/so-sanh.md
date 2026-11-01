@@ -169,7 +169,7 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 
 **Menu Quản trị cuộn được:** vùng menu đã có `overflow-y-auto` nhưng thiếu `min-h-0` và không kéo mục đang mở vào tầm nhìn, nên ở màn 1440×900 các mục cuối ("Cấp độ", "Địa điểm", "Chứng chỉ") nằm ngoài vùng nhìn mà không có dấu hiệu cuộn. Sửa: `min-h-0` + `overscroll-contain` và tự `scrollIntoView` mục đang mở khi đổi trang; đáy (Chat, Hồ sơ, công cụ) vẫn cố định. Ảnh `shot_menu_cuon` cho thấy "Chứng chỉ" nằm trong vùng nhìn sau khi bấm.
 
-## 13. GĐ26a: Trang Rating và FIDE (2026-11-01, lần tám; PR nháp chờ áp migration)
+## 13. GĐ26a: Trang Rating và FIDE (2026-11-01, lần tám; ảnh FIDE tắt, trước khi áp migration)
 
 **Ảnh** (`gd26a/{desktop-light,desktop-dark,mobile-light}/shot_rating.png`, đã xem): trang Rating ở **trạng thái FIDE tắt**. Migration `20261101000041_fide_rating.sql` chưa áp lên cloud nên chưa chụp được trạng thái bật, cột FIDE trong bảng/lưới học viên, dòng FIDE ở báo cáo và phiếu in (các phần này được kiểm bằng test; chụp sau khi áp). Không chụp trang Học viên và Báo cáo bản mới vì `fetchMembers` đã đọc cột `fide_*` chưa có trên cloud (sẽ lỗi cho tới khi áp migration, nên **chỉ merge sau khi áp**).
 
@@ -178,3 +178,24 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 | Rating | Thẻ "Nội bộ học viện" luôn bật (3 loại + mô tả mức thời gian), thẻ FIDE có công tắc (3 loại), thẻ USCF khoá | Thẻ **Nội bộ học viện** (huy hiệu Đã bật, Classical/Rapid/Blitz kèm mô tả mức thời gian đúng ngưỡng của `categoryOf`) và thẻ **FIDE** có công tắc (chủ học viện bật/tắt, HLV chỉ xem kèm giải thích; đếm học viên đã nhập khi bật; link sang danh sách học viên) | **Khớp bố cục.** Có chủ đích: bỏ USCF (chỉ cho học viện ở Mỹ); FIDE nhập tay, không gọi API của FIDE |
 
 **Khi bật FIDE:** bảng học viên có cột FIDE và thẻ lưới có mục FIDE (mã + Standard/Rapid/Blitz, nút Lưu chỉ hiện khi có thay đổi); báo cáo học viên hiện dòng "FIDE: …" và phiếu in có mục FIDE khi học viên có dữ liệu. Mã FIDE 3-12 chữ số, Elo 1000-3300 (kiểm ở cả giao diện, domain và cơ sở dữ liệu).
+
+## 14. GĐ26a/26c sau khi áp migration 39–41 (2026-11-01, lần chín)
+
+Chủ dự án đã áp migration `20261101000039`, `…040`, `…041` lên `erpchess-dev`. Seed (`scripts/seed-ui-demo.mjs`) bật FIDE cho `thu-nghiem-ui` và nhập FIDE mẫu cho 5 học viên qua `set_member_fide` bằng tài khoản thử (đi qua RLS như người dùng thật).
+
+**Kiểm gián tiếp bằng API** (tôi không có công cụ chạy pgTAP; chủ dự án đã chạy: 31 = 8/8, 32 = 8/8, 33 = 20/21, ca hỏng là lỗi test đã sửa):
+
+| Migration | Kiểm | Kết quả |
+| --- | --- | --- |
+| 39 `academy_stats` | `attempts_week` so với tổng `academy_daily_stats` 7 ngày | 5 = 5, khớp |
+| 40 `get_academy_students_report` | gọi bằng owner | chạy được, trả 8 học viên kèm `levelName` |
+| 41 FIDE | bật FIDE, `set_member_fide`, đọc lại cột `fide_*` | ghi/đọc đúng, 4 học viên có mã FIDE sau lần seed cuối |
+
+**Ảnh** `gd26d/{desktop-light,desktop-dark,mobile-light}/` (đã xem từng ảnh): `shot_rating` (công tắc bật, "Đã nhập FIDE cho N học viên"), `shot_hoc_vien_danh_sach` (cột FIDE), `shot_hoc_vien_luoi` (mục FIDE trong thẻ), `shot_bao_cao_hoc_vien` (dòng "FIDE: ID … · Standard … · Rapid … · Blitz …"), `shot_bao_cao_toan_hoc_vien` (bảng toàn học viện chạy được, hết lỗi `academy_levels`).
+
+**Lỗi hiển thị tìm thấy và sửa:**
+
+| # | Lỗi | Sửa |
+| --- | --- | --- |
+| 22 | Cột FIDE ở bảng học viên quá hẹp: ô Elo xuống dòng lộn xộn, placeholder "Standard" bị cắt | Mã FIDE một hàng, ba Elo một hàng, bề rộng tối thiểu; placeholder "Std" (nhãn truy cập vẫn đầy đủ) |
+| 23 | Dòng FIDE ở báo cáo đọc thành "FIDE: ID FIDE 14012345 …" (lặp "FIDE") | Dùng nhãn "ID" trong dòng và phiếu in |

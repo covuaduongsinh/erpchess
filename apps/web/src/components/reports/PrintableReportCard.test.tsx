@@ -119,7 +119,7 @@ describe('PrintableReportCard', () => {
     );
     expect(screen.getByText('fide.title')).toBeTruthy();
     expect(
-      screen.getByText('fide.idShort 12345678 · fide.standardShort 1800 · fide.blitzShort 1700'),
+      screen.getByText('fide.idInline 12345678 · fide.standardShort 1800 · fide.blitzShort 1700'),
     ).toBeTruthy();
   });
 

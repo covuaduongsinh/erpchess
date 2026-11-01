@@ -1,6 +1,6 @@
 # Giai đoạn 26: Hoàn thiện nhóm Quản trị theo Chesslang (Rating, Tích hợp, Branding nhiều tab, Báo cáo theo học viên)
 
-> **Trạng thái:** lập kế hoạch 2026-11-01, chưa triển khai.
+> **Trạng thái (2026-11-01):** **26a, 26b, 26c đã xong và merge** (#83, #80, #81); #82 sửa lỗi báo cáo toàn học viện. Migration `20261101000039` (thẻ 7 ngày), `…040` (báo cáo toàn học viện), `…041` (FIDE) đã được chủ dự án áp lên `erpchess-dev`. Còn **26d** (gửi email) và **26e** (Masterbase), chờ chủ dự án quyết ở mục 4.
 > **Tiếp nối:** Giai đoạn 25 (`18-giai-doan-25-giao-dien-theo-chesslang.md`) đã xong giao diện và nghiệm thu bằng REA (PR #64–#77).
 > **Lý do:** sổ cái REA còn 11 claim một phần. Lần quan sát mới cho thấy menu Quản trị của Chesslang có các trang mà erpchess chưa có, hoặc mới có một phần: **Rating**, **Integration**, **Email**, Branding chia **6 tab**, và trang **Reports** dạng chọn học viên bên trái, xem báo cáo bên phải.
 
@@ -41,8 +41,9 @@
 
 Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạch 18 mục 5, cộng thêm **chụp REA trước/sau** bằng tài khoản thử `thu-nghiem-ui` (xem `rea/evidence/ui-2026-11-01/make-scenarios.py`). PR có migration thì mở ở dạng **draft**, chủ dự án áp lên `erpchess-dev` rồi mới merge.
 
-### PR 26a: Trang Rating và FIDE (có migration)
+### PR 26a: Trang Rating và FIDE (có migration) — ✅ #83
 
+> **Kết quả:** migration `20261101000041_fide_rating.sql` (cột `fide_*`, RPC `set_academy_fide_enabled` và `set_member_fide`, không nới RLS) + pgTAP `33`; trang `/a/$slug/rating`; cột FIDE ở bảng và thẻ lưới học viên; dòng FIDE ở báo cáo và phiếu in. Ảnh REA ở `rea/evidence/ui-2026-11-01/gd26a/` (FIDE tắt) và `gd26d/` (FIDE bật). Chưa gọi API của FIDE (nhập tay). pgTAP trên cloud: 33 = 20/21 (lỗi ở test, đã sửa; xem mục 4b).
 - **DB:**
   - `academies.fide_enabled boolean default false`.
   - `memberships`: thêm `fide_id text` (kiểm số), `fide_standard`/`fide_rapid`/`fide_blitz int` (khoảng 1000–3000, cho phép null).
@@ -55,8 +56,9 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
   - Báo cáo và phiếu in hiện FIDE nếu có.
 - **Sổ cái:** `org.rating` → ✅.
 
-### PR 26b: Trang Tích hợp và Branding chia tab (không migration, trừ khi cần cột `reply_to`)
+### PR 26b: Trang Tích hợp và Branding chia tab (không migration, trừ khi cần cột `reply_to`) — ✅ #80
 
+> **Kết quả:** không cần migration: người gửi lời mời (tên hiển thị + email trả lời) lưu trong `academies.contact` (jsonb). Trang `/a/$slug/integrations`, Branding chia 4 tab (`?tab=`), VietQR chuyển sang Tích hợp. PayOS/Stripe "Sắp có". Ảnh: `gd26b/`.
 - **Trang `/a/$slug/integrations`**, theo quyết định 2.2:
   - Thẻ có huy hiệu trạng thái Đã cấu hình / Chưa cấu hình.
   - Modal cấu hình VietQR (chuyển từ trang Học phí sang; trang Học phí trỏ link về đây).
@@ -64,8 +66,9 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 - **Branding chia tab** theo quyết định 2.3.
 - Nav: thêm mục Tích hợp và Rating vào nhóm Học viện.
 
-### PR 26c: Báo cáo theo học viên, chọn bên trái xem bên phải
+### PR 26c: Báo cáo theo học viên, chọn bên trái xem bên phải — ✅ #81, #82
 
+> **Kết quả:** hai tab Theo học viên / Toàn học viện, `?student=`, mobile danh sách rồi chi tiết, sidebar tự thu icon; menu Quản trị cuộn được. Phát hiện RPC `get_academy_students_report` join bảng không tồn tại `public.academy_levels` nên tab Toàn học viện chưa từng chạy: sửa ở #82 (migration `…040` + pgTAP `32`), đã áp. Ảnh: `gd26c/`, `gd26d/`.
 - `a.$slug.reports.tsx` có hai tab: **Theo học viên** (mặc định) và **Toàn học viện** (bảng hiện có).
 - **Tab Theo học viên:**
   - Cột trái gồm tìm kiếm, khoảng ngày kèm T/Q/N, chọn loại báo cáo, nút Xuất CSV, danh sách học viên có avatar.
@@ -92,6 +95,12 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 | 26d Email      | Có làm không? Nếu có: Resend (dễ, có gói miễn phí) hay SendGrid (giống Chesslang)? Cần khoá API và tên miền gửi. |
 | PayOS / Stripe | Có tài khoản PayOS (thanh toán VN) chưa? Không có thì giữ thẻ "Sắp có".                                          |
 | 26e Masterbase | Đồng ý dùng kho broadcast Lichess (CC0) không? Ai chạy lệnh nạp (cần service role)?                              |
+
+## 4b. Việc đã làm thêm ngoài kế hoạch
+
+- **Thẻ "Lượt làm bài 7 ngày"** (PR #79): `academy_stats.attempts_week` đếm bài tập + quiz + học liệu, khớp biểu đồ (migration `…039` + pgTAP `31`).
+- **Sửa lưới mobile** (#78) và tab Học phí một hàng; seed dữ liệu mẫu `scripts/seed-ui-demo.mjs` (idempotent, chỉ học viện `thu-nghiem-ui`).
+- **pgTAP trên `erpchess-dev`** (chủ dự án chạy sau khi áp): 31 = 8/8, 32 = 8/8, 33 = 20/21 (tổng 36/37). Ca hỏng là test 7 của `33_fide_rating.sql`: đọc `academies.fide_enabled` của học viện B khi đang đăng nhập owner A, RLS ẩn dòng nên trả NULL thay vì `false`; migration đúng. Đã sửa test (đọc dưới vai trò postgres) nên kỳ vọng 37/37, chờ chủ dự án chạy lại. Kiểm gián tiếp bằng API cũng đạt: `attempts_week` khớp tổng biểu đồ, báo cáo toàn học viện chạy được, FIDE ghi/đọc đúng.
 
 ## 5. Thứ tự đề xuất
 

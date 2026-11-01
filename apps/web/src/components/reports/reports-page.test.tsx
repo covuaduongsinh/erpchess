@@ -171,9 +171,7 @@ describe('trang Báo cáo theo học viên', () => {
     ];
     vi.spyOn(Route, 'useSearch').mockReturnValue({ student: 's1' });
     const { unmount } = renderPage('owner', 'u-owner', true);
-    expect(
-      await screen.findByText('FIDE: ID FIDE 12345678 · Standard 1800', {}, SLOW),
-    ).toBeTruthy();
+    expect(await screen.findByText('FIDE: ID 12345678 · Standard 1800', {}, SLOW)).toBeTruthy();
     unmount();
     renderPage('owner', 'u-owner', false);
     expect(await screen.findByText('Chi tiết báo cáo', {}, SLOW)).toBeTruthy();

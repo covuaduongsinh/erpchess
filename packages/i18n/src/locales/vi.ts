@@ -158,6 +158,8 @@ export const vi = {
     title: 'FIDE',
     columnHeader: 'FIDE',
     idShort: 'ID FIDE',
+    idInline: 'ID',
+    standardPlaceholder: 'Std',
     standardShort: 'Standard',
     rapidShort: 'Rapid',
     blitzShort: 'Blitz',

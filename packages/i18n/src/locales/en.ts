@@ -161,6 +161,8 @@ export const en: Resource = {
     title: 'FIDE',
     columnHeader: 'FIDE',
     idShort: 'FIDE ID',
+    idInline: 'ID',
+    standardPlaceholder: 'Std',
     standardShort: 'Standard',
     rapidShort: 'Rapid',
     blitzShort: 'Blitz',

@@ -53,7 +53,7 @@ export function PrintableReportCard({
   const { student, summary } = report;
   const [coachNote, setCoachNote] = useState('');
   const fideText = fideParts(fide, {
-    id: t('fide.idShort'),
+    id: t('fide.idInline'),
     standard: t('fide.standardShort'),
     rapid: t('fide.rapidShort'),
     blitz: t('fide.blitzShort'),
