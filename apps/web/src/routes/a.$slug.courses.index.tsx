@@ -7,8 +7,21 @@ import {
 } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { CheckCircle2, GraduationCap, Library } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import {
+  Button,
+  Card,
+  EmptyState,
+  ErrorText,
+  Field,
+  FilterBar,
+  PageHeader,
+  SearchInput,
+  Spinner,
+  StatCard,
+  StatusChips,
+} from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -26,66 +39,117 @@ function CoursesPage() {
   const progress = useCourseProgress(staff ? [] : ids);
   const done = useCourseCompletions(staff ? [] : ids);
   const levelName = (id: string | null) => levels.data?.find((l) => l.id === id)?.name;
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState<'all' | 'published' | 'draft'>('all');
+  const needle = search.trim().toLowerCase();
+  const shown = (list.data ?? []).filter(
+    (c) =>
+      (!needle || c.title.toLowerCase().includes(needle)) &&
+      (!staff || status === 'all' || c.status === status),
+  );
+  const mineDone = (done.data ?? []).filter((x) => x.student_id === session.user.id).length;
+  const published = (list.data ?? []).filter((c) => c.status === 'published').length;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <Card title={t('course.title')}>
-        {list.isPending ? (
-          <Spinner />
-        ) : list.error ? (
-          <ErrorText error={list.error} />
-        ) : list.data.length === 0 ? (
-          <p className="text-text-muted">{t('course.none')}</p>
-        ) : (
-          <ul className="flex flex-col divide-y divide-text-muted/15">
-            {list.data.map((c) => {
-              const p = progress.data?.find(
-                (x) => x.course_id === c.id && x.student_id === session.user.id,
-              );
-              const finished = done.data?.some(
-                (x) => x.course_id === c.id && x.student_id === session.user.id,
-              );
-              const pct = p?.required_total
-                ? Math.round(((p.required_done ?? 0) / p.required_total) * 100)
-                : 0;
-              return (
-                <li key={c.id} className="flex flex-col gap-1 py-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Link
-                      to="/a/$slug/courses/$id"
-                      params={{ slug: academy.slug, id: c.id }}
-                      className="font-medium text-primary hover:underline"
-                    >
-                      {c.title}
-                    </Link>
-                    <span className="text-sm text-text-muted">
-                      {t('course.studyCount', { count: c.itemCount })}
-                      {levelName(c.level_id) && ` · ${levelName(c.level_id)}`}
-                      {staff &&
-                        ` · ${c.status === 'published' ? t('course.published') : t('course.draft')}`}
-                    </span>
-                  </div>
-                  {!staff && (
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-bg">
-                        <div
-                          className="h-full bg-green"
-                          style={{ width: `${finished ? 100 : pct}%` }}
-                        />
-                      </div>
-                      <span className="text-xs text-text-muted">
-                        {finished ? t('course.completed') : t('course.percent', { percent: pct })}
+    <>
+      <PageHeader
+        icon={GraduationCap}
+        title={t('course.title')}
+        subtitle={t('learnPage.coursesSubtitle')}
+      />
+      <div className="grid grid-cols-2 gap-3">
+        <StatCard
+          accent="blue"
+          icon={Library}
+          label={t('learnPage.courseStatTotal')}
+          value={list.data?.length ?? '—'}
+        />
+        <StatCard
+          accent="green"
+          icon={CheckCircle2}
+          label={staff ? t('learnPage.courseStatPublished') : t('learnPage.courseStatCompleted')}
+          value={staff ? published : mineDone}
+        />
+      </div>
+      <FilterBar>
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder={t('learnPage.coursesSearch')}
+        />
+        {staff && (
+          <StatusChips
+            value={status}
+            onChange={setStatus}
+            options={[
+              { value: 'all', label: t('quiz.filter_all') },
+              { value: 'published', label: t('course.published') },
+              { value: 'draft', label: t('course.draft') },
+            ]}
+          />
+        )}
+      </FilterBar>
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <Card>
+          {list.isPending ? (
+            <Spinner />
+          ) : list.error ? (
+            <ErrorText error={list.error} />
+          ) : list.data.length === 0 ? (
+            <EmptyState dashed icon={GraduationCap} title={t('course.none')} />
+          ) : shown.length === 0 ? (
+            <EmptyState icon={GraduationCap} title={t('learnPage.noMatch')} />
+          ) : (
+            <ul className="flex flex-col divide-y divide-text-muted/15">
+              {shown.map((c) => {
+                const p = progress.data?.find(
+                  (x) => x.course_id === c.id && x.student_id === session.user.id,
+                );
+                const finished = done.data?.some(
+                  (x) => x.course_id === c.id && x.student_id === session.user.id,
+                );
+                const pct = p?.required_total
+                  ? Math.round(((p.required_done ?? 0) / p.required_total) * 100)
+                  : 0;
+                return (
+                  <li key={c.id} className="flex flex-col gap-1 py-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <Link
+                        to="/a/$slug/courses/$id"
+                        params={{ slug: academy.slug, id: c.id }}
+                        className="font-medium text-primary hover:underline"
+                      >
+                        {c.title}
+                      </Link>
+                      <span className="text-sm text-text-muted">
+                        {t('course.studyCount', { count: c.itemCount })}
+                        {levelName(c.level_id) && ` · ${levelName(c.level_id)}`}
+                        {staff &&
+                          ` · ${c.status === 'published' ? t('course.published') : t('course.draft')}`}
                       </span>
                     </div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </Card>
-      {staff && <CreateCourse />}
-    </div>
+                    {!staff && (
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-bg">
+                          <div
+                            className="h-full bg-green"
+                            style={{ width: `${finished ? 100 : pct}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-text-muted">
+                          {finished ? t('course.completed') : t('course.percent', { percent: pct })}
+                        </span>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </Card>
+        {staff && <CreateCourse />}
+      </div>
+    </>
   );
 }
 

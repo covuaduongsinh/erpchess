@@ -1,8 +1,20 @@
 import { usePracticeChapters, usePracticeMutations } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Layers, Puzzle, Search } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import {
+  Button,
+  Card,
+  EmptyState,
+  ErrorText,
+  Field,
+  FilterBar,
+  PageHeader,
+  SearchInput,
+  Spinner,
+  StatCard,
+} from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -19,6 +31,7 @@ function PracticePage() {
   const [title, setTitle] = useState('');
   const [shared, setShared] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [search, setSearch] = useState('');
 
   function onCreate(e: FormEvent) {
     e.preventDefault();
@@ -36,35 +49,44 @@ function PracticePage() {
 
   const list = chapters.data ?? [];
   const totalPositions = list.reduce((sum, c) => sum + (c.positionCount || 0), 0);
+  const needle = search.trim().toLowerCase();
+  const shown = list.filter((c) => !needle || c.title.toLowerCase().includes(needle));
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Banner / Thống kê tổng quan */}
-      <div className="flex flex-col gap-4 rounded-xl border border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-primary sm:text-2xl">{t('practice.title')}</h2>
-          <p className="mt-1 text-sm text-text-muted">{t('practice.hint')}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="rounded-lg bg-white/80 px-4 py-2 shadow-xs backdrop-blur-xs">
-            <div className="text-xs text-text-muted">Tổng số chương</div>
-            <div className="text-xl font-bold text-primary">{list.length}</div>
-          </div>
-          <div className="rounded-lg bg-white/80 px-4 py-2 shadow-xs backdrop-blur-xs">
-            <div className="text-xs text-text-muted">Tổng số thế cờ</div>
-            <div className="text-xl font-bold text-primary">{totalPositions}</div>
-          </div>
-          {staff && (
-            <Button
-              variant="cta"
-              onClick={() => setShowCreate((v) => !v)}
-              className="h-full py-2.5"
-            >
-              {showCreate ? 'Đóng form' : `+ ${t('practice.create')}`}
+    <>
+      <PageHeader
+        icon={Puzzle}
+        title={t('practice.title')}
+        subtitle={t('practice.hint')}
+        actions={
+          staff && (
+            <Button variant="cta" onClick={() => setShowCreate((v) => !v)}>
+              {showCreate ? t('common.cancel') : `+ ${t('practice.create')}`}
             </Button>
-          )}
-        </div>
+          )
+        }
+      />
+      <div className="grid grid-cols-2 gap-3">
+        <StatCard
+          accent="blue"
+          icon={Layers}
+          label={t('learnPage.practiceStatChapters')}
+          value={list.length}
+        />
+        <StatCard
+          accent="green"
+          icon={Puzzle}
+          label={t('learnPage.practiceStatPositions')}
+          value={totalPositions}
+        />
       </div>
+      <FilterBar>
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder={t('learnPage.practiceSearch')}
+        />
+      </FilterBar>
 
       {/* Form tạo chương (dành cho HLV) */}
       {staff && showCreate && (
@@ -101,7 +123,7 @@ function PracticePage() {
       )}
 
       {/* Danh sách chương dạng Grid Cards */}
-      <Card title={t('practice.title')}>
+      <Card>
         {chapters.isPending ? (
           <div className="flex justify-center py-8">
             <Spinner />
@@ -109,17 +131,17 @@ function PracticePage() {
         ) : chapters.error ? (
           <ErrorText error={chapters.error} />
         ) : list.length === 0 ? (
-          <div className="py-8 text-center text-text-muted">
-            <p className="text-base font-medium">{t('practice.none')}</p>
-            {staff && (
-              <p className="mt-1 text-sm">
-                Hãy bấm "Tạo chương" ở trên để thêm các bài drill thế cờ cho học viên.
-              </p>
-            )}
-          </div>
+          <EmptyState
+            dashed
+            icon={Puzzle}
+            title={t('practice.none')}
+            description={staff ? t('practice.hint') : undefined}
+          />
+        ) : shown.length === 0 ? (
+          <EmptyState icon={Search} title={t('learnPage.noMatch')} />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {list.map((c) => (
+            {shown.map((c) => (
               <div
                 key={c.id}
                 className="group relative flex flex-col justify-between rounded-xl border border-text-muted/15 bg-white p-4 shadow-xs transition hover:border-primary/40 hover:shadow-md"
@@ -158,6 +180,6 @@ function PracticePage() {
           </div>
         )}
       </Card>
-    </div>
+    </>
   );
 }
