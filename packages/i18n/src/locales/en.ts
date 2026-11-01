@@ -113,7 +113,7 @@ export const en: Resource = {
     statClasses: 'Classes this month',
     statTournaments: 'Tournaments',
     statTournamentsHint: '{{active}} in progress · {{upcoming}} upcoming · {{finished}} finished',
-    statAttempts: 'Assignments done in 7 days',
+    statAttempts: 'Attempts in 7 days',
     tabStats: 'Academy stats',
     tabSessions: 'Ongoing sessions',
     upcoming: 'Upcoming classes',

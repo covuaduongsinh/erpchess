@@ -34,7 +34,7 @@ packages/engine/wasm/.obj/
 apps/web/public/engine/
 
 # Evidence REA cỡ lớn (ảnh base64), giữ ngoài git
-rea/evidence/**/capture.json
+rea/evidence/**/capture*.json
 
 # Supabase CLI cục bộ
 supabase/.temp/

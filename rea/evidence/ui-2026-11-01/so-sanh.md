@@ -86,7 +86,7 @@ Ghi chú vận hành: một lần chạy `desktop-dark` bị REA báo `cleanup_i
 
 ## 8. Lỗi lớn còn lại (cần quyết định/migration, chưa sửa)
 
-- **Thẻ "Bài tập đã làm 7 ngày"** chỉ đếm bài tập; muốn gồm cả quiz và hoạt động học liệu như biểu đồ thì phải sửa RPC `academy_stats` (cần migration, chủ dự án áp).
+- **Thẻ "Lượt làm bài 7 ngày"**: đã có migration `20261101000039_academy_stats_7_ngay_gom_quiz_hoc_lieu.sql` (PR nháp, **chờ chủ dự án áp**) để `academy_stats.attempts_week` đếm bài tập + quiz + học liệu và khớp tổng biểu đồ; nhãn thẻ trả về "Lượt làm bài 7 ngày". Trước khi áp, thẻ vẫn đếm chỉ bài tập.
 - **Quiz đã đóng chưa có lượt làm** vì máy chủ từ chối bài nộp quá hạn; muốn ảnh quiz đóng có điểm phải tạo quiz đang mở, cho làm rồi đợi hết hạn.
 - `LevelBadge` còn chuỗi cứng "Chưa phân cấp" / "Cấp độ: …" (chưa qua i18n).
 - Chưa có dữ liệu cho ván đấu, ván đang diễn ra, học viên online, điểm danh (cần phiên đăng nhập học viên đồng thời).
@@ -139,6 +139,8 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 **Giữ nguyên có chủ đích** (nút chọn ngắn như `3+2`, `5+0`, "Trắng/Ngẫu nhiên/Đen", lưới 7 ngày của lịch giải, khối XP 3 số của học viên): ba cột vẫn vừa màn 390 px, đổi sang một cột chỉ làm dài trang. Cửa sổ "Thách đấu" ở trang Chơi cờ chỉ mở được khi có học viên online nên chưa có ảnh; kiểm bằng đọc mã.
 
 **Còn lại:** cửa sổ Thách đấu chưa chụp; trang Chơi cờ còn chữ cứng tiếng Việt ("Kiểm soát thời gian", "Màu quân của bạn", "Thách đấu với …") chưa qua i18n.
+
+**Bổ sung (cùng PR chờ áp migration):** Học phí, hàng tab con (Hoá đơn / Gói học phí / Giảm giá / Cài đặt) xuống dòng "Cài đặt" trên mobile → một hàng cuộn ngang, nhãn không xuống dòng (`BillingNav`). Ảnh: `mobile-fix/sau/{mobile-light,mobile-dark}/shot_giam_gia.png`.
 
 ## 11. GĐ26b: Trang Tích hợp và Branding chia tab (2026-11-01, lần sáu)
 

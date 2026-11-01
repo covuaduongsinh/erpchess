@@ -1,15 +1,12 @@
 import {
-  useAcademyStats,
   useClassrooms,
   useLeaderboard,
   useMembers,
   useStudentXp,
-  useTournaments,
   useXpLeaderboard,
 } from '@erpchess/api/react';
 import {
   academyRoles,
-  calendarRange,
   isStaff,
   type Period,
   periodRange,
@@ -31,9 +28,10 @@ import {
 import { type ReactNode, useMemo, useState } from 'react';
 import { AcademyContactCard } from '../components/academy/BrandingCard';
 import { LeaderboardPodium } from '../components/dashboard/LeaderboardPodium';
+import { OverviewStatsRow } from '../components/dashboard/OverviewStatsRow';
 import { QuickSessionModal } from '../components/dashboard/QuickSessionModal';
 import { WeeklyStatsPanel } from '../components/dashboard/WeeklyStatsPanel';
-import { Card, EmptyState, ErrorText, PageHeader, Spinner, StatCard, Tabs } from '../components/ui';
+import { Card, EmptyState, ErrorText, PageHeader, Spinner, Tabs } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -78,7 +76,7 @@ function OverviewPage() {
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="flex min-w-0 flex-col gap-6">
           {staff && <QuickActionsRow onOpenQuickSession={() => setQuickSessionOpen(true)} />}
-          {staff && <StatsRow />}
+          {staff && <OverviewStatsRow />}
           {staff ? (
             <>
               <Tabs
@@ -206,59 +204,6 @@ function QuickActionsRow({ onOpenQuickSession }: { onOpenQuickSession: () => voi
         </button>
       </div>
     </section>
-  );
-}
-
-/** 4 thẻ số liệu: học viên, lớp trong tháng, giải đấu, lượt làm bài 7 ngày. */
-function StatsRow() {
-  const { t } = useT();
-  const { academy } = useAcademy();
-  const stats = useAcademyStats(academy.id);
-  const month = useMemo(() => calendarRange('month'), []);
-  const classes = useClassrooms(academy.id, month);
-  const tournaments = useTournaments(academy.id);
-  if (stats.isPending) return <Spinner />;
-  if (stats.error) return <ErrorText error={stats.error} />;
-  if (!stats.data) return null;
-  const list = tournaments.data ?? [];
-  const count = (status: string) => list.filter((x) => x.status === status).length;
-  return (
-    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-      <StatCard
-        variant="stacked"
-        accent="blue"
-        icon={GraduationCap}
-        label={t('overview.statStudents')}
-        value={stats.data.students}
-        hint={t('overview.statStudentsHint', { count: stats.data.staff })}
-      />
-      <StatCard
-        variant="stacked"
-        accent="green"
-        icon={CalendarDays}
-        label={t('overview.statClasses')}
-        value={classes.data?.length ?? '—'}
-      />
-      <StatCard
-        variant="stacked"
-        accent="orange"
-        icon={Trophy}
-        label={t('overview.statTournaments')}
-        value={tournaments.data ? list.length : '—'}
-        hint={t('overview.statTournamentsHint', {
-          active: count('active'),
-          upcoming: count('upcoming'),
-          finished: count('finished'),
-        })}
-      />
-      <StatCard
-        variant="stacked"
-        accent="purple"
-        icon={Swords}
-        label={t('overview.statAttempts')}
-        value={stats.data.attemptsWeek}
-      />
-    </div>
   );
 }
 
