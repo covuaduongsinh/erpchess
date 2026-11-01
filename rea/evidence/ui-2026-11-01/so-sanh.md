@@ -228,3 +228,15 @@ Chủ dự án đã áp migration `20261101000039`, `…040`, `…041` lên `erp
 3. Triển khai function: `supabase functions deploy send-email` (hoặc nhờ agent Supabase).
 4. Vào trang Email, bấm **Gửi thử**; muốn gửi cho người khác thì xác minh tên miền gửi trong Resend (bản ghi DNS).
 5. Bật gửi tự động cho thông báo quiz/nhắc học phí: lên lịch gọi `send-email` chế độ `flush` (ví dụ 10 phút một lần) bằng service role, vd. `select cron.schedule('send-email-flush', '*/10 * * * *', $$ select net.http_post(url := 'https://<project-ref>.supabase.co/functions/v1/send-email', headers := jsonb_build_object('Authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'service_role_key'), 'Content-Type', 'application/json'), body := '{"mode":"flush"}'::jsonb) $$);` (cần bật `pg_net` và lưu service role key vào Vault).
+
+## 17. GĐ27b–27d: Masterbase, kho puzzle và script nạp (2026-11-02)
+
+**Trạng thái:** code xong và đã merge (#87, #88). Migration 42 và 43 đã áp, pgTAP 34 (13/13) và 35 (18/18) đạt. Dữ liệu chưa nạp vào Supabase nên ảnh REA có dữ liệu chưa chụp được; ảnh `gd27c/` chỉ có modal kho puzzle trống.
+
+**Số liệu chạy thật trên máy dev:**
+- Kho puzzle (`--target 150000`): 6.193.530 dòng đọc, 3.292.767 đạt lọc, 414 tầng, chọn 149.680; rating 399–2998; CSV 27,0 MB; ước tính 55,2 MB trong DB.
+- Masterbase (2026-04..2026-09): 224.224 ván đọc, 23.815 đạt (Elo hai bên ≥ 2300, ≥ 10 nước); 960.404 thế; games.csv 44,5 MB, positions.csv 58,4 MB; ước tính 183,4 MB trong DB; 853 giây.
+
+**Quyết định:** nạp bằng `scripts/db-load-csv.mjs` (không cần `psql`), idempotent, mật khẩu chỉ qua `DATABASE_URL`.
+
+**Việc kế tiếp:** chủ dự án chạy hai lệnh nạp (xem plan 20, mục 27d); sau đó chụp lại REA tab Masterbase và modal kho puzzle có dữ liệu, rồi đóng claim trong ledger.
