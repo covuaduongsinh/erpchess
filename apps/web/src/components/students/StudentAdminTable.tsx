@@ -24,6 +24,8 @@ export interface StudentAdminTableProps {
   levels: LevelItem[];
   groups?: GroupItem[];
   ratings?: StudentRating[];
+  /** `false` khi trang cha đã có thanh lọc riêng; vẫn giữ ô chọn loại Elo. */
+  showFilters?: boolean;
 }
 
 export interface GroupItem {
@@ -38,6 +40,7 @@ export function StudentAdminTable({
   levels,
   groups = [],
   ratings = [],
+  showFilters = true,
 }: StudentAdminTableProps) {
   const [search, setSearch] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
@@ -99,61 +102,85 @@ export function StudentAdminTable({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Filter & Search Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-xs">
-        <div className="flex flex-1 flex-wrap items-center gap-3 min-w-[280px]">
-          {/* Ô tìm kiếm */}
-          <div className="relative flex-1 min-w-[200px]">
-            <span
-              className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm"
-              aria-hidden="true"
-            >
-              🔍
-            </span>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Tìm theo tên học viên, username..."
-              className="w-full rounded-lg border border-gray-300 py-2 pr-3 pl-9 text-sm focus:border-primary focus:outline-hidden"
-            />
+      {showFilters ? (
+        <>
+          {/* Filter & Search Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-xs">
+            <div className="flex flex-1 flex-wrap items-center gap-3 min-w-[280px]">
+              {/* Ô tìm kiếm */}
+              <div className="relative flex-1 min-w-[200px]">
+                <span
+                  className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm"
+                  aria-hidden="true"
+                >
+                  🔍
+                </span>
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Tìm theo tên học viên, username..."
+                  className="w-full rounded-lg border border-gray-300 py-2 pr-3 pl-9 text-sm focus:border-primary focus:outline-hidden"
+                />
+              </div>
+
+              {/* Lọc theo Lớp / Batch */}
+              <select
+                value={selectedGroup}
+                onChange={(e) => setSelectedGroup(e.target.value)}
+                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
+              >
+                <option value="all">Tất cả lớp / nhóm</option>
+                {groups.map((g) => (
+                  <option key={g.id} value={g.name}>
+                    Lớp: {g.name}
+                  </option>
+                ))}
+                <option value="none">Chưa xếp lớp</option>
+              </select>
+
+              {/* Lọc theo Cấp độ */}
+              <select
+                value={selectedLevel}
+                onChange={(e) => setSelectedLevel(e.target.value)}
+                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
+              >
+                <option value="all">Tất cả cấp độ</option>
+                {levels.map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.name}
+                  </option>
+                ))}
+                <option value="none">Chưa phân cấp</option>
+              </select>
+
+              {/* Chọn hệ số Elo */}
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value as RatingCategory)}
+                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
+              >
+                {ratingCategories.map((c) => (
+                  <option key={c} value={c}>
+                    Elo {c.toUpperCase()}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="text-xs font-medium text-text-muted">
+              Tổng số: <strong className="text-gray-900">{filteredStudents.length}</strong> /{' '}
+              {students.length} học viên
+            </div>
           </div>
-
-          {/* Lọc theo Lớp / Batch */}
+        </>
+      ) : (
+        <div className="flex justify-end">
           <select
-            value={selectedGroup}
-            onChange={(e) => setSelectedGroup(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
-          >
-            <option value="all">Tất cả lớp / nhóm</option>
-            {groups.map((g) => (
-              <option key={g.id} value={g.name}>
-                Lớp: {g.name}
-              </option>
-            ))}
-            <option value="none">Chưa xếp lớp</option>
-          </select>
-
-          {/* Lọc theo Cấp độ */}
-          <select
-            value={selectedLevel}
-            onChange={(e) => setSelectedLevel(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
-          >
-            <option value="all">Tất cả cấp độ</option>
-            {levels.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.name}
-              </option>
-            ))}
-            <option value="none">Chưa phân cấp</option>
-          </select>
-
-          {/* Chọn hệ số Elo */}
-          <select
+            aria-label="Elo"
             value={category}
             onChange={(e) => setCategory(e.target.value as RatingCategory)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-primary focus:outline-hidden"
+            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text"
           >
             {ratingCategories.map((c) => (
               <option key={c} value={c}>
@@ -162,12 +189,7 @@ export function StudentAdminTable({
             ))}
           </select>
         </div>
-
-        <div className="text-xs font-medium text-text-muted">
-          Tổng số: <strong className="text-gray-900">{filteredStudents.length}</strong> /{' '}
-          {students.length} học viên
-        </div>
-      </div>
+      )}
 
       {/* Student Data Table */}
       <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-xs">
@@ -307,7 +329,7 @@ export function StudentAdminTable({
   );
 }
 
-function InlineRatingEdit({
+export function InlineRatingEdit({
   academyId,
   studentId,
   name,

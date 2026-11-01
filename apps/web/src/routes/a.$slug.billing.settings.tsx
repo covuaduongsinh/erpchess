@@ -2,7 +2,7 @@ import { useBilling, useBillingMutations } from '@erpchess/api/react';
 import { invoiceNumber, VN_BANKS } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
-import { BillingNav, CurrencySelect } from '../components/billing';
+import { BillingHeader, CurrencySelect } from '../components/billing';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
@@ -18,7 +18,7 @@ function SettingsPage() {
   if (academy.role !== 'owner') return <p className="text-text-muted">{t('bill.ownerOnly')}</p>;
   return (
     <div className="flex flex-col gap-4">
-      <BillingNav />
+      <BillingHeader />
       {settings.isPending ? (
         <Spinner />
       ) : settings.error ? (

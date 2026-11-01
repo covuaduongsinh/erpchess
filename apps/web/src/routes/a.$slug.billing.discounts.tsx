@@ -2,7 +2,7 @@ import { useBilling, useBillingMutations, useDiscounts, usePlans } from '@erpche
 import { type DiscountKind, discountKinds, discountUsable, formatMoney } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
-import { BillingNav, CurrencySelect, MoneyInput } from '../components/billing';
+import { BillingHeader, CurrencySelect, MoneyInput } from '../components/billing';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
@@ -36,7 +36,7 @@ function DiscountsPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <BillingNav />
+      <BillingHeader />
       <div className="grid grid-cols-3 gap-3">
         {stats.map((s) => (
           <div key={s.label} className="rounded-lg bg-white p-4 shadow-sm">

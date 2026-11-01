@@ -7,8 +7,9 @@ import {
   useReminderRule,
 } from '@erpchess/api/react';
 import { createFileRoute } from '@tanstack/react-router';
+import { Bell } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import { Button, Card, ErrorText, Field, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -22,13 +23,14 @@ function NotificationsPage() {
   const { academy } = useAcademy();
   if (academy.role !== 'owner') return <p className="text-text-muted">{t('notify.ownerOnly')}</p>;
   return (
-    <div className="flex flex-col gap-6">
+    <>
+      <PageHeader icon={Bell} title={t('notify.title')} subtitle={t('notify.subtitle')} />
       <div className="grid gap-6 lg:grid-cols-2">
         <CategoriesCard />
         <ReminderCard />
       </div>
       <LogCard />
-    </div>
+    </>
   );
 }
 
