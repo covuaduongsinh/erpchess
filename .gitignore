@@ -38,3 +38,7 @@ rea/evidence/**/capture*.json
 
 # Supabase CLI cục bộ
 supabase/.temp/
+
+# Dữ liệu Masterbase tải về và CSV sinh ra (scripts/masterbase-broadcast.mjs): không commit
+.cache/
+out/
