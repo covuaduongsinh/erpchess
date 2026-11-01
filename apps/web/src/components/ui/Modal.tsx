@@ -10,10 +10,13 @@ export function Modal({
   title,
   onClose,
   children,
+  wide = false,
 }: {
   title: string;
   onClose: () => void;
   children: ReactNode;
+  /** Hộp thoại rộng (danh sách/lưới); mặc định hẹp cho biểu mẫu ngắn. */
+  wide?: boolean;
 }) {
   const { t } = useT();
   const titleId = useId();
@@ -39,7 +42,7 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative z-10 flex max-h-[90vh] w-full max-w-md flex-col gap-4 overflow-y-auto rounded-xl border border-border bg-surface p-6 shadow-2xl"
+        className={`relative z-10 flex max-h-[90vh] w-full flex-col gap-4 overflow-y-auto rounded-xl border border-border bg-surface p-6 shadow-2xl ${wide ? 'max-w-4xl' : 'max-w-md'}`}
       >
         <div className="flex items-start justify-between gap-3">
           <h2 id={titleId} className="text-lg font-bold text-primary">

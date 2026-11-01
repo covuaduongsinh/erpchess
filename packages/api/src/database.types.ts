@@ -2687,6 +2687,51 @@ export type Database = {
         }
         Relationships: []
       }
+      puzzle_bank: {
+        Row: {
+          fen: string
+          id: number
+          imported_at: string
+          lichess_id: string
+          moves: string
+          nb_plays: number
+          opening_tags: string[]
+          popularity: number
+          rating: number
+          rating_deviation: number
+          source: string
+          themes: string[]
+        }
+        Insert: {
+          fen: string
+          id?: never
+          imported_at?: string
+          lichess_id: string
+          moves: string
+          nb_plays?: number
+          opening_tags?: string[]
+          popularity?: number
+          rating: number
+          rating_deviation?: number
+          source?: string
+          themes?: string[]
+        }
+        Update: {
+          fen?: string
+          id?: never
+          imported_at?: string
+          lichess_id?: string
+          moves?: string
+          nb_plays?: number
+          opening_tags?: string[]
+          popularity?: number
+          rating?: number
+          rating_deviation?: number
+          source?: string
+          themes?: string[]
+        }
+        Relationships: []
+      }
       puzzles: {
         Row: {
           academy_id: string | null
@@ -4122,6 +4167,26 @@ export type Database = {
           p_starts: string
         }
         Returns: string
+      }
+      search_puzzle_bank: {
+        Args: {
+          p_limit?: number
+          p_moves_max?: number
+          p_offset?: number
+          p_rating_max?: number
+          p_rating_min?: number
+          p_themes?: string[]
+        }
+        Returns: {
+          fen: string
+          id: number
+          lichess_id: string
+          moves: string
+          popularity: number
+          rating: number
+          themes: string[]
+          total: number
+        }[]
       }
       search_masterbase: {
         Args: {

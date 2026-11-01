@@ -2,9 +2,12 @@
 // tag, lọc/bỏ trùng, và ghi hai tệp CSV (games.csv, positions.csv). `masterbase-export.mjs` (một tệp PGN)
 // và `scripts/masterbase-broadcast.mjs` (kho broadcast của Lichess) cùng dùng, để khoá thế cờ và định dạng
 // CSV luôn khớp với `src/masterbase.ts` và bảng `masterbase_*`.
-import { createWriteStream, mkdirSync } from 'node:fs';
+import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'node:fs';
+import { rename } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createInterface } from 'node:readline';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { Chess } from 'chess.js';
 
 // Phải khớp với MASTERBASE_INDEX_PLIES và positionKey trong src/masterbase.ts
@@ -306,4 +309,41 @@ export async function* decompressZstd(chunks) {
   }
   const run = promisify(zstdDecompress);
   for await (const frame of zstdFrames(chunks)) yield await run(frame);
+}
+
+/**
+ * Tải `url` vào thư mục cache (nếu chưa có hoặc khác dung lượng); trả `{ path, bytes }`. Ghi ra tệp `.part` rồi đổi tên
+ * nên không để lại tệp dở dang. `hint404` là gợi ý khi gặp HTTP 404.
+ */
+export async function downloadToCache(url, cacheDir, { hint404 = '', log = console.log } = {}) {
+  const name = url.split('/').pop();
+  const target = join(cacheDir, name);
+  mkdirSync(cacheDir, { recursive: true });
+  const head = await fetch(url, { method: 'HEAD' });
+  if (!head.ok) {
+    throw new Error(
+      `Không tải được ${url}: HTTP ${head.status}${head.status === 404 ? hint404 : ''}`,
+    );
+  }
+  const size = Number(head.headers.get('content-length') ?? 0);
+  if (existsSync(target) && size > 0 && statSync(target).size === size) {
+    log(`  đã có trong cache: ${name} (${(size / 1048576).toFixed(1)} MB)`);
+    return { path: target, bytes: size };
+  }
+  log(`  tải ${name} (${(size / 1048576).toFixed(1)} MB)…`);
+  const res = await fetch(url);
+  if (!res.ok || !res.body) throw new Error(`Không tải được ${url}: HTTP ${res.status}`);
+  await pipeline(Readable.fromWeb(res.body), createWriteStream(`${target}.part`));
+  await rename(`${target}.part`, target);
+  return { path: target, bytes: statSync(target).size };
+}
+
+/** Luồng dòng văn bản từ tệp thường hoặc `.zst` (giải nén stream theo frame, không nạp cả tệp vào RAM). */
+export function textLines(path) {
+  const raw = createReadStream(path);
+  if (!path.endsWith('.zst')) return linesOf(raw.setEncoding('utf8'));
+  const text = Readable.from(decompressZstd(raw));
+  text.setEncoding('utf8');
+  raw.on('error', (e) => text.destroy(e));
+  return linesOf(text);
 }

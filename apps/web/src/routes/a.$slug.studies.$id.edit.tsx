@@ -11,6 +11,7 @@ import {
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 import { ActivityEditor } from '../components/study/ActivityEditor';
+import { PuzzleBankModal } from '../components/study/PuzzleBankModal';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
@@ -28,6 +29,7 @@ function EditStudyPage() {
   const study = useStudy(id);
   const m = useStudyMutations(session.user.id);
   const [editing, setEditing] = useState<Editing | null>(null);
+  const [bankOpen, setBankOpen] = useState(false);
 
   if (study.isPending) return <Spinner />;
   if (study.error) return <ErrorText error={study.error} />;
@@ -52,6 +54,20 @@ function EditStudyPage() {
         ← {t('studies.title')}
       </Link>
       <StudyDetailsForm key={study.data.updated_at} />
+      {bankOpen && (
+        <PuzzleBankModal
+          settings={defaultsForKind(academy.activity_defaults, 'puzzle')}
+          onClose={() => setBankOpen(false)}
+          onAdd={async (inputs, progress) => {
+            // Thêm tuần tự để giữ đúng thứ tự và vị trí liên tiếp ở cuối study
+            const base = (activities.at(-1)?.position ?? -1) + 1;
+            for (const [i, input] of inputs.entries()) {
+              await m.addActivity.mutateAsync({ studyId: id, input, position: base + i });
+              progress(i + 1);
+            }
+          }}
+        />
+      )}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
         <Card title={t('studies.activities')}>
           <p className="text-sm text-text-muted">
@@ -113,6 +129,13 @@ function EditStudyPage() {
                 </Button>
               ))}
             </div>
+            <Button
+              variant="cta"
+              className="mt-1 self-start text-sm"
+              onClick={() => setBankOpen(true)}
+            >
+              {t('puzzleBank.openButton')}
+            </Button>
           </fieldset>
         </Card>
 
