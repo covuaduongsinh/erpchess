@@ -42,7 +42,7 @@ beforeAll(async () => {
     const page = route.options.component as { preload?: () => Promise<void> };
     await page.preload?.();
   }
-}, 60_000);
+}, 180_000);
 
 // Lần đầu nạp chunk của route (tách mã) có thể chậm hơn mốc 1 giây mặc định
 const SLOW = { timeout: 30_000 };

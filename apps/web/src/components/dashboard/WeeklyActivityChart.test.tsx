@@ -37,4 +37,31 @@ describe('WeeklyActivityChart', () => {
     expect(screen.getByText('Thứ Bảy')).toBeTruthy();
     expect(screen.getByText('Trung bình:')).toBeTruthy();
   });
+
+  it('không còn dữ liệu mẫu và không có huy hiệu xu hướng khi không truyền trendPercent', () => {
+    render(<WeeklyActivityChart data={MOCK_DATA} />);
+    expect(screen.queryByText(/[▲▼]/)).toBeNull();
+    expect(screen.queryByText('▲ +14.5%')).toBeNull();
+  });
+
+  it('xu hướng âm hiện mũi tên xuống; null thì ẩn', () => {
+    const { rerender } = render(<WeeklyActivityChart data={MOCK_DATA} trendPercent={-12} />);
+    expect(screen.getByText('▼ -12%')).toBeTruthy();
+    rerender(<WeeklyActivityChart data={MOCK_DATA} trendPercent={null} />);
+    expect(screen.queryByText(/[▲▼]/)).toBeNull();
+  });
+
+  it('tiêu đề, chú thích và đơn vị tuỳ biến; khoá cột theo date khi nhãn ngày trùng', () => {
+    const rows: DayActivity[] = [
+      { day: 'T2', date: '2026-05-04', label: 'Thứ Hai 4/5', count: 3 },
+      { day: 'T2', date: '2026-05-11', label: 'Thứ Hai 11/5', count: 5 },
+    ];
+    render(
+      <WeeklyActivityChart data={rows} title="Quiz hoàn thành" subtitle="Mỗi ngày" unit="quiz" />,
+    );
+    expect(screen.getByText('Quiz hoàn thành')).toBeTruthy();
+    expect(screen.getByText('Mỗi ngày')).toBeTruthy();
+    expect(screen.getAllByText('T2')).toHaveLength(2);
+    expect(screen.getAllByText(/quiz/).length).toBeGreaterThan(0);
+  });
 });

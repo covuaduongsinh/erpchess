@@ -1,10 +1,12 @@
-import { useQuizzes } from '@erpchess/api/react';
+import { percent } from '@erpchess/api';
+import { useQuizStarted, useQuizzes } from '@erpchess/api/react';
 import { isStaff, type QuizStatus, quizStatus } from '@erpchess/domain';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { Brain, Plus, Search, Timer } from 'lucide-react';
+import { Brain, Play, Plus, Search, Timer, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import { AutoQuiz } from '../components/quiz/AutoQuiz';
 import { FILTERS, type Filter, filterQuizzes, type Sort } from '../components/quiz/filter-quizzes';
+import { QuizBoardTab } from '../components/quiz/QuizBoardTab';
 import { QuizSchedulesPanel } from '../components/quiz/QuizSchedulesPanel';
 import {
   type DateRange,
@@ -41,7 +43,7 @@ function QuizzesPage() {
   const { t } = useT();
   const { academy } = useAcademy();
   const staff = isStaff(academy.role);
-  const [tab, setTab] = useState<'list' | 'auto'>('list');
+  const [tab, setTab] = useState<'list' | 'auto' | 'board'>('list');
 
   const createLink = staff && (
     <Link
@@ -63,23 +65,32 @@ function QuizzesPage() {
         subtitle={t('learnPage.quizSubtitle')}
         actions={createLink}
       />
-      {staff && (
-        <Tabs
-          variant="underline"
-          value={tab}
-          onChange={setTab}
-          items={[
-            { value: 'list', label: t('learnPage.quizTabList'), icon: Brain },
-            {
-              value: 'auto',
-              label: t('learnPage.quizTabAuto'),
-              icon: Timer,
-              badge: t('ui.badgeNew'),
-            },
-          ]}
-        />
+      <Tabs
+        variant="underline"
+        value={tab}
+        onChange={setTab}
+        items={[
+          { value: 'list', label: t('learnPage.quizTabList'), icon: Brain },
+          ...(staff
+            ? [
+                {
+                  value: 'auto' as const,
+                  label: t('learnPage.quizTabAuto'),
+                  icon: Timer,
+                  badge: t('ui.badgeNew'),
+                },
+              ]
+            : []),
+          { value: 'board', label: t('learnPage.quizTabBoard'), icon: Trophy },
+        ]}
+      />
+      {tab === 'board' ? (
+        <QuizBoardTab />
+      ) : staff && tab === 'auto' ? (
+        <AutoTab />
+      ) : (
+        <QuizList createLink={createLink} />
       )}
-      {staff && tab === 'auto' ? <AutoTab /> : <QuizList createLink={createLink} />}
     </>
   );
 }
@@ -109,6 +120,8 @@ function QuizList({ createLink }: { createLink: React.ReactNode }) {
   const { academy } = useAcademy();
   const staff = isStaff(academy.role);
   const quizzes = useQuizzes(academy.id);
+  // Chỉ nhân sự có số liệu này; học viên/phụ huynh không gọi RPC
+  const started = useQuizStarted(staff ? academy.id : undefined);
   const [filter, setFilter] = useState<Filter>('all');
   const [search, setSearch] = useState('');
   const [range, setRange] = useState<DateRange>({ from: '', to: '' });
@@ -134,7 +147,7 @@ function QuizList({ createLink }: { createLink: React.ReactNode }) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <div className={`grid grid-cols-2 gap-3 ${staff ? 'xl:grid-cols-5' : 'xl:grid-cols-4'}`}>
         <StatCard
           accent="blue"
           icon={Brain}
@@ -144,6 +157,26 @@ function QuizList({ createLink }: { createLink: React.ReactNode }) {
         <StatCard accent="green" label={t('quiz.status_open')} value={count('open')} />
         <StatCard accent="orange" label={t('quiz.status_upcoming')} value={count('upcoming')} />
         <StatCard accent="gray" label={t('quiz.status_closed')} value={count('closed')} />
+        {staff && started.data && (
+          <StatCard
+            accent="purple"
+            icon={Play}
+            label={t('learnPage.quizStatStarted')}
+            value={
+              percent(started.data.started, started.data.open) === null
+                ? '—'
+                : `${percent(started.data.started, started.data.open)}%`
+            }
+            hint={
+              started.data.open > 0
+                ? t('learnPage.quizStatStartedHint', {
+                    started: started.data.started,
+                    open: started.data.open,
+                  })
+                : t('learnPage.quizStatStartedNone')
+            }
+          />
+        )}
       </div>
 
       <FilterBar>

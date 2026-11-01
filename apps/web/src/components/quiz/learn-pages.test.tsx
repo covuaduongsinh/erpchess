@@ -14,6 +14,8 @@ const data = vi.hoisted(() => ({
   quizzes: [] as unknown[],
   assignments: [] as unknown[],
   studies: { mine: [] as unknown[], academy: [] as unknown[], public: [] as unknown[] },
+  started: null as null | { total: number; open: number; started: number },
+  board: [] as unknown[],
 }));
 
 const ok = <T,>(d: T) => ({ data: d, isPending: false, error: null });
@@ -21,6 +23,10 @@ const mutation = { mutate: vi.fn(), isPending: false, error: null, data: null, r
 
 vi.mock('@erpchess/api/react', () => ({
   useQuizzes: () => ok(data.quizzes),
+  useQuizStarted: (academyId: string | undefined) => ({
+    data: academyId ? data.started : undefined,
+  }),
+  useAcademyQuizBoard: () => ok(data.board),
   useAssignments: () => ok(data.assignments),
   useProgress: () => ok([]),
   useStudies: (o: { scope: 'mine' | 'academy' | 'public' }) => ok(data.studies[o.scope]),
@@ -85,12 +91,18 @@ beforeAll(async () => {
   for (const r of [QuizzesRoute, AssignmentsRoute, StudiesRoute]) {
     await (r.options.component as { preload?: () => Promise<void> }).preload?.();
   }
-}, 60_000);
+}, 180_000);
 
 beforeEach(() => {
   data.quizzes = [
     quiz(1, 'Chiến thuật cơ bản', '2026-05-10T08:00:00'),
     quiz(2, 'Tàn cuộc Tốt', '2026-04-01T08:00:00'),
+  ];
+  data.started = { total: 4, open: 2, started: 1 };
+  data.board = [
+    { studentId: 's1', displayName: 'An', avatarUrl: null, points: 18, correct: 2, completed: 1 },
+    { studentId: 's2', displayName: 'Bình', avatarUrl: null, points: 10, correct: 1, completed: 0 },
+    { studentId: 's3', displayName: 'Chi', avatarUrl: null, points: 0, correct: 0, completed: 0 },
   ];
   data.assignments = [
     {
@@ -194,6 +206,51 @@ describe('trang Quiz', () => {
     renderRoute(QuizzesRoute, 'student');
     await screen.findByText('Chiến thuật cơ bản', {}, SLOW);
     expect(screen.queryByRole('tab', { name: /Quiz tự động/ })).toBeNull();
+  });
+});
+
+describe('trang Quiz: % đã bắt đầu và bảng xếp hạng (25g)', () => {
+  it('nhân sự thấy thẻ Đã bắt đầu = 50% (1/2 quiz đang giao)', async () => {
+    renderRoute(QuizzesRoute);
+    await screen.findByRole('heading', { level: 1, name: 'Quiz' }, SLOW);
+    const label = screen.getByText('Đã bắt đầu');
+    expect(label.previousElementSibling?.textContent).toBe('50%');
+    expect(screen.getByText('1/2 quiz đang giao đã có người làm')).toBeTruthy();
+  });
+
+  it('không có quiz nào đang giao thì hiện "—" thay vì 0% giả', async () => {
+    data.started = { total: 3, open: 0, started: 0 };
+    renderRoute(QuizzesRoute);
+    await screen.findByText('Đã bắt đầu', {}, SLOW);
+    expect(screen.getByText('Đã bắt đầu').previousElementSibling?.textContent).toBe('—');
+    expect(screen.getByText('Chưa có quiz nào đang giao')).toBeTruthy();
+  });
+
+  it('học viên không thấy thẻ Đã bắt đầu', async () => {
+    renderRoute(QuizzesRoute, 'student');
+    await screen.findByText('Chiến thuật cơ bản', {}, SLOW);
+    expect(screen.queryByText('Đã bắt đầu')).toBeNull();
+  });
+
+  it('tab Bảng xếp hạng có cho mọi vai trò, hiện podium và bỏ người 0 điểm', async () => {
+    renderRoute(QuizzesRoute, 'student');
+    const tab = await screen.findByRole('tab', { name: 'Bảng xếp hạng' }, SLOW);
+    fireEvent.click(tab);
+    expect(screen.getByTestId('podium')).toBeTruthy();
+    expect(screen.getByText('An')).toBeTruthy();
+    expect(screen.getByText('Bình')).toBeTruthy();
+    expect(screen.queryByText('Chi')).toBeNull();
+    expect(screen.queryByPlaceholderText('Tìm quiz theo tên')).toBeNull();
+  });
+
+  it('bảng xếp hạng có chọn khoảng Tuần/Tháng/6 tháng; rỗng thì có trạng thái rỗng', async () => {
+    data.board = [];
+    renderRoute(QuizzesRoute);
+    fireEvent.click(await screen.findByRole('tab', { name: 'Bảng xếp hạng' }, SLOW));
+    expect(screen.getByRole('tab', { name: 'Tuần này', selected: true })).toBeTruthy();
+    fireEvent.click(screen.getByRole('tab', { name: 'Tháng này' }));
+    expect(screen.getByRole('tab', { name: 'Tháng này', selected: true })).toBeTruthy();
+    expect(screen.getByText('Chưa có ai ghi điểm quiz trong khoảng này.')).toBeTruthy();
   });
 });
 

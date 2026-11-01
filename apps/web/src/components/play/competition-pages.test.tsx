@@ -95,7 +95,7 @@ beforeAll(async () => {
   for (const r of [PlayRoute, SimulsRoute, TournamentsRoute]) {
     await (r.options.component as { preload?: () => Promise<void> }).preload?.();
   }
-}, 60_000);
+}, 180_000);
 
 beforeEach(() => {
   data.tournaments = [

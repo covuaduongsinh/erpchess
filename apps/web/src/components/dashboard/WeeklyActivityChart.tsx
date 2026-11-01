@@ -5,28 +5,29 @@ export interface DayActivity {
   label: string; // 'Thứ Hai', 'Thứ Ba'...
   count: number;
   isToday?: boolean;
+  /** Khoá ổn định khi nhãn `day` có thể trùng (khoảng dài hơn một tuần). */
+  date?: string;
 }
 
 export interface WeeklyActivityChartProps {
-  data?: DayActivity[];
+  /** Số liệu thật từng ngày (không có dữ liệu mẫu mặc định). */
+  data: DayActivity[];
   totalSolved?: number;
-  trendPercent?: number;
+  /** % thay đổi so với kỳ trước; không truyền (hoặc null) thì ẩn huy hiệu xu hướng. */
+  trendPercent?: number | null;
+  title?: string;
+  subtitle?: string;
+  /** Đơn vị của số liệu, vd. "bài", "lượt", "quiz". */
+  unit?: string;
 }
 
-const DEFAULT_DAYS: DayActivity[] = [
-  { day: 'T2', label: 'Thứ Hai', count: 12 },
-  { day: 'T3', label: 'Thứ Ba', count: 18 },
-  { day: 'T4', label: 'Thứ Tư', count: 15 },
-  { day: 'T5', label: 'Thứ Năm', count: 24, isToday: true },
-  { day: 'T6', label: 'Thứ Sáu', count: 20 },
-  { day: 'T7', label: 'Thứ Bảy', count: 32 },
-  { day: 'CN', label: 'Chủ Nhật', count: 28 },
-];
-
 export function WeeklyActivityChart({
-  data = DEFAULT_DAYS,
+  data,
   totalSolved,
-  trendPercent = 14.5,
+  trendPercent,
+  title = '📊 Hoạt động giải bài tập trong tuần',
+  subtitle = 'Tần suất giải thế cờ và nộp bài tập của học viên toàn học viện',
+  unit = 'bài',
 }: WeeklyActivityChartProps) {
   const { maxCount, total, avgPerDay, bestDay } = useMemo(() => {
     let max = 1;
@@ -52,17 +53,22 @@ export function WeeklyActivityChart({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <h3 className="font-bold text-base text-text">📊 Hoạt động giải bài tập trong tuần</h3>
-          <p className="text-xs text-text-muted">
-            Tần suất giải thế cờ và nộp bài tập của học viên toàn học viện
-          </p>
+          <h3 className="font-bold text-base text-text">{title}</h3>
+          <p className="text-xs text-text-muted">{subtitle}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-bold text-emerald-700 text-xs">
-            ▲ +{trendPercent}%
-          </span>
+          {trendPercent !== undefined && trendPercent !== null && (
+            <span
+              className={`rounded-full px-2.5 py-1 font-bold text-xs ${
+                trendPercent >= 0 ? 'bg-green/15 text-green' : 'bg-danger/10 text-danger'
+              }`}
+            >
+              {trendPercent >= 0 ? '▲ +' : '▼ '}
+              {trendPercent}%
+            </span>
+          )}
           <span className="font-bold text-lg text-primary">{total}</span>
-          <span className="text-text-muted text-xs">bài</span>
+          <span className="text-text-muted text-xs">{unit}</span>
         </div>
       </div>
 
@@ -73,12 +79,12 @@ export function WeeklyActivityChart({
 
           return (
             <div
-              key={item.day}
+              key={item.date ?? item.day}
               className="group relative flex flex-1 flex-col items-center h-full justify-end cursor-pointer"
             >
               {/* Tooltip on Hover via CSS */}
               <div className="pointer-events-none absolute -top-10 z-20 hidden whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1 text-center font-medium text-white text-xs shadow-lg group-hover:block animate-in fade-in duration-150">
-                <span className="font-bold">{item.count}</span> bài ({item.label})
+                <span className="font-bold">{item.count}</span> {unit} ({item.label})
               </div>
 
               {/* Number Badge above Bar */}
@@ -121,12 +127,12 @@ export function WeeklyActivityChart({
       <div className="flex flex-wrap items-center justify-between border-t border-border pt-3 text-xs text-text-muted">
         <div>
           <span>Trung bình: </span>
-          <strong className="text-text">{avgPerDay}</strong> bài/ngày
+          <strong className="text-text">{avgPerDay}</strong> {unit}/ngày
         </div>
         {bestDay && (
           <div>
             <span>Tích cực nhất: </span>
-            <strong className="text-text">{bestDay.label}</strong> ({bestDay.count} bài)
+            <strong className="text-text">{bestDay.label}</strong> ({bestDay.count} {unit})
           </div>
         )}
       </div>

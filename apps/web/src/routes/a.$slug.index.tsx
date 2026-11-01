@@ -32,6 +32,7 @@ import { type ReactNode, useMemo, useState } from 'react';
 import { AcademyContactCard } from '../components/academy/BrandingCard';
 import { LeaderboardPodium } from '../components/dashboard/LeaderboardPodium';
 import { QuickSessionModal } from '../components/dashboard/QuickSessionModal';
+import { WeeklyStatsPanel } from '../components/dashboard/WeeklyStatsPanel';
 import { Card, EmptyState, ErrorText, PageHeader, Spinner, StatCard, Tabs } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
@@ -89,7 +90,14 @@ function OverviewPage() {
                   { value: 'sessions', label: t('overview.tabSessions'), icon: Radio },
                 ]}
               />
-              {tab === 'stats' ? <AcademyColumn /> : <OngoingSessionsCard />}
+              {tab === 'stats' ? (
+                <>
+                  <WeeklyStatsPanel academyId={academy.id} />
+                  <AcademyColumn />
+                </>
+              ) : (
+                <OngoingSessionsCard />
+              )}
             </>
           ) : (
             <>
