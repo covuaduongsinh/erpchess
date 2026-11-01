@@ -10,6 +10,7 @@ import type {
   ClassroomInput,
   CourseInput,
   ExerciseInput,
+  FideInput,
   InviteSenderInput,
   LevelInput,
   LocationInput,
@@ -711,6 +712,27 @@ export function useUpdateAcademyProfile(academyId: string) {
   return useMutation({
     mutationFn: (input: AcademyProfileInput) => api.updateAcademyProfile(client, academyId, input),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+/** Chủ học viện bật/tắt phần FIDE (Giai đoạn 26a). */
+export function useSetAcademyFideEnabled(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (enabled: boolean) => api.setAcademyFideEnabled(client, academyId, enabled),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+/** Nhân sự nhập mã FIDE và Elo FIDE của một học viên (Giai đoạn 26a). */
+export function useSetMemberFide(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ studentId, ...input }: FideInput & { studentId: string }) =>
+      api.setMemberFide(client, academyId, studentId, input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.members(academyId) }),
   });
 }
 

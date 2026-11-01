@@ -1,5 +1,6 @@
-import type { StudentDetailedReport } from '@erpchess/domain';
+import type { MemberFide, StudentDetailedReport } from '@erpchess/domain';
 import { type ReactNode, useState } from 'react';
+import { fideParts } from '../../lib/fide-text';
 import { formatDate } from '../../lib/format';
 import { useT } from '../../lib/use-t';
 import { Button } from '../ui';
@@ -17,6 +18,8 @@ export interface PrintableReportCardProps {
   academy: ReportAcademy;
   levelName?: string;
   batchName?: string;
+  /** Mã và Elo FIDE của học viên (chỉ truyền khi học viện bật FIDE và học viên có dữ liệu). */
+  fide?: MemberFide;
   /** Khoảng thời gian của báo cáo, vd. "Tháng này". */
   periodLabel?: string;
   /** Tên HLV ký phiếu (người đang xem nếu là staff). */
@@ -41,6 +44,7 @@ export function PrintableReportCard({
   academy,
   levelName,
   batchName,
+  fide,
   periodLabel,
   signerName,
   onClose,
@@ -48,6 +52,12 @@ export function PrintableReportCard({
   const { t, i18n } = useT();
   const { student, summary } = report;
   const [coachNote, setCoachNote] = useState('');
+  const fideText = fideParts(fide, {
+    id: t('fide.idShort'),
+    standard: t('fide.standardShort'),
+    rapid: t('fide.rapidShort'),
+    blitz: t('fide.blitzShort'),
+  });
   const date = (iso: string) => formatDate(iso, i18n.language);
 
   const handlePrint = () => {
@@ -127,6 +137,7 @@ export function PrintableReportCard({
             <Info label={t('reports.printAccount')} value={`@${student.username}`} />
             <Info label={t('reports.colLevel')} value={levelName || '—'} />
             <Info label={t('reports.printBatch')} value={batchName || '—'} />
+            {fideText && <Info label={t('fide.title')} value={fideText} />}
           </dl>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

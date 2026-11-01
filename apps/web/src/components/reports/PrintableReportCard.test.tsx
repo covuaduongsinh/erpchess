@@ -103,6 +103,26 @@ describe('PrintableReportCard', () => {
     expect(container.querySelector('.report-print')).toBeTruthy();
   });
 
+  it('shows a FIDE row only when the student has FIDE data', () => {
+    const { unmount } = render(
+      <PrintableReportCard report={MOCK_REPORT} academy={ACADEMY} onClose={vi.fn()} />,
+    );
+    expect(screen.queryByText('fide.title')).toBeNull();
+    unmount();
+    render(
+      <PrintableReportCard
+        report={MOCK_REPORT}
+        academy={ACADEMY}
+        fide={{ id: '12345678', standard: 1800, rapid: null, blitz: 1700 }}
+        onClose={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('fide.title')).toBeTruthy();
+    expect(
+      screen.getByText('fide.idShort 12345678 · fide.standardShort 1800 · fide.blitzShort 1700'),
+    ).toBeTruthy();
+  });
+
   it('lists recent activity rows and shows an empty state', () => {
     render(
       <PrintableReportCard

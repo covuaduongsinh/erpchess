@@ -86,7 +86,7 @@ const member = (id: string, name: string, username: string, role = 'student') =>
   profile: { id, display_name: name, username },
 });
 
-function renderPage(role: AcademyRole = 'owner', userId = 'u-owner') {
+function renderPage(role: AcademyRole = 'owner', userId = 'u-owner', fideEnabled = false) {
   const Page = Route.options.component as ComponentType;
   const academy = {
     id: 'a1',
@@ -95,6 +95,7 @@ function renderPage(role: AcademyRole = 'owner', userId = 'u-owner') {
     role,
     logo_url: null,
     contact: {},
+    fide_enabled: fideEnabled,
   } as unknown as MyAcademy;
   return render(
     <I18nextProvider i18n={createI18n('vi')}>
@@ -155,6 +156,33 @@ describe('trang Báo cáo theo học viên', () => {
     const current = within(list()).getByRole('button', { current: true });
     expect(current.textContent).toContain('Nguyễn Văn An');
     expect(screen.queryByText('Chọn học viên để xem báo cáo')).toBeNull();
+  });
+
+  it('FIDE: dòng FIDE của học viên chỉ hiện khi học viện bật FIDE và học viên có dữ liệu', async () => {
+    h.members = [
+      {
+        ...member('s1', 'Nguyễn Văn An', 'an'),
+        fide: { id: '12345678', standard: 1800, rapid: null, blitz: null },
+      },
+      {
+        ...member('s2', 'Trần Thị Bình', 'binh'),
+        fide: { id: null, standard: null, rapid: null, blitz: null },
+      },
+    ];
+    vi.spyOn(Route, 'useSearch').mockReturnValue({ student: 's1' });
+    const { unmount } = renderPage('owner', 'u-owner', true);
+    expect(
+      await screen.findByText('FIDE: ID FIDE 12345678 · Standard 1800', {}, SLOW),
+    ).toBeTruthy();
+    unmount();
+    renderPage('owner', 'u-owner', false);
+    expect(await screen.findByText('Chi tiết báo cáo', {}, SLOW)).toBeTruthy();
+    expect(screen.queryByText(/FIDE:/)).toBeNull();
+    cleanup();
+    vi.spyOn(Route, 'useSearch').mockReturnValue({ student: 's2' });
+    renderPage('owner', 'u-owner', true);
+    expect(await screen.findByText('Chi tiết báo cáo', {}, SLOW)).toBeTruthy();
+    expect(screen.queryByText(/FIDE:/)).toBeNull();
   });
 
   it('?student= không thuộc học viện thì coi như chưa chọn', async () => {

@@ -24,6 +24,7 @@ describe('buildNavGroups', () => {
       'coaches',
       'branding',
       'integrations',
+      'rating',
       'groups',
       'batches',
       'leads',
@@ -55,7 +56,15 @@ describe('buildNavGroups', () => {
       'leads',
     ])
       expect(off, id).not.toContain(id);
-    for (const id of ['students', 'coaches', 'calendar', 'levels', 'locations', 'database'])
+    for (const id of [
+      'students',
+      'coaches',
+      'calendar',
+      'levels',
+      'rating',
+      'locations',
+      'database',
+    ])
       expect(off, id).toContain(id);
     expect(ids('coach', true)).toContain('leads');
   });
@@ -78,6 +87,7 @@ describe('buildNavGroups', () => {
       'integrations',
       'calendar',
       'levels',
+      'rating',
       'locations',
       'notifications',
     ])

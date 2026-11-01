@@ -90,6 +90,7 @@ DATA_PAGES = [
     ('bao_cao_hoc_vien', f'{A}/reports', "ul[aria-label='Danh sách học viên'] li:first-child button"),
     ('bao_cao_toan_hoc_vien', f'{A}/reports?view=academy', None),
     ('menu_cuon', f'{A}/billing/discounts', "aside nav a[href$='/certificates']"),
+    ('rating', f'{A}/rating', None),
     ('tich_hop', f'{A}/integrations', None),
     ('tich_hop_vietqr', f'{A}/integrations', "li:has-text('VietQR') button"),
     ('tich_hop_nguoi_gui', f'{A}/integrations', "li:has-text('Người gửi lời mời') button"),

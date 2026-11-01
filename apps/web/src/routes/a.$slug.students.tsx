@@ -250,6 +250,7 @@ function StudentsPage() {
               groupOf={groupOf}
               ratings={ratings.data ?? []}
               category="rapid"
+              fideEnabled={academy.fide_enabled}
             />
           ) : (
             <StudentAdminTable
@@ -260,6 +261,7 @@ function StudentsPage() {
               levels={levels.data ?? []}
               groups={groupItems}
               ratings={ratings.data ?? []}
+              fideEnabled={academy.fide_enabled}
             />
           )}
         </>

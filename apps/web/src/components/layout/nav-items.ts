@@ -30,6 +30,7 @@ import {
   School,
   Shield,
   Swords,
+  TrendingUp,
   Trophy,
   UserPlus,
   Users,
@@ -148,6 +149,7 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
             ? [item('integrations', '/a/$slug/integrations', 'nav.integrations', Plug)]
             : []),
           item('levels', '/a/$slug/levels', 'levels.title', Shield),
+          item('rating', '/a/$slug/rating', 'nav.rating', TrendingUp),
           item('locations', '/a/$slug/locations', 'location.title', MapPin),
           item('certificates', '/a/$slug/certificates', 'cert.title', Award),
         ],
