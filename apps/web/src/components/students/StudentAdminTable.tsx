@@ -1,6 +1,7 @@
 import type { Member } from '@erpchess/api';
 import { useCreateInvitation, useSetInitialRating, useSetStudentLevel } from '@erpchess/api/react';
 import { type RatingCategory, ratingCategories } from '@erpchess/domain';
+import { Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { InviteLink } from '../InviteLink';
 import { Button, ErrorText } from '../ui';
@@ -272,8 +273,9 @@ export function StudentAdminTable({
                     {/* Cột Lớp / Batch */}
                     <td className="px-4 py-3.5">
                       {groupName ? (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 font-medium text-blue-700 text-xs">
-                          🏫 {groupName}
+                        <span className="inline-flex items-center gap-1 rounded-md bg-primary-soft px-2.5 py-1 font-medium text-primary text-xs">
+                          <Users className="size-3.5" aria-hidden="true" />
+                          {groupName}
                         </span>
                       ) : (
                         <span className="text-xs text-text-muted italic">Chưa xếp lớp</span>

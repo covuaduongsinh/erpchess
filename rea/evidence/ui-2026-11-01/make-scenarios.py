@@ -19,7 +19,8 @@ import json
 import pathlib
 import sys
 
-slug = sys.argv[1] if len(sys.argv) > 1 else 'thu-nghiem-ui'
+args = [a for a in sys.argv[1:] if not a.startswith('--')]
+slug = args[0] if args else 'thu-nghiem-ui'
 base = 'http://localhost:4173'
 here = pathlib.Path(__file__).parent
 template = json.loads((here / 'scenario.json').read_text(encoding='utf-8'))
@@ -60,6 +61,23 @@ PAGES = [
 ]
 
 
+# Chế độ có dữ liệu (`--data`): sáu trang chính, mỗi trang có thể bấm thêm một nút/tab trước khi chụp.
+# (tên ảnh, đường dẫn, bộ chọn CSS cần bấm sau khi tải — hoặc None)
+DATA_PAGES = [
+    ('tong_quan', '/dashboard', None),
+    ('hoc_vien_danh_sach', '/administration/students', "button[aria-label='Danh sách']"),
+    ('hoc_vien_luoi', '/administration/students', "button[aria-label='Lưới']"),
+    ('batch', '/batches', None),
+    ('quiz', '/quiz/list', None),
+    ('quiz_bxh', '/quiz/list', "[role=tab]:nth-of-type(3)"),
+    ('giai_dau', '/tournaments', None),
+    ('khu_thi_dau', '/game-area', None),
+    ('bai_tap', '/assignment/exercise', None),
+    ('simul', '/simul', None),
+]
+DATA = '--data' in sys.argv
+
+
 def build(name: str, width: int, height: int, scheme: str, mobile: bool) -> None:
     acts = [
         {"step_id": "login_form", "locator": {"selector": "input[name=email]", "kind": "css"}, "state": "visible", "timeout_ms": 60000, "action": "wait_for"},
@@ -68,8 +86,11 @@ def build(name: str, width: int, height: int, scheme: str, mobile: bool) -> None
         {"step_id": "submit", "locator": {"selector": "button[type=submit]", "kind": "css"}, "timeout_ms": 15000, "action": "click"},
         {"step_id": "after_login", "duration_ms": 8000, "action": "wait_for_timeout"},
     ]
-    for key, path in PAGES:
+    pages = [(k, p, None) for k, p in PAGES] if not DATA else DATA_PAGES
+    for key, path, click in pages:
         acts.append({"step_id": f"go_{key}", "timeout_ms": 60000, "wait_until": "load", "destination": {"url": base + path}, "action": "goto"})
+        if click:
+            acts.append({"step_id": f"click_{key}", "locator": {"selector": click, "kind": "css"}, "timeout_ms": 15000, "action": "click"})
         acts.append({"step_id": f"shot_{key}", "duration_ms": 6000, "action": "wait_for_timeout"})
         if mobile and key == 'tong_quan':
             # Ảnh drawer của sidebar trên màn hẹp
@@ -88,10 +109,11 @@ def build(name: str, width: int, height: int, scheme: str, mobile: bool) -> None
         {"secret_id": "erp_pass", "environment_variable": "ERP_TEST_PASSWORD"},
     ]
     (here / name).write_text(json.dumps(scenario, indent=1, ensure_ascii=False) + '\n', encoding='utf-8')
-    print(name, len(PAGES), 'trang')
+    print(name, len(DATA_PAGES if DATA else PAGES), 'trang')
 
 
-build('scenario-erpchess-desktop-light.json', 1440, 900, 'light', False)
-build('scenario-erpchess-desktop-dark.json', 1440, 900, 'dark', False)
-build('scenario-erpchess-mobile-light.json', 390, 844, 'light', True)
-build('scenario-erpchess-mobile-dark.json', 390, 844, 'dark', True)
+pre = 'scenario-erpchess-data-' if DATA else 'scenario-erpchess-'
+build(pre + 'desktop-light.json', 1440, 900, 'light', False)
+build(pre + 'desktop-dark.json', 1440, 900, 'dark', False)
+build(pre + 'mobile-light.json', 390, 844, 'light', True)
+build(pre + 'mobile-dark.json', 390, 844, 'dark', True)

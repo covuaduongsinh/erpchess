@@ -17,7 +17,7 @@ import {
   scheduleSchema,
 } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { Layers, Plus } from 'lucide-react';
+import { CalendarDays, Layers, MapPin, Plus, UserRound, Users } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { LevelBadge } from '../components/students/LevelBadge';
 import { Button, EmptyState, ErrorText, Field, PageHeader, Spinner } from '../components/ui';
@@ -42,7 +42,9 @@ function BatchesPage() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [activeBatchId, setActiveBatchId] = useState<string | null>(null);
 
-  const activeBatch = groups.data?.find((g) => g.id === activeBatchId);
+  // Trang này chỉ liệt kê batch; nhóm thường quản lý ở trang Nhóm
+  const batches = groups.data?.filter((g) => g.kind === 'batch') ?? [];
+  const activeBatch = batches.find((g) => g.id === activeBatchId);
 
   return (
     <>
@@ -64,7 +66,7 @@ function BatchesPage() {
         <Spinner />
       ) : groups.error ? (
         <ErrorText error={groups.error} />
-      ) : groups.data.length === 0 ? (
+      ) : batches.length === 0 ? (
         <EmptyState
           dashed
           icon={Layers}
@@ -80,7 +82,7 @@ function BatchesPage() {
         />
       ) : (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {groups.data.map((batch) => {
+          {batches.map((batch) => {
             const level = levels.data?.find((l) => l.id === batch.level_id);
             const coach = members.data?.find((m) => m.profile.id === batch.coach_id);
             const parsedSchedule = scheduleSchema.safeParse(batch.schedule).data ?? [];
@@ -101,34 +103,27 @@ function BatchesPage() {
                   {/* Thông tin HLV & Số học viên */}
                   <div className="mt-4 flex flex-col gap-2.5 text-xs text-text-muted">
                     <div className="flex items-center gap-2">
-                      <span className="text-base" aria-hidden="true">
-                        👨‍🏫
-                      </span>
+                      <UserRound className="size-4 shrink-0" aria-hidden="true" />
                       <span>
-                        Huấn luyện viên:{' '}
+                        {t('groups.coachLabel')}:{' '}
                         <strong className="text-text">
-                          {coach?.profile.display_name || 'Chưa phân công'}
+                          {coach?.profile.display_name || t('groups.noCoach')}
                         </strong>
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-base" aria-hidden="true">
-                        👥
-                      </span>
+                      <Users className="size-4 shrink-0" aria-hidden="true" />
                       <span>
-                        Sĩ số học viên:{' '}
+                        {t('groups.rosterSize')}:{' '}
                         <strong className="text-primary font-bold text-sm">
-                          {batch.studentCount ?? 0}
-                        </strong>{' '}
-                        học viên
+                          {t('groups.studentCount', { count: batch.studentCount ?? 0 })}
+                        </strong>
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-base" aria-hidden="true">
-                        📍
-                      </span>
+                      <MapPin className="size-4 shrink-0" aria-hidden="true" />
                       <span>
                         {t(`location.mode_${(batch.mode ?? 'online') as BatchMode}`)}
                         {batch.location_id && (
@@ -144,9 +139,7 @@ function BatchesPage() {
 
                     {parsedSchedule.length > 0 && (
                       <div className="flex items-start gap-2">
-                        <span className="text-base" aria-hidden="true">
-                          📅
-                        </span>
+                        <CalendarDays className="size-4 shrink-0" aria-hidden="true" />
                         <div className="flex flex-wrap gap-1">
                           {parsedSchedule.map((s) => (
                             <span
@@ -169,7 +162,7 @@ function BatchesPage() {
                     onClick={() => setActiveBatchId(batch.id)}
                     className="text-xs font-semibold text-primary hover:underline"
                   >
-                    Quản lý học viên →
+                    {t('groups.manage')} →
                   </button>
 
                   <Link
@@ -177,7 +170,7 @@ function BatchesPage() {
                     params={{ slug }}
                     className="rounded-md bg-bg px-2.5 py-1 text-xs font-medium text-text hover:bg-primary-soft"
                   >
-                    Xem lịch lớp
+                    {t('groups.viewClasses')}
                   </Link>
                 </div>
               </div>
@@ -247,10 +240,11 @@ function CreateBatchModal({
       name: name.trim(),
       coachId: coachId || undefined,
     });
-    if (res?.id && (levelId || mode !== 'online')) {
+    if (res?.id) {
       await update.mutateAsync({
         id: res.id,
         patch: {
+          kind: 'batch',
           ...(levelId ? { levelId } : {}),
           ...(mode !== 'online' ? { mode, locationId } : {}),
         },

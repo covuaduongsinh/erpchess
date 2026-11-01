@@ -58,7 +58,7 @@ describe('WeeklyStatsPanel', () => {
     renderPanel();
     expect(screen.getByLabelText('Từ ngày')).toHaveProperty('value', week.from);
     expect(screen.getByLabelText('Đến ngày')).toHaveProperty('value', week.to);
-    expect(screen.getByText('📊 Lượt làm bài theo ngày')).toBeTruthy();
+    expect(screen.getByText('Lượt làm bài theo ngày')).toBeTruthy();
     // 7 ngày x 2 lượt, đơn vị theo chuỗi
     expect(screen.getByText('14')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Tuần này' })).toBeNull();
@@ -74,11 +74,11 @@ describe('WeeklyStatsPanel', () => {
   it('đổi chuỗi: điểm danh dùng lượt có mặt và chú thích tổng; quiz dùng số hoàn thành', () => {
     renderPanel();
     fireEvent.click(screen.getByRole('tab', { name: 'Điểm danh' }));
-    expect(screen.getByText('🧑‍🏫 Lượt có mặt theo ngày')).toBeTruthy();
+    expect(screen.getByText('Lượt có mặt theo ngày')).toBeTruthy();
     expect(screen.getByText(/trên 28 lượt điểm danh/)).toBeTruthy(); // 7 ngày x 4
     expect(screen.getByText('7')).toBeTruthy(); // 7 ngày x 1
     fireEvent.click(screen.getByRole('tab', { name: 'Quiz hoàn thành' }));
-    expect(screen.getByText('🏁 Quiz hoàn thành theo ngày')).toBeTruthy();
+    expect(screen.getByText('Quiz hoàn thành theo ngày')).toBeTruthy();
     expect(screen.getByText('21')).toBeTruthy(); // 7 ngày x 3
   });
 
@@ -134,6 +134,6 @@ describe('WeeklyStatsPanel', () => {
     h.fail = true;
     renderPanel();
     expect(screen.getByRole('alert')).toBeTruthy();
-    expect(screen.queryByText('📊 Lượt làm bài theo ngày')).toBeNull();
+    expect(screen.queryByText('Lượt làm bài theo ngày')).toBeNull();
   });
 });

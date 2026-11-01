@@ -19,7 +19,7 @@ describe('WeeklyActivityChart', () => {
 
   it('hiển thị tiêu đề biểu đồ và tổng số bài', () => {
     render(<WeeklyActivityChart data={MOCK_DATA} totalSolved={175} trendPercent={20} />);
-    expect(screen.getByText('📊 Hoạt động giải bài tập trong tuần')).toBeTruthy();
+    expect(screen.getByText('Hoạt động giải bài tập trong tuần')).toBeTruthy();
     expect(screen.getByText('175')).toBeTruthy();
     expect(screen.getByText('▲ +20%')).toBeTruthy();
   });
