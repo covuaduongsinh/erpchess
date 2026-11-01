@@ -139,3 +139,5 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 **Giữ nguyên có chủ đích** (nút chọn ngắn như `3+2`, `5+0`, "Trắng/Ngẫu nhiên/Đen", lưới 7 ngày của lịch giải, khối XP 3 số của học viên): ba cột vẫn vừa màn 390 px, đổi sang một cột chỉ làm dài trang. Cửa sổ "Thách đấu" ở trang Chơi cờ chỉ mở được khi có học viên online nên chưa có ảnh; kiểm bằng đọc mã.
 
 **Còn lại:** cửa sổ Thách đấu chưa chụp; trang Chơi cờ còn chữ cứng tiếng Việt ("Kiểm soát thời gian", "Màu quân của bạn", "Thách đấu với …") chưa qua i18n.
+
+**Bổ sung (cùng PR chờ áp migration):** Học phí, hàng tab con (Hoá đơn / Gói học phí / Giảm giá / Cài đặt) xuống dòng "Cài đặt" trên mobile → một hàng cuộn ngang, nhãn không xuống dòng (`BillingNav`). Ảnh: `mobile-fix/sau/{mobile-light,mobile-dark}/shot_giam_gia.png`.

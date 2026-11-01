@@ -40,14 +40,14 @@ export function BillingNav() {
     { to: '/a/$slug/billing/settings', label: t('bill.settings'), exact: false },
   ] as const;
   return (
-    <nav className="flex flex-wrap gap-2 print:hidden">
+    <nav className="flex gap-2 overflow-x-auto print:hidden">
       {links.map((l) => (
         <Link
           key={l.to}
           to={l.to}
           params={{ slug: academy.slug }}
           activeOptions={{ exact: l.exact }}
-          className="rounded-full px-3 py-1 text-sm text-text-muted hover:bg-primary/10 data-[status=active]:bg-primary data-[status=active]:text-text-on-primary"
+          className="shrink-0 whitespace-nowrap rounded-full px-3 py-1 text-sm text-text-muted hover:bg-primary/10 data-[status=active]:bg-primary data-[status=active]:text-text-on-primary"
         >
           {l.label}
         </Link>
