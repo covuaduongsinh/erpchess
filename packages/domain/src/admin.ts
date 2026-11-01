@@ -62,6 +62,41 @@ export function sortSchedule(slots: readonly ScheduleSlot[]): ScheduleSlot[] {
   return [...slots].sort((a, b) => order(a.day) - order(b.day) || a.start.localeCompare(b.start));
 }
 
+/** Elo FIDE hợp lệ: 1000–3300 (nhập tay, không gọi API FIDE). */
+const optionalFideElo = z
+  .number()
+  .int('fideElo')
+  .min(1000, 'fideElo')
+  .max(3300, 'fideElo')
+  .nullable();
+
+/**
+ * Mã FIDE và Elo FIDE 3 loại của một học viên. `fideId` rỗng = chưa có; Elo `null` = chưa có.
+ * Lỗi mang mã `fideId` / `fideElo` để giao diện dịch.
+ */
+export const fideInputSchema = z.object({
+  fideId: z
+    .string()
+    .trim()
+    .refine((v) => v === '' || /^[0-9]{3,12}$/.test(v), 'fideId')
+    .default(''),
+  standard: optionalFideElo.default(null),
+  rapid: optionalFideElo.default(null),
+  blitz: optionalFideElo.default(null),
+});
+export type FideInput = z.input<typeof fideInputSchema>;
+export type MemberFide = {
+  id: string | null;
+  standard: number | null;
+  rapid: number | null;
+  blitz: number | null;
+};
+
+/** Học viên có ít nhất một thông tin FIDE (để báo cáo/phiếu in quyết định có hiện dòng FIDE không). */
+export function hasFide(f: MemberFide | null | undefined): f is MemberFide {
+  return !!f && (!!f.id || f.standard !== null || f.rapid !== null || f.blitz !== null);
+}
+
 export const socialKeys = ['facebook', 'youtube', 'tiktok', 'zalo', 'website'] as const;
 export type SocialKey = (typeof socialKeys)[number];
 

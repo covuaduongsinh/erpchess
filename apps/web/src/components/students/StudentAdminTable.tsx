@@ -3,8 +3,10 @@ import { useCreateInvitation, useSetInitialRating, useSetStudentLevel } from '@e
 import { type RatingCategory, ratingCategories } from '@erpchess/domain';
 import { Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useT } from '../../lib/use-t';
 import { InviteLink } from '../InviteLink';
 import { Button, ErrorText } from '../ui';
+import { FideEditor } from './FideEditor';
 import { LevelBadge } from './LevelBadge';
 
 export interface LevelItem {
@@ -27,6 +29,8 @@ export interface StudentAdminTableProps {
   ratings?: StudentRating[];
   /** `false` khi trang cha đã có thanh lọc riêng; vẫn giữ ô chọn loại Elo. */
   showFilters?: boolean;
+  /** Học viện bật FIDE: thêm cột mã FIDE và Elo FIDE (nhân sự nhập tay). */
+  fideEnabled?: boolean;
 }
 
 export interface GroupItem {
@@ -42,7 +46,9 @@ export function StudentAdminTable({
   groups = [],
   ratings = [],
   showFilters = true,
+  fideEnabled = false,
 }: StudentAdminTableProps) {
+  const { t } = useT();
   const [search, setSearch] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
@@ -209,6 +215,11 @@ export function StudentAdminTable({
               <th scope="col" className="px-4 py-3.5">
                 Elo ({category.toUpperCase()})
               </th>
+              {fideEnabled && (
+                <th scope="col" className="px-4 py-3.5">
+                  {t('fide.columnHeader')}
+                </th>
+              )}
               <th scope="col" className="px-4 py-3.5">
                 Phụ huynh
               </th>
@@ -217,12 +228,12 @@ export function StudentAdminTable({
           <tbody className="divide-y divide-border">
             {filteredStudents.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-8 text-center text-text-muted">
+                <td colSpan={fideEnabled ? 6 : 5} className="py-8 text-center text-text-muted">
                   Không tìm thấy học viên nào phù hợp với bộ lọc.
                 </td>
               </tr>
             ) : (
-              filteredStudents.map(({ profile, levelId }) => {
+              filteredStudents.map(({ profile, levelId, fide }) => {
                 const currentLevelName = levelId ? levelMap.get(levelId) : null;
                 const groupName = studentGroupMap.get(profile.id);
                 const currentRating = ratingOf(profile.id);
@@ -292,6 +303,18 @@ export function StudentAdminTable({
                         value={currentRating}
                       />
                     </td>
+
+                    {/* Cột FIDE (chỉ khi học viện bật) */}
+                    {fideEnabled && (
+                      <td className="px-4 py-3.5">
+                        <FideEditor
+                          academyId={academyId}
+                          studentId={profile.id}
+                          name={profile.display_name}
+                          fide={fide}
+                        />
+                      </td>
+                    )}
 
                     {/* Cột Phụ huynh */}
                     <td className="px-4 py-3.5">

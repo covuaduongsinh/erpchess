@@ -166,3 +166,13 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 **Lỗi nặng tìm thấy khi xem ảnh (chưa sửa trong PR này):** tab **Toàn học viện** báo `relation "public.academy_levels" does not exist`. RPC `get_academy_students_report` (migration `20261026000025`) join bảng không tồn tại `public.academy_levels` (bảng đúng là `public.levels`); plpgsql không kiểm tên bảng lúc tạo nên migration vẫn áp được, nhưng hàm lỗi mỗi lần gọi, nghĩa là bảng toàn học viện và Xuất CSV toàn học viện chưa từng chạy được trên cloud. Cần migration `create or replace` đổi sang `public.levels` (PR riêng, nháp, chờ chủ dự án áp).
 
 **Menu Quản trị cuộn được:** vùng menu đã có `overflow-y-auto` nhưng thiếu `min-h-0` và không kéo mục đang mở vào tầm nhìn, nên ở màn 1440×900 các mục cuối ("Cấp độ", "Địa điểm", "Chứng chỉ") nằm ngoài vùng nhìn mà không có dấu hiệu cuộn. Sửa: `min-h-0` + `overscroll-contain` và tự `scrollIntoView` mục đang mở khi đổi trang; đáy (Chat, Hồ sơ, công cụ) vẫn cố định. Ảnh `shot_menu_cuon` cho thấy "Chứng chỉ" nằm trong vùng nhìn sau khi bấm.
+
+## 13. GĐ26a: Trang Rating và FIDE (2026-11-01, lần tám; PR nháp chờ áp migration)
+
+**Ảnh** (`gd26a/{desktop-light,desktop-dark,mobile-light}/shot_rating.png`, đã xem): trang Rating ở **trạng thái FIDE tắt**. Migration `20261101000041_fide_rating.sql` chưa áp lên cloud nên chưa chụp được trạng thái bật, cột FIDE trong bảng/lưới học viên, dòng FIDE ở báo cáo và phiếu in (các phần này được kiểm bằng test; chụp sau khi áp). Không chụp trang Học viên và Báo cáo bản mới vì `fetchMembers` đã đọc cột `fide_*` chưa có trên cloud (sẽ lỗi cho tới khi áp migration, nên **chỉ merge sau khi áp**).
+
+| Trang | Tham chiếu Chesslang (`gd26-2026-11-01/shot_administration_rating.png`, chỉ bố cục) | erpchess | Đánh giá |
+| --- | --- | --- | --- |
+| Rating | Thẻ "Nội bộ học viện" luôn bật (3 loại + mô tả mức thời gian), thẻ FIDE có công tắc (3 loại), thẻ USCF khoá | Thẻ **Nội bộ học viện** (huy hiệu Đã bật, Classical/Rapid/Blitz kèm mô tả mức thời gian đúng ngưỡng của `categoryOf`) và thẻ **FIDE** có công tắc (chủ học viện bật/tắt, HLV chỉ xem kèm giải thích; đếm học viên đã nhập khi bật; link sang danh sách học viên) | **Khớp bố cục.** Có chủ đích: bỏ USCF (chỉ cho học viện ở Mỹ); FIDE nhập tay, không gọi API của FIDE |
+
+**Khi bật FIDE:** bảng học viên có cột FIDE và thẻ lưới có mục FIDE (mã + Standard/Rapid/Blitz, nút Lưu chỉ hiện khi có thay đổi); báo cáo học viên hiện dòng "FIDE: …" và phiếu in có mục FIDE khi học viên có dữ liệu. Mã FIDE 3-12 chữ số, Elo 1000-3300 (kiểm ở cả giao diện, domain và cơ sở dữ liệu).

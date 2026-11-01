@@ -5,7 +5,7 @@ import {
   useLevels,
   useMembers,
 } from '@erpchess/api/react';
-import { academyStudentsReportToCsv, isStaff } from '@erpchess/domain';
+import { academyStudentsReportToCsv, hasFide, isStaff } from '@erpchess/domain';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { BarChart3, Download, FileText } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -127,6 +127,7 @@ function ReportsPage() {
       periodLabel={range.periodLabel}
       levelName={levels.data?.find((l) => l.id === selected?.levelId)?.name}
       batchName={batchId !== 'all' ? batches.find((b) => b.id === batchId)?.name : undefined}
+      fide={academy.fide_enabled && hasFide(selected?.fide) ? selected?.fide : undefined}
       signerName={staff ? me?.profile.display_name || me?.profile.username || undefined : undefined}
       onBack={isStudent ? undefined : () => select(undefined)}
     />

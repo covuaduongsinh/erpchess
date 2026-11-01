@@ -1,8 +1,9 @@
 import { useStudentReportDetails, useStudentReportSummary } from '@erpchess/api/react';
-import { studentDetailedReportToCsv } from '@erpchess/domain';
+import { type MemberFide, studentDetailedReportToCsv } from '@erpchess/domain';
 import { ArrowLeft, Download, Printer } from 'lucide-react';
 import { useState } from 'react';
 import { downloadCsv } from '../../lib/download';
+import { fideParts } from '../../lib/fide-text';
 import { useT } from '../../lib/use-t';
 import { Button, ErrorText, Spinner } from '../ui';
 import { PrintableReportCard } from './PrintableReportCard';
@@ -20,6 +21,7 @@ export function StudentReportPane({
   periodLabel,
   levelName,
   batchName,
+  fide,
   signerName,
   onBack,
 }: {
@@ -36,6 +38,8 @@ export function StudentReportPane({
   periodLabel: string | undefined;
   levelName: string | undefined;
   batchName: string | undefined;
+  /** FIDE của học viên; chỉ truyền khi học viện bật FIDE và học viên có dữ liệu. */
+  fide?: MemberFide;
   /** Tên HLV ký phiếu; học viên/phụ huynh tự xem thì không truyền. */
   signerName: string | undefined;
   onBack?: () => void;
@@ -45,6 +49,12 @@ export function StudentReportPane({
   const details = useStudentReportDetails(academy.id, studentId, filter);
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [showPrint, setShowPrint] = useState(false);
+  const fideText = fideParts(fide, {
+    id: t('fide.idShort'),
+    standard: t('fide.standardShort'),
+    rapid: t('fide.rapidShort'),
+    blitz: t('fide.blitzShort'),
+  });
   const pending = summary.isPending || details.isPending;
   const error = summary.error || details.error;
 
@@ -76,6 +86,7 @@ export function StudentReportPane({
           </Button>
         </div>
       </div>
+      {fideText && <p className="text-sm text-text-muted">{t('fide.line', { parts: fideText })}</p>}
       {pending && <Spinner />}
       {error && <ErrorText error={error} />}
       {!pending && !error && details.data && (
@@ -96,6 +107,7 @@ export function StudentReportPane({
           }}
           levelName={levelName}
           batchName={batchName}
+          fide={fide}
           periodLabel={periodLabel}
           signerName={signerName}
           onClose={() => setShowPrint(false)}

@@ -524,6 +524,20 @@
    "action": "wait_for_timeout"
   },
   {
+   "step_id": "go_rating",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/rating"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_rating",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
    "step_id": "go_tich_hop",
    "timeout_ms": 60000,
    "wait_until": "load",

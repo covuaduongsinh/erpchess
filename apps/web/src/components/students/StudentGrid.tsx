@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useT } from '../../lib/use-t';
 import { InviteLink } from '../InviteLink';
 import { ErrorText, IconButton } from '../ui';
+import { FideEditor } from './FideEditor';
 import { LevelBadge } from './LevelBadge';
 import { InlineRatingEdit, type LevelItem, type StudentRating } from './StudentAdminTable';
 
@@ -17,6 +18,7 @@ export function StudentGrid({
   groupOf,
   ratings,
   category,
+  fideEnabled = false,
 }: {
   students: Member[];
   academyId: string;
@@ -25,6 +27,8 @@ export function StudentGrid({
   groupOf: (studentId: string) => string | undefined;
   ratings: StudentRating[];
   category: RatingCategory;
+  /** Học viện bật FIDE: thẻ có thêm mục FIDE (nhân sự nhập tay). */
+  fideEnabled?: boolean;
 }) {
   const { t } = useT();
   const setLevel = useSetStudentLevel(academyId);
@@ -37,7 +41,7 @@ export function StudentGrid({
   return (
     <div className="flex flex-col gap-3">
       <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {students.map(({ profile, levelId }) => {
+        {students.map(({ profile, levelId, fide }) => {
           const group = groupOf(profile.id);
           const rating = ratings.find(
             (r) => r.student_id === profile.id && r.category === category,
@@ -113,6 +117,19 @@ export function StudentGrid({
               <dl className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1 text-sm">
                 <dt className="text-text-muted">{t('studentsPage.group')}</dt>
                 <dd className="truncate">{group ?? t('studentsPage.unassigned')}</dd>
+                {fideEnabled && (
+                  <>
+                    <dt className="text-text-muted">{t('fide.title')}</dt>
+                    <dd>
+                      <FideEditor
+                        academyId={academyId}
+                        studentId={profile.id}
+                        name={profile.display_name}
+                        fide={fide}
+                      />
+                    </dd>
+                  </>
+                )}
                 <dt className="text-text-muted">{t('studentsPage.rating')}</dt>
                 <dd>
                   <InlineRatingEdit
