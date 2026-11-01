@@ -134,7 +134,7 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 - **Bài tập:** `Tabs` pills Đã giao (có số đếm) / Kho bài tập, tìm và sắp xếp, `EmptyState` nét đứt.
 - **Học liệu:** `Tabs` underline Học liệu / Bộ sưu tập, pills theo nguồn (Của tôi / Học viện / Thư viện chung) có số đếm, tìm, khoảng ngày + T/Q/N, sắp xếp, `ViewToggle` danh sách/lưới, `Pagination`, nút đầu trang Cấu hình mặc định / Nhập từ Lichess / Tạo học liệu.
 - **Khác Chesslang có chủ đích:** chưa có thẻ "% đã bắt đầu", tab "Góc nhìn học viên" và tab "Bảng xếp hạng" của Quiz (chưa có tính năng hay số liệu tổng hợp tương ứng, không bịa); chưa có khối "Bản nháp" của Học liệu (study không có trạng thái nháp); nguồn "Được chia sẻ" của Chesslang ứng với nguồn "Học viện".
-  **25d-2 (Khoá học, Lớp học, Luyện tập, CSDL ván, Báo cáo, Chat):**
+  **25d-2 (Khoá học, Lớp học, Luyện tập, CSDL ván, Báo cáo, Chat) ✅ ĐÃ HOÀN THÀNH & MERGE #69:**
 
 - **Khoá học:** `PageHeader`, 2 `StatCard` (tổng khoá; đã xuất bản cho staff, đã hoàn thành cho học viên), `FilterBar` (tìm, chip xuất bản/bản nháp cho staff), `EmptyState`.
 - **Lớp học (danh sách):** `PageHeader` có Xuất CSV và Tạo buổi học, 3 `StatCard` (số buổi, trực tuyến, trực tiếp), `Tabs` pills Mọi buổi / Của tôi (staff), `FilterBar` (tìm, `DateRangeFields`, nút khoảng nhanh tuần/tháng có sẵn), `Pagination`, `EmptyState` có CTA.
@@ -156,7 +156,14 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 - **Khoá học, Lớp học, Luyện tập, CSDL ván, Báo cáo, Chat:** dùng `PageHeader`, `FilterBar`, `EmptyState`, `Pagination` khi danh sách dài.
 - Các trang chi tiết như trình soạn study và phòng học **không đổi bố cục bên trong**, chỉ thêm `PageHeader` gọn nếu hợp.
 
-### PR 25e: Áp dụng: nhóm Thi đấu và Bàn cờ
+### PR 25e: Áp dụng: nhóm Thi đấu và Bàn cờ (chia làm 25e-1 và 25e-2)
+
+**25e-1 (Khu thi đấu, Giải đấu, Simul):**
+- **Khu thi đấu:** `PageHeader` (liên kết Simul, Giải đấu; nút **Ghép cặp** cho staff bật/tắt biểu mẫu ghép cặp); 4 `StatCard stacked` theo vai trò, mỗi thẻ có chú thích phạm vi: học viên xem phạm vi "của tôi" (Ván hôm nay của tôi, Cầm Trắng, Cầm Đen, Tổng ván của tôi trong 50 ván kết thúc gần nhất); staff và phụ huynh xem toàn học viện (Ván hôm nay, Đang diễn ra, Đã xong hôm nay, Học viên online); tất cả tính từ dữ liệu đã tải; banner **Đánh với máy** nền gradient màu chính kèm họa tiết ô cờ `.chess-pattern` và hai chip thật (7 mức độ, Elo 800 – 2600+), nút tới `/a/$slug/play/bot`; `QuickPairCard` cạnh banner; `Tabs` pills Học viên (danh sách học viên kèm chấm online) / Lịch sử ván / Ván đang diễn ra; cột phải Học viên online có `EmptyState` và thách đấu nhanh.
+- **Giải đấu:** `FilterBar` (tìm, khoảng ngày + T/Q/N, sắp xếp, chip trạng thái), `ViewToggle` danh sách / lưới / bảng / lịch (lịch và bảng là chế độ đã có, thêm chế độ lưới), 4 `StatCard`, `Pagination`, `EmptyState` có CTA.
+- **Simul:** cùng mẫu (thẻ số liệu, tìm, khoảng ngày + T/Q/N, chip trạng thái, danh sách/lưới, phân trang, `EmptyState` có CTA).
+- **Khác Chesslang có chủ đích:** thẻ Cầm Trắng/Cầm Đen chỉ dành cho học viên (phạm vi "của tôi"), staff xem các thẻ toàn học viện vì không thêm RPC; chip cấp độ của banner là chip thông tin (trang đánh với máy tự có bộ chọn mức Elo); Simul chưa có chế độ lịch.
+- **25e-2 (sau):** Bàn cờ phân tích (`/analysis`, `AnalysisBoard`).
 
 - **Khu thi đấu** (`a.$slug.play.index.tsx`):
   - `PageHeader` có nút Ghép cặp.
