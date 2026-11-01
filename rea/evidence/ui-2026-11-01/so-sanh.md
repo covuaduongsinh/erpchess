@@ -199,3 +199,15 @@ Chủ dự án đã áp migration `20261101000039`, `…040`, `…041` lên `erp
 | --- | --- | --- |
 | 22 | Cột FIDE ở bảng học viên quá hẹp: ô Elo xuống dòng lộn xộn, placeholder "Standard" bị cắt | Mã FIDE một hàng, ba Elo một hàng, bề rộng tối thiểu; placeholder "Std" (nhãn truy cập vẫn đầy đủ) |
 | 23 | Dòng FIDE ở báo cáo đọc thành "FIDE: ID FIDE 14012345 …" (lặp "FIDE") | Dùng nhãn "ID" trong dòng và phiếu in |
+
+## 15. Elo nội bộ nhất quán (2026-11-02)
+
+**Lỗi (thấy ở `gd26d`):** học viên chưa có rating thì trang Học viên ghi "Chưa có", nhưng bảng Báo cáo → Toàn học viện (và CSV) ghi 1200/1200/1200.
+
+**Nguyên nhân gốc:** RPC `get_academy_students_report` dùng `coalesce(rt.blitz, 1200)` (và rapid, classical) nên không phân biệt "chưa có dòng rating" với "đúng 1200". Báo cáo một học viên (`get_student_report_details`) vốn trả null nên hiện "-"/"—". Không có nơi nào khác hiển thị Elo nội bộ (đã rà bảng, lưới học viên, báo cáo, phiếu in, CSV, hồ sơ, bảng xếp hạng, Khu thi đấu, mobile).
+
+**Sửa ở phía client (không đổi RPC, không migration):** `withRealRatings` lấy số từ bảng `ratings` (giống trang Học viên): có dòng thì dùng số đó (làm tròn), không có thì `null`; `AcademyStudentSummary.*Rating` thành `number | null`. Giao diện ghi "Chưa có" (bảng toàn học viện, thẻ và tab Tổng quan của báo cáo một học viên, phiếu in); CSV để trống ô rating (cả CSV toàn học viện lẫn CSV một học viên). Dấu "?" khi RD còn cao không làm vì giao diện báo cáo chưa có dữ liệu RD.
+
+**Còn lại (tuỳ chọn):** nếu muốn sửa tận gốc ở RPC thì cần migration đổi `coalesce(…, 1200)` thành `null`; hiện không cần vì client đã lấy số từ `ratings`.
+
+**Ảnh** (`gd26e/{desktop-light,desktop-dark,mobile-light}/`, đã xem): `shot_hoc_vien_danh_sach`, `shot_bao_cao_toan_hoc_vien`, `shot_bao_cao_hoc_vien`. Seed thêm Elo ban đầu cho 2 học viên (An: rapid 1350, blitz 1300; Bình: rapid 1180) để thấy cả hai trạng thái.

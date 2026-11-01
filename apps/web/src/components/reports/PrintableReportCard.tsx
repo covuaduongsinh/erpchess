@@ -158,7 +158,7 @@ export function PrintableReportCard({
             />
             <Metric
               label={t('reports.tabGames')}
-              value={rating ? String(rating) : '—'}
+              value={rating ? String(Math.round(rating)) : t('reports.noRating')}
               sub={`${t('reports.printScoreRate')}: ${scoreRate}% (${games.totalGames})`}
             />
           </div>

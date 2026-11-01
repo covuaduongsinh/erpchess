@@ -4,8 +4,9 @@ import {
   useGroups,
   useLevels,
   useMembers,
+  useRatings,
 } from '@erpchess/api/react';
-import { academyStudentsReportToCsv, hasFide, isStaff } from '@erpchess/domain';
+import { academyStudentsReportToCsv, hasFide, isStaff, withRealRatings } from '@erpchess/domain';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { BarChart3, Download, FileText } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -84,12 +85,14 @@ function ReportsPage() {
   const selected = students.find((s) => s.profile.id === selectedId);
 
   const academyReport = useAcademyStudentsReport(staff ? academy.id : undefined, range.filter);
+  const ratings = useRatings(staff ? academy.id : undefined);
   const summaries = useMemo(() => {
-    const all = academyReport.data ?? [];
+    // Rating lấy từ bảng `ratings` (giống trang Học viên): chưa có dòng thì là "Chưa có", không phải 1200
+    const all = withRealRatings(academyReport.data ?? [], ratings.data ?? []);
     if (batchId === 'all') return all;
     const ids = new Set(batchStudentIds.data ?? []);
     return all.filter((s) => ids.has(s.studentId));
-  }, [academyReport.data, batchId, batchStudentIds.data]);
+  }, [academyReport.data, ratings.data, batchId, batchStudentIds.data]);
 
   function select(studentId: string | undefined, nextView: ReportView = 'student') {
     void navigate({

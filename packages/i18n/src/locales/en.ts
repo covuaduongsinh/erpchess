@@ -1858,6 +1858,7 @@ export const en: Resource = {
     fromDate: 'From date',
     toDate: 'To date',
     exportCsv: 'Export CSV',
+    noRating: 'None yet',
     tabsLabel: 'Report view',
     tabByStudent: 'By student',
     tabWholeAcademy: 'Whole academy',

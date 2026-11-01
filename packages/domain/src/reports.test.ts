@@ -4,6 +4,7 @@ import {
   academyStudentsReportToCsv,
   type StudentDetailedReport,
   studentDetailedReportToCsv,
+  withRealRatings,
 } from './reports';
 
 describe('studentDetailedReportToCsv', () => {
@@ -160,5 +161,52 @@ describe('academyStudentsReportToCsv', () => {
     expect(csv).toContain('80.0'); // solved rate
     expect(csv).toContain('12/3/5');
     expect(csv).toContain('1450');
+  });
+});
+
+describe('withRealRatings (Elo nội bộ: chưa có thì null, không phải 1200)', () => {
+  const base = {
+    displayName: 'An',
+    username: 'an',
+    assignmentsCompleted: 0,
+    assignmentsTotal: 0,
+    quizAvgScore: 0,
+    quizCompleted: 0,
+    attendanceRate: 0,
+    sessionsPresent: 0,
+    sessionsTotal: 0,
+    gamesTotal: 0,
+    gamesWdl: '0/0/0',
+    blitzRating: 1200,
+    rapidRating: 1200,
+    classicalRating: 1200,
+  };
+
+  it('lấy số từ bảng ratings (làm tròn); học viên chưa có dòng nào thì null', () => {
+    const out = withRealRatings(
+      [
+        { ...base, studentId: 's1' },
+        { ...base, studentId: 's2' },
+      ],
+      [
+        { student_id: 's1', category: 'rapid', rating: 1234.6 },
+        { student_id: 's1', category: 'blitz', rating: 1200 },
+        { student_id: 'khac', category: 'classical', rating: 1800 },
+      ],
+    );
+    expect(out[0]).toMatchObject({ blitzRating: 1200, rapidRating: 1235, classicalRating: null });
+    expect(out[1]).toMatchObject({ blitzRating: null, rapidRating: null, classicalRating: null });
+  });
+
+  it('CSV toàn học viện để trống ô rating khi chưa có', () => {
+    const [s] = withRealRatings(
+      [{ ...base, studentId: 's1' }],
+      [{ student_id: 's1', category: 'rapid', rating: 1500 }],
+    );
+    const lines = academyStudentsReportToCsv([s as AcademyStudentSummary])
+      .trim()
+      .split(/\r?\n/);
+    expect(lines[0]).toContain('Rating Blitz,Rating Rapid,Rating Classical');
+    expect(lines[1]?.endsWith(',0/0/0,,1500,')).toBe(true);
   });
 });
