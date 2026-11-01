@@ -123,3 +123,19 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 - Học viên online và buổi học đang diễn ra cần phiên đồng thời nên chưa có ảnh.
 - Quiz đã đóng chưa có lượt làm (máy chủ từ chối bài quá hạn).
 - Trang `billing/discounts`, `levels`, `play` còn `grid-cols-3` cố định; chưa kiểm trên mobile.
+
+## 10. Sửa lưới cố định trên điện thoại (2026-11-01, lần bốn)
+
+**Ảnh trước/sau:** `mobile-fix/truoc/mobile-light/` (bản trước sửa: Giảm giá, Cấp độ) và `mobile-fix/sau/{mobile-light,mobile-dark}/` (10 trang: Giảm giá, Cấp độ, Cấp độ đang sửa, Gói học phí, Lịch, Địa điểm, Lead, Thiết lập, Nhóm, Chơi cờ). Seed thêm 3 mã giảm giá (phần trăm, số tiền cố định, đã tắt) trong học viện thử.
+
+| # | Lỗi (thấy trong ảnh mobile) | Sửa |
+| --- | --- | --- |
+| 17 | Giảm giá: thẻ danh sách **tràn ngang** khỏi màn hình (chữ ở mép phải bị cắt) và 3 thẻ số liệu chật | Cột đơn `grid-cols-1` (cột ngầm của `grid` không có mẫu cột nở theo nội dung); thẻ số liệu 1 cột, `sm:` 3 cột |
+| 18 | Cùng nguyên nhân (lưới `grid gap-6 lg:grid-cols-[…]` không có cột mobile tường minh) ở **36 chỗ** khác: hoá đơn, gói học phí, lịch, lead, nhóm, địa điểm, thiết lập, quiz, giải đấu, học liệu, bài tập, CSDL, chat… | Thêm `grid-cols-1` cho cả 36 chỗ (không đổi gì từ `lg` trở lên) |
+| 19 | Cấp độ (form sửa): 3 ô số điều kiện lên cấp xếp 3 cột trên màn hẹp | `grid-cols-1 sm:grid-cols-3` |
+| 20 | Địa điểm: tiêu đề bị cắt thành "Địa…", phụ đề 6 dòng vì nút hành động chiếm chỗ | `PageHeader`: khối tiêu đề rộng tối thiểu 12rem nên nút hành động xuống dòng riêng khi hẹp (áp dụng mọi trang dùng `PageHeader`) |
+| 21 | Nhóm: nhãn "Cơ bản" và nút "Tạo lớp" xuống hai dòng | Nhãn, số học viên, nút không xuống dòng; tên và nhãn tự xuống dòng gọn |
+
+**Giữ nguyên có chủ đích** (nút chọn ngắn như `3+2`, `5+0`, "Trắng/Ngẫu nhiên/Đen", lưới 7 ngày của lịch giải, khối XP 3 số của học viên): ba cột vẫn vừa màn 390 px, đổi sang một cột chỉ làm dài trang. Cửa sổ "Thách đấu" ở trang Chơi cờ chỉ mở được khi có học viên online nên chưa có ảnh; kiểm bằng đọc mã.
+
+**Còn lại:** cửa sổ Thách đấu chưa chụp; trang Chơi cờ còn chữ cứng tiếng Việt ("Kiểm soát thời gian", "Màu quân của bạn", "Thách đấu với …") chưa qua i18n.

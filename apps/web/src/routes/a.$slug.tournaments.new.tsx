@@ -405,7 +405,7 @@ function NewTournamentPage() {
       )}
 
       {step === 3 && (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
           <Card title={t('tournament.step_players')}>
             <TargetPicker
               groupIds={groupIds}

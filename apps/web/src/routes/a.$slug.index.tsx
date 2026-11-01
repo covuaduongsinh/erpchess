@@ -127,7 +127,7 @@ function OverviewPage() {
 /** Nội dung tab "Thống kê học viện": lịch sắp tới, XP, thành viên và liên hệ. */
 function AcademyColumn() {
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <UpcomingClassesCard />
       <XpCard />
       <MembersCard />

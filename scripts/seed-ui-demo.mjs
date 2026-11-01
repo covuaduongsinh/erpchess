@@ -484,5 +484,38 @@ if ((gameCount ?? 0) >= 4) {
     console.log(`LỖI ván đấu (làm được tới đâu ghi tới đó): ${err.message}`);
   }
 }
+// --- Giảm giá (trang Học phí > Giảm giá): đang dùng theo phần trăm, số tiền cố định, và đã tắt --------------
+await ensure(
+  'discounts',
+  { name: 'Giảm 10% học viên mới' },
+  { name: 'Giảm 10% học viên mới', code: 'MOI10', kind: 'percent', value: 10, max_uses: 50 },
+  'giảm giá 10%',
+);
+await ensure(
+  'discounts',
+  { name: 'Anh chị em ruột giảm 200.000đ' },
+  {
+    name: 'Anh chị em ruột giảm 200.000đ',
+    code: 'ANHEM',
+    kind: 'fixed',
+    value: 200000,
+    currency: 'VND',
+  },
+  'giảm giá cố định',
+);
+await ensure(
+  'discounts',
+  { name: 'Ưu đãi hè đã kết thúc' },
+  {
+    name: 'Ưu đãi hè đã kết thúc',
+    code: 'HE2026',
+    kind: 'percent',
+    value: 15,
+    active: false,
+    starts_on: '2026-06-01',
+    ends_on: '2026-08-31',
+  },
+  'giảm giá đã tắt',
+);
 console.log('xong');
 process.exit(0);

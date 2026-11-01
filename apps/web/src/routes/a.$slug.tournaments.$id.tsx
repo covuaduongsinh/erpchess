@@ -146,7 +146,7 @@ function TournamentPage() {
         )}
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card title={t('tournament.liveStandings')}>
           {d.status === 'active' && (
             <div className="mb-2 flex items-center justify-end">

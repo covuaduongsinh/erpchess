@@ -45,7 +45,7 @@ function InvoicesPage() {
   return (
     <div className="flex flex-col gap-4">
       <BillingHeader />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <Card title={owner ? t('bill.invoices') : t('bill.myInvoices')}>
           {owner && (
             <div className="flex flex-wrap gap-2">

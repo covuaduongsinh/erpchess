@@ -18,7 +18,7 @@ function SettingsPage() {
   return (
     <>
       <PageHeader icon={Palette} title={t('settings.title')} subtitle={t('settings.subtitle')} />
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <BrandingCard />
         <AcademyBoardDefaultsCard />
       </div>

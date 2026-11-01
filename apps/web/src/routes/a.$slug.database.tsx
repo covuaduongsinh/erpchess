@@ -38,7 +38,7 @@ function DatabasePage() {
         title={t('database.title')}
         subtitle={t('learnPage.databaseSubtitle')}
       />
-      <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
         <div className="flex flex-col gap-6">
           {academy.role !== 'parent' && (
             <GameSyncCard
@@ -88,7 +88,7 @@ function DatabasePage() {
           {current && <ImportCard key={current.id} database={current} />}
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           <Card title={current?.name ?? t('database.games')}>
             {current ? (
               <GameList databaseId={current.id} selected={gameId} onSelect={setGameId} />

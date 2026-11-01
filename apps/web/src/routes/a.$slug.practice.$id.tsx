@@ -102,7 +102,7 @@ function ChapterPage() {
         )}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
         <Card title={t('practice.positions')}>
           {/* Bộ lọc thế cờ */}
           {c.positions.length > 0 && (

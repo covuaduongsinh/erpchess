@@ -57,13 +57,13 @@ function QuizPage() {
             </Button>
             <DeleteQuiz id={id} />
           </div>
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
             <Report quizId={id} />
             <Leaderboard quizId={id} />
           </div>
         </>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <QuizTaker quizId={id} userId={session.user.id} startsAt={q.starts_at} dueAt={q.due_at} />
           <Leaderboard quizId={id} />
         </div>

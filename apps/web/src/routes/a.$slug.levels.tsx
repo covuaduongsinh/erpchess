@@ -30,7 +30,7 @@ function LevelsPage() {
   return (
     <>
       <PageHeader icon={Shield} title={t('levels.title')} subtitle={t('levels.subtitle')} />
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card>
           <p className="text-sm text-text-muted">{t('levels.hint')}</p>
           {levels.data.length === 0 ? (
@@ -162,7 +162,7 @@ function LevelForm({
         />
         <fieldset className="flex flex-col gap-3">
           <legend className="mb-2 text-sm font-medium">{t('levels.criteria')}</legend>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <Field
               label={t('levels.xp')}
               name="xp"
