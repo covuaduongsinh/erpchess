@@ -194,7 +194,7 @@ export function AppSidebar({
       >
         {/* Đầu sidebar: logo, tên học viện, vai trò; bấm để đổi học viện */}
         <div ref={switcherBox} className="relative border-b border-text-muted/15 p-3">
-          <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 ${collapsed ? 'lg:flex-col' : ''}`}>
             <button
               type="button"
               onClick={() => setSwitcherOpen((o) => !o)}
@@ -322,50 +322,55 @@ export function AppSidebar({
               <span className={hide}>{t('nav.profile')}</span>
             </Link>
           )}
-          {/* Công tắc sáng/tối: lưu localStorage, mặc định theo hệ thống (lib/theme.ts) */}
-          <button
-            type="button"
-            role="switch"
-            aria-checked={theme === 'dark'}
-            onClick={onToggleTheme}
-            title={collapsed ? t('nav.darkMode') : undefined}
-            className={`${linkBase} w-full ${collapsed ? 'lg:justify-center lg:px-2' : ''}`}
+          {/* Hàng công cụ gọn (giữ sidebar đủ chỗ cho menu trên màn 900 px): giao diện sáng/tối,
+              ngôn ngữ, đăng xuất. Thu gọn thì xếp dọc. */}
+          <div
+            className={`flex items-center justify-between gap-1 px-1 pt-1 ${collapsed ? 'lg:flex-col lg:gap-2' : ''}`}
           >
-            {theme === 'dark' ? (
-              <Sun className="size-5 shrink-0" aria-hidden="true" />
-            ) : (
-              <Moon className="size-5 shrink-0" aria-hidden="true" />
-            )}
-            <span className={hide}>{t('nav.darkMode')}</span>
-          </button>
-          <fieldset
-            className={`m-0 flex items-center gap-1 border-0 px-3 py-1 ${collapsed ? 'lg:flex-col lg:px-0' : ''}`}
-          >
-            <legend className="sr-only">{t('nav.language')}</legend>
-            {languages.map((lng) => (
-              <button
-                key={lng}
-                type="button"
-                aria-pressed={i18n.language === lng}
-                onClick={() => void i18n.changeLanguage(lng)}
-                className="rounded-md px-2 py-1 text-xs font-medium text-text-muted hover:bg-primary/5 aria-pressed:bg-primary/10 aria-pressed:text-primary"
-              >
-                {lng.toUpperCase()}
-              </button>
-            ))}
-          </fieldset>
-          {signedIn && (
+            {/* Công tắc sáng/tối: lưu localStorage, mặc định theo hệ thống (lib/theme.ts) */}
             <button
               type="button"
-              onClick={onSignOut}
-              title={collapsed ? t('nav.signOut') : undefined}
-              aria-label={collapsed ? t('nav.signOut') : undefined}
-              className={`${linkBase} w-full ${collapsed ? 'lg:justify-center lg:px-2' : ''}`}
+              role="switch"
+              aria-checked={theme === 'dark'}
+              aria-label={t('nav.darkMode')}
+              title={t('nav.darkMode')}
+              onClick={onToggleTheme}
+              className="rounded-md p-2 text-text-muted hover:bg-primary/5 hover:text-text"
             >
-              <LogOut className="size-5 shrink-0" aria-hidden="true" />
-              <span className={hide}>{t('nav.signOut')}</span>
+              {theme === 'dark' ? (
+                <Sun className="size-5" aria-hidden="true" />
+              ) : (
+                <Moon className="size-5" aria-hidden="true" />
+              )}
             </button>
-          )}
+            <fieldset
+              className={`m-0 flex items-center gap-1 border-0 p-0 ${collapsed ? 'lg:flex-col' : ''}`}
+            >
+              <legend className="sr-only">{t('nav.language')}</legend>
+              {languages.map((lng) => (
+                <button
+                  key={lng}
+                  type="button"
+                  aria-pressed={i18n.language === lng}
+                  onClick={() => void i18n.changeLanguage(lng)}
+                  className="rounded-md px-2 py-1 text-xs font-medium text-text-muted hover:bg-primary/5 aria-pressed:bg-primary/10 aria-pressed:text-primary"
+                >
+                  {lng.toUpperCase()}
+                </button>
+              ))}
+            </fieldset>
+            {signedIn && (
+              <button
+                type="button"
+                onClick={onSignOut}
+                aria-label={t('nav.signOut')}
+                title={t('nav.signOut')}
+                className="rounded-md p-2 text-text-muted hover:bg-primary/5 hover:text-text"
+              >
+                <LogOut className="size-5" aria-hidden="true" />
+              </button>
+            )}
+          </div>
         </div>
       </aside>
     </>

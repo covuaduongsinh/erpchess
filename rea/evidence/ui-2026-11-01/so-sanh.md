@@ -1,0 +1,58 @@
+# Đối chiếu giao diện erpchess với Chesslang (nghiệm thu Giai đoạn 25)
+
+**Ngày chụp:** 2026-11-01. **Bản build:** `main` tại `7ae5477` (sau PR 25a–25g), cộng các sửa của PR này, chạy bằng `vite preview` cục bộ, đăng nhập tài khoản thử `erpchess-dev` (học viện `thu-nghiem-ui`, vai chủ học viện). **Công cụ:** REA `capture-browser-scenario` (Chrome headless), bốn kịch bản sinh từ `make-scenarios.py`.
+
+- Ảnh erpchess: `25f/<biến thể>/shot_*.png`, bốn biến thể `desktop-light`, `desktop-dark` (1440×900), `mobile-light`, `mobile-dark` (390×844, có thêm `shot_drawer.png`), mỗi biến thể 26 ảnh.
+- Ảnh Chesslang (đã quan sát trước): `shot_p_*.png` cùng thư mục.
+- **Phạm vi thực sự đã xem bằng mắt:** Tổng quan, Học viên, Quiz, Giải đấu, Khu thi đấu, Bàn cờ, Thiết lập, Học phí, 404 (desktop sáng và/hoặc tối), Tổng quan và drawer (mobile). Các trang còn lại đã được chụp đủ nhưng chưa xem từng ảnh; học liệu so sánh trực tiếp chỉ có ở các trang có ảnh Chesslang.
+- **Dữ liệu:** học viện thử gần như trống (0 học viên, 0 quiz, 0 giải), nên đối chiếu này chủ yếu về **bố cục, điều hướng và trạng thái rỗng**, chưa kiểm cách hiển thị khi có nhiều dữ liệu (bục podium có người, biểu đồ có cột, danh sách dài, phân trang).
+
+## 1. Lỗi tìm thấy khi chụp và đã sửa trong PR này
+
+| # | Lỗi (thấy trong ảnh) | Nguyên nhân | Sửa |
+| --- | --- | --- | --- |
+| 1 | Nút "Tìm kiếm… Ctrl K" ở thanh trên gần như vô hình trên mọi trang (sáng) | Nút `CommandPalette` được viết cho thanh trên màu navy (chữ trắng, nền trắng 10%), nhưng từ 25a thanh trên trong suốt | Đổi sang viền + nền `surface`, chữ `text-muted` |
+| 2 | Mục menu đang mở, tab gạch chân đang chọn và nút ngôn ngữ đang chọn **không đọc được ở chế độ tối** (chữ navy trên nền tối) | Quy tắc làm sáng chữ `text-primary` ở 25f chỉ phủ lớp gốc, không phủ các biến thể `data-[active=true]:`, `aria-pressed:`, `aria-selected:`, `group-hover:` | Mở rộng quy tắc `.dark` cho đủ bốn biến thể đang dùng; test token kiểm từng biến thể |
+| 3 | Đáy sidebar chiếm quá nhiều chỗ nên trên màn 900 px menu bị cắt (không thấy "Học liệu" ở nhóm Nội dung, "Địa điểm"/"Chứng chỉ" ở Quản trị) | Mỗi mục đáy (Chế độ tối, VI/EN, Đăng xuất) một dòng riêng | Gom thành một hàng công cụ (chế độ tối · VI EN · đăng xuất), tiết kiệm khoảng 110 px; vẫn có nhãn truy cập và tooltip |
+| 4 | Khi sidebar thu gọn thành thanh icon, logo học viện bị nút thu gọn đè lên | Hai phần tử xếp ngang trong thanh rộng 80 px | Xếp dọc khi thu gọn |
+
+Sau sửa đã chụp lại cả bốn biến thể (ảnh trong thư mục này là bản sau sửa).
+
+## 2. Đối chiếu từng trang có ảnh Chesslang
+
+| Trang | Chesslang | erpchess | Đánh giá |
+| --- | --- | --- | --- |
+| Tổng quan | Tiêu đề lớn + lời chào; 3 thẻ Quick actions (thẻ đầu tô màu); 4 thẻ số liệu có biểu tượng trên, nhãn hoa, số lớn; tab Academy stats / Ongoing sessions; Weekly stats có Start/End date + Previous/Next week; biểu đồ 3 chuỗi; cột phải Leaderboard có bục podium | Cùng bố cục: thẻ tiêu đề, 3 Thao tác nhanh (thẻ đầu tô màu chính), 4 thẻ stacked, tab pills, Thống kê theo ngày (3 chuỗi, ô ngày, nút ‹ ›), cột phải Bảng xếp hạng + podium | **Khớp.** Khác có chủ đích: thẻ Học viên không có thanh ghế (DB không có giới hạn ghế); biểu đồ erpchess là cột đơn chuỗi chuyển tab, không vẽ đồng thời 3 chuỗi và trục tỉ lệ phải; podium tự vẽ, không ảnh |
+| Quiz | Thẻ Automated Quiz (NEW) và Started %; tab Quiz / Automated Quiz / Student View / Leaderboard; thanh lọc có Start/End date + M/Q/Y; "Rows/page", Go to ở đầu danh sách; trạng thái rỗng có hình | Thẻ Tổng/Đang mở/Sắp mở/Đã đóng + **Đã bắt đầu** ("—" khi không có quiz đang giao); tab Quiz / Quiz tự động (Mới) / Bảng xếp hạng; lọc tìm + Từ/Đến ngày + T Q N + sắp xếp + chip trạng thái; phân trang ở cuối; trạng thái rỗng có icon và nút | **Khớp về cấu trúc.** Còn khác: không có tab Student View (chưa có tính năng); thẻ "Quiz tự động" của Chesslang đếm lịch tự động, erpchess chưa có thẻ riêng (huy hiệu Mới nằm ở tab); phân trang ở cuối thay vì đầu |
+| Khu thi đấu | Tab phân đoạn toàn chiều rộng (Students / Game History / Live Games); 4 thẻ (Games today / as White / as Black / Total); banner tối có ảnh bàn cờ + chip cấp độ + nút Play Computer; cột phải Online Students có trạng thái rỗng | Tab pills dưới banner; 4 thẻ **theo vai trò** (staff: hôm nay / đang diễn ra / đã xong / online; học viên: của tôi / Trắng / Đen / tổng); banner gradient màu chính + họa tiết ô cờ + chip thông tin + nút Đánh với máy; QuickPairCard cạnh banner; cột phải Học viên online | **Khớp về bố cục.** Khác có chủ đích: không dùng ảnh Chesslang; thẻ Trắng/Đen chỉ cho học viên (không có RPC đếm theo màu cả học viện); Ghép cặp là nút bật/tắt biểu mẫu thay vì modal |
+| Học viên | 3 thẻ ghế; thanh tìm + lọc HLV + sắp xếp + công tắc "Show inactive" + List/Grid; thẻ học viên có hàng 7 nút icon | 4 thẻ (Tổng, Đã phân cấp, Đã xếp nhóm, Nhóm và Batch); thanh tìm + lớp + cấp độ + sắp xếp + chuyển danh sách/lưới; menu Thêm học viên | **Khớp về cấu trúc.** Khác có chủ đích: không thẻ "Còn trống", không công tắc học viên nghỉ và lọc HLV (không có dữ liệu); hàng icon thao tác dùng các thao tác sẵn có (mời phụ huynh, đổi cấp độ, Elo) |
+| Bàn cờ | Hai cột: bàn cờ + thanh công cụ icon dưới bàn; phải là panel đầu trang + tab (Masterbase / New Board / AI PDF / My Database / Engine / Analysis); sidebar thu thành icon | Hai cột toàn chiều rộng; thanh công cụ icon (về đầu, lùi, tới, về cuối, lật, xoá nét vẽ, engine); phải: đầu trang gọn + nút Lưu ván + tab Phân tích / Engine / Masterbase / CSDL của tôi; sidebar tự thu gọn | **Khớp.** Khác có chủ đích: không AI PDF; không tab "Bàn mới" riêng (ô dán FEN/PGN luôn hiện) |
+| 404 | Thẻ giữa màn hình, số 404 cách điệu, tiêu đề, câu đùa, nút Go to Dashboard / Go Back / Refresh, Quick links | Thẻ giữa màn hình, 404 trên họa tiết ô cờ, tiêu đề, mô tả, Về tổng quan / Quay lại / Tải lại, liên kết nhanh (Bàn cờ, Luyện tập, Học liệu, Giải đấu) | **Khớp**; câu chữ và họa tiết tự thiết kế |
+| Khung ứng dụng | Sidebar 256 px có nhóm Administration / Learn / Play / Content, đáy Chat, Profile, Report a bug, công tắc Light/Dark, Logout | Sidebar 256 px nhóm Quản trị (danh sách con) / Học tập / Thi đấu / Nội dung, đáy Chat, Hồ sơ, hàng công cụ (tối/sáng, VI/EN, đăng xuất); thu gọn thành thanh icon; drawer < lg | **Khớp.** Không có "Report a bug" (ngoài phạm vi); thêm chọn ngôn ngữ vì erpchess song ngữ |
+
+## 3. Chế độ tối
+
+- Chesslang trong các ảnh quan sát chỉ có chế độ sáng ("Light Mode" kèm công tắc), nên không có ảnh tối để đối chiếu; ảnh tối của erpchess được kiểm theo tiêu chí tự thân: chữ đọc được, nền bề mặt phân biệt được với nền trang, bàn cờ giữ theme riêng.
+- Đã xem: Tổng quan, Học viên, Quiz, Thiết lập, Học phí, Bàn cờ (desktop tối) và drawer (mobile tối). Sau sửa lỗi 2, chữ nhấn và mục đang chọn đọc được ở các trang này.
+- Chưa xem từng ảnh tối của các trang còn lại; rủi ro còn lại là các khối giữ màu riêng (slate có cặp `dark:`, phòng học, quiz toàn màn hình) và các trang chi tiết không nằm trong kịch bản.
+
+## 4. Còn khác Chesslang, để sau hoặc có chủ đích
+
+- Biểu đồ Tổng quan: một chuỗi mỗi lần (chuyển tab), chưa vẽ đồng thời 3 chuỗi với trục tỉ lệ phải. Để sau nếu chủ dự án muốn.
+- Quiz: chưa có "Góc nhìn học viên" (tính năng mới); phân trang ở cuối danh sách.
+- Học viên: chưa có thẻ ghế, công tắc học viên nghỉ, lọc HLV (không có dữ liệu trong DB).
+- Lớp học, Simul: chưa có chế độ lịch/lưới (không để nút chết).
+- Cách hiển thị với dữ liệu thật (nhiều học viên, quiz, giải; podium có người; biểu đồ có cột) **chưa được kiểm bằng ảnh** vì học viện thử trống. Cần nạp dữ liệu mẫu (không dùng dữ liệu thật của học viện khác) rồi chụp lại các trang Tổng quan, Học viên, Quiz, Giải đấu để nghiệm thu nốt.
+- Ô chọn ngày hiện `mm/dd/yyyy` trong ảnh vì Chrome headless dùng định dạng ngày của hệ điều hành, không phải lỗi ứng dụng.
+
+## 5. Chạy lại
+
+```bash
+pnpm --filter @erpchess/web build && pnpm --filter @erpchess/web preview --port 4173
+python rea/evidence/ui-2026-11-01/make-scenarios.py thu-nghiem-ui
+set -a; . ./.env.test-account; set +a
+node D:/code/rea/scripts/rea.mjs capture-browser-scenario rea/evidence/ui-2026-11-01/scenario-erpchess-desktop-light.json --format json > rea/evidence/ui-2026-11-01/25f/desktop-light/capture.json
+python rea/evidence/ui-2026-11-01/extract-shots.py rea/evidence/ui-2026-11-01/25f/desktop-light/capture.json rea/evidence/ui-2026-11-01/25f/desktop-light
+```
+
+Ghi chú vận hành: một lần chạy `desktop-dark` bị REA báo `cleanup_incomplete` (hết hạn 30 giây khi dọn dẹp trình duyệt); chạy lại ngay thì đạt. `capture.json` (nặng) bị `.gitignore`.

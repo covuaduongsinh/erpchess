@@ -52,6 +52,10 @@
 /* Chữ màu chính (navy) gần như không đọc được trên nền tối: làm sáng bằng cách trộn với trắng.
    Tính tại chính phần tử nên màu thương hiệu học viện cũng được làm sáng theo. */
 .dark .text-primary,
-.dark .hover\:text-primary:hover {
+.dark .hover\:text-primary:hover,
+.dark .group:hover .group-hover\:text-primary,
+.dark .data-\[active\=true\]\:text-primary[data-active="true"],
+.dark .aria-pressed\:text-primary[aria-pressed="true"],
+.dark .aria-selected\:text-primary[aria-selected="true"] {
   color: color-mix(in oklab, var(--color-primary) 40%, white);
 }
