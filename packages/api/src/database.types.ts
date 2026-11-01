@@ -1253,6 +1253,70 @@ export type Database = {
           },
         ]
       }
+      email_log: {
+        Row: {
+          academy_id: string
+          created_at: string
+          created_by: string | null
+          error: string | null
+          id: string
+          kind: string
+          notification_id: string | null
+          provider_id: string | null
+          status: string
+          subject: string
+          to_email: string
+        }
+        Insert: {
+          academy_id: string
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          kind: string
+          notification_id?: string | null
+          provider_id?: string | null
+          status: string
+          subject?: string
+          to_email: string
+        }
+        Update: {
+          academy_id?: string
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          kind?: string
+          notification_id?: string | null
+          provider_id?: string | null
+          status?: string
+          subject?: string
+          to_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_log_academy_id_fkey"
+            columns: ["academy_id"]
+            isOneToOne: false
+            referencedRelation: "academies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_log_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_log_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_items: {
         Row: {
           exercise_id: string
@@ -2241,6 +2305,7 @@ export type Database = {
           body: string
           category: string
           created_at: string
+          emailed_at: string | null
           id: string
           link: string
           read_at: string | null
@@ -2252,6 +2317,7 @@ export type Database = {
           body?: string
           category: string
           created_at?: string
+          emailed_at?: string | null
           id?: string
           link?: string
           read_at?: string | null
@@ -2263,6 +2329,7 @@ export type Database = {
           body?: string
           category?: string
           created_at?: string
+          emailed_at?: string | null
           id?: string
           link?: string
           read_at?: string | null

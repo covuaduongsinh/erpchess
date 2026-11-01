@@ -1,6 +1,6 @@
-import { useBilling } from '@erpchess/api/react';
+import { useBilling, useEmailStatus } from '@erpchess/api/react';
 import { VN_BANKS } from '@erpchess/domain';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { CreditCard, Landmark, Mail, Plug, Wallet } from 'lucide-react';
 import { type ReactNode, useState } from 'react';
 import { IntegrationCard } from '../components/integrations/IntegrationCard';
@@ -28,6 +28,7 @@ function IntegrationsPage() {
   const { t } = useT();
   const { academy } = useAcademy();
   const billing = useBilling(academy.id);
+  const emailStatus = useEmailStatus(academy.role === 'owner' ? academy.id : undefined);
   const [open, setOpen] = useState<'sender' | 'vietqr' | null>(null);
   if (academy.role !== 'owner') {
     return <p className="text-text-muted">{t('integrations.ownerOnly')}</p>;
@@ -55,6 +56,20 @@ function IntegrationsPage() {
             name: contact.senderName || academy.name,
             email: contact.replyTo ?? '',
           })}
+          note={
+            <>
+              {emailStatus.data?.configured
+                ? t('integrations.emailOn', { from: emailStatus.data.from })
+                : t('integrations.emailOff')}{' '}
+              <Link
+                to="/a/$slug/email"
+                params={{ slug: academy.slug }}
+                className="font-medium text-primary underline"
+              >
+                {t('integrations.openEmail')}
+              </Link>
+            </>
+          }
           onConfigure={() => setOpen('sender')}
         />
       </Group>

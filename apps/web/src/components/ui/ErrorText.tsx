@@ -1,5 +1,18 @@
+import type { TranslationKey } from '@erpchess/i18n';
 import { ZodError } from 'zod';
 import { useT, validationKey } from '../../lib/use-t';
+
+// Mã lỗi của Edge Function send-email (Giai đoạn 27a)
+const EMAIL_ERRORS = [
+  'not_configured',
+  'rate_limited',
+  'send_failed',
+  'recipient_not_allowed',
+  'category_disabled',
+  'invitation_closed',
+  'invitation_not_found',
+  'forbidden',
+];
 
 /** Hiển thị lỗi: lỗi validate được dịch theo trường, lỗi khác hiện nguyên thông điệp. */
 export function ErrorText({ error }: { error: unknown }) {
@@ -21,6 +34,8 @@ export function ErrorText({ error }: { error: unknown }) {
     else if (code?.startsWith('sync_')) message = t('gameSync.sync_error');
     else if (code === 'lichess_unreachable' || code === 'lichess_error')
       message = t('database.lichessUnavailable');
+    else if (code && EMAIL_ERRORS.includes(code))
+      message = t(`emailPage.err_${code}` as TranslationKey);
     else if (code === '23505') message = t('academy.slugTaken');
     else if (/invalid login credentials/i.test(error.message))
       message = t('auth.invalidCredentials');

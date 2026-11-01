@@ -1,0 +1,121 @@
+{
+  "actions": [
+    {
+      "timeout_ms": 30000,
+      "action": "wait_for",
+      "state": "visible",
+      "locator": {
+        "kind": "css",
+        "selector": "#username"
+      },
+      "step_id": "login_form"
+    },
+    {
+      "value": {
+        "secret_id": "cl_user",
+        "source": "secret"
+      },
+      "timeout_ms": 10000,
+      "action": "fill",
+      "locator": {
+        "kind": "css",
+        "selector": "#username"
+      },
+      "step_id": "fill_user"
+    },
+    {
+      "value": {
+        "secret_id": "cl_pass",
+        "source": "secret"
+      },
+      "timeout_ms": 10000,
+      "action": "fill",
+      "locator": {
+        "kind": "css",
+        "selector": "#password"
+      },
+      "step_id": "fill_pass"
+    },
+    {
+      "timeout_ms": 15000,
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "button[type=submit]"
+      },
+      "step_id": "submit"
+    },
+    {
+      "action": "wait_for_timeout",
+      "duration_ms": 8000,
+      "step_id": "after_login"
+    },
+    {
+      "wait_until": "load",
+      "timeout_ms": 45000,
+      "action": "goto",
+      "destination": {
+        "url": "https://platform.chesslang.com/study/list"
+      },
+      "step_id": "go_studies"
+    },
+    {
+      "action": "wait_for_timeout",
+      "duration_ms": 6000,
+      "step_id": "settle_studies"
+    },
+    {
+      "timeout_ms": 15000,
+      "action": "click",
+      "locator": {
+        "kind": "css",
+        "selector": "text=Untitled draft"
+      },
+      "step_id": "open_draft"
+    },
+    {
+      "action": "wait_for_timeout",
+      "duration_ms": 8000,
+      "step_id": "shot_draft"
+    }
+  ],
+  "secrets": [
+    {
+      "environment_variable": "CL_USER",
+      "secret_id": "cl_user"
+    },
+    {
+      "environment_variable": "CL_PASS",
+      "secret_id": "cl_pass"
+    }
+  ],
+  "start_url": {
+    "url": "https://platform.chesslang.com/dashboard"
+  },
+  "capture": {
+    "after_each_step": [
+      "screenshot"
+    ],
+    "at_end": [
+      "url",
+      "dom"
+    ]
+  },
+  "browser": {
+    "mode": "launch",
+    "executable_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "headless": true
+  },
+  "environment": {
+    "reduced_motion": "reduce",
+    "viewport": {
+      "height": 1100,
+      "width": 1440,
+      "device_scale_factor": 1
+    },
+    "locale": "en-US",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "service_workers": "allow",
+    "color_scheme": "light"
+  }
+}

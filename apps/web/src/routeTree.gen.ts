@@ -40,6 +40,7 @@ import { Route as ASlugCalendarRouteImport } from './routes/a.$slug.calendar'
 import { Route as ASlugChatRouteImport } from './routes/a.$slug.chat'
 import { Route as ASlugCoachesRouteImport } from './routes/a.$slug.coaches'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
+import { Route as ASlugEmailRouteImport } from './routes/a.$slug.email'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
 import { Route as ASlugIntegrationsRouteImport } from './routes/a.$slug.integrations'
 import { Route as ASlugLeadsRouteImport } from './routes/a.$slug.leads'
@@ -238,6 +239,11 @@ const ASlugCoachesRoute = ASlugCoachesRouteImport.update({
 const ASlugDatabaseRoute = ASlugDatabaseRouteImport.update({
   id: '/database',
   path: '/database',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugEmailRoute = ASlugEmailRouteImport.update({
+  id: '/email',
+  path: '/email',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugGroupsRoute = ASlugGroupsRouteImport.update({
@@ -492,6 +498,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
+  '/a/$slug/email': typeof ASlugEmailRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
@@ -568,6 +575,7 @@ export interface FileRoutesByTo {
   '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
+  '/a/$slug/email': typeof ASlugEmailRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
@@ -646,6 +654,7 @@ export interface FileRoutesById {
   '/a/$slug/chat': typeof ASlugChatRoute
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
+  '/a/$slug/email': typeof ASlugEmailRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
@@ -725,6 +734,7 @@ export interface FileRouteTypes {
     | '/a/$slug/chat'
     | '/a/$slug/coaches'
     | '/a/$slug/database'
+    | '/a/$slug/email'
     | '/a/$slug/groups'
     | '/a/$slug/integrations'
     | '/a/$slug/leads'
@@ -801,6 +811,7 @@ export interface FileRouteTypes {
     | '/a/$slug/chat'
     | '/a/$slug/coaches'
     | '/a/$slug/database'
+    | '/a/$slug/email'
     | '/a/$slug/groups'
     | '/a/$slug/integrations'
     | '/a/$slug/leads'
@@ -878,6 +889,7 @@ export interface FileRouteTypes {
     | '/a/$slug/chat'
     | '/a/$slug/coaches'
     | '/a/$slug/database'
+    | '/a/$slug/email'
     | '/a/$slug/groups'
     | '/a/$slug/integrations'
     | '/a/$slug/leads'
@@ -1168,6 +1180,13 @@ declare module '@tanstack/react-router' {
       path: '/database'
       fullPath: '/a/$slug/database'
       preLoaderRoute: typeof ASlugDatabaseRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/email': {
+      id: '/a/$slug/email'
+      path: '/email'
+      fullPath: '/a/$slug/email'
+      preLoaderRoute: typeof ASlugEmailRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/groups': {
@@ -1501,6 +1520,7 @@ interface ASlugRouteChildren {
   ASlugChatRoute: typeof ASlugChatRoute
   ASlugCoachesRoute: typeof ASlugCoachesRoute
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
+  ASlugEmailRoute: typeof ASlugEmailRoute
   ASlugGroupsRoute: typeof ASlugGroupsRoute
   ASlugIntegrationsRoute: typeof ASlugIntegrationsRoute
   ASlugLeadsRoute: typeof ASlugLeadsRoute
@@ -1554,6 +1574,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugChatRoute: ASlugChatRoute,
   ASlugCoachesRoute: ASlugCoachesRoute,
   ASlugDatabaseRoute: ASlugDatabaseRoute,
+  ASlugEmailRoute: ASlugEmailRoute,
   ASlugGroupsRoute: ASlugGroupsRoute,
   ASlugIntegrationsRoute: ASlugIntegrationsRoute,
   ASlugLeadsRoute: ASlugLeadsRoute,

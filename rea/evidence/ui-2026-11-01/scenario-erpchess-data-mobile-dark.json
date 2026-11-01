@@ -538,6 +538,20 @@
    "action": "wait_for_timeout"
   },
   {
+   "step_id": "go_email",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/email"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_email",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
    "step_id": "go_tich_hop",
    "timeout_ms": 60000,
    "wait_until": "load",

@@ -13,6 +13,7 @@ export function IntegrationCard({
   description,
   status,
   summary,
+  note,
   onConfigure,
 }: {
   icon: LucideIcon;
@@ -21,6 +22,8 @@ export function IntegrationCard({
   status: 'configured' | 'notConfigured' | 'soon';
   /** Dòng tóm tắt cấu hình hiện tại (chỉ hiện khi đã cấu hình). */
   summary?: ReactNode;
+  /** Dòng ghi chú luôn hiện (vd. trạng thái kết nối thật của dịch vụ). */
+  note?: ReactNode;
   onConfigure?: () => void;
 }) {
   const { t } = useT();
@@ -38,6 +41,7 @@ export function IntegrationCard({
       {status === 'configured' && summary && (
         <p className="break-words text-sm text-text">{summary}</p>
       )}
+      {note && <div className="text-sm text-text-muted">{note}</div>}
       <div className="mt-auto flex items-center justify-between gap-2">
         <Badge tone={status === 'configured' ? 'success' : status === 'soon' ? 'new' : 'muted'}>
           {status === 'configured'

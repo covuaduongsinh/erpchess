@@ -141,7 +141,9 @@ export function StudentGrid({
                   />
                 </dd>
               </dl>
-              {invitedFor === profile.id && invite.data && <InviteLink token={invite.data.token} />}
+              {invitedFor === profile.id && invite.data && (
+                <InviteLink token={invite.data.token} academyId={academyId} inviteRole="parent" />
+              )}
             </li>
           );
         })}

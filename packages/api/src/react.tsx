@@ -47,6 +47,7 @@ import * as classrooms from './classrooms';
 import type { ErpClient } from './client';
 import * as courses from './courses';
 import * as databases from './databases';
+import * as emailApi from './email';
 import * as gameSync from './game-sync';
 import * as games from './games';
 import * as leads from './leads';
@@ -716,6 +717,58 @@ export function useUpdateAcademyProfile(academyId: string) {
 }
 
 /** Chủ học viện bật/tắt phần FIDE (Giai đoạn 26a). */
+/** Trạng thái gửi email (Giai đoạn 27a): chỉ nhân sự gọi được. */
+export function useEmailStatus(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['email-status', academyId ?? ''],
+    queryFn: () => emailApi.fetchEmailStatus(client, academyId ?? ''),
+    enabled: !!academyId,
+    retry: false,
+  });
+}
+
+export function useEmailLog(academyId: string | undefined) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['email-log', academyId ?? ''],
+    queryFn: () => emailApi.fetchEmailLog(client, academyId ?? ''),
+    enabled: !!academyId,
+  });
+}
+
+export function useSendTestEmail(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ to, locale }: { to: string; locale?: 'vi' | 'en' }) =>
+      emailApi.sendTestEmail(client, academyId, to, locale),
+    onSettled: () => {
+      void qc.invalidateQueries({ queryKey: ['email-log'] });
+      void qc.invalidateQueries({ queryKey: ['email-status'] });
+    },
+  });
+}
+
+export function useSendInviteEmail(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      role,
+      to,
+      token,
+      locale,
+    }: {
+      role: 'coach' | 'parent';
+      to: string;
+      token: string;
+      locale?: 'vi' | 'en';
+    }) => emailApi.sendInviteEmail(client, academyId, role, to, token, locale),
+    onSettled: () => void qc.invalidateQueries({ queryKey: ['email-log'] }),
+  });
+}
+
 export function useSetAcademyFideEnabled(academyId: string) {
   const client = useErpClient();
   const qc = useQueryClient();
