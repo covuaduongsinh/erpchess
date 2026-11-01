@@ -153,3 +153,16 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 **Không migration:** tên hiển thị và email trả lời nằm trong `academies.contact` (jsonb có sẵn). Lưu hồ sơ từ tab Thông tin gửi lại hai trường này để không xoá chúng.
 
 **Còn lại:** plan 19 sẽ cập nhật sau khi PR #79 (đưa tệp plan vào main) merge; PayOS và Stripe chờ chủ dự án có khoá API.
+
+## 12. GĐ26c: Báo cáo theo học viên và menu Quản trị cuộn được (2026-11-01, lần bảy)
+
+**Ảnh** (`gd26c/{desktop-light,desktop-dark,mobile-light}/shot_*.png`, đã xem từng ảnh): `shot_bao_cao` (chưa chọn học viên), `shot_bao_cao_hoc_vien` (đã chọn), `shot_bao_cao_toan_hoc_vien` (tab Toàn học viện), `shot_menu_cuon` (desktop: bấm "Chứng chỉ" cuối danh sách Quản trị từ trang Giảm giá; sidebar tự cuộn tới mục đang mở).
+
+| Trang | Tham chiếu Chesslang (`gd26-2026-11-01/shot_reports.png`, chỉ bố cục) | erpchess | Đánh giá |
+| --- | --- | --- | --- |
+| Báo cáo | Chọn bên trái, xem bên phải; cột trái có ô tìm, khoảng ngày, Export, danh sách học viên; chưa chọn thì lời nhắc; sidebar thu thành icon | Hai tab Theo học viên (mặc định) / Toàn học viện. Cột trái: lọc lớp, khoảng ngày (Toàn thời gian/Tháng/Quý/Năm/Tuỳ chỉnh), Xuất CSV toàn học viện, tìm, danh sách có avatar; cột phải: báo cáo chi tiết (thẻ số liệu + tab con, In phiếu điểm, Xuất CSV học viên) hoặc lời nhắc; `?student=` trên URL; sidebar tự thu thành icon; mobile: danh sách trước, chọn thì xem chi tiết + nút quay lại | **Khớp bố cục.** Không có "loại báo cáo" như Chesslang vì erpchess chỉ có một loại (các khối nằm ở tab con của báo cáo chi tiết) |
+| Quyền | — | Học viên vào thẳng báo cáo của mình (không tab, không danh sách); phụ huynh một con vào thẳng báo cáo con, nhiều con thì chọn | Giữ logic quyền cũ |
+
+**Lỗi nặng tìm thấy khi xem ảnh (chưa sửa trong PR này):** tab **Toàn học viện** báo `relation "public.academy_levels" does not exist`. RPC `get_academy_students_report` (migration `20261026000025`) join bảng không tồn tại `public.academy_levels` (bảng đúng là `public.levels`); plpgsql không kiểm tên bảng lúc tạo nên migration vẫn áp được, nhưng hàm lỗi mỗi lần gọi, nghĩa là bảng toàn học viện và Xuất CSV toàn học viện chưa từng chạy được trên cloud. Cần migration `create or replace` đổi sang `public.levels` (PR riêng, nháp, chờ chủ dự án áp).
+
+**Menu Quản trị cuộn được:** vùng menu đã có `overflow-y-auto` nhưng thiếu `min-h-0` và không kéo mục đang mở vào tầm nhìn, nên ở màn 1440×900 các mục cuối ("Cấp độ", "Địa điểm", "Chứng chỉ") nằm ngoài vùng nhìn mà không có dấu hiệu cuộn. Sửa: `min-h-0` + `overscroll-contain` và tự `scrollIntoView` mục đang mở khi đổi trang; đáy (Chat, Hồ sơ, công cụ) vẫn cố định. Ảnh `shot_menu_cuon` cho thấy "Chứng chỉ" nằm trong vùng nhìn sau khi bấm.

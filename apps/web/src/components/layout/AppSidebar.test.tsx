@@ -59,6 +59,26 @@ function renderSidebar(over: Partial<AppSidebarProps> = {}) {
 describe('AppSidebar', () => {
   afterEach(() => cleanup());
 
+  it('vùng menu cuộn riêng và kéo mục đang mở vào tầm nhìn (danh sách Quản trị dài hơn màn hình)', () => {
+    const scrollIntoView = vi.fn();
+    const original = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+    try {
+      const { container } = renderSidebar({ pathname: '/a/clb/certificates' });
+      const nav = container.querySelector('nav') as HTMLElement;
+      // Cuộn được: overflow-y-auto + min-h-0 (không có min-h-0 thì vùng này nở theo nội dung, không cuộn)
+      expect(nav.className).toContain('overflow-y-auto');
+      expect(nav.className).toContain('min-h-0');
+      // Chat/Hồ sơ/công cụ nằm ngoài vùng cuộn (đáy cố định)
+      expect(within(nav).queryByText('Chat')).toBeNull();
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+      const active = nav.querySelector('[aria-current="page"]') as HTMLElement;
+      expect(active.textContent).toContain('Chứng chỉ');
+    } finally {
+      HTMLElement.prototype.scrollIntoView = original;
+    }
+  });
+
   it('hiện tên học viện, vai trò và các nhóm menu chính', () => {
     renderSidebar();
     expect(screen.getByText('CLB Dương Sinh')).toBeTruthy();

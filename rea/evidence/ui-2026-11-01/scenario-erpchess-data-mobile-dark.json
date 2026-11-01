@@ -450,6 +450,80 @@
    "action": "wait_for_timeout"
   },
   {
+   "step_id": "go_bao_cao",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/reports"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_bao_cao",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_bao_cao_hoc_vien",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/reports"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_bao_cao_hoc_vien",
+   "locator": {
+    "selector": "ul[aria-label='Danh sách học viên'] li:first-child button",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_bao_cao_hoc_vien",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_bao_cao_toan_hoc_vien",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/reports?view=academy"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_bao_cao_toan_hoc_vien",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_menu_cuon",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/billing/discounts"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_menu_cuon",
+   "locator": {
+    "selector": "aside nav a[href$='/certificates']",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_menu_cuon",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
    "step_id": "go_tich_hop",
    "timeout_ms": 60000,
    "wait_until": "load",
