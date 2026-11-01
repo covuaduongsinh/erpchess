@@ -141,5 +141,13 @@ describe('ui-tokens', () => {
     const rule = css.slice(css.indexOf('.dark .text-primary'));
     expect(rule).toContain('color-mix(in oklab, var(--color-primary) 40%, white)');
     expect(rule).toContain(String.raw`.dark .hover\:text-primary:hover`);
+    // Các biến thể đang dùng trong ứng dụng: mục sidebar đang mở, nút bấm, tab đang chọn, nhóm khi rê chuột
+    for (const variant of [
+      String.raw`.dark .group:hover .group-hover\:text-primary`,
+      String.raw`.dark .data-\[active\=true\]\:text-primary[data-active="true"]`,
+      String.raw`.dark .aria-pressed\:text-primary[aria-pressed="true"]`,
+      String.raw`.dark .aria-selected\:text-primary[aria-selected="true"]`,
+    ])
+      expect(rule, variant).toContain(variant);
   });
 });

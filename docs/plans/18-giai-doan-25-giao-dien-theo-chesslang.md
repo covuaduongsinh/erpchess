@@ -196,6 +196,7 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 - **Trang 404:** `notFoundComponent` của router gốc (`components/NotFound.tsx`): số 404 cách điệu bằng họa tiết ô cờ, nút Về tổng quan (hoặc Về trang chủ khi chưa có học viện) / Quay lại / Tải lại, liên kết nhanh Bàn cờ, Luyện tập, Học liệu, Giải đấu theo học viện gần nhất (`useCurrentAcademy`, tách từ `AppLayout`).
 - **Mobile Expo:** thêm `nativeColors` / `darkNativeColors` (bản hex của `primary-soft`, `app-bg`, tính trong oklab giống `color-mix`, có test đối chiếu); màn hình gốc, trang chủ và nền các màn dùng `app-bg`. Không đổi điều hướng.
 - **Kịch bản REA:** `make-scenarios.py` sinh 4 kịch bản (desktop/mobile x sáng/tối, 26 trang gồm cả 404, mobile có ảnh drawer) cho các trang 25a–25f. Chưa chạy được vì tài khoản thử chưa xác nhận email; không lách. Việc chụp, tệp `so-sanh.md` và ghi các chỗ còn khác Chesslang là bước riêng sau khi tài khoản dùng được.
+- **Nghiệm thu REA (2026-11-01):** đã chạy 4 kịch bản trên bản build `main` sau #74 với tài khoản thử; kết quả và đối chiếu từng trang ở `rea/evidence/ui-2026-11-01/so-sanh.md`. Phát hiện và sửa 4 lỗi giao diện (nút tìm kiếm vô hình ở thanh trên, mục đang chọn không đọc được ở chế độ tối, đáy sidebar quá cao làm cắt menu, logo bị nút thu gọn đè khi thu gọn). Còn lại: kiểm bằng dữ liệu thật/dữ liệu mẫu (học viện thử đang trống).
 
 - **Chế độ tối:**
   - Lưu theo người dùng vào `localStorage`, mặc định theo hệ thống.

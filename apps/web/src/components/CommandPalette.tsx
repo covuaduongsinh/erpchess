@@ -363,12 +363,12 @@ export function CommandPalette() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 rounded-md bg-white/10 px-3 py-1.5 text-xs text-white/90 hover:bg-white/20 transition-colors"
+        className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-1.5 text-xs text-text-muted transition-colors hover:bg-primary-soft hover:text-text"
         title="Tìm kiếm nhanh (Ctrl+K)"
       >
         <span aria-hidden="true">🔍</span>
         <span className="hidden md:inline">Tìm kiếm...</span>
-        <kbd className="hidden sm:inline-block rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-mono text-white/80">
+        <kbd className="hidden sm:inline-block rounded bg-bg px-1.5 py-0.5 text-[10px] font-mono text-text-muted">
           Ctrl K
         </kbd>
       </button>
