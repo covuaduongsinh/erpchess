@@ -22,6 +22,7 @@ import {
   Library,
   type LucideIcon,
   MapPin,
+  Palette,
   Percent,
   Puzzle,
   Receipt,
@@ -115,6 +116,7 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
         labelKey: 'nav.members',
         items: [
           item('students', '/a/$slug/students', 'students.title', Users),
+          item('coaches', '/a/$slug/coaches', 'nav.coaches', School),
           item('groups', '/a/$slug/groups', 'nav.groups', UsersRound),
           item('batches', '/a/$slug/batches', 'nav.batches', Layers),
         ],
@@ -140,6 +142,7 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
         id: 'academy',
         labelKey: 'nav.academy',
         items: [
+          ...(owner ? [item('branding', '/a/$slug/settings', 'nav.branding', Palette)] : []),
           item('levels', '/a/$slug/levels', 'levels.title', Shield),
           item('locations', '/a/$slug/locations', 'location.title', MapPin),
           item('certificates', '/a/$slug/certificates', 'cert.title', Award),
