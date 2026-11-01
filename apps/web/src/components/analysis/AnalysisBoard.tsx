@@ -21,6 +21,7 @@ import {
   Eraser,
   FlipVertical2,
   Grid2x2,
+  Save,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBoardPreferences } from '../../lib/use-board-preferences';
@@ -31,6 +32,7 @@ import { EngineLines } from './EngineLines';
 import { EvalBar } from './EvalBar';
 import { MasterbasePanel } from './MasterbasePanel';
 import { MoveList } from './MoveList';
+import { SaveGamePanel } from './SaveGamePanel';
 
 const NO_DRAWINGS: Drawings = { arrows: [], highlights: [] };
 
@@ -39,6 +41,7 @@ export function AnalysisBoard({
   initialPgn,
   notation = 'letters',
   showMasterbase = false,
+  saveTarget,
 }: {
   initialFen?: string;
   /** Ván PGN nạp sẵn khi mở (vd. thẻ ván chia sẻ trong chat). */
@@ -46,6 +49,8 @@ export function AnalysisBoard({
   /** Hiện kho ván cao thủ (cần đăng nhập vì `search_masterbase` không mở cho khách). */
   showMasterbase?: boolean;
   notation?: MoveNotation;
+  /** Có thì hiện tab "CSDL của tôi" và nút "Lưu ván" (chỉ nhân sự có học viện mới tạo được CSDL). */
+  saveTarget?: { academyId: string; userId: string; slug: string };
 }) {
   const { t } = useT();
   const { preferences } = useBoardPreferences();
@@ -69,7 +74,7 @@ export function AnalysisBoard({
   const [importText, setImportText] = useState('');
   const [importError, setImportError] = useState<unknown>(null);
   const [copied, setCopied] = useState<string | null>(null);
-  const [tab, setTab] = useState<'analysis' | 'engine' | 'masterbase'>('analysis');
+  const [tab, setTab] = useState<'analysis' | 'engine' | 'masterbase' | 'mydb'>('analysis');
 
   const fen = current.fen;
   const side = sideToMove(fen);
@@ -168,6 +173,13 @@ export function AnalysisBoard({
           icon={Grid2x2}
           title={t('analysis.title')}
           subtitle={t('analysis.subtitle')}
+          actions={
+            saveTarget && (
+              <Button variant="cta" size="sm" icon={Save} onClick={() => setTab('mydb')}>
+                {t('analysis.saveGame')}
+              </Button>
+            )
+          }
         />
         <Tabs
           variant="pills"
@@ -180,6 +192,7 @@ export function AnalysisBoard({
             ...(showMasterbase
               ? [{ value: 'masterbase' as const, label: t('analysis.tabMasterbase') }]
               : []),
+            ...(saveTarget ? [{ value: 'mydb' as const, label: t('analysis.tabMyDb') }] : []),
           ]}
         />
 
@@ -251,6 +264,16 @@ export function AnalysisBoard({
 
         {tab === 'masterbase' && showMasterbase && (
           <MasterbasePanel fen={fen} onLoadPgn={(pgn) => game.load(pgn)} />
+        )}
+
+        {tab === 'mydb' && saveTarget && (
+          <SaveGamePanel
+            academyId={saveTarget.academyId}
+            userId={saveTarget.userId}
+            slug={saveTarget.slug}
+            pgn={() => toPgn(tree)}
+            canSave={tree.root.children.length > 0}
+          />
         )}
 
         <Card>

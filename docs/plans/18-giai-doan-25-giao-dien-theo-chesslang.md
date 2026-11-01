@@ -213,7 +213,8 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 
 - **Việc:** thêm RPC thống kê theo ngày (bài làm, điểm danh, hoàn thành quiz), nối lại biểu đồ tuần ở Tổng quan kèm `DateRangeFields`, nút Tuần trước/Tuần sau và hàng Hoạt động quiz.
 - **Bổ sung từ 25d-1:** thẻ "% quiz đã bắt đầu" ở trang Quiz và tab "Bảng xếp hạng quiz toàn học viện" (hiện chỉ có bảng xếp hạng từng quiz trong trang chi tiết) cần số liệu tổng hợp phía server; làm cùng đợt RPC này.
-- **Bổ sung từ 25e-2:** **Lưu ván từ bàn phân tích vào CSDL của tôi** (tab "CSDL của tôi" và nút "Lưu ván" ở trang phân tích); cần chọn CSDL đích và ghi PGN, có thể cần API/RPC mới.
+- **Bổ sung từ 25e-2 — PR 25g-3 (không cần migration, đã làm):** **Lưu ván từ bàn phân tích vào CSDL của tôi**. Tab "CSDL của tôi" và nút "Lưu ván" ở đầu panel phải của trang phân tích, chỉ hiện cho nhân sự (owner/coach) của học viện gần nhất, vì RLS chỉ cho nhân sự tạo CSDL (học viên chỉ tạo được CSDL đồng bộ). Chọn một CSDL riêng tư của chính mình (bỏ CSDL đồng bộ Lichess/Chess.com và CSDL chia sẻ), hoặc tạo CSDL riêng tư mới (tên điền sẵn, sửa được); lưu cả ván lẫn các biến bằng `importPgn` có sẵn; PGN nhập 0 ván thì báo lỗi; thành công thì có liên kết tới trang CSDL ván. Không đổi API, DB hay RPC.
+- **Còn lại của 25g (cần migration, chờ chủ dự án duyệt):** 25g-1 thống kê theo ngày + biểu đồ tuần, 25g-2 bảng xếp hạng quiz toàn học viện + thẻ "% quiz đã bắt đầu".
 - **Lưu ý:** có migration nên cần chủ dự án duyệt rồi áp lên Supabase cloud (CI không tự áp). Khi nối lại, `WeeklyActivityChart` phải nhận dữ liệu thật và bỏ dữ liệu mẫu mặc định.
 
 ## 4. Rủi ro và cách xử lý
