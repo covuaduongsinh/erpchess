@@ -537,5 +537,60 @@ if (!bill?.bank_bin) {
     }),
   );
 }
+// --- FIDE (26a): bật cho học viện thử và nhập tay FIDE mẫu cho vài học viên (qua RPC như trên giao diện) ---
+const { data: acFide } = await c.from('academies').select('fide_enabled').eq('id', A).single();
+if (!acFide?.fide_enabled) {
+  note('bật FIDE', await c.rpc('set_academy_fide_enabled', { p_academy: A, p_enabled: true }));
+}
+const FIDE = {
+  'an.nguyen': ['14012345', 1450, 1400, 1380],
+  'binh.tran': ['14067890', 1620, 1580, null],
+  'khoi.vu': [null, null, 1210, 1190],
+  'tuan.bui': ['14111222', 1380, null, 1350],
+  'han.dang': ['14333444', 1510, 1490, 1470],
+};
+const { data: fideRows } = await c
+  .from('memberships')
+  .select('user_id, fide_id, fide_standard, fide_rapid, fide_blitz')
+  .eq('academy_id', A)
+  .eq('role', 'student');
+for (const [username, [fideId, standard, rapid, blitz]] of Object.entries(FIDE)) {
+  const uid = idOf[username];
+  const cur = fideRows?.find((r) => r.user_id === uid);
+  if (!uid || cur?.fide_id || cur?.fide_standard || cur?.fide_rapid || cur?.fide_blitz) continue;
+  note(
+    `FIDE ${username}`,
+    await c.rpc('set_member_fide', {
+      p_academy: A,
+      p_student: uid,
+      p_fide_id: fideId ?? '',
+      p_standard: standard,
+      p_rapid: rapid,
+      p_blitz: blitz,
+    }),
+  );
+}
+// Kiểm gián tiếp các migration 39-41 qua API (không có công cụ chạy pgTAP): in kết quả để đối chiếu
+const stats = await c.rpc('academy_stats', { p_academy: A });
+const today = new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 10);
+const weekAgo = new Date(Date.now() + 7 * 36e5 - 6 * 864e5).toISOString().slice(0, 10);
+const daily = await c.rpc('academy_daily_stats', { p_academy: A, p_from: weekAgo, p_to: today });
+const sum = (daily.data ?? []).reduce((n, d) => n + d.attempts, 0);
+console.log(
+  `kiểm 39: attempts_week=${stats.data?.[0]?.attempts_week} tổng biểu đồ 7 ngày=${sum}`,
+  stats.data?.[0]?.attempts_week === sum ? 'KHỚP' : 'LỆCH',
+);
+const rep = await c.rpc('get_academy_students_report', { p_academy_id: A });
+console.log(
+  `kiểm 40: get_academy_students_report ${rep.error ? `LỖI ${rep.error.message}` : `ok, ${rep.data.length} học viên, levelName mẫu: ${rep.data[0]?.levelName}`}`,
+);
+const fchk = await c
+  .from('memberships')
+  .select('fide_id', { count: 'exact', head: true })
+  .eq('academy_id', A)
+  .not('fide_id', 'is', null);
+console.log(
+  `kiểm 41: ${fchk.error ? `LỖI ${fchk.error.message}` : `${fchk.count} học viên đã có mã FIDE`}`,
+);
 console.log('xong');
 process.exit(0);

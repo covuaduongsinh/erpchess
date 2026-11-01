@@ -50,7 +50,7 @@ export function StudentReportPane({
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [showPrint, setShowPrint] = useState(false);
   const fideText = fideParts(fide, {
-    id: t('fide.idShort'),
+    id: t('fide.idInline'),
     standard: t('fide.standardShort'),
     rapid: t('fide.rapidShort'),
     blitz: t('fide.blitzShort'),

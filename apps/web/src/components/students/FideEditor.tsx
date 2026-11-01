@@ -44,10 +44,16 @@ export function FideEditor({
     });
   }
 
-  const field = (key: keyof typeof saved, label: string, width: string, props = {}) => (
+  const field = (
+    key: keyof typeof saved,
+    label: string,
+    width: string,
+    props = {},
+    placeholder = label,
+  ) => (
     <input
       aria-label={`${label} — ${name}`}
-      placeholder={label}
+      placeholder={placeholder}
       value={draft[key]}
       onChange={(e) => setDraft((d) => ({ ...d, [key]: e.target.value }))}
       className={`${width} rounded-md border border-border bg-surface px-2 py-1 text-xs font-semibold text-text focus:border-primary focus:outline-hidden`}
@@ -56,16 +62,26 @@ export function FideEditor({
   );
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-1.5">
+    <form onSubmit={onSubmit} className="flex min-w-[14.5rem] flex-col gap-1.5">
+      {field('id', t('fide.idShort'), 'w-28', { inputMode: 'numeric', maxLength: 12 })}
       <div className="flex flex-wrap items-center gap-1.5">
-        {field('id', t('fide.idShort'), 'w-24', { inputMode: 'numeric', maxLength: 12 })}
-        {field('standard', t('fide.standardShort'), 'w-16', {
+        {field(
+          'standard',
+          t('fide.standardShort'),
+          'w-[4.5rem]',
+          { type: 'number', min: 1000, max: 3300 },
+          t('fide.standardPlaceholder'),
+        )}
+        {field('rapid', t('fide.rapidShort'), 'w-[4.5rem]', {
           type: 'number',
           min: 1000,
           max: 3300,
         })}
-        {field('rapid', t('fide.rapidShort'), 'w-16', { type: 'number', min: 1000, max: 3300 })}
-        {field('blitz', t('fide.blitzShort'), 'w-16', { type: 'number', min: 1000, max: 3300 })}
+        {field('blitz', t('fide.blitzShort'), 'w-[4.5rem]', {
+          type: 'number',
+          min: 1000,
+          max: 3300,
+        })}
         {dirty && (
           <Button
             type="submit"

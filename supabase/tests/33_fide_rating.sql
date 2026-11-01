@@ -50,7 +50,10 @@ select pg_temp.login('00000000-0000-0000-0000-0000000000a1');
 select lives_ok($$ select public.set_academy_fide_enabled('10000000-0000-0000-0000-00000000000a', true) $$,
   'owner bật được FIDE');
 select is((select fide_enabled from academies where slug = 'hv-a'), true, 'fide_enabled = true sau khi bật');
+-- Đọc học viện B dưới vai trò postgres: owner A không thấy học viện B (RLS) nên sẽ nhận NULL thay vì false
+select pg_temp.logout();
 select is((select fide_enabled from academies where slug = 'hv-b'), false, 'học viện khác không bị ảnh hưởng');
+select pg_temp.login('00000000-0000-0000-0000-0000000000a1');
 select throws_ok($$ select public.set_academy_fide_enabled('10000000-0000-0000-0000-00000000000a', null) $$,
   '22023', null, 'giá trị null bị từ chối');
 
