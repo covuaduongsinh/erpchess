@@ -15,5 +15,37 @@
   --color-danger: #dc2626;
   --color-board-light: #e8ebf7;
   --color-board-dark: #7c88c9;
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+  --color-purple: #7c4dbd;
+  --color-primary-soft: color-mix(in oklab, var(--color-primary) 8%, white);
+  --color-app-bg: color-mix(in oklab, var(--color-primary) 4%, #f8f9fc);
+  --radius-card: 16px;
   --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Chế độ tối: gắn class `.dark` lên <html>. Khai báo sẵn từ 25b, công tắc làm ở 25f. */
+.dark {
+  --color-bg: #12142a;
+  --color-white: #1c1f3d;
+  --color-text: #eceef8;
+  --color-text-muted: #a1a7c4;
+  --color-board-light: #b7bee3;
+  --color-board-dark: #4a57a8;
+  --color-surface: #1c1f3d;
+  --color-border: #2f335c;
+  --color-primary-soft: color-mix(in oklab, var(--color-primary) 22%, #1c1f3d);
+  --color-app-bg: color-mix(in oklab, var(--color-primary) 10%, #12142a);
+}
+
+/* Màu thương hiệu học viện ghi đè --color-primary trên một phần tử có data-brand: màu nhạt suy ra
+   phải tính lại tại đó (biến dẫn xuất đã khai ở :root chỉ dùng giá trị primary của :root). */
+[data-brand] {
+  --color-primary-soft: color-mix(in oklab, var(--color-primary) 8%, white);
+  --color-app-bg: color-mix(in oklab, var(--color-primary) 4%, #f8f9fc);
+}
+
+.dark [data-brand] {
+  --color-primary-soft: color-mix(in oklab, var(--color-primary) 22%, #1c1f3d);
+  --color-app-bg: color-mix(in oklab, var(--color-primary) 10%, #12142a);
 }

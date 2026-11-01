@@ -91,7 +91,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const displayName = String(session.user.user_metadata?.display_name ?? session.user.email ?? '');
 
   return (
-    <div className="flex min-h-screen bg-bg" style={academyBrandStyle(academy?.brand_color)}>
+    <div
+      className="flex min-h-screen bg-app-bg"
+      style={academyBrandStyle(academy?.brand_color)}
+      data-brand={academy?.brand_color ? '' : undefined}
+    >
       <AppSidebar
         pathname={pathname}
         academy={academy}

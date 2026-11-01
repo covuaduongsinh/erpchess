@@ -48,8 +48,9 @@
 
 Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, merge xong mới làm PR sau.
 
-### PR 25a: Khung ứng dụng: sidebar nhóm, thu gọn, mobile drawer
+### PR 25a: Khung ứng dụng: sidebar nhóm, thu gọn, mobile drawer (✅ ĐÃ HOÀN THÀNH & MERGE #64)
 
+**Nghiệm thu:** lint, typecheck 11/11, test web (30 test mới cho `nav-items`, `AppSidebar`, `useSidebarState`), build, mobile `export:web`, `cargo check`, CI 3/3 xanh. Mục "HLV" và "Thông tin & Branding" tạm ẩn (cùng trỏ `/a/$slug`) cho tới khi 25c tách trang `settings`. Công tắc Sáng/Tối chỉ đặt chỗ (làm ở 25f). Ảnh REA trước/sau chưa chụp được vì tài khoản thử chưa xác nhận email. Job Arasan của CI ghim `ubuntu-24.04` vì `ubuntu-latest` đã sang image thiếu `ld`.
 - **Tệp mới:**
   - `apps/web/src/components/layout/AppSidebar.tsx`
   - `apps/web/src/components/layout/nav-items.ts`: hàm thuần `buildNavGroups(role, academy)` trả về các nhóm và mục, kèm icon, `to`, `exact` và điều kiện vai trò.

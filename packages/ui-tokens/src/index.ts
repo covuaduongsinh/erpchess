@@ -19,6 +19,9 @@ export const colors = {
   danger: '#DC2626',
   boardLight: '#E8EBF7',
   boardDark: '#7C88C9',
+  surface: '#FFFFFF',
+  border: '#E5E7EB',
+  purple: '#7C4DBD',
 } as const;
 
 export const darkColors = {
@@ -29,7 +32,24 @@ export const darkColors = {
   textMuted: '#A1A7C4',
   boardLight: '#B7BEE3',
   boardDark: '#4A57A8',
+  surface: '#1C1F3D',
+  border: '#2F335C',
 } as const satisfies Record<keyof typeof colors, string>;
+
+/**
+ * Màu suy ra từ `--color-primary` bằng `color-mix`, để màu thương hiệu học viện (ghi đè
+ * `--color-primary`) tự kéo theo nền nhạt. Không phải hex nên tách khỏi `colors`.
+ */
+export const derivedColors = {
+  primarySoft: 'color-mix(in oklab, var(--color-primary) 8%, white)',
+  appBg: 'color-mix(in oklab, var(--color-primary) 4%, #f8f9fc)',
+} as const;
+
+/** Bản chế độ tối của màu suy ra: trộn vào nền tối thay vì nền trắng. */
+export const darkDerivedColors = {
+  primarySoft: 'color-mix(in oklab, var(--color-primary) 22%, #1c1f3d)',
+  appBg: 'color-mix(in oklab, var(--color-primary) 10%, #12142a)',
+} as const satisfies Record<keyof typeof derivedColors, string>;
 
 export const spacing = {
   xs: 4,
@@ -44,6 +64,7 @@ export const radius = {
   sm: 4,
   md: 8,
   lg: 12,
+  card: 16,
   full: 9999,
 } as const;
 
