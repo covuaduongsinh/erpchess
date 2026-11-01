@@ -17,9 +17,10 @@ import {
   scheduleSchema,
 } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Layers, Plus } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { LevelBadge } from '../components/students/LevelBadge';
-import { Button, ErrorText, Field, Spinner } from '../components/ui';
+import { Button, EmptyState, ErrorText, Field, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -44,34 +45,19 @@ function BatchesPage() {
   const activeBatch = groups.data?.find((g) => g.id === activeBatchId);
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 p-6 text-white shadow-md">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <span className="text-3xl" aria-hidden="true">
-              🏫
-            </span>
-            <h1 className="font-extrabold text-2xl tracking-tight">
-              Quản lý Lớp học & Nhóm Học viên (Batches)
-            </h1>
-          </div>
-          <p className="max-w-2xl text-blue-100 text-sm">
-            Tổ chức học viên theo từng lớp học, trình độ cờ vua mục tiêu và lịch học định kỳ trong
-            tuần tương tự Chesslang.
-          </p>
-        </div>
-
-        {staff && (
-          <Button
-            variant="cta"
-            onClick={() => setCreateModalOpen(true)}
-            className="flex items-center gap-2 shadow-lg"
-          >
-            <span>+ Tạo Lớp Mới</span>
-          </Button>
-        )}
-      </div>
+    <>
+      <PageHeader
+        icon={Layers}
+        title={t('nav.batches')}
+        subtitle={t('groups.batchHint')}
+        actions={
+          staff && (
+            <Button variant="cta" icon={Plus} onClick={() => setCreateModalOpen(true)}>
+              {t('groups.create')}
+            </Button>
+          )
+        }
+      />
 
       {/* Grid Danh sách các Lớp / Batches */}
       {groups.isPending ? (
@@ -79,21 +65,19 @@ function BatchesPage() {
       ) : groups.error ? (
         <ErrorText error={groups.error} />
       ) : groups.data.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-gray-200 border-dashed bg-white py-16 text-center">
-          <span className="mb-3 text-5xl" aria-hidden="true">
-            🏫
-          </span>
-          <h3 className="font-bold text-gray-900 text-lg">Chưa có lớp học (Batch) nào</h3>
-          <p className="mt-1 max-w-sm text-sm text-text-muted">
-            Tạo lớp học đầu tiên để bắt đầu phân nhóm học viên, xếp lịch học và giao bài tập theo
-            trình độ.
-          </p>
-          {staff && (
-            <Button variant="cta" onClick={() => setCreateModalOpen(true)} className="mt-5">
-              + Tạo Lớp Đầu Tiên
-            </Button>
-          )}
-        </div>
+        <EmptyState
+          dashed
+          icon={Layers}
+          title={t('groups.none')}
+          description={t('groups.batchHint')}
+          action={
+            staff && (
+              <Button variant="cta" onClick={() => setCreateModalOpen(true)}>
+                {t('groups.create')}
+              </Button>
+            )
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {groups.data.map((batch) => {
@@ -226,7 +210,7 @@ function BatchesPage() {
           onClose={() => setCreateModalOpen(false)}
         />
       )}
-    </div>
+    </>
   );
 }
 

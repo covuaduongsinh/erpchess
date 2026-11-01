@@ -2,8 +2,9 @@ import { type Lead, type LeadStatus, leadStatuses } from '@erpchess/api';
 import { useLeadMutations, useLeads } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { UserPlus } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import { Button, Card, EmptyState, ErrorText, Field, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime, localInputToIso } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -32,20 +33,23 @@ function LeadsPage() {
   if (!isStaff(academy.role)) return <p className="text-text-muted">{t('lead.staffOnly')}</p>;
   if (!academy.leads_enabled) {
     return (
-      <Card title={t('lead.title')}>
-        <p className="text-text-muted">{t('lead.disabled')}</p>
-        {owner && (
-          <Button
-            variant="cta"
-            className="self-start"
-            disabled={setEnabled.isPending}
-            onClick={() => setEnabled.mutate(true)}
-          >
-            {t('lead.enable')}
-          </Button>
-        )}
-        <ErrorText error={setEnabled.error} />
-      </Card>
+      <>
+        <PageHeader icon={UserPlus} title={t('lead.title')} subtitle={t('lead.subtitle')} />
+        <Card>
+          <p className="text-text-muted">{t('lead.disabled')}</p>
+          {owner && (
+            <Button
+              variant="cta"
+              className="self-start"
+              disabled={setEnabled.isPending}
+              onClick={() => setEnabled.mutate(true)}
+            >
+              {t('lead.enable')}
+            </Button>
+          )}
+          <ErrorText error={setEnabled.error} />
+        </Card>
+      </>
     );
   }
 
@@ -58,7 +62,8 @@ function LeadsPage() {
   );
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
+      <PageHeader icon={UserPlus} title={t('lead.title')} subtitle={t('lead.subtitle')} />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
         {leadStatuses.map((st) => (
           <button
@@ -76,7 +81,7 @@ function LeadsPage() {
         ))}
       </div>
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <Card title={t('lead.title')}>
+        <Card>
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -88,7 +93,7 @@ function LeadsPage() {
           ) : list.error ? (
             <ErrorText error={list.error} />
           ) : rows.length === 0 ? (
-            <p className="text-text-muted">{t('lead.none')}</p>
+            <EmptyState icon={UserPlus} title={t('lead.none')} dashed />
           ) : (
             <ul className="flex flex-col divide-y divide-text-muted/15">
               {rows.map((l) => (
@@ -108,7 +113,7 @@ function LeadsPage() {
         </Card>
         <NewLead />
       </div>
-    </div>
+    </>
   );
 }
 

@@ -2,8 +2,9 @@ import type { Level } from '@erpchess/api';
 import { useLevelMutations, useLevels, useMembers } from '@erpchess/api/react';
 import type { LevelInput } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
+import { Shield } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import { Button, Card, EmptyState, ErrorText, Field, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -27,70 +28,73 @@ function LevelsPage() {
     members.data?.filter((m) => m.role === 'student' && m.levelId === levelId).length ?? 0;
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card title={t('levels.title')}>
-        <p className="text-sm text-text-muted">{t('levels.hint')}</p>
-        {levels.data.length === 0 ? (
-          <p className="text-text-muted">{t('levels.none')}</p>
-        ) : (
-          <ol className="flex flex-col gap-2">
-            {levels.data.map((level) => (
-              <li key={level.id}>
-                <button
-                  type="button"
-                  disabled={!owner}
-                  aria-pressed={editing === level.id}
-                  onClick={() => setEditing(level.id)}
-                  className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left hover:bg-bg aria-pressed:bg-primary/10"
+    <>
+      <PageHeader icon={Shield} title={t('levels.title')} subtitle={t('levels.subtitle')} />
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <p className="text-sm text-text-muted">{t('levels.hint')}</p>
+          {levels.data.length === 0 ? (
+            <EmptyState icon={Shield} title={t('levels.none')} dashed />
+          ) : (
+            <ol className="flex flex-col gap-2">
+              {levels.data.map((level) => (
+                <li key={level.id}>
+                  <button
+                    type="button"
+                    disabled={!owner}
+                    aria-pressed={editing === level.id}
+                    onClick={() => setEditing(level.id)}
+                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left hover:bg-bg aria-pressed:bg-primary/10"
+                  >
+                    <span
+                      aria-hidden
+                      className="size-4 shrink-0 rounded-full"
+                      style={{ backgroundColor: level.color }}
+                    />
+                    <span className="flex-1 font-medium">{level.name}</span>
+                    <span className="text-sm text-text-muted">
+                      {level.max_rating === null
+                        ? t('levels.rangeOpen', { min: level.min_rating })
+                        : t('levels.range', { min: level.min_rating, max: level.max_rating })}
+                      {' · '}
+                      {t('levels.studentCount', { count: countFor(level.id) })}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          )}
+          {owner ? (
+            <div className="flex flex-wrap gap-2">
+              {levels.data.length === 0 && (
+                <Button
+                  variant="cta"
+                  disabled={mutations.fromTemplate.isPending}
+                  onClick={() => mutations.fromTemplate.mutate(nextPosition)}
                 >
-                  <span
-                    aria-hidden
-                    className="size-4 shrink-0 rounded-full"
-                    style={{ backgroundColor: level.color }}
-                  />
-                  <span className="flex-1 font-medium">{level.name}</span>
-                  <span className="text-sm text-text-muted">
-                    {level.max_rating === null
-                      ? t('levels.rangeOpen', { min: level.min_rating })
-                      : t('levels.range', { min: level.min_rating, max: level.max_rating })}
-                    {' · '}
-                    {t('levels.studentCount', { count: countFor(level.id) })}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        )}
-        {owner ? (
-          <div className="flex flex-wrap gap-2">
-            {levels.data.length === 0 && (
-              <Button
-                variant="cta"
-                disabled={mutations.fromTemplate.isPending}
-                onClick={() => mutations.fromTemplate.mutate(nextPosition)}
-              >
-                {t('levels.useTemplate')}
+                  {t('levels.useTemplate')}
+                </Button>
+              )}
+              <Button variant="ghost" onClick={() => setEditing('new')}>
+                {t('levels.create')}
               </Button>
-            )}
-            <Button variant="ghost" onClick={() => setEditing('new')}>
-              {t('levels.create')}
-            </Button>
-          </div>
-        ) : (
-          <p className="text-sm text-text-muted">{t('levels.ownerOnly')}</p>
-        )}
-        <ErrorText error={mutations.fromTemplate.error} />
-      </Card>
+            </div>
+          ) : (
+            <p className="text-sm text-text-muted">{t('levels.ownerOnly')}</p>
+          )}
+          <ErrorText error={mutations.fromTemplate.error} />
+        </Card>
 
-      {owner && editing && (
-        <LevelForm
-          key={editing}
-          level={levels.data.find((l) => l.id === editing)}
-          position={nextPosition}
-          onDone={() => setEditing(null)}
-        />
-      )}
-    </div>
+        {owner && editing && (
+          <LevelForm
+            key={editing}
+            level={levels.data.find((l) => l.id === editing)}
+            position={nextPosition}
+            onDone={() => setEditing(null)}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

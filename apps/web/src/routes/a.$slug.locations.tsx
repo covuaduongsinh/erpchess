@@ -2,9 +2,10 @@ import type { LocationRow } from '@erpchess/api';
 import { useGroups, useLocationMutations, useLocations } from '@erpchess/api/react';
 import { filterLocations, isStaff, type LocationFilter } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
+import { MapPin, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { LocationFormModal } from '../components/locations/LocationFormModal';
-import { Button, Card, ErrorText, Spinner } from '../components/ui';
+import { Button, Card, EmptyState, ErrorText, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -32,17 +33,18 @@ function LocationsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-2xl font-bold text-primary">{t('location.title')}</h2>
-          <p className="text-sm text-text-muted">{t('location.subtitle')}</p>
-        </div>
-        {owner && (
-          <Button variant="cta" onClick={() => setEditing('new')}>
-            + {t('location.add')}
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        icon={MapPin}
+        title={t('location.title')}
+        subtitle={t('location.subtitle')}
+        actions={
+          owner && (
+            <Button variant="cta" icon={Plus} onClick={() => setEditing('new')}>
+              {t('location.add')}
+            </Button>
+          )
+        }
+      />
 
       <div className="flex flex-wrap items-center gap-2">
         {FILTERS.map((f) => (
@@ -70,11 +72,11 @@ function LocationsPage() {
       ) : locations.error ? (
         <ErrorText error={locations.error} />
       ) : rows.length === 0 ? (
-        <Card>
-          <p className="text-sm text-text-muted">
-            {(locations.data ?? []).length === 0 ? t('location.none') : t('location.noMatch')}
-          </p>
-        </Card>
+        <EmptyState
+          dashed
+          icon={MapPin}
+          title={(locations.data ?? []).length === 0 ? t('location.none') : t('location.noMatch')}
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {rows.map((l) => (

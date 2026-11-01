@@ -100,8 +100,17 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 - **Token mới** trong `packages/ui-tokens/src/index.ts` và `tokens.css` (test `tokens.test.ts` bắt hai nơi khớp nhau). Biến chế độ tối khai báo sẵn.
 - **Kiểm thử:** test cho `Tabs` (bàn phím ←/→, `aria-selected`), `Pagination`, `DateRangeFields` cùng `PeriodQuickPick`, `EmptyState`, `StatCard`.
 
-### PR 25c: Áp dụng: Tổng quan và nhóm Quản trị
+### PR 25c: Áp dụng: Tổng quan và nhóm Quản trị (chia làm 25c-1 và 25c-2)
 
+**25c-1 ✅ ĐÃ HOÀN THÀNH & MERGE #66.** Tổng quan hai cột có bục podium, route `/a/$slug/settings` và `/a/$slug/coaches`, alias `/administration/academy`, nav `branding`/`coaches` trỏ trang riêng. Nghiệm thu: lint, typecheck 11/11, test web 199, build, `export:web`, `cargo check`, CI 3/3.
+
+**Khác Chesslang có chủ đích (25c):**
+- **Không có biểu đồ tuần ở Tổng quan:** `WeeklyActivityChart` từng hiện dữ liệu mẫu cố định nên đã gỡ; API chưa có thống kê theo ngày. Xem PR 25g.
+- **Không có thẻ ghế (Còn trống):** DB không có giới hạn ghế (đã grep migrations, API, domain), nên trang Học viên chỉ có các thẻ Tổng học viên, Đã phân cấp, Đã xếp nhóm, Nhóm và Batch; không bịa số.
+- **Không có công tắc "Hiện học viên nghỉ" và lọc theo HLV ở trang Học viên:** dữ liệu thành viên chưa có cờ hoạt động và chưa có HLV phụ trách từng học viên (HLV gắn với nhóm/Batch).
+- **Thẻ Liên hệ (chỉ đọc) giữ ở Tổng quan** để học viên và phụ huynh vẫn xem được.
+
+**25c-2:** trang Học viên (PageHeader, thẻ số liệu, FilterBar dùng chung cho bảng và lưới, ViewToggle danh sách/lưới, menu Thêm học viên có Nhập CSV, Xuất), cùng PageHeader và EmptyState cho Batch, Nhóm, Cấp độ, Địa điểm, Lead, Học phí (billing.*), Thông báo. Sửa lỗi cột Lớp của bảng học viên luôn trống do không truyền danh sách thành viên nhóm.
 - **Tổng quan** (`a.$slug.index.tsx`):
   - `PageHeader` "<Tên học viện> · Tổng quan" và lời chào theo tên người dùng.
   - Hàng **Thao tác nhanh** 3 thẻ lớn: Giải đấu, Học viện → Học viên, Lớp học → modal tạo nhanh đã có. Thẻ đầu tô màu chính.
@@ -166,6 +175,11 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
   - Chụp từng trang, đặt cạnh ảnh Chesslang trong một tệp so sánh `rea/evidence/ui-2026-11-01/so-sanh.md`.
   - Ghi các chỗ còn khác và lý do (khác có chủ đích, hoặc để sau).
 - **Cập nhật** `rea/ledger.md`: thêm claim `ui.shell`, `ui.components`, `ui.dark-mode`, `ui.404`. Cập nhật kế hoạch này bằng kết quả nghiệm thu từng PR.
+
+### PR 25g (sau): RPC thống kê theo ngày và biểu đồ tuần
+
+- **Việc:** thêm RPC thống kê theo ngày (bài làm, điểm danh, hoàn thành quiz), nối lại biểu đồ tuần ở Tổng quan kèm `DateRangeFields`, nút Tuần trước/Tuần sau và hàng Hoạt động quiz.
+- **Lưu ý:** có migration nên cần chủ dự án duyệt rồi áp lên Supabase cloud (CI không tự áp). Khi nối lại, `WeeklyActivityChart` phải nhận dữ liệu thật và bỏ dữ liệu mẫu mặc định.
 
 ## 4. Rủi ro và cách xử lý
 

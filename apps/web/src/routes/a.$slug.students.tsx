@@ -2,6 +2,7 @@ import { fetchGroupMemberships, type Member } from '@erpchess/api';
 import {
   useCreateStudent,
   useErpClient,
+  useGroupMemberships,
   useGroups,
   useImportStudents,
   useLevels,
@@ -11,9 +12,36 @@ import {
 import { parseStudentsCsv, type StudentCsvResult, slugify, studentsToCsv } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute } from '@tanstack/react-router';
-import { type FormEvent, useState } from 'react';
+import {
+  Download,
+  FileUp,
+  GraduationCap,
+  Layers,
+  Plus,
+  Search,
+  Shield,
+  UserPlus,
+  UsersRound,
+  X,
+} from 'lucide-react';
+import { type FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { StudentAdminTable } from '../components/students/StudentAdminTable';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import { StudentGrid } from '../components/students/StudentGrid';
+import {
+  Button,
+  Card,
+  EmptyState,
+  ErrorText,
+  Field,
+  FilterBar,
+  PageHeader,
+  SearchInput,
+  SelectField,
+  Spinner,
+  StatCard,
+  type ViewMode,
+  ViewToggle,
+} from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { downloadCsv } from '../lib/download';
 import { useT } from '../lib/use-t';
@@ -26,53 +54,265 @@ export const Route = createFileRoute('/a/$slug/students')({
 });
 
 function StudentsPage() {
+  const { t } = useT();
   const { academy } = useAcademy();
+  const { name: prefill } = Route.useSearch();
   const members = useMembers(academy.id);
   const levels = useLevels(academy.id);
   const groups = useGroups(academy.id);
+  const memberships = useGroupMemberships(academy.id);
   const ratings = useRatings(academy.id);
 
-  const students = members.data?.filter((m) => m.role === 'student') ?? [];
+  // Mở sẵn khung thêm học viên khi đến từ "chuyển lead thành học viên" (có ?name=)
+  const [panel, setPanel] = useState<'create' | 'import' | null>(prefill ? 'create' : null);
+  const [view, setView] = useState<ViewMode>('list');
+  const [search, setSearch] = useState('');
+  const [group, setGroup] = useState('all');
+  const [level, setLevel] = useState('all');
+  const [sort, setSort] = useState<'nameAsc' | 'nameDesc' | 'level'>('nameAsc');
+
+  const students = useMemo(
+    () => members.data?.filter((m) => m.role === 'student') ?? [],
+    [members.data],
+  );
+
+  // Nhóm kèm danh sách học viên (bảng cần để hiện cột lớp và lọc theo lớp)
+  const groupItems = useMemo(
+    () =>
+      (groups.data ?? []).map((g) => ({
+        id: g.id,
+        name: g.name,
+        studentIds: (memberships.data ?? [])
+          .filter((m) => m.groupId === g.id)
+          .map((m) => m.studentId),
+      })),
+    [groups.data, memberships.data],
+  );
+  const groupOf = (studentId: string) =>
+    groupItems.find((g) => g.studentIds.includes(studentId))?.name;
+
+  const shown = useMemo(() => {
+    const needle = search.trim().toLowerCase();
+    const levelName = (id: string | null) => levels.data?.find((l) => l.id === id)?.name ?? '';
+    const list = students.filter((s) => {
+      if (
+        needle &&
+        !`${s.profile.display_name} ${s.profile.username ?? ''}`.toLowerCase().includes(needle)
+      )
+        return false;
+      if (level !== 'all' && (level === 'none' ? s.levelId : s.levelId !== level)) return false;
+      if (group !== 'all') {
+        const g = groupItems.find((x) => x.studentIds.includes(s.profile.id));
+        if (group === 'none' ? g : g?.id !== group) return false;
+      }
+      return true;
+    });
+    const byName = (a: Member, b: Member) =>
+      a.profile.display_name.localeCompare(b.profile.display_name);
+    return list.sort((a, b) =>
+      sort === 'nameDesc'
+        ? byName(b, a)
+        : sort === 'level'
+          ? levelName(a.levelId).localeCompare(levelName(b.levelId)) || byName(a, b)
+          : byName(a, b),
+    );
+  }, [students, search, group, level, sort, groupItems, levels.data]);
+
+  const leveled = students.filter((s) => s.levelId).length;
+  const grouped = students.filter((s) => groupOf(s.profile.id)).length;
+  const loading = members.isPending || levels.isPending || groups.isPending;
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Top Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-blue-700 to-indigo-800 p-6 text-white shadow-md">
-        <div>
-          <h1 className="font-extrabold text-2xl tracking-tight">
-            Quản trị Học viên (Students Administration)
-          </h1>
-          <p className="mt-1 text-blue-100 text-sm">
-            Danh sách học viên, phân nhóm lớp (batches), cấp độ đào tạo và liên kết tài khoản phụ
-            huynh
-          </p>
-        </div>
-        <ExportButton students={students} />
+    <>
+      <PageHeader
+        icon={GraduationCap}
+        title={t('students.title')}
+        subtitle={t('studentsPage.subtitle')}
+        actions={
+          <>
+            <ExportButton students={students} />
+            <AddStudentMenu onPick={setPanel} />
+          </>
+        }
+      />
+
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <StatCard
+          variant="stacked"
+          accent="blue"
+          icon={GraduationCap}
+          label={t('studentsPage.statTotal')}
+          value={students.length}
+        />
+        <StatCard
+          variant="stacked"
+          accent="green"
+          icon={Shield}
+          label={t('studentsPage.statLeveled')}
+          value={leveled}
+          progress={{ value: leveled, max: students.length }}
+        />
+        <StatCard
+          variant="stacked"
+          accent="orange"
+          icon={UsersRound}
+          label={t('studentsPage.statGrouped')}
+          value={grouped}
+          progress={{ value: grouped, max: students.length }}
+        />
+        <StatCard
+          variant="stacked"
+          accent="purple"
+          icon={Layers}
+          label={t('studentsPage.statGroups')}
+          value={groups.data?.length ?? '—'}
+        />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[2.5fr_1fr]">
-        <div className="flex flex-col gap-4">
-          {members.isPending || levels.isPending || groups.isPending ? (
-            <Spinner />
-          ) : members.error ? (
-            <ErrorText error={members.error} />
+      {panel && (
+        <div className="flex flex-col gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            icon={X}
+            className="self-end"
+            onClick={() => setPanel(null)}
+          >
+            {t('studentsPage.closePanel')}
+          </Button>
+          {panel === 'create' ? <CreateStudentCard /> : <ImportCard />}
+        </div>
+      )}
+
+      <FilterBar>
+        <SearchInput value={search} onChange={setSearch} placeholder={t('studentsPage.search')} />
+        <SelectField
+          label={t('studentsPage.group')}
+          value={group}
+          onChange={setGroup}
+          options={[
+            { value: 'all', label: t('studentsPage.allGroups') },
+            ...groupItems.map((g) => ({ value: g.id, label: g.name })),
+            { value: 'none', label: t('studentsPage.noGroupFilter') },
+          ]}
+        />
+        <SelectField
+          label={t('studentsPage.level')}
+          value={level}
+          onChange={setLevel}
+          options={[
+            { value: 'all', label: t('studentsPage.allLevels') },
+            ...(levels.data ?? []).map((l) => ({ value: l.id, label: l.name })),
+            { value: 'none', label: t('studentsPage.noLevelFilter') },
+          ]}
+        />
+        <SelectField
+          label={t('studentsPage.sort')}
+          value={sort}
+          onChange={setSort}
+          options={[
+            { value: 'nameAsc', label: t('studentsPage.sortNameAsc') },
+            { value: 'nameDesc', label: t('studentsPage.sortNameDesc') },
+            { value: 'level', label: t('studentsPage.sortLevel') },
+          ]}
+        />
+        <ViewToggle value={view} onChange={setView} views={['list', 'grid']} />
+      </FilterBar>
+
+      {loading ? (
+        <Spinner />
+      ) : members.error ? (
+        <ErrorText error={members.error} />
+      ) : students.length === 0 ? (
+        <EmptyState
+          dashed
+          icon={GraduationCap}
+          title={t('studentsPage.emptyTitle')}
+          description={t('studentsPage.emptyDesc')}
+          action={
+            <Button variant="cta" onClick={() => setPanel('create')}>
+              {t('studentsPage.add')}
+            </Button>
+          }
+        />
+      ) : shown.length === 0 ? (
+        <EmptyState icon={Search} title={t('studentsPage.noMatch')} />
+      ) : (
+        <>
+          <p className="text-xs font-medium text-text-muted">
+            {t('studentsPage.countOf', { shown: shown.length, total: students.length })}
+          </p>
+          {view === 'grid' ? (
+            <StudentGrid
+              students={shown}
+              academyId={academy.id}
+              levels={levels.data ?? []}
+              groupOf={groupOf}
+              ratings={ratings.data ?? []}
+              category="rapid"
+            />
           ) : (
             <StudentAdminTable
-              students={students}
+              showFilters={false}
+              students={shown}
               academyId={academy.id}
               slug={academy.slug}
               levels={levels.data ?? []}
-              groups={groups.data ?? []}
+              groups={groupItems}
               ratings={ratings.data ?? []}
             />
           )}
-        </div>
+        </>
+      )}
+    </>
+  );
+}
 
-        <div className="flex flex-col gap-6">
-          <CreateStudentCard />
-          <ImportCard />
+/** Nút "Thêm học viên" có menu: thêm một học viên hoặc nhập từ CSV. */
+function AddStudentMenu({ onPick }: { onPick: (panel: 'create' | 'import') => void }) {
+  const { t } = useT();
+  const [open, setOpen] = useState(false);
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => {
+      if (box.current && !box.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [open]);
+  const pick = (panel: 'create' | 'import') => {
+    setOpen(false);
+    onPick(panel);
+  };
+  const item =
+    'flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm hover:bg-primary-soft';
+  return (
+    <div ref={box} className="relative">
+      <Button
+        variant="cta"
+        icon={Plus}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        {t('studentsPage.add')}
+      </Button>
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 z-30 mt-1 flex w-56 flex-col rounded-lg border border-border bg-surface p-1 shadow-lg"
+        >
+          <button type="button" role="menuitem" className={item} onClick={() => pick('create')}>
+            <UserPlus className="size-4" aria-hidden="true" />
+            {t('studentsPage.addOne')}
+          </button>
+          <button type="button" role="menuitem" className={item} onClick={() => pick('import')}>
+            <FileUp className="size-4" aria-hidden="true" />
+            {t('studentsPage.importCsv')}
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -111,7 +351,7 @@ function ExportButton({ students }: { students: Member[] }) {
 
   return (
     <>
-      <Button variant="ghost" className="ml-auto text-sm" onClick={onExport}>
+      <Button variant="secondary" icon={Download} onClick={onExport}>
         {t('students.export')}
       </Button>
       <ErrorText error={error} />

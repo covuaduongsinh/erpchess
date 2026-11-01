@@ -10,7 +10,7 @@ import { discountAmount, discountUsable, formatMoney, invoiceStatuses } from '@e
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 import {
-  BillingNav,
+  BillingHeader,
   CurrencySelect,
   InvoiceStatus,
   isOverdue,
@@ -44,7 +44,7 @@ function InvoicesPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <BillingNav />
+      <BillingHeader />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <Card title={owner ? t('bill.invoices') : t('bill.myInvoices')}>
           {owner && (

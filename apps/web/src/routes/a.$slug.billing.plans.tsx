@@ -9,7 +9,7 @@ import {
 } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
-import { BillingNav, CurrencySelect, MoneyInput } from '../components/billing';
+import { BillingHeader, CurrencySelect, MoneyInput } from '../components/billing';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
@@ -30,7 +30,7 @@ function PlansPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <BillingNav />
+      <BillingHeader />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <Card title={t('bill.plans')}>
           {plans.isPending ? (

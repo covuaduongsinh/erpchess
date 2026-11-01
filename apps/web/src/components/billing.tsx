@@ -9,11 +9,24 @@ import {
   vietQrPayload,
 } from '@erpchess/domain';
 import { Link } from '@tanstack/react-router';
+import { Receipt } from 'lucide-react';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import { useAcademy } from '../lib/academy-context';
 import { formatDate } from '../lib/format';
 import { useT } from '../lib/use-t';
+import { PageHeader } from './ui';
+
+/** Thẻ đầu trang Học phí kèm thanh điều hướng con (thanh con chỉ owner thấy). */
+export function BillingHeader() {
+  const { t } = useT();
+  return (
+    <>
+      <PageHeader icon={Receipt} title={t('bill.title')} subtitle={t('bill.subtitle')} />
+      <BillingNav />
+    </>
+  );
+}
 
 /** Thanh điều hướng con của tab Học phí (chỉ owner). */
 export function BillingNav() {

@@ -18,9 +18,10 @@ import {
   sortSchedule,
 } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
+import { UsersRound } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { ScheduleEditor } from '../components/ScheduleEditor';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import { Button, Card, EmptyState, ErrorText, Field, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -48,87 +49,90 @@ function GroupsPage() {
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card title={t('groups.title')}>
-        {groups.isPending ? (
-          <Spinner />
-        ) : groups.error ? (
-          <ErrorText error={groups.error} />
-        ) : groups.data.length === 0 ? (
-          <p className="text-text-muted">{t('groups.none')}</p>
-        ) : (
-          <ul className="flex flex-col gap-1">
-            {groups.data.map((g) => {
-              const level = levels.data?.find((l) => l.id === g.level_id);
-              return (
-                <li key={g.id}>
-                  <button
-                    type="button"
-                    aria-pressed={selected === g.id}
-                    onClick={() => setSelected(g.id)}
-                    disabled={!staff}
-                    className="flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left hover:bg-bg aria-pressed:bg-primary/10"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="font-medium">{g.name}</span>
-                      {g.kind === 'batch' && (
-                        <span className="rounded bg-primary/10 px-1.5 text-xs font-bold text-primary uppercase">
-                          {t('groups.kindBatch')}
-                        </span>
-                      )}
-                      {level && (
-                        <span
-                          className="rounded px-1.5 text-xs text-white"
-                          style={{ backgroundColor: level.color }}
-                        >
-                          {level.name}
-                        </span>
-                      )}
-                    </span>
-                    {staff && (
-                      <span className="text-sm text-text-muted">
-                        {t('groups.studentCount', { count: g.studentCount })}
+    <>
+      <PageHeader icon={UsersRound} title={t('nav.groups')} subtitle={t('groups.subtitle')} />
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          {groups.isPending ? (
+            <Spinner />
+          ) : groups.error ? (
+            <ErrorText error={groups.error} />
+          ) : groups.data.length === 0 ? (
+            <EmptyState icon={UsersRound} title={t('groups.none')} dashed />
+          ) : (
+            <ul className="flex flex-col gap-1">
+              {groups.data.map((g) => {
+                const level = levels.data?.find((l) => l.id === g.level_id);
+                return (
+                  <li key={g.id}>
+                    <button
+                      type="button"
+                      aria-pressed={selected === g.id}
+                      onClick={() => setSelected(g.id)}
+                      disabled={!staff}
+                      className="flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left hover:bg-bg aria-pressed:bg-primary/10"
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="font-medium">{g.name}</span>
+                        {g.kind === 'batch' && (
+                          <span className="rounded bg-primary/10 px-1.5 text-xs font-bold text-primary uppercase">
+                            {t('groups.kindBatch')}
+                          </span>
+                        )}
+                        {level && (
+                          <span
+                            className="rounded px-1.5 text-xs text-white"
+                            style={{ backgroundColor: level.color }}
+                          >
+                            {level.name}
+                          </span>
+                        )}
                       </span>
-                    )}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {staff && (
-          <form onSubmit={onCreate} className="flex items-end gap-2">
-            <div className="flex-1">
-              <Field
-                label={t('groups.name')}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" variant="cta" disabled={createGroup.isPending}>
-              {t('groups.create')}
-            </Button>
-          </form>
-        )}
-        <ErrorText error={createGroup.error} />
-      </Card>
+                      {staff && (
+                        <span className="text-sm text-text-muted">
+                          {t('groups.studentCount', { count: g.studentCount })}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {staff && (
+            <form onSubmit={onCreate} className="flex items-end gap-2">
+              <div className="flex-1">
+                <Field
+                  label={t('groups.name')}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" variant="cta" disabled={createGroup.isPending}>
+                {t('groups.create')}
+              </Button>
+            </form>
+          )}
+          <ErrorText error={createGroup.error} />
+        </Card>
 
-      {staff && selectedGroup && (
-        <div className="flex flex-col gap-6">
-          <GroupSettings
-            key={`settings-${selectedGroup.id}`}
-            group={selectedGroup}
-            onDeleted={() => setSelected(null)}
-          />
-          <GroupStudents
-            key={selectedGroup.id}
-            groupId={selectedGroup.id}
-            title={selectedGroup.name}
-          />
-        </div>
-      )}
-    </div>
+        {staff && selectedGroup && (
+          <div className="flex flex-col gap-6">
+            <GroupSettings
+              key={`settings-${selectedGroup.id}`}
+              group={selectedGroup}
+              onDeleted={() => setSelected(null)}
+            />
+            <GroupStudents
+              key={selectedGroup.id}
+              groupId={selectedGroup.id}
+              title={selectedGroup.name}
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
