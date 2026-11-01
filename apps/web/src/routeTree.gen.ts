@@ -41,6 +41,7 @@ import { Route as ASlugChatRouteImport } from './routes/a.$slug.chat'
 import { Route as ASlugCoachesRouteImport } from './routes/a.$slug.coaches'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
+import { Route as ASlugIntegrationsRouteImport } from './routes/a.$slug.integrations'
 import { Route as ASlugLeadsRouteImport } from './routes/a.$slug.leads'
 import { Route as ASlugLevelsRouteImport } from './routes/a.$slug.levels'
 import { Route as ASlugLocationsRouteImport } from './routes/a.$slug.locations'
@@ -241,6 +242,11 @@ const ASlugDatabaseRoute = ASlugDatabaseRouteImport.update({
 const ASlugGroupsRoute = ASlugGroupsRouteImport.update({
   id: '/groups',
   path: '/groups',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugIntegrationsRoute = ASlugIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugLeadsRoute = ASlugLeadsRouteImport.update({
@@ -481,6 +487,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/locations': typeof ASlugLocationsRoute
@@ -555,6 +562,7 @@ export interface FileRoutesByTo {
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/locations': typeof ASlugLocationsRoute
@@ -631,6 +639,7 @@ export interface FileRoutesById {
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/locations': typeof ASlugLocationsRoute
@@ -708,6 +717,7 @@ export interface FileRouteTypes {
     | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/integrations'
     | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/locations'
@@ -782,6 +792,7 @@ export interface FileRouteTypes {
     | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/integrations'
     | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/locations'
@@ -857,6 +868,7 @@ export interface FileRouteTypes {
     | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/integrations'
     | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/locations'
@@ -1151,6 +1163,13 @@ declare module '@tanstack/react-router' {
       path: '/groups'
       fullPath: '/a/$slug/groups'
       preLoaderRoute: typeof ASlugGroupsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/integrations': {
+      id: '/a/$slug/integrations'
+      path: '/integrations'
+      fullPath: '/a/$slug/integrations'
+      preLoaderRoute: typeof ASlugIntegrationsRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/leads': {
@@ -1464,6 +1483,7 @@ interface ASlugRouteChildren {
   ASlugCoachesRoute: typeof ASlugCoachesRoute
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
   ASlugGroupsRoute: typeof ASlugGroupsRoute
+  ASlugIntegrationsRoute: typeof ASlugIntegrationsRoute
   ASlugLeadsRoute: typeof ASlugLeadsRoute
   ASlugLevelsRoute: typeof ASlugLevelsRoute
   ASlugLocationsRoute: typeof ASlugLocationsRoute
@@ -1515,6 +1535,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugCoachesRoute: ASlugCoachesRoute,
   ASlugDatabaseRoute: ASlugDatabaseRoute,
   ASlugGroupsRoute: ASlugGroupsRoute,
+  ASlugIntegrationsRoute: ASlugIntegrationsRoute,
   ASlugLeadsRoute: ASlugLeadsRoute,
   ASlugLevelsRoute: ASlugLevelsRoute,
   ASlugLocationsRoute: ASlugLocationsRoute,

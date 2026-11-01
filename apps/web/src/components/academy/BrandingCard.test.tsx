@@ -63,7 +63,7 @@ describe('BrandingCard', () => {
       expect.objectContaining({
         name: 'CLB Dương Sinh',
         brandColor: '#c0392b',
-        contact: { address: '', phone: '0912 345 678', zalo: '' },
+        contact: { address: '', phone: '0912 345 678', zalo: '', senderName: '', replyTo: '' },
       }),
     );
   });
@@ -102,6 +102,54 @@ describe('BrandingCard login page', () => {
           { title: 'Lịch khai giảng', body: 'Thứ 7' },
           { title: 'Học phí', body: '' },
         ],
+      }),
+    );
+  });
+});
+
+describe('BrandingCard chia tab (section)', () => {
+  it('chỉ hiện nhóm trường của tab nhưng một nút Lưu vẫn lưu đủ mọi nhóm', () => {
+    render(<BrandingCard section="brand" />);
+    const hidden = (label: string) =>
+      (screen.getByLabelText(label).closest('[hidden]') as HTMLElement | null) !== null;
+    // tab Logo & màu: trường logo hiện, trường liên hệ và trang đăng nhập bị ẩn
+    expect(hidden('branding.logoUrl')).toBe(false);
+    expect(hidden('branding.phone')).toBe(true);
+    expect(hidden('loginPage.background')).toBe(true);
+    fireEvent.change(screen.getByLabelText('branding.phone'), {
+      target: { value: '0912 345 678' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'common.save' }));
+    expect(updateMutate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'CLB Dương Sinh',
+        loginBackgroundUrl: 'https://cdn.vn/bg.jpg',
+        contact: expect.objectContaining({ phone: '0912 345 678' }),
+      }),
+    );
+  });
+
+  it('tab Trang đăng nhập hiện cấu hình đăng nhập, ẩn trường logo', () => {
+    render(<BrandingCard section="login" />);
+    const hidden = (label: string) =>
+      (screen.getByLabelText(label).closest('[hidden]') as HTMLElement | null) !== null;
+    expect(hidden('loginPage.background')).toBe(false);
+    expect(hidden('branding.logoUrl')).toBe(true);
+  });
+
+  it('lưu thẻ này giữ nguyên người gửi lời mời đặt ở trang Tích hợp', () => {
+    academy.contact = { phone: '0912 345 678', senderName: 'CLB Dương Sinh', replyTo: 'hi@clb.vn' };
+    render(<BrandingCard />);
+    fireEvent.click(screen.getByRole('button', { name: 'common.save' }));
+    expect(updateMutate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        contact: {
+          address: '',
+          phone: '0912 345 678',
+          zalo: '',
+          senderName: 'CLB Dương Sinh',
+          replyTo: 'hi@clb.vn',
+        },
       }),
     );
   });

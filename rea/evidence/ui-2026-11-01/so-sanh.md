@@ -139,3 +139,17 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 **Giữ nguyên có chủ đích** (nút chọn ngắn như `3+2`, `5+0`, "Trắng/Ngẫu nhiên/Đen", lưới 7 ngày của lịch giải, khối XP 3 số của học viên): ba cột vẫn vừa màn 390 px, đổi sang một cột chỉ làm dài trang. Cửa sổ "Thách đấu" ở trang Chơi cờ chỉ mở được khi có học viên online nên chưa có ảnh; kiểm bằng đọc mã.
 
 **Còn lại:** cửa sổ Thách đấu chưa chụp; trang Chơi cờ còn chữ cứng tiếng Việt ("Kiểm soát thời gian", "Màu quân của bạn", "Thách đấu với …") chưa qua i18n.
+
+## 11. GĐ26b: Trang Tích hợp và Branding chia tab (2026-11-01, lần sáu)
+
+**Ảnh** (`gd26b/{desktop-light,desktop-dark,mobile-light}/shot_*.png`, đã xem từng ảnh; tài khoản thử, VietQR mẫu được seed để thẻ có trạng thái Đã cấu hình): `shot_tich_hop` (hai nhóm thẻ), `shot_tich_hop_vietqr` và `shot_tich_hop_nguoi_gui` (modal), `shot_thiet_lap` (tab Thông tin học viện), `shot_thiet_lap_logo`, `shot_thiet_lap_dang_nhap`, `shot_thiet_lap_ban_co`, `shot_hoc_phi_cai_dat`.
+
+| Trang | Tham chiếu Chesslang (`gd26-2026-11-01/shot_administration_integration.png`, `…_info.png`, chỉ bố cục) | erpchess | Đánh giá |
+| --- | --- | --- | --- |
+| Tích hợp | Hai nhóm thẻ (Liên lạc, Thanh toán), mỗi thẻ có huy hiệu trạng thái và nút cấu hình | Nhóm **Liên lạc** (Người gửi lời mời) và **Thanh toán** (Chuyển khoản/VietQR, PayOS, Stripe); huy hiệu Đã cấu hình / Chưa cấu hình; thẻ đã cấu hình có dòng tóm tắt; PayOS và Stripe chỉ có huy hiệu "Sắp có", không có nút | **Khớp bố cục.** Có chủ đích: không hiện WhatsApp và Razorpay (ngoài phạm vi); người gửi lời mời chỉ lưu cấu hình, chưa gửi email thật |
+| Branding | Nhiều tab ngang (thông tin, logo, đăng nhập…) | 4 tab gạch chân: Thông tin học viện / Logo & màu / Trang đăng nhập / Bàn cờ mặc định, chọn tab qua `?tab=`; một nút Lưu cho ba tab đầu (cùng một biểu mẫu, đổi tab không mất phần đang nhập) | **Khớp.** Chưa có "Thương hiệu ván trực tiếp" và tên miền riêng (không để tab rỗng) |
+| Học phí → Cài đặt | — | Thẻ ngân hàng thay bằng lời nhắn và link sang Tích hợp; lưu phần chung giữ nguyên tài khoản ngân hàng | Một nguồn dữ liệu `academy_billing` |
+
+**Không migration:** tên hiển thị và email trả lời nằm trong `academies.contact` (jsonb có sẵn). Lưu hồ sơ từ tab Thông tin gửi lại hai trường này để không xoá chúng.
+
+**Còn lại:** plan 19 sẽ cập nhật sau khi PR #79 (đưa tệp plan vào main) merge; PayOS và Stripe chờ chủ dự án có khoá API.
