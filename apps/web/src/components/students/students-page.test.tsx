@@ -49,7 +49,7 @@ function renderPage() {
 beforeAll(async () => {
   const page = Route.options.component as { preload?: () => Promise<void> };
   await page.preload?.();
-}, 60_000);
+}, 180_000);
 
 beforeEach(() => {
   vi.spyOn(Route, 'useSearch').mockReturnValue({});

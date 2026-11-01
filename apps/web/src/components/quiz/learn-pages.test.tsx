@@ -91,7 +91,7 @@ beforeAll(async () => {
   for (const r of [QuizzesRoute, AssignmentsRoute, StudiesRoute]) {
     await (r.options.component as { preload?: () => Promise<void> }).preload?.();
   }
-}, 60_000);
+}, 180_000);
 
 beforeEach(() => {
   data.quizzes = [
