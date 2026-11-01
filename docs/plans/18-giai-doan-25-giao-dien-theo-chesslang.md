@@ -159,10 +159,10 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 ### PR 25e: Áp dụng: nhóm Thi đấu và Bàn cờ (chia làm 25e-1 và 25e-2)
 
 **25e-1 (Khu thi đấu, Giải đấu, Simul):**
-- **Khu thi đấu:** `PageHeader` (liên kết Simul, Giải đấu; nút **Ghép cặp** cho staff bật/tắt biểu mẫu ghép cặp); 4 `StatCard stacked`: Ván hôm nay (toàn học viện), Cầm Trắng và Cầm Đen (ván của chính người dùng trong số ván hôm nay đã tải), Tổng ván (tối đa 50 ván gần nhất), mỗi thẻ có chú thích phạm vi; banner **Đánh với máy** nền gradient màu chính kèm họa tiết ô cờ `.chess-pattern` và hai chip thật (7 mức độ, Elo 800 – 2600+), nút tới `/a/$slug/play/bot`; `QuickPairCard` cạnh banner; `Tabs` pills Học viên (danh sách học viên kèm chấm online) / Lịch sử ván / Ván đang diễn ra; cột phải Học viên online có `EmptyState` và thách đấu nhanh.
+- **Khu thi đấu:** `PageHeader` (liên kết Simul, Giải đấu; nút **Ghép cặp** cho staff bật/tắt biểu mẫu ghép cặp); 4 `StatCard stacked` theo vai trò, mỗi thẻ có chú thích phạm vi: học viên xem phạm vi "của tôi" (Ván hôm nay của tôi, Cầm Trắng, Cầm Đen, Tổng ván của tôi trong 50 ván kết thúc gần nhất); staff và phụ huynh xem toàn học viện (Ván hôm nay, Đang diễn ra, Đã xong hôm nay, Học viên online); tất cả tính từ dữ liệu đã tải; banner **Đánh với máy** nền gradient màu chính kèm họa tiết ô cờ `.chess-pattern` và hai chip thật (7 mức độ, Elo 800 – 2600+), nút tới `/a/$slug/play/bot`; `QuickPairCard` cạnh banner; `Tabs` pills Học viên (danh sách học viên kèm chấm online) / Lịch sử ván / Ván đang diễn ra; cột phải Học viên online có `EmptyState` và thách đấu nhanh.
 - **Giải đấu:** `FilterBar` (tìm, khoảng ngày + T/Q/N, sắp xếp, chip trạng thái), `ViewToggle` danh sách / lưới / bảng / lịch (lịch và bảng là chế độ đã có, thêm chế độ lưới), 4 `StatCard`, `Pagination`, `EmptyState` có CTA.
 - **Simul:** cùng mẫu (thẻ số liệu, tìm, khoảng ngày + T/Q/N, chip trạng thái, danh sách/lưới, phân trang, `EmptyState` có CTA).
-- **Khác Chesslang có chủ đích:** Cầm Trắng/Cầm Đen tính theo ván của người dùng vì không thêm RPC; chip cấp độ của banner là chip thông tin (trang đánh với máy tự có bộ chọn mức Elo); Simul chưa có chế độ lịch.
+- **Khác Chesslang có chủ đích:** thẻ Cầm Trắng/Cầm Đen chỉ dành cho học viên (phạm vi "của tôi"), staff xem các thẻ toàn học viện vì không thêm RPC; chip cấp độ của banner là chip thông tin (trang đánh với máy tự có bộ chọn mức Elo); Simul chưa có chế độ lịch.
 - **25e-2 (sau):** Bàn cờ phân tích (`/analysis`, `AnalysisBoard`).
 
 - **Khu thi đấu** (`a.$slug.play.index.tsx`):

@@ -2,7 +2,7 @@ import { type GameRow, type Member, TIME_PRESETS } from '@erpchess/api';
 import { useGameMutations, useMembers, usePlayGames } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { Bot, Crown, History, Plus, Swords, Trophy, Users } from 'lucide-react';
+import { Bot, Crown, History, Plus, Radio, Swords, Trophy, Users } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { resultText } from '../components/play/gameText';
 import { QuickPairCard } from '../components/play/QuickPairCard';
@@ -54,10 +54,16 @@ function PlayPage() {
   const students = (members.data ?? []).filter((m) => m.role === 'student');
   const onlineStudents = online.filter((o) => o.role === 'student');
   const onlineIds = new Set(online.map((o) => o.userId));
-  // Cầm Trắng/Cầm Đen tính trên các ván hôm nay đã tải của chính người dùng
+  // Số liệu đều tính từ dữ liệu đã tải, không có RPC riêng
+  const me = session.user.id;
   const todayGames = today.data ?? [];
-  const asWhite = todayGames.filter((g) => g.white_id === session.user.id).length;
-  const asBlack = todayGames.filter((g) => g.black_id === session.user.id).length;
+  const finishedToday = todayGames.filter((g) => g.status === 'finished').length;
+  const myToday = todayGames.filter((g) => g.white_id === me || g.black_id === me);
+  const asWhite = myToday.filter((g) => g.white_id === me).length;
+  const asBlack = myToday.filter((g) => g.black_id === me).length;
+  const myHistory = (history.data ?? []).filter(
+    (g) => g.white_id === me || g.black_id === me,
+  ).length;
 
   return (
     <>
@@ -96,39 +102,79 @@ function PlayPage() {
         }
       />
 
+      {/* Thẻ số liệu theo vai trò: học viên xem "của tôi", còn lại xem toàn học viện */}
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <StatCard
-          variant="stacked"
-          accent="blue"
-          icon={Swords}
-          label={t('learnPage.playStatToday')}
-          value={today.data ? todayGames.length : '—'}
-          hint={t('learnPage.playStatTodayHint')}
-        />
-        <StatCard
-          variant="stacked"
-          accent="green"
-          icon={Crown}
-          label={t('learnPage.playStatWhite')}
-          value={asWhite}
-          hint={t('learnPage.playStatMineHint')}
-        />
-        <StatCard
-          variant="stacked"
-          accent="gray"
-          icon={Crown}
-          label={t('learnPage.playStatBlack')}
-          value={asBlack}
-          hint={t('learnPage.playStatMineHint')}
-        />
-        <StatCard
-          variant="stacked"
-          accent="purple"
-          icon={History}
-          label={t('learnPage.playStatTotal')}
-          value={history.data?.length ?? '—'}
-          hint={t('learnPage.playStatTotalHint')}
-        />
+        {academy.role === 'student' ? (
+          <>
+            <StatCard
+              variant="stacked"
+              accent="blue"
+              icon={Swords}
+              label={t('learnPage.playStatTodayMine')}
+              value={today.data ? myToday.length : '—'}
+              hint={t('learnPage.playStatMineHint')}
+            />
+            <StatCard
+              variant="stacked"
+              accent="green"
+              icon={Crown}
+              label={t('learnPage.playStatWhite')}
+              value={asWhite}
+              hint={t('learnPage.playStatMineHint')}
+            />
+            <StatCard
+              variant="stacked"
+              accent="gray"
+              icon={Crown}
+              label={t('learnPage.playStatBlack')}
+              value={asBlack}
+              hint={t('learnPage.playStatMineHint')}
+            />
+            <StatCard
+              variant="stacked"
+              accent="purple"
+              icon={History}
+              label={t('learnPage.playStatTotalMine')}
+              value={history.data ? myHistory : '—'}
+              hint={t('learnPage.playStatTotalMineHint')}
+            />
+          </>
+        ) : (
+          <>
+            <StatCard
+              variant="stacked"
+              accent="blue"
+              icon={Swords}
+              label={t('learnPage.playStatToday')}
+              value={today.data ? todayGames.length : '—'}
+              hint={t('learnPage.playStatTodayHint')}
+            />
+            <StatCard
+              variant="stacked"
+              accent="green"
+              icon={Radio}
+              label={t('learnPage.playStatLive')}
+              value={live.data ? live.data.length : '—'}
+              hint={t('learnPage.playStatLiveHint')}
+            />
+            <StatCard
+              variant="stacked"
+              accent="gray"
+              icon={History}
+              label={t('learnPage.playStatFinishedToday')}
+              value={today.data ? finishedToday : '—'}
+              hint={t('learnPage.playStatFinishedTodayHint')}
+            />
+            <StatCard
+              variant="stacked"
+              accent="orange"
+              icon={Users}
+              label={t('learnPage.playStatOnline')}
+              value={onlineStudents.length}
+              hint={t('learnPage.playStatOnlineHint')}
+            />
+          </>
+        )}
       </div>
 
       <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">

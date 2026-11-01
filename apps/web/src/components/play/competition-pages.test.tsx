@@ -233,15 +233,54 @@ describe('trang Simul', () => {
 });
 
 describe('trang Khu thi đấu', () => {
-  it('thẻ số liệu: ván hôm nay toàn học viện, Cầm Trắng/Đen của bạn, có chú thích phạm vi', async () => {
-    renderRoute(PlayRoute);
+  it('staff: thẻ toàn học viện (hôm nay, đang diễn ra, đã xong hôm nay, học viên online)', async () => {
+    data.live = [{ id: 'l1' }, { id: 'l2' }];
+    data.today = [
+      { id: 'g1', status: 'finished', white_id: 'u1', black_id: 's1' },
+      { id: 'g2', status: 'finished', white_id: 's2', black_id: 's1' },
+      { id: 'g3', status: 'active', white_id: 's1', black_id: 's2' },
+    ];
+    renderRoute(PlayRoute, 'owner', [
+      { userId: 's1', name: 'An', role: 'student' },
+      { userId: 'c9', name: 'HLV', role: 'coach' },
+    ]);
     expect(await screen.findByRole('heading', { level: 1, name: 'Chơi cờ' }, SLOW)).toBeTruthy();
-    expect(stat('Ván hôm nay')).toBe('4');
-    expect(stat('Cầm Trắng')).toBe('2'); // g1, g3
-    expect(stat('Cầm Đen')).toBe('1'); // g2
-    expect(screen.getByText('Toàn học viện')).toBeTruthy();
-    expect(screen.getAllByText('Ván của bạn hôm nay')).toHaveLength(2);
-    expect(screen.getByText('Tối đa 50 ván gần nhất')).toBeTruthy();
+    expect(stat('Ván hôm nay')).toBe('3');
+    expect(stat('Đang diễn ra')).toBe('2');
+    expect(stat('Đã xong hôm nay')).toBe('2');
+    expect(stat('Học viên online')).toBe('1'); // chỉ tính học viên
+    expect(screen.getAllByText('Toàn học viện')).toHaveLength(3);
+    expect(screen.queryByText('Cầm Trắng')).toBeNull();
+  });
+
+  it('staff không còn thấy dãy 0/0 của Cầm Trắng/Cầm Đen khi tự mình không chơi', async () => {
+    data.today = [{ id: 'g1', status: 'active', white_id: 's1', black_id: 's2' }];
+    renderRoute(PlayRoute, 'coach');
+    await screen.findByRole('heading', { level: 1, name: 'Chơi cờ' }, SLOW);
+    expect(stat('Ván hôm nay')).toBe('1');
+    expect(screen.queryByText('Cầm Đen')).toBeNull();
+  });
+
+  it('học viên: bốn thẻ cùng phạm vi "của tôi"', async () => {
+    data.today = [
+      { id: 'g1', status: 'finished', white_id: 'u1', black_id: 's1' },
+      { id: 'g2', status: 'finished', white_id: 's2', black_id: 'u1' },
+      { id: 'g3', status: 'active', white_id: 'u1', black_id: 's2' },
+      { id: 'g4', status: 'active', white_id: 's1', black_id: 's2' }, // không phải của tôi
+    ];
+    data.history = [
+      { id: 'h1', white_id: 'u1', black_id: 's1' },
+      { id: 'h2', white_id: 's1', black_id: 's2' },
+    ];
+    renderRoute(PlayRoute, 'student');
+    await screen.findByRole('heading', { level: 1, name: 'Chơi cờ' }, SLOW);
+    expect(stat('Ván hôm nay của tôi')).toBe('3');
+    expect(stat('Cầm Trắng')).toBe('2');
+    expect(stat('Cầm Đen')).toBe('1');
+    expect(stat('Tổng ván của tôi')).toBe('1');
+    expect(screen.getAllByText('Ván của bạn hôm nay')).toHaveLength(3);
+    expect(screen.getByText('Trong 50 ván kết thúc gần nhất')).toBeTruthy();
+    expect(screen.queryByText('Toàn học viện')).toBeNull();
   });
 
   it('banner đánh với máy có liên kết tới bàn đấu máy và chip mức Elo thật', async () => {
