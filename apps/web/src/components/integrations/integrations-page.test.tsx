@@ -10,14 +10,23 @@ import { Route } from '../../routes/a.$slug.integrations';
 
 const h = vi.hoisted(() => ({
   billing: { data: null as unknown, isPending: false, error: null as unknown },
+  emailStatus: { data: undefined as unknown },
   saveSettings: { mutate: vi.fn(), isPending: false, error: null as unknown },
   updateSender: { mutate: vi.fn(), isPending: false, error: null as unknown },
 }));
 
 vi.mock('@erpchess/api/react', () => ({
   useBilling: () => h.billing,
+  useEmailStatus: () => h.emailStatus,
   useBillingMutations: () => ({ saveSettings: h.saveSettings }),
   useUpdateInviteSender: () => h.updateSender,
+}));
+
+vi.mock('@tanstack/react-router', async (orig) => ({
+  ...(await orig<typeof import('@tanstack/react-router')>()),
+  Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
+    <a href={to}>{children}</a>
+  ),
 }));
 
 function renderPage(role: AcademyRole = 'owner', contact: Record<string, string> = {}) {
@@ -49,6 +58,7 @@ beforeAll(async () => {
 
 beforeEach(() => {
   h.billing = { data: null, isPending: false, error: null };
+  h.emailStatus = { data: undefined };
   h.saveSettings.mutate.mockReset();
   h.updateSender.mutate.mockReset();
 });
@@ -69,6 +79,25 @@ describe('trang Tích hợp', () => {
     }
     // Không hiện tích hợp ngoài phạm vi
     expect(screen.queryByText(/WhatsApp|Razorpay/)).toBeNull();
+  });
+
+  it('thẻ Người gửi phản ánh trạng thái gửi email thật: chưa kết nối / đã kết nối, kèm link sang trang Email', async () => {
+    renderPage();
+    await screen.findByRole('heading', { level: 1, name: 'Tích hợp' }, SLOW);
+    const sender = card('Người gửi lời mời');
+    expect(within(sender).getByText(/Gửi email: chưa kết nối/)).toBeTruthy();
+    expect(within(sender).getByRole('link', { name: 'Mở trang Email' }).getAttribute('href')).toBe(
+      '/a/$slug/email',
+    );
+    cleanup();
+    h.emailStatus = { data: { configured: true, from: 'no-reply@duongsinh.vn' } };
+    renderPage();
+    await screen.findByRole('heading', { level: 1, name: 'Tích hợp' }, SLOW);
+    expect(
+      within(card('Người gửi lời mời')).getByText(
+        /Gửi email: đã kết nối \(no-reply@duongsinh.vn\)/,
+      ),
+    ).toBeTruthy();
   });
 
   it('đã cấu hình: huy hiệu Đã cấu hình kèm tóm tắt (email, ngân hàng + số tài khoản)', async () => {

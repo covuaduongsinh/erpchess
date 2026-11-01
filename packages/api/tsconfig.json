@@ -1,4 +1,8 @@
 {
   "extends": "@erpchess/config/tsconfig.react-library.json",
+  "compilerOptions": {
+    // handler.ts của Edge Function send-email (Deno) import kiểu `./x.ts`; test của nó nằm ở đây
+    "allowImportingTsExtensions": true
+  },
   "include": ["src"]
 }

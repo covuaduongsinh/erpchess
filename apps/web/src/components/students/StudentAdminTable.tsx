@@ -334,7 +334,11 @@ export function StudentAdminTable({
                         </Button>
                         {invitedFor === profile.id && invite.data && (
                           <div className="mt-1">
-                            <InviteLink token={invite.data.token} />
+                            <InviteLink
+                              token={invite.data.token}
+                              academyId={academyId}
+                              inviteRole="parent"
+                            />
                           </div>
                         )}
                       </div>

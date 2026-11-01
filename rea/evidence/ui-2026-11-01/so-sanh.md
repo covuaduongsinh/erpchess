@@ -211,3 +211,20 @@ Chủ dự án đã áp migration `20261101000039`, `…040`, `…041` lên `erp
 **Còn lại (tuỳ chọn):** nếu muốn sửa tận gốc ở RPC thì cần migration đổi `coalesce(…, 1200)` thành `null`; hiện không cần vì client đã lấy số từ `ratings`.
 
 **Ảnh** (`gd26e/{desktop-light,desktop-dark,mobile-light}/`, đã xem): `shot_hoc_vien_danh_sach`, `shot_bao_cao_toan_hoc_vien`, `shot_bao_cao_hoc_vien`. Seed thêm Elo ban đầu cho 2 học viên (An: rapid 1350, blitz 1300; Bình: rapid 1180) để thấy cả hai trạng thái.
+
+## 16. GĐ27a: Gửi email qua Resend (2026-11-02; PR nháp)
+
+**Ảnh** (`gd27a/{desktop-light,desktop-dark,mobile-light}/`, đã xem): `shot_email` (trang Email) và `shot_tich_hop` (thẻ Người gửi). Chụp **trước khi** áp migration và triển khai function nên thấy đúng các trạng thái "chưa sẵn sàng": trạng thái báo "Edge Function send-email chưa được triển khai hoặc đang lỗi" kèm hướng dẫn 4 bước, nhật ký báo bảng `email_log` chưa có; thẻ Người gửi ghi "Gửi email: chưa kết nối" kèm link sang trang Email. Email người nhận của nút Gửi thử được che một phần (`ch***@…`). Chưa chụp được trạng thái đã cấu hình và nhật ký có dữ liệu (cần khoá Resend); được kiểm bằng test.
+
+**Quyết định thiết kế:**
+- Nội dung email chỉ dựng từ mẫu soạn sẵn trong mã (vi/en), mọi giá trị người dùng được thoát HTML, link chỉ nhận http(s); client không gửi HTML.
+- Chống lạm dụng: chỉ nhân sự học viện (hoặc service role cho `flush`); tối đa 30 email/giờ/học viện; email thử chỉ tới chính người đăng nhập; lời mời chỉ tới email của lời mời (gắn email vào lời mời nếu chưa có); không bao giờ gửi tới email giả của học viên PIN (`@students.erpchess.local`).
+- Khoá `RESEND_API_KEY` chỉ nằm ở secret của function: không trả về client, không vào nhật ký, có test kiểm tra.
+- Người gửi lấy từ `academies.contact` (tên hiển thị và `reply_to` do 26b); địa chỉ `from` lấy từ secret `RESEND_FROM`, mặc định `onboarding@resend.dev` (chế độ thử của Resend chỉ gửi tới chủ tài khoản Resend).
+
+**Việc chủ dự án cần làm** (theo thứ tự):
+1. Áp migration `supabase/migrations/20261102000042_email_log.sql`, chạy pgTAP `supabase/tests/34_email_log.sql` (13 kiểm tra, chưa chạy trên Supabase thật).
+2. Tạo tài khoản Resend và API key. Đặt secret (không dán khoá vào chat hay repo): `supabase secrets set RESEND_API_KEY=... RESEND_FROM="ERPChess <no-reply@tên-miền-đã-xác-minh>" APP_URL=https://<tên-miền-web>`; `RESEND_FROM` và `APP_URL` tuỳ chọn.
+3. Triển khai function: `supabase functions deploy send-email` (hoặc nhờ agent Supabase).
+4. Vào trang Email, bấm **Gửi thử**; muốn gửi cho người khác thì xác minh tên miền gửi trong Resend (bản ghi DNS).
+5. Bật gửi tự động cho thông báo quiz/nhắc học phí: lên lịch gọi `send-email` chế độ `flush` (ví dụ 10 phút một lần) bằng service role, vd. `select cron.schedule('send-email-flush', '*/10 * * * *', $$ select net.http_post(url := 'https://<project-ref>.supabase.co/functions/v1/send-email', headers := jsonb_build_object('Authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'service_role_key'), 'Content-Type', 'application/json'), body := '{"mode":"flush"}'::jsonb) $$);` (cần bật `pg_net` và lưu service role key vào Vault).

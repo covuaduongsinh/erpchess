@@ -98,6 +98,7 @@ export * from './billing';
 export * from './classroom';
 export * from './course';
 export * from './csv';
+export * from './email';
 export * from './locations';
 export * from './markdown';
 export * from './money';

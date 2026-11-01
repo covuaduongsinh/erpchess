@@ -54,7 +54,9 @@ export function InviteCoachCard() {
         {t('academy.inviteCoach')}
       </Button>
       <ErrorText error={invite.error} />
-      {invite.data && <InviteLink token={invite.data.token} />}
+      {invite.data && (
+        <InviteLink token={invite.data.token} academyId={academy.id} inviteRole="coach" />
+      )}
     </Card>
   );
 }

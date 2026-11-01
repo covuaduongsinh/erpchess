@@ -24,6 +24,8 @@ const TARGETS = [
     files: ['rules.ts', 'clock.ts', 'tournament.ts', 'schedule.ts'],
     lib: ['tournament-run.ts'],
   },
+  // Mẫu email dùng chung với web (packages/domain/src/email.ts, không phụ thuộc gì nên chép nguyên văn)
+  { fn: 'send-email', files: [], domain: ['email.ts'] },
   {
     fn: 'tournament-tick',
     files: ['rules.ts', 'clock.ts', 'tournament.ts', 'schedule.ts'],
@@ -31,6 +33,7 @@ const TARGETS = [
   },
 ];
 const libDir = resolve(here, '_lib');
+const domainDir = resolve(here, '../../packages/domain/src');
 const pkg = JSON.parse(
   readFileSync(resolve(here, '../../packages/chess-core/package.json'), 'utf8'),
 );
@@ -38,7 +41,12 @@ const chessJs = pkg.dependencies['chess.js'];
 
 const check = process.argv.includes('--check');
 let stale = 0;
-const jobs = TARGETS.flatMap(({ fn, files, lib = [] }) => [
+const jobs = TARGETS.flatMap(({ fn, files, lib = [], domain = [] }) => [
+  ...domain.map((file) => ({
+    target: join(here, fn, '_shared', file),
+    content: `// Tự sinh bởi supabase/functions/sync-shared.mjs từ packages/domain/src/${file} — không sửa tay.
+${readFileSync(join(domainDir, file), 'utf8')}`,
+  })),
   ...files.map((file) => ({
     target: join(here, fn, '_shared/chess-core', file),
     content:

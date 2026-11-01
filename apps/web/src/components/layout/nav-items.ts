@@ -21,6 +21,7 @@ import {
   LayoutDashboard,
   Library,
   type LucideIcon,
+  Mail,
   MapPin,
   Palette,
   Percent,
@@ -135,6 +136,7 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
                 item('plans', '/a/$slug/billing/plans', 'bill.plans', CircleDollarSign),
                 item('discounts', '/a/$slug/billing/discounts', 'bill.discounts', Percent),
                 item('notifications', '/a/$slug/notifications', 'notify.title', Bell),
+                item('email', '/a/$slug/email', 'nav.email', Mail),
               ]
             : []),
           item('reports', '/a/$slug/reports', 'reports.navReports', BarChart3),
