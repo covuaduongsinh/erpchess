@@ -8,12 +8,27 @@ import {
   isStaff,
 } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { CalendarDays, Download, Plus, School, Video } from 'lucide-react';
 import { useState } from 'react';
 import { ClassroomForm } from '../components/classroom/ClassroomForm';
-import { Button, Card, ErrorText, Spinner } from '../components/ui';
+import {
+  Button,
+  Card,
+  DateRangeFields,
+  EmptyState,
+  ErrorText,
+  FilterBar,
+  PageHeader,
+  Pagination,
+  SearchInput,
+  Spinner,
+  StatCard,
+  Tabs,
+} from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { downloadCsv } from '../lib/download';
 import { formatDateTime } from '../lib/format';
+import { paginate } from '../lib/list-tools';
 import { useT } from '../lib/use-t';
 
 export const Route = createFileRoute('/a/$slug/classes/')({
@@ -41,6 +56,9 @@ function ClassesPage() {
   const staff = isStaff(academy.role);
   const [creating, setCreating] = useState(false);
   const [mine, setMine] = useState(false);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [range, setRange] = useState(() => {
     const r = calendarRange('month');
     return { from: dateInput(r.from), to: dateInput(new Date(r.to.getTime() - 86_400_000)) };
@@ -88,108 +106,159 @@ function ClassesPage() {
     );
   }
 
-  const pill =
-    'rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary';
+  const needle = search.trim().toLowerCase();
+  const rows = (classes.data ?? []).filter(
+    (c) => !needle || c.title.toLowerCase().includes(needle),
+  );
+  const online = rows.filter((c) => c.kind !== 'offline').length;
+
+  const actions = staff && (
+    <>
+      <Button
+        variant="secondary"
+        icon={Download}
+        onClick={onExport}
+        disabled={!classes.data || classes.data.length === 0}
+      >
+        {t('classroom.exportCsv')}
+      </Button>
+      <Button variant="cta" icon={Plus} onClick={() => setCreating(true)}>
+        {t('classroom.create')}
+      </Button>
+    </>
+  );
+
   return (
-    <Card title={t('classroom.title')}>
-      <div className="flex flex-wrap items-end gap-3">
-        {staff && (
-          <div role="tablist" className="flex gap-1">
-            {([false, true] as const).map((m) => (
-              <button
-                key={String(m)}
-                type="button"
-                role="tab"
-                aria-selected={mine === m}
-                onClick={() => setMine(m)}
-                className={pill}
-              >
-                {m ? t('classroom.mine') : t('classroom.everyone')}
-              </button>
-            ))}
-          </div>
-        )}
-        <label className="flex flex-col gap-1 text-sm">
-          <span>{t('classroom.from')}</span>
-          <input
-            type="date"
-            value={range.from}
-            onChange={(e) => e.target.value && setRange((r) => ({ ...r, from: e.target.value }))}
-            className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          <span>{t('classroom.to')}</span>
-          <input
-            type="date"
-            value={range.to}
-            onChange={(e) => e.target.value && setRange((r) => ({ ...r, to: e.target.value }))}
-            className="rounded-md border border-text-muted/30 bg-white px-2 py-1"
-          />
-        </label>
+    <>
+      <PageHeader
+        icon={School}
+        title={t('classroom.title')}
+        subtitle={t('learnPage.classesSubtitle')}
+        actions={actions}
+      />
+      <div className="grid grid-cols-3 gap-3">
+        <StatCard
+          accent="blue"
+          icon={CalendarDays}
+          label={t('learnPage.classesStatTotal')}
+          value={rows.length}
+        />
+        <StatCard
+          accent="green"
+          icon={Video}
+          label={t('learnPage.classesStatOnline')}
+          value={online}
+        />
+        <StatCard
+          accent="orange"
+          icon={School}
+          label={t('learnPage.classesStatOffline')}
+          value={rows.length - online}
+        />
+      </div>
+      {staff && (
+        <Tabs
+          variant="pills"
+          value={mine ? 'mine' : 'all'}
+          onChange={(v) => {
+            setMine(v === 'mine');
+            setPage(1);
+          }}
+          items={[
+            { value: 'all', label: t('classroom.everyone') },
+            { value: 'mine', label: t('classroom.mine') },
+          ]}
+        />
+      )}
+      <FilterBar>
+        <SearchInput
+          value={search}
+          onChange={(v) => {
+            setSearch(v);
+            setPage(1);
+          }}
+          placeholder={t('learnPage.classesSearch')}
+        />
+        <DateRangeFields
+          value={range}
+          onChange={(v) => {
+            // Khoảng ngày luôn phải đủ hai đầu để truy vấn được
+            if (v.from && v.to) {
+              setRange(v);
+              setPage(1);
+            }
+          }}
+        />
         <div className="flex gap-1">
           {calendarRanges.map((k) => (
-            <Button key={k} variant="ghost" className="px-2 py-1 text-sm" onClick={() => quick(k)}>
+            <Button key={k} variant="secondary" size="sm" onClick={() => quick(k)}>
               {t(`classroom.range_${k}`)}
             </Button>
           ))}
         </div>
-        {staff && (
-          <div className="ml-auto flex gap-2">
-            <Button
-              variant="ghost"
-              onClick={onExport}
-              disabled={!classes.data || classes.data.length === 0}
-            >
-              {t('classroom.exportCsv')}
-            </Button>
-            <Button variant="cta" onClick={() => setCreating(true)}>
-              {t('classroom.create')}
-            </Button>
-          </div>
-        )}
-      </div>
+      </FilterBar>
       {classes.isPending ? (
         <Spinner />
       ) : classes.error ? (
         <ErrorText error={classes.error} />
-      ) : classes.data.length === 0 ? (
-        <div className="text-text-muted">
-          <p>{t('classroom.none')}</p>
-          {staff && <p className="text-sm">{t('classroom.noneHint')}</p>}
-        </div>
+      ) : rows.length === 0 ? (
+        <EmptyState
+          dashed
+          icon={CalendarDays}
+          title={classes.data.length === 0 ? t('classroom.none') : t('learnPage.noMatch')}
+          description={classes.data.length === 0 && staff ? t('classroom.noneHint') : undefined}
+          action={
+            classes.data.length === 0 && staff ? (
+              <Button variant="cta" onClick={() => setCreating(true)}>
+                {t('classroom.create')}
+              </Button>
+            ) : undefined
+          }
+        />
       ) : (
-        <ul className="flex flex-col divide-y divide-text-muted/15">
-          {classes.data.map((c) => {
-            const n = counts(c);
-            return (
-              <li key={c.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
-                <div className="flex flex-col">
-                  <Link
-                    to="/a/$slug/classes/$id"
-                    params={{ slug: academy.slug, id: c.id }}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {c.title}
-                  </Link>
-                  <span className="text-sm text-text-muted">
-                    {formatDateTime(c.starts_at, i18n.language)} · {c.minutes}′ ·{' '}
-                    {t(`classroom.kind_${c.kind === 'offline' ? 'offline' : 'online'}`)}
-                    {c.coach_id && ` · ${name(c.coach_id)}`}
-                    {c.is_public && ` · ${t('classroom.public')}`}
-                  </span>
-                </div>
-                {staff && (
-                  <span className="text-sm text-text-muted">
-                    {t('classroom.status_present')} {n.present + n.late} ·{' '}
-                    {t('classroom.status_absent')} {n.absent}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+        <Card>
+          <ul className="flex flex-col divide-y divide-text-muted/15">
+            {paginate(rows, page, pageSize).map((c) => {
+              const n = counts(c);
+              return (
+                <li key={c.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                  <div className="flex flex-col">
+                    <Link
+                      to="/a/$slug/classes/$id"
+                      params={{ slug: academy.slug, id: c.id }}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {c.title}
+                    </Link>
+                    <span className="text-sm text-text-muted">
+                      {formatDateTime(c.starts_at, i18n.language)} · {c.minutes}′ ·{' '}
+                      {t(`classroom.kind_${c.kind === 'offline' ? 'offline' : 'online'}`)}
+                      {c.coach_id && ` · ${name(c.coach_id)}`}
+                      {c.is_public && ` · ${t('classroom.public')}`}
+                    </span>
+                  </div>
+                  {staff && (
+                    <span className="text-sm text-text-muted">
+                      {t('classroom.status_present')} {n.present + n.late} ·{' '}
+                      {t('classroom.status_absent')} {n.absent}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+          <Pagination
+            page={page}
+            pageSize={pageSize}
+            total={rows.length}
+            onPageChange={setPage}
+            onPageSizeChange={(n) => {
+              setPageSize(n);
+              setPage(1);
+            }}
+          />
+        </Card>
       )}
-    </Card>
+    </>
   );
 }

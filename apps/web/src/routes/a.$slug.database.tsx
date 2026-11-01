@@ -8,10 +8,11 @@ import {
 import { useDatabaseMutations, useDatabases, useGamePgn, useGames } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Database } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { GameSyncCard } from '../components/database/GameSyncCards';
 import { GameViewer } from '../components/study/GameViewer';
-import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
+import { Button, Card, EmptyState, ErrorText, Field, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { useT } from '../lib/use-t';
 
@@ -31,74 +32,81 @@ function DatabasePage() {
   const current = dbs.data?.find((d) => d.id === selected) ?? dbs.data?.[0];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
-      <div className="flex flex-col gap-6">
-        {academy.role !== 'parent' && (
-          <GameSyncCard
-            academyId={academy.id}
-            userId={session.user.id}
-            onSynced={(id) => {
-              setSelected(id);
-              setGameId(null);
-            }}
-          />
-        )}
-        <Card title={t('database.title')}>
-          {dbs.isPending ? (
-            <Spinner />
-          ) : dbs.error ? (
-            <ErrorText error={dbs.error} />
-          ) : dbs.data.length === 0 ? (
-            <p className="text-text-muted">{t('database.none')}</p>
-          ) : (
-            <ul className="flex flex-col gap-1">
-              {dbs.data.map((d) => (
-                <li key={d.id}>
-                  <button
-                    type="button"
-                    aria-pressed={current?.id === d.id}
-                    onClick={() => {
-                      setSelected(d.id);
-                      setGameId(null);
-                    }}
-                    className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left hover:bg-bg aria-pressed:bg-primary/10"
-                  >
-                    <span className="font-medium">{d.name}</span>
-                    <span className="text-xs text-text-muted">
-                      {d.sync_source
-                        ? `⟳ ${t('gameSync.synced')}`
-                        : d.visibility === 'academy'
-                          ? t('database.shared')
-                          : t('database.private')}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
+    <>
+      <PageHeader
+        icon={Database}
+        title={t('database.title')}
+        subtitle={t('learnPage.databaseSubtitle')}
+      />
+      <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+        <div className="flex flex-col gap-6">
+          {academy.role !== 'parent' && (
+            <GameSyncCard
+              academyId={academy.id}
+              userId={session.user.id}
+              onSynced={(id) => {
+                setSelected(id);
+                setGameId(null);
+              }}
+            />
           )}
-          {staff && <CreateDatabaseForm onCreated={setSelected} />}
-        </Card>
-        {current && <ImportCard key={current.id} database={current} />}
-      </div>
+          <Card>
+            {dbs.isPending ? (
+              <Spinner />
+            ) : dbs.error ? (
+              <ErrorText error={dbs.error} />
+            ) : dbs.data.length === 0 ? (
+              <EmptyState dashed icon={Database} title={t('database.none')} />
+            ) : (
+              <ul className="flex flex-col gap-1">
+                {dbs.data.map((d) => (
+                  <li key={d.id}>
+                    <button
+                      type="button"
+                      aria-pressed={current?.id === d.id}
+                      onClick={() => {
+                        setSelected(d.id);
+                        setGameId(null);
+                      }}
+                      className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left hover:bg-bg aria-pressed:bg-primary/10"
+                    >
+                      <span className="font-medium">{d.name}</span>
+                      <span className="text-xs text-text-muted">
+                        {d.sync_source
+                          ? `⟳ ${t('gameSync.synced')}`
+                          : d.visibility === 'academy'
+                            ? t('database.shared')
+                            : t('database.private')}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {staff && <CreateDatabaseForm onCreated={setSelected} />}
+          </Card>
+          {current && <ImportCard key={current.id} database={current} />}
+        </div>
 
-      <div className="grid gap-6 xl:grid-cols-2">
-        <Card title={current?.name ?? t('database.games')}>
-          {current ? (
-            <GameList databaseId={current.id} selected={gameId} onSelect={setGameId} />
-          ) : (
-            <p className="text-text-muted">{t('database.pickDatabase')}</p>
-          )}
-        </Card>
+        <div className="grid gap-6 xl:grid-cols-2">
+          <Card title={current?.name ?? t('database.games')}>
+            {current ? (
+              <GameList databaseId={current.id} selected={gameId} onSelect={setGameId} />
+            ) : (
+              <p className="text-text-muted">{t('database.pickDatabase')}</p>
+            )}
+          </Card>
 
-        <Card title={t('database.viewer')}>
-          {gameId ? (
-            <SelectedGame gameId={gameId} />
-          ) : (
-            <p className="text-text-muted">{t('database.pickGame')}</p>
-          )}
-        </Card>
+          <Card title={t('database.viewer')}>
+            {gameId ? (
+              <SelectedGame gameId={gameId} />
+            ) : (
+              <p className="text-text-muted">{t('database.pickGame')}</p>
+            )}
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

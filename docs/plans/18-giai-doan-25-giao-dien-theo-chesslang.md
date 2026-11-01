@@ -129,12 +129,18 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 
 ### PR 25d: Áp dụng: nhóm Học tập và Nội dung (chia làm 25d-1 và 25d-2)
 
-**25d-1 (Quiz, Bài tập, Học liệu):**
+**25d-1 (Quiz, Bài tập, Học liệu) ✅ ĐÃ HOÀN THÀNH & MERGE #68:**
 - **Quiz:** `PageHeader`, 4 `StatCard` số thật (tổng, đang mở, sắp mở, đã đóng), `Tabs` underline Quiz / Quiz tự động (huy hiệu Mới, chỉ staff; chứa `QuizSchedulesPanel` và tạo quiz tự động theo cấp độ), `FilterBar` (tìm, khoảng ngày tạo + T/Q/N, sắp xếp, chip trạng thái), `Pagination`, `EmptyState` có CTA.
 - **Bài tập:** `Tabs` pills Đã giao (có số đếm) / Kho bài tập, tìm và sắp xếp, `EmptyState` nét đứt.
 - **Học liệu:** `Tabs` underline Học liệu / Bộ sưu tập, pills theo nguồn (Của tôi / Học viện / Thư viện chung) có số đếm, tìm, khoảng ngày + T/Q/N, sắp xếp, `ViewToggle` danh sách/lưới, `Pagination`, nút đầu trang Cấu hình mặc định / Nhập từ Lichess / Tạo học liệu.
 - **Khác Chesslang có chủ đích:** chưa có thẻ "% đã bắt đầu", tab "Góc nhìn học viên" và tab "Bảng xếp hạng" của Quiz (chưa có tính năng hay số liệu tổng hợp tương ứng, không bịa); chưa có khối "Bản nháp" của Học liệu (study không có trạng thái nháp); nguồn "Được chia sẻ" của Chesslang ứng với nguồn "Học viện".
-- **25d-2 (sau):** Khoá học, Lớp học (danh sách), Luyện tập, CSDL ván, Báo cáo, Chat.
+  **25d-2 (Khoá học, Lớp học, Luyện tập, CSDL ván, Báo cáo, Chat):**
+
+- **Khoá học:** `PageHeader`, 2 `StatCard` (tổng khoá; đã xuất bản cho staff, đã hoàn thành cho học viên), `FilterBar` (tìm, chip xuất bản/bản nháp cho staff), `EmptyState`.
+- **Lớp học (danh sách):** `PageHeader` có Xuất CSV và Tạo buổi học, 3 `StatCard` (số buổi, trực tuyến, trực tiếp), `Tabs` pills Mọi buổi / Của tôi (staff), `FilterBar` (tìm, `DateRangeFields`, nút khoảng nhanh tuần/tháng có sẵn), `Pagination`, `EmptyState` có CTA.
+- **Luyện tập:** `PageHeader` có nút Tạo chương, 2 `StatCard` (số chương, số thế cờ), tìm chương, `EmptyState`.
+- **CSDL ván, Báo cáo, Chat:** `PageHeader` (Báo cáo giữ thanh điều khiển cũ ở dưới), `EmptyState` cho danh sách rỗng; trang chi tiết và khung chat không đổi bố cục.
+- **Khác Chesslang có chủ đích:** Lớp học chưa có chế độ lưới/lịch; Báo cáo chưa đổi các biểu đồ và phiếu bên trong; không thêm chọn khoảng ngày T/Q/N cho Lớp học vì trang đã có nút tuần/tháng riêng.
 
 - **Quiz:**
   - 2 `StatCard inline`: Quiz tự động (badge MỚI), % đã bắt đầu.
@@ -186,6 +192,7 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
 ### PR 25g (sau): RPC thống kê theo ngày và biểu đồ tuần
 
 - **Việc:** thêm RPC thống kê theo ngày (bài làm, điểm danh, hoàn thành quiz), nối lại biểu đồ tuần ở Tổng quan kèm `DateRangeFields`, nút Tuần trước/Tuần sau và hàng Hoạt động quiz.
+- **Bổ sung từ 25d-1:** thẻ "% quiz đã bắt đầu" ở trang Quiz và tab "Bảng xếp hạng quiz toàn học viện" (hiện chỉ có bảng xếp hạng từng quiz trong trang chi tiết) cần số liệu tổng hợp phía server; làm cùng đợt RPC này.
 - **Lưu ý:** có migration nên cần chủ dự án duyệt rồi áp lên Supabase cloud (CI không tự áp). Khi nối lại, `WeeklyActivityChart` phải nhận dữ liệu thật và bỏ dữ liệu mẫu mặc định.
 
 ## 4. Rủi ro và cách xử lý

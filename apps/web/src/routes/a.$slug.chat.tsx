@@ -8,9 +8,10 @@ import {
 } from '@erpchess/api/react';
 import { isStaff } from '@erpchess/domain';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { MessageSquare } from 'lucide-react';
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { ChatMessageBody, useChatPreview } from '../components/chat/ChatMessageBody';
-import { Button, Card, ErrorText, Spinner } from '../components/ui';
+import { Button, Card, EmptyState, ErrorText, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -59,73 +60,80 @@ function ChatPage() {
   const current = list.data?.find((c) => c.id === selected);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-      <div className="flex flex-col gap-4">
-        <Card title={t('chat.title')}>
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder={t('chat.search')}
-            className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm"
-          />
-          <div className="flex flex-wrap gap-1">
-            {(['', 'unread', 'group', 'batch', 'coach', 'student'] as const).map((f) => (
-              <button
-                key={f}
-                type="button"
-                aria-pressed={filter === f}
-                onClick={() => setFilter(f)}
-                className="rounded-full px-3 py-1 text-xs text-text-muted hover:bg-primary/10 aria-pressed:bg-primary aria-pressed:text-text-on-primary"
-              >
-                {t(`chat.filter_${f || 'all'}`)}
-              </button>
-            ))}
-          </div>
-          {list.isPending ? (
-            <Spinner />
-          ) : list.error ? (
-            <ErrorText error={list.error} />
-          ) : rows.length === 0 ? (
-            <p className="text-sm text-text-muted">{t('chat.none')}</p>
-          ) : (
-            <ul className="-mx-2 flex flex-col">
-              {rows.map((c) => (
-                <li key={c.id}>
-                  <button
-                    type="button"
-                    onClick={() => select(c.id)}
-                    className={`flex w-full items-start gap-2 rounded-md px-2 py-2 text-left hover:bg-bg ${
-                      c.id === selected ? 'bg-primary/10' : ''
-                    }`}
-                  >
-                    <span className="text-lg">{c.kind === 'group' ? '👥' : '💬'}</span>
-                    <span className="flex min-w-0 flex-1 flex-col">
-                      <span className="truncate font-medium">{conversationTitle(c)}</span>
-                      <span className="truncate text-xs text-text-muted">
-                        {preview(c.last_body) ?? t('chat.empty')}
-                      </span>
-                    </span>
-                    {c.unread > 0 && (
-                      <span className="rounded-full bg-orange px-2 text-xs font-bold text-white">
-                        {c.unread}
-                      </span>
-                    )}
-                  </button>
-                </li>
+    <>
+      <PageHeader
+        icon={MessageSquare}
+        title={t('chat.title')}
+        subtitle={t('learnPage.chatSubtitle')}
+      />
+      <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="flex flex-col gap-4">
+          <Card>
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder={t('chat.search')}
+              className="rounded-md border border-text-muted/30 bg-white px-3 py-2 text-sm"
+            />
+            <div className="flex flex-wrap gap-1">
+              {(['', 'unread', 'group', 'batch', 'coach', 'student'] as const).map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  aria-pressed={filter === f}
+                  onClick={() => setFilter(f)}
+                  className="rounded-full px-3 py-1 text-xs text-text-muted hover:bg-primary/10 aria-pressed:bg-primary aria-pressed:text-text-on-primary"
+                >
+                  {t(`chat.filter_${f || 'all'}`)}
+                </button>
               ))}
-            </ul>
-          )}
-        </Card>
-        <NewChat onOpened={select} />
+            </div>
+            {list.isPending ? (
+              <Spinner />
+            ) : list.error ? (
+              <ErrorText error={list.error} />
+            ) : rows.length === 0 ? (
+              <EmptyState icon={MessageSquare} title={t('chat.none')} />
+            ) : (
+              <ul className="-mx-2 flex flex-col">
+                {rows.map((c) => (
+                  <li key={c.id}>
+                    <button
+                      type="button"
+                      onClick={() => select(c.id)}
+                      className={`flex w-full items-start gap-2 rounded-md px-2 py-2 text-left hover:bg-bg ${
+                        c.id === selected ? 'bg-primary/10' : ''
+                      }`}
+                    >
+                      <span className="text-lg">{c.kind === 'group' ? '👥' : '💬'}</span>
+                      <span className="flex min-w-0 flex-1 flex-col">
+                        <span className="truncate font-medium">{conversationTitle(c)}</span>
+                        <span className="truncate text-xs text-text-muted">
+                          {preview(c.last_body) ?? t('chat.empty')}
+                        </span>
+                      </span>
+                      {c.unread > 0 && (
+                        <span className="rounded-full bg-orange px-2 text-xs font-bold text-white">
+                          {c.unread}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+          <NewChat onOpened={select} />
+        </div>
+        {current ? (
+          <ChatPane conversation={current} />
+        ) : (
+          <Card>
+            <EmptyState dashed icon={MessageSquare} title={t('chat.pick')} />
+          </Card>
+        )}
       </div>
-      {current ? (
-        <ChatPane conversation={current} />
-      ) : (
-        <Card>
-          <p className="text-text-muted">{t('chat.pick')}</p>
-        </Card>
-      )}
-    </div>
+    </>
   );
 }
 

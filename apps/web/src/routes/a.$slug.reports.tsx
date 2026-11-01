@@ -15,9 +15,10 @@ import {
   studentDetailedReportToCsv,
 } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
+import { BarChart3 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { PrintableReportCard } from '../components/reports/PrintableReportCard';
-import { Button, Card, ErrorText, Spinner } from '../components/ui';
+import { Button, Card, ErrorText, PageHeader, Spinner } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { downloadCsv } from '../lib/download';
 import { useT } from '../lib/use-t';
@@ -176,13 +177,9 @@ function ReportsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Tiêu đề & thanh điều khiển */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-primary">{t('reports.title')}</h2>
-          <p className="text-sm text-text-muted">{t('reports.subtitle')}</p>
-        </div>
-
+      <PageHeader icon={BarChart3} title={t('reports.title')} subtitle={t('reports.subtitle')} />
+      {/* Thanh điều khiển */}
+      <div className="flex flex-wrap items-center justify-end gap-4">
         <div className="flex items-center gap-2">
           {isSingleStudent && details.data && (
             <Button
