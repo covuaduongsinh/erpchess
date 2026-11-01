@@ -21,6 +21,8 @@ describe('buildNavGroups', () => {
     const all = ids('owner');
     for (const id of [
       'students',
+      'coaches',
+      'branding',
       'groups',
       'batches',
       'leads',
@@ -42,9 +44,9 @@ describe('buildNavGroups', () => {
 
   it('HLV: ẩn học phí, gói, giảm giá, thông báo; Lead theo leads_enabled', () => {
     const off = ids('coach', false);
-    for (const id of ['billing', 'plans', 'discounts', 'notifications', 'leads'])
+    for (const id of ['billing', 'plans', 'discounts', 'notifications', 'branding', 'leads'])
       expect(off, id).not.toContain(id);
-    for (const id of ['students', 'calendar', 'levels', 'locations', 'database'])
+    for (const id of ['students', 'coaches', 'calendar', 'levels', 'locations', 'database'])
       expect(off, id).toContain(id);
     expect(ids('coach', true)).toContain('leads');
   });
@@ -60,7 +62,15 @@ describe('buildNavGroups', () => {
     const all = ids('student');
     for (const id of ['groups', 'certificates', 'reports', 'billing', 'database', 'quizzes'])
       expect(all, id).toContain(id);
-    for (const id of ['students', 'calendar', 'levels', 'locations', 'notifications'])
+    for (const id of [
+      'students',
+      'coaches',
+      'branding',
+      'calendar',
+      'levels',
+      'locations',
+      'notifications',
+    ])
       expect(all, id).not.toContain(id);
   });
 

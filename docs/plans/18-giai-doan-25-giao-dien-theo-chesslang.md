@@ -83,8 +83,9 @@ Mỗi PR nhánh riêng từ `main`, qua đủ cổng kiểm thử ở mục 5, m
   - `AppSidebar.test.tsx`: thu gọn có lưu, mục đang mở được tô, chuyển vào và ra danh sách Quản trị, drawer trên màn hẹp.
   - Sửa các test cũ đang dựa vào tab ngang hoặc header.
 
-### PR 25b: Hệ thành phần giao diện dùng chung
+### PR 25b: Hệ thành phần giao diện dùng chung (✅ ĐÃ HOÀN THÀNH & MERGE #65)
 
+**Nghiệm thu:** lint, typecheck 11/11, test web 185 (có test cho `Tabs`, `Pagination`, `DateRangeFields` + `PeriodQuickPick`, `EmptyState`, `StatCard`), build, mobile `export:web`, `cargo check`, CI 3/3 xanh. Khác kế hoạch: `PeriodQuickPick` dùng `quickRange` (tháng/quý/năm theo lịch) thay vì `periodRange`; `Tabs` chỉ điều khiển qua `value`/`onChange`; chưa chuẩn hoá `Modal`. Màu nhạt suy ra có thêm quy tắc `[data-brand]` để theo màu thương hiệu học viện.
 - **Tách `apps/web/src/components/ui.tsx`** thành thư mục `components/ui/`, giữ `index.ts` export lại các tên cũ để không vỡ import.
 - **Thành phần mới:**
   - `PageHeader`: icon, tiêu đề, phụ đề, `actions`; dạng thẻ trắng bo `--radius-card`.

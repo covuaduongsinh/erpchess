@@ -1,14 +1,15 @@
 import {
   useAcademyStats,
   useClassrooms,
-  useCreateInvitation,
   useLeaderboard,
   useMembers,
   useStudentXp,
+  useTournaments,
   useXpLeaderboard,
 } from '@erpchess/api/react';
 import {
   academyRoles,
+  calendarRange,
   isStaff,
   type Period,
   periodRange,
@@ -18,13 +19,20 @@ import {
 } from '@erpchess/domain';
 import type { TranslationKey } from '@erpchess/i18n';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { useMemo, useState } from 'react';
-import { AcademyBoardDefaultsCard } from '../components/academy/AcademyBoardDefaultsCard';
-import { AcademyContactCard, BrandingCard } from '../components/academy/BrandingCard';
+import {
+  CalendarDays,
+  GraduationCap,
+  LayoutDashboard,
+  Radio,
+  Swords,
+  Trophy,
+  Users,
+} from 'lucide-react';
+import { type ReactNode, useMemo, useState } from 'react';
+import { AcademyContactCard } from '../components/academy/BrandingCard';
+import { LeaderboardPodium } from '../components/dashboard/LeaderboardPodium';
 import { QuickSessionModal } from '../components/dashboard/QuickSessionModal';
-import { WeeklyActivityChart } from '../components/dashboard/WeeklyActivityChart';
-import { InviteLink } from '../components/InviteLink';
-import { Button, Card, ErrorText, Spinner } from '../components/ui';
+import { Card, EmptyState, ErrorText, PageHeader, Spinner, StatCard, Tabs } from '../components/ui';
 import { useAcademy } from '../lib/academy-context';
 import { formatDateTime } from '../lib/format';
 import { useT } from '../lib/use-t';
@@ -34,9 +42,11 @@ export const Route = createFileRoute('/a/$slug/')({
 });
 
 function OverviewPage() {
+  const { t } = useT();
   const { academy, session } = useAcademy();
   const staff = isStaff(academy.role);
   const [quickSessionOpen, setQuickSessionOpen] = useState(false);
+  const [tab, setTab] = useState<'stats' | 'sessions'>('stats');
   const members = useMembers(academy.id);
 
   const coaches = useMemo(() => {
@@ -44,27 +54,52 @@ function OverviewPage() {
       .filter((m) => m.role === 'coach' || m.role === 'owner')
       .map((m) => ({
         id: m.profile.id,
-        name: m.profile.display_name || m.profile.username || 'Huấn luyện viên',
+        name: m.profile.display_name || m.profile.username || t('role.coach'),
       }));
-  }, [members.data]);
+  }, [members.data, t]);
+
+  const userName = String(session.user.user_metadata?.display_name ?? '').trim();
+  const greeting = userName ? t('overview.greeting', { name: userName }) : '';
+  const subtitle = [greeting, staff ? t('overview.greetingStaff') : t('overview.greetingMember')]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className="flex flex-col gap-6">
+    <>
+      <PageHeader
+        icon={LayoutDashboard}
+        title={t('overview.title', { name: academy.name })}
+        subtitle={subtitle}
+      />
       {academy.description && (
         <p className="whitespace-pre-line text-sm text-text-muted">{academy.description}</p>
       )}
-      {staff && <QuickActionsRow onOpenQuickSession={() => setQuickSessionOpen(true)} />}
-      {staff && <StatsRow />}
-      {staff && <WeeklyActivityChart />}
-      <div className="grid gap-6 md:grid-cols-2">
-        <UpcomingClassesCard />
-        <XpCard />
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="flex min-w-0 flex-col gap-6">
+          {staff && <QuickActionsRow onOpenQuickSession={() => setQuickSessionOpen(true)} />}
+          {staff && <StatsRow />}
+          {staff ? (
+            <>
+              <Tabs
+                variant="pills"
+                value={tab}
+                onChange={setTab}
+                items={[
+                  { value: 'stats', label: t('overview.tabStats'), icon: Users },
+                  { value: 'sessions', label: t('overview.tabSessions'), icon: Radio },
+                ]}
+              />
+              {tab === 'stats' ? <AcademyColumn /> : <OngoingSessionsCard />}
+            </>
+          ) : (
+            <>
+              <UpcomingClassesCard />
+              <XpCard />
+              <AcademyContactCard />
+            </>
+          )}
+        </div>
         <LeaderboardCard />
-        <MembersCard />
-        <AcademyContactCard />
-        {academy.role === 'owner' && <InviteCoachCard />}
-        {academy.role === 'owner' && <BrandingCard />}
-        {academy.role === 'owner' && <AcademyBoardDefaultsCard />}
       </div>
 
       {staff && (
@@ -77,201 +112,275 @@ function OverviewPage() {
           coaches={coaches}
         />
       )}
+    </>
+  );
+}
+
+/** Nội dung tab "Thống kê học viện": lịch sắp tới, XP, thành viên và liên hệ. */
+function AcademyColumn() {
+  return (
+    <div className="grid gap-6 lg:grid-cols-2">
+      <UpcomingClassesCard />
+      <XpCard />
+      <MembersCard />
+      <AcademyContactCard />
     </div>
   );
 }
 
-type QuickAction =
-  | {
-      title: string;
-      desc: string;
-      icon: string;
-      onClick: () => void;
-      color: string;
-    }
-  | {
-      title: string;
-      desc: string;
-      icon: string;
-      to: string;
-      color: string;
-    };
+const cardBase =
+  'flex items-start gap-4 rounded-card p-5 text-left shadow-sm transition-shadow hover:shadow-md';
 
+function QuickCardBody({
+  icon: Icon,
+  title,
+  desc,
+  primary,
+}: {
+  icon: typeof Trophy;
+  title: string;
+  desc: string;
+  primary: boolean;
+}) {
+  return (
+    <>
+      <span
+        className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${
+          primary ? 'bg-white/20' : 'bg-primary-soft text-primary'
+        }`}
+      >
+        <Icon className="size-6" aria-hidden="true" />
+      </span>
+      <span className="flex flex-col">
+        <span className="font-bold">{title}</span>
+        <span className={`text-sm ${primary ? 'opacity-80' : 'text-text-muted'}`}>{desc}</span>
+      </span>
+    </>
+  );
+}
+
+/** Thao tác nhanh: 3 thẻ lớn, thẻ đầu tô màu chính. */
 function QuickActionsRow({ onOpenQuickSession }: { onOpenQuickSession: () => void }) {
+  const { t } = useT();
   const { academy } = useAcademy();
   const slug = academy.slug;
-
-  const actions: QuickAction[] = [
-    {
-      title: 'Tạo lớp học',
-      desc: 'Mở nhanh phòng học trực tuyến LiveKit',
-      icon: '🏫',
-      onClick: onOpenQuickSession,
-      color: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 cursor-pointer',
-    },
-    {
-      title: 'Giao bài tập',
-      desc: 'Giao thế cờ từ kho học liệu cho học viên',
-      icon: '📝',
-      to: '/a/$slug/assignments/new',
-      color: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200',
-    },
-    {
-      title: 'Tổ chức giải đấu',
-      desc: 'Tạo giải đấu Swiss, Quad hoặc vòng tròn',
-      icon: '🏆',
-      to: '/a/$slug/tournaments/new',
-      color: 'bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200',
-    },
-    {
-      title: 'Quản lý học viên',
-      desc: 'Thêm học viên, chia lớp hoặc nhập CSV',
-      icon: '👥',
-      to: '/a/$slug/students',
-      color: 'bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200',
-    },
-  ];
-
+  const primary = `${cardBase} bg-primary text-text-on-primary`;
+  const plain = `${cardBase} bg-surface text-text`;
   return (
-    <div className="flex flex-col gap-2">
+    <section className="flex flex-col gap-2" aria-label={t('overview.quickActions')}>
       <h2 className="text-xs font-bold tracking-[0.05em] text-text-muted uppercase">
-        Thao tác nhanh
+        {t('overview.quickActions')}
       </h2>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {actions.map((act) =>
-          'onClick' in act ? (
-            <button
-              key={act.title}
-              type="button"
-              onClick={act.onClick}
-              className={`flex items-start text-left gap-3 rounded-xl border p-4 shadow-xs transition-all hover:shadow-md ${act.color}`}
-            >
-              <span className="text-2xl" aria-hidden="true">
-                {act.icon}
-              </span>
-              <div className="flex flex-col">
-                <span className="font-bold text-sm">{act.title}</span>
-                <span className="text-xs opacity-80">{act.desc}</span>
-              </div>
-            </button>
-          ) : (
-            <Link
-              key={act.title}
-              to={act.to}
-              params={{ slug }}
-              className={`flex items-start gap-3 rounded-xl border p-4 shadow-xs transition-all hover:shadow-md ${act.color}`}
-            >
-              <span className="text-2xl" aria-hidden="true">
-                {act.icon}
-              </span>
-              <div className="flex flex-col">
-                <span className="font-bold text-sm">{act.title}</span>
-                <span className="text-xs opacity-80">{act.desc}</span>
-              </div>
-            </Link>
-          ),
-        )}
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        <Link to="/a/$slug/tournaments/new" params={{ slug }} className={primary}>
+          <QuickCardBody
+            icon={Trophy}
+            title={t('overview.qaTournament')}
+            desc={t('overview.qaTournamentDesc')}
+            primary
+          />
+        </Link>
+        <Link to="/a/$slug/students" params={{ slug }} className={plain}>
+          <QuickCardBody
+            icon={GraduationCap}
+            title={t('overview.qaStudents')}
+            desc={t('overview.qaStudentsDesc')}
+            primary={false}
+          />
+        </Link>
+        <button type="button" onClick={onOpenQuickSession} className={plain}>
+          <QuickCardBody
+            icon={Swords}
+            title={t('overview.qaClass')}
+            desc={t('overview.qaClassDesc')}
+            primary={false}
+          />
+        </button>
       </div>
+    </section>
+  );
+}
+
+/** 4 thẻ số liệu: học viên, lớp trong tháng, giải đấu, lượt làm bài 7 ngày. */
+function StatsRow() {
+  const { t } = useT();
+  const { academy } = useAcademy();
+  const stats = useAcademyStats(academy.id);
+  const month = useMemo(() => calendarRange('month'), []);
+  const classes = useClassrooms(academy.id, month);
+  const tournaments = useTournaments(academy.id);
+  if (stats.isPending) return <Spinner />;
+  if (stats.error) return <ErrorText error={stats.error} />;
+  if (!stats.data) return null;
+  const list = tournaments.data ?? [];
+  const count = (status: string) => list.filter((x) => x.status === status).length;
+  return (
+    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <StatCard
+        variant="stacked"
+        accent="blue"
+        icon={GraduationCap}
+        label={t('overview.statStudents')}
+        value={stats.data.students}
+        hint={t('overview.statStudentsHint', { count: stats.data.staff })}
+      />
+      <StatCard
+        variant="stacked"
+        accent="green"
+        icon={CalendarDays}
+        label={t('overview.statClasses')}
+        value={classes.data?.length ?? '—'}
+      />
+      <StatCard
+        variant="stacked"
+        accent="orange"
+        icon={Trophy}
+        label={t('overview.statTournaments')}
+        value={tournaments.data ? list.length : '—'}
+        hint={t('overview.statTournamentsHint', {
+          active: count('active'),
+          upcoming: count('upcoming'),
+          finished: count('finished'),
+        })}
+      />
+      <StatCard
+        variant="stacked"
+        accent="purple"
+        icon={Swords}
+        label={t('overview.statAttempts')}
+        value={stats.data.attemptsWeek}
+      />
     </div>
   );
 }
 
 function UpcomingClassesCard() {
-  const { i18n } = useT();
+  const { t, i18n } = useT();
   const { academy } = useAcademy();
   const slug = academy.slug;
-
-  const now = new Date();
-  const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-  const classes = useClassrooms(academy.id, { from: now, to: nextWeek });
-
+  // Mốc thời gian cố định theo lần mở trang để khoá truy vấn không đổi mỗi lần render
+  const range = useMemo(() => {
+    const now = new Date();
+    return { from: now, to: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) };
+  }, []);
+  const classes = useClassrooms(academy.id, range);
   const list = classes.data ?? [];
 
   return (
-    <Card title="Lịch học sắp tới">
+    <Card title={t('overview.upcoming')}>
       {classes.isPending ? (
         <Spinner />
       ) : classes.error ? (
         <ErrorText error={classes.error} />
       ) : list.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-6 text-center text-text-muted">
-          <span className="text-3xl mb-2" aria-hidden="true">
-            📅
-          </span>
-          <p className="text-sm">Không có lớp học nào sắp diễn ra trong 7 ngày tới.</p>
-          <Link
-            to="/a/$slug/classes"
-            params={{ slug }}
-            className="mt-3 text-xs font-medium text-primary hover:underline"
-          >
-            Tạo buổi học mới →
-          </Link>
-        </div>
+        <EmptyState
+          icon={CalendarDays}
+          title={t('overview.upcomingEmpty')}
+          action={
+            isStaff(academy.role) ? (
+              <Link
+                to="/a/$slug/classes"
+                params={{ slug }}
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                {t('overview.upcomingCreate')} →
+              </Link>
+            ) : undefined
+          }
+        />
       ) : (
-        <div className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-2">
           {list.slice(0, 5).map((c) => (
-            <div
+            <li
               key={c.id}
-              className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50/50 p-3"
+              className="flex items-center justify-between gap-3 rounded-lg border border-border bg-primary-soft/40 p-3"
             >
-              <div className="flex flex-col">
-                <span className="font-semibold text-sm text-gray-900">{c.title}</span>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-semibold">{c.title}</span>
                 <span className="text-xs text-text-muted">
                   {formatDateTime(c.starts_at, i18n.language)} ·{' '}
-                  {c.kind === 'online' ? '🌐 Trực tuyến' : '🏫 Trực tiếp'}
+                  {c.kind === 'online' ? t('overview.online') : t('overview.onsite')}
                 </span>
               </div>
               {c.kind === 'online' ? (
                 <Link
                   to="/a/$slug/classes/$id/room"
                   params={{ slug, id: c.id }}
-                  className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+                  className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-text-on-primary hover:opacity-90"
                 >
-                  Vào lớp
+                  {t('overview.joinClass')}
                 </Link>
               ) : (
                 <Link
                   to="/a/$slug/classes"
                   params={{ slug }}
-                  className="rounded-md bg-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-300"
+                  className="rounded-md border border-border px-3 py-1.5 text-xs font-medium text-text hover:bg-primary-soft"
                 >
-                  Chi tiết
+                  {t('overview.details')}
                 </Link>
               )}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </Card>
   );
 }
 
-function StatsRow() {
-  const { t } = useT();
+/** Tab "Buổi học đang diễn ra": buổi hôm nay đã bắt đầu, chưa kết thúc và chưa hết giờ. */
+function OngoingSessionsCard() {
+  const { t, i18n } = useT();
   const { academy } = useAcademy();
-  const stats = useAcademyStats(academy.id);
-  if (stats.isPending) return <Spinner />;
-  if (stats.error) return <ErrorText error={stats.error} />;
-  if (!stats.data) return null;
-  const items: [TranslationKey, number][] = [
-    ['dashboard.students', stats.data.students],
-    ['dashboard.staff', stats.data.staff],
-    ['dashboard.groups', stats.data.groups],
-    ['dashboard.batches', stats.data.batches],
-    ['dashboard.assignments', stats.data.assignments],
-    ['dashboard.attemptsWeek', stats.data.attemptsWeek],
-  ];
+  const slug = academy.slug;
+  const range = useMemo(() => {
+    const now = new Date();
+    const from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return { from, to: new Date(from.getTime() + 24 * 60 * 60 * 1000) };
+  }, []);
+  const classes = useClassrooms(academy.id, range);
+  const now = Date.now();
+  const live = (classes.data ?? []).filter((c) => {
+    const start = new Date(c.starts_at).getTime();
+    return !c.ended_at && start <= now && now < start + c.minutes * 60_000;
+  });
   return (
-    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-      {items.map(([key, value]) => (
-        <div key={key} className="flex flex-col gap-1 rounded-lg bg-white p-4 shadow-sm">
-          <dt className="text-xs font-bold tracking-[0.05em] text-text-muted uppercase">
-            {t(key)}
-          </dt>
-          <dd className="text-2xl font-bold text-primary">{value}</dd>
-        </div>
-      ))}
-    </dl>
+    <Card title={t('overview.tabSessions')}>
+      {classes.isPending ? (
+        <Spinner />
+      ) : classes.error ? (
+        <ErrorText error={classes.error} />
+      ) : live.length === 0 ? (
+        <EmptyState
+          icon={Radio}
+          dashed
+          title={t('overview.ongoingEmpty')}
+          description={t('overview.ongoingEmptyDesc')}
+        />
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {live.map((c) => (
+            <li
+              key={c.id}
+              className="flex items-center justify-between gap-3 rounded-lg border border-border p-3"
+            >
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-semibold">{c.title}</span>
+                <span className="text-xs text-text-muted">
+                  {formatDateTime(c.starts_at, i18n.language)}
+                </span>
+              </div>
+              <Link
+                to="/a/$slug/classes/$id/room"
+                params={{ slug, id: c.id }}
+                className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-text-on-primary hover:opacity-90"
+              >
+                {t('overview.joinClass')}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Card>
   );
 }
 
@@ -281,7 +390,8 @@ const PERIOD_LABEL: Record<Period, TranslationKey> = {
   sixMonths: 'dashboard.sixMonths',
 };
 
-function LeaderboardCard() {
+/** Cột phải: bảng xếp hạng có bục podium top 3 và danh sách hạng 4 trở đi. */
+function LeaderboardCard(): ReactNode {
   const { t } = useT();
   const { academy, session } = useAcademy();
   const [period, setPeriod] = useState<Period>('week');
@@ -292,52 +402,21 @@ function LeaderboardCard() {
 
   return (
     <Card title={t('dashboard.leaderboard')}>
-      <div role="tablist" className="flex gap-1">
-        {periods.map((p) => (
-          <button
-            key={p}
-            type="button"
-            role="tab"
-            aria-selected={period === p}
-            onClick={() => setPeriod(p)}
-            className="rounded-full px-3 py-1 text-sm text-text-muted aria-selected:bg-primary aria-selected:text-text-on-primary"
-          >
-            {t(PERIOD_LABEL[p])}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        variant="pills"
+        ariaLabel={t('overview.leaderboardPeriods')}
+        value={period}
+        onChange={setPeriod}
+        items={periods.map((p) => ({ value: p, label: t(PERIOD_LABEL[p]) }))}
+      />
       {board.isPending ? (
         <Spinner />
       ) : board.error ? (
         <ErrorText error={board.error} />
       ) : ranked.length === 0 ? (
-        <p className="text-text-muted">{t('dashboard.empty')}</p>
+        <EmptyState icon={Trophy} title={t('dashboard.empty')} />
       ) : (
-        <ol className="flex flex-col gap-1">
-          {ranked.slice(0, 10).map((row, i) => (
-            <li
-              key={row.studentId}
-              className={`flex items-center gap-3 rounded-md px-3 py-2 ${
-                row.studentId === session.user.id ? 'bg-yellow/20' : ''
-              }`}
-            >
-              <span
-                className={`flex size-7 items-center justify-center rounded-full text-sm font-bold ${
-                  i < 3 ? 'bg-orange text-white' : 'bg-bg text-text-muted'
-                }`}
-              >
-                {i + 1}
-              </span>
-              <span className="flex-1 font-medium">{row.displayName}</span>
-              <span className="text-sm text-text-muted">
-                {t('dashboard.solved', { count: row.solved })}
-              </span>
-              <span className="w-20 text-right font-bold text-primary">
-                {t('dashboard.points', { count: row.points })}
-              </span>
-            </li>
-          ))}
-        </ol>
+        <LeaderboardPodium rows={ranked} currentUserId={session.user.id} />
       )}
       <p className="text-xs text-text-muted">{t('dashboard.rule')}</p>
     </Card>
@@ -379,26 +458,6 @@ function MembersCard() {
           })}
         </dl>
       )}
-    </Card>
-  );
-}
-
-function InviteCoachCard() {
-  const { t } = useT();
-  const { academy } = useAcademy();
-  const invite = useCreateInvitation(academy.id);
-  return (
-    <Card title={t('academy.inviteCoach')}>
-      <Button
-        variant="cta"
-        className="self-start"
-        disabled={invite.isPending}
-        onClick={() => invite.mutate({ role: 'coach' })}
-      >
-        {t('academy.inviteCoach')}
-      </Button>
-      <ErrorText error={invite.error} />
-      {invite.data && <InviteLink token={invite.data.token} />}
     </Card>
   );
 }

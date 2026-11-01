@@ -22,6 +22,7 @@ export function StatCard({
   accent = 'blue',
   variant = 'inline',
   progress,
+  hint,
 }: {
   label: string;
   value: string | number;
@@ -29,6 +30,8 @@ export function StatCard({
   accent?: StatAccent;
   variant?: 'inline' | 'stacked';
   progress?: { value: number; max: number };
+  /** Dòng phụ nhỏ dưới nhãn (vd. chia theo trạng thái). */
+  hint?: string;
 }) {
   const a = accents[accent];
   const pct =
@@ -64,6 +67,7 @@ export function StatCard({
           {label}
         </span>
         <span className="text-3xl font-bold text-text">{value}</span>
+        {hint && <span className="text-xs text-text-muted">{hint}</span>}
         {bar}
       </div>
     );
@@ -78,6 +82,7 @@ export function StatCard({
         <div className="flex flex-col">
           <span className="text-2xl leading-tight font-bold text-text">{value}</span>
           <span className="text-sm text-text-muted">{label}</span>
+          {hint && <span className="text-xs text-text-muted">{hint}</span>}
         </div>
       </div>
       {bar}

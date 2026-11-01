@@ -26,6 +26,7 @@ import { Route as SimulRouteImport } from './routes/simul'
 import { Route as TournamentsRouteImport } from './routes/tournaments'
 import { Route as ASlugRouteImport } from './routes/a.$slug'
 import { Route as AcademiesNewRouteImport } from './routes/academies.new'
+import { Route as AdministrationAcademyRouteImport } from './routes/administration.academy'
 import { Route as AdministrationStudentsRouteImport } from './routes/administration.students'
 import { Route as AssignmentExerciseRouteImport } from './routes/assignment.exercise'
 import { Route as GameAreaSimulRouteImport } from './routes/game-area.simul'
@@ -37,6 +38,7 @@ import { Route as ASlugIndexRouteImport } from './routes/a.$slug.index'
 import { Route as ASlugBatchesRouteImport } from './routes/a.$slug.batches'
 import { Route as ASlugCalendarRouteImport } from './routes/a.$slug.calendar'
 import { Route as ASlugChatRouteImport } from './routes/a.$slug.chat'
+import { Route as ASlugCoachesRouteImport } from './routes/a.$slug.coaches'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
 import { Route as ASlugLeadsRouteImport } from './routes/a.$slug.leads'
@@ -44,6 +46,7 @@ import { Route as ASlugLevelsRouteImport } from './routes/a.$slug.levels'
 import { Route as ASlugLocationsRouteImport } from './routes/a.$slug.locations'
 import { Route as ASlugNotificationsRouteImport } from './routes/a.$slug.notifications'
 import { Route as ASlugReportsRouteImport } from './routes/a.$slug.reports'
+import { Route as ASlugSettingsRouteImport } from './routes/a.$slug.settings'
 import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
 import { Route as ASlugAssignmentsIndexRouteImport } from './routes/a.$slug.assignments.index'
 import { Route as ASlugAssignmentsIdRouteImport } from './routes/a.$slug.assignments.$id'
@@ -165,6 +168,11 @@ const AcademiesNewRoute = AcademiesNewRouteImport.update({
   path: '/academies/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdministrationAcademyRoute = AdministrationAcademyRouteImport.update({
+  id: '/administration/academy',
+  path: '/administration/academy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdministrationStudentsRoute = AdministrationStudentsRouteImport.update({
   id: '/administration/students',
   path: '/administration/students',
@@ -220,6 +228,11 @@ const ASlugChatRoute = ASlugChatRouteImport.update({
   path: '/chat',
   getParentRoute: () => ASlugRoute,
 } as any)
+const ASlugCoachesRoute = ASlugCoachesRouteImport.update({
+  id: '/coaches',
+  path: '/coaches',
+  getParentRoute: () => ASlugRoute,
+} as any)
 const ASlugDatabaseRoute = ASlugDatabaseRouteImport.update({
   id: '/database',
   path: '/database',
@@ -253,6 +266,11 @@ const ASlugNotificationsRoute = ASlugNotificationsRouteImport.update({
 const ASlugReportsRoute = ASlugReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugSettingsRoute = ASlugSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugStudentsRoute = ASlugStudentsRouteImport.update({
@@ -449,6 +467,7 @@ export interface FileRoutesByFullPath {
   '/tournaments': typeof TournamentsRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
+  '/administration/academy': typeof AdministrationAcademyRoute
   '/administration/students': typeof AdministrationStudentsRoute
   '/assignment/exercise': typeof AssignmentExerciseRoute
   '/game-area/simul': typeof GameAreaSimulRoute
@@ -459,6 +478,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
+  '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
@@ -466,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/a/$slug/locations': typeof ASlugLocationsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/reports': typeof ASlugReportsRoute
+  '/a/$slug/settings': typeof ASlugSettingsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -520,6 +541,7 @@ export interface FileRoutesByTo {
   '/simul': typeof SimulRoute
   '/tournaments': typeof TournamentsRoute
   '/academies/new': typeof AcademiesNewRoute
+  '/administration/academy': typeof AdministrationAcademyRoute
   '/administration/students': typeof AdministrationStudentsRoute
   '/assignment/exercise': typeof AssignmentExerciseRoute
   '/game-area/simul': typeof GameAreaSimulRoute
@@ -530,6 +552,7 @@ export interface FileRoutesByTo {
   '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
+  '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
@@ -537,6 +560,7 @@ export interface FileRoutesByTo {
   '/a/$slug/locations': typeof ASlugLocationsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/reports': typeof ASlugReportsRoute
+  '/a/$slug/settings': typeof ASlugSettingsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -593,6 +617,7 @@ export interface FileRoutesById {
   '/tournaments': typeof TournamentsRoute
   '/a/$slug': typeof ASlugRouteWithChildren
   '/academies/new': typeof AcademiesNewRoute
+  '/administration/academy': typeof AdministrationAcademyRoute
   '/administration/students': typeof AdministrationStudentsRoute
   '/assignment/exercise': typeof AssignmentExerciseRoute
   '/game-area/simul': typeof GameAreaSimulRoute
@@ -603,6 +628,7 @@ export interface FileRoutesById {
   '/a/$slug/batches': typeof ASlugBatchesRoute
   '/a/$slug/calendar': typeof ASlugCalendarRoute
   '/a/$slug/chat': typeof ASlugChatRoute
+  '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
@@ -610,6 +636,7 @@ export interface FileRoutesById {
   '/a/$slug/locations': typeof ASlugLocationsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
   '/a/$slug/reports': typeof ASlugReportsRoute
+  '/a/$slug/settings': typeof ASlugSettingsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
   '/a/$slug/': typeof ASlugIndexRoute
   '/a/$slug/assignments/$id': typeof ASlugAssignmentsIdRoute
@@ -667,6 +694,7 @@ export interface FileRouteTypes {
     | '/tournaments'
     | '/a/$slug'
     | '/academies/new'
+    | '/administration/academy'
     | '/administration/students'
     | '/assignment/exercise'
     | '/game-area/simul'
@@ -677,6 +705,7 @@ export interface FileRouteTypes {
     | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
+    | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/leads'
@@ -684,6 +713,7 @@ export interface FileRouteTypes {
     | '/a/$slug/locations'
     | '/a/$slug/notifications'
     | '/a/$slug/reports'
+    | '/a/$slug/settings'
     | '/a/$slug/students'
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
@@ -738,6 +768,7 @@ export interface FileRouteTypes {
     | '/simul'
     | '/tournaments'
     | '/academies/new'
+    | '/administration/academy'
     | '/administration/students'
     | '/assignment/exercise'
     | '/game-area/simul'
@@ -748,6 +779,7 @@ export interface FileRouteTypes {
     | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
+    | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/leads'
@@ -755,6 +787,7 @@ export interface FileRouteTypes {
     | '/a/$slug/locations'
     | '/a/$slug/notifications'
     | '/a/$slug/reports'
+    | '/a/$slug/settings'
     | '/a/$slug/students'
     | '/a/$slug'
     | '/a/$slug/assignments/$id'
@@ -810,6 +843,7 @@ export interface FileRouteTypes {
     | '/tournaments'
     | '/a/$slug'
     | '/academies/new'
+    | '/administration/academy'
     | '/administration/students'
     | '/assignment/exercise'
     | '/game-area/simul'
@@ -820,6 +854,7 @@ export interface FileRouteTypes {
     | '/a/$slug/batches'
     | '/a/$slug/calendar'
     | '/a/$slug/chat'
+    | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
     | '/a/$slug/leads'
@@ -827,6 +862,7 @@ export interface FileRouteTypes {
     | '/a/$slug/locations'
     | '/a/$slug/notifications'
     | '/a/$slug/reports'
+    | '/a/$slug/settings'
     | '/a/$slug/students'
     | '/a/$slug/'
     | '/a/$slug/assignments/$id'
@@ -883,6 +919,7 @@ export interface RootRouteChildren {
   TournamentsRoute: typeof TournamentsRoute
   ASlugRoute: typeof ASlugRouteWithChildren
   AcademiesNewRoute: typeof AcademiesNewRoute
+  AdministrationAcademyRoute: typeof AdministrationAcademyRoute
   AdministrationStudentsRoute: typeof AdministrationStudentsRoute
   AssignmentExerciseRoute: typeof AssignmentExerciseRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -1011,6 +1048,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademiesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/administration/academy': {
+      id: '/administration/academy'
+      path: '/administration/academy'
+      fullPath: '/administration/academy'
+      preLoaderRoute: typeof AdministrationAcademyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/administration/students': {
       id: '/administration/students'
       path: '/administration/students'
@@ -1088,6 +1132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ASlugChatRouteImport
       parentRoute: typeof ASlugRoute
     }
+    '/a/$slug/coaches': {
+      id: '/a/$slug/coaches'
+      path: '/coaches'
+      fullPath: '/a/$slug/coaches'
+      preLoaderRoute: typeof ASlugCoachesRouteImport
+      parentRoute: typeof ASlugRoute
+    }
     '/a/$slug/database': {
       id: '/a/$slug/database'
       path: '/database'
@@ -1135,6 +1186,13 @@ declare module '@tanstack/react-router' {
       path: '/reports'
       fullPath: '/a/$slug/reports'
       preLoaderRoute: typeof ASlugReportsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/settings': {
+      id: '/a/$slug/settings'
+      path: '/settings'
+      fullPath: '/a/$slug/settings'
+      preLoaderRoute: typeof ASlugSettingsRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/students': {
@@ -1403,6 +1461,7 @@ interface ASlugRouteChildren {
   ASlugBatchesRoute: typeof ASlugBatchesRoute
   ASlugCalendarRoute: typeof ASlugCalendarRoute
   ASlugChatRoute: typeof ASlugChatRoute
+  ASlugCoachesRoute: typeof ASlugCoachesRoute
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
   ASlugGroupsRoute: typeof ASlugGroupsRoute
   ASlugLeadsRoute: typeof ASlugLeadsRoute
@@ -1410,6 +1469,7 @@ interface ASlugRouteChildren {
   ASlugLocationsRoute: typeof ASlugLocationsRoute
   ASlugNotificationsRoute: typeof ASlugNotificationsRoute
   ASlugReportsRoute: typeof ASlugReportsRoute
+  ASlugSettingsRoute: typeof ASlugSettingsRoute
   ASlugStudentsRoute: typeof ASlugStudentsRoute
   ASlugIndexRoute: typeof ASlugIndexRoute
   ASlugAssignmentsIdRoute: typeof ASlugAssignmentsIdRoute
@@ -1452,6 +1512,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugBatchesRoute: ASlugBatchesRoute,
   ASlugCalendarRoute: ASlugCalendarRoute,
   ASlugChatRoute: ASlugChatRoute,
+  ASlugCoachesRoute: ASlugCoachesRoute,
   ASlugDatabaseRoute: ASlugDatabaseRoute,
   ASlugGroupsRoute: ASlugGroupsRoute,
   ASlugLeadsRoute: ASlugLeadsRoute,
@@ -1459,6 +1520,7 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugLocationsRoute: ASlugLocationsRoute,
   ASlugNotificationsRoute: ASlugNotificationsRoute,
   ASlugReportsRoute: ASlugReportsRoute,
+  ASlugSettingsRoute: ASlugSettingsRoute,
   ASlugStudentsRoute: ASlugStudentsRoute,
   ASlugIndexRoute: ASlugIndexRoute,
   ASlugAssignmentsIdRoute: ASlugAssignmentsIdRoute,
@@ -1517,6 +1579,7 @@ const rootRouteChildren: RootRouteChildren = {
   TournamentsRoute: TournamentsRoute,
   ASlugRoute: ASlugRouteWithChildren,
   AcademiesNewRoute: AcademiesNewRoute,
+  AdministrationAcademyRoute: AdministrationAcademyRoute,
   AdministrationStudentsRoute: AdministrationStudentsRoute,
   AssignmentExerciseRoute: AssignmentExerciseRoute,
   InviteTokenRoute: InviteTokenRoute,
