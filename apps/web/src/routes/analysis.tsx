@@ -1,7 +1,9 @@
 import { useProfile, useSession } from '@erpchess/api/react';
 import { isValidFen, type MoveNotation, parsePgn } from '@erpchess/chess-core';
+import { isStaff } from '@erpchess/domain';
 import { createFileRoute } from '@tanstack/react-router';
 import { AnalysisBoard } from '../components/analysis/AnalysisBoard';
+import { useCurrentAcademy } from '../components/layout/useCurrentAcademy';
 
 type Search = { fen?: string; pgn?: string };
 
@@ -28,6 +30,7 @@ function AnalysisPage() {
   const { fen, pgn } = Route.useSearch();
   const { session } = useSession();
   const profileQuery = useProfile(session?.user?.id);
+  const { academy } = useCurrentAcademy();
   const notation = (profileQuery.data?.move_notation as MoveNotation) ?? 'letters';
   return (
     <AnalysisBoard
@@ -36,6 +39,11 @@ function AnalysisPage() {
       initialPgn={pgn}
       notation={notation}
       showMasterbase={!!session}
+      saveTarget={
+        session && academy && isStaff(academy.role)
+          ? { academyId: academy.id, userId: session.user.id, slug: academy.slug }
+          : undefined
+      }
     />
   );
 }
