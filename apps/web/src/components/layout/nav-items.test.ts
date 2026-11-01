@@ -23,6 +23,8 @@ describe('buildNavGroups', () => {
       'students',
       'coaches',
       'branding',
+      'integrations',
+      'rating',
       'groups',
       'batches',
       'leads',
@@ -44,9 +46,25 @@ describe('buildNavGroups', () => {
 
   it('HLV: ẩn học phí, gói, giảm giá, thông báo; Lead theo leads_enabled', () => {
     const off = ids('coach', false);
-    for (const id of ['billing', 'plans', 'discounts', 'notifications', 'branding', 'leads'])
+    for (const id of [
+      'billing',
+      'plans',
+      'discounts',
+      'notifications',
+      'branding',
+      'integrations',
+      'leads',
+    ])
       expect(off, id).not.toContain(id);
-    for (const id of ['students', 'coaches', 'calendar', 'levels', 'locations', 'database'])
+    for (const id of [
+      'students',
+      'coaches',
+      'calendar',
+      'levels',
+      'rating',
+      'locations',
+      'database',
+    ])
       expect(off, id).toContain(id);
     expect(ids('coach', true)).toContain('leads');
   });
@@ -66,8 +84,10 @@ describe('buildNavGroups', () => {
       'students',
       'coaches',
       'branding',
+      'integrations',
       'calendar',
       'levels',
+      'rating',
       'locations',
       'notifications',
     ])
@@ -147,6 +167,9 @@ describe('isImmersivePath', () => {
 
   it('các trang danh sách thì không', () => {
     expect(isImmersivePath('/a/clb/play')).toBe(false);
+    expect(isImmersivePath('/a/clb/reports')).toBe(true);
+    expect(isImmersivePath('/a/clb/reports/')).toBe(true);
+    expect(isImmersivePath('/a/clb/reportsx')).toBe(false);
     expect(isImmersivePath('/a/clb/simuls')).toBe(false);
     expect(isImmersivePath('/a/clb/classes/42')).toBe(false);
     expect(isImmersivePath('/a/clb')).toBe(false);

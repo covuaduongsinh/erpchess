@@ -86,6 +86,15 @@ export function AppSidebar({
     setAdminOpen(activeGroup?.id === 'admin');
   }, [activeGroup?.id]);
 
+  // Vùng menu cuộn riêng (đáy cố định): sang trang mới thì kéo mục đang mở vào tầm nhìn, vì danh sách
+  // Quản trị dài hơn chiều cao màn hình (900 px) và mục cuối nằm ngoài vùng cuộn.
+  const navBox = useRef<HTMLElement>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: chạy lại khi đổi trang hoặc đổi menu con
+  useEffect(() => {
+    const current = navBox.current?.querySelector<HTMLElement>('[aria-current="page"]');
+    current?.scrollIntoView?.({ block: 'nearest' });
+  }, [pathname, adminOpen]);
+
   const [switcherOpen, setSwitcherOpen] = useState(false);
   const switcherBox = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -274,7 +283,10 @@ export function AppSidebar({
           )}
         </div>
 
-        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-3">
+        <nav
+          ref={navBox}
+          className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto overscroll-contain p-3"
+        >
           {adminOpen && adminGroup ? (
             <>
               <button

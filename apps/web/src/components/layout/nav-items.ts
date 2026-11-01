@@ -24,11 +24,13 @@ import {
   MapPin,
   Palette,
   Percent,
+  Plug,
   Puzzle,
   Receipt,
   School,
   Shield,
   Swords,
+  TrendingUp,
   Trophy,
   UserPlus,
   Users,
@@ -143,7 +145,11 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
         labelKey: 'nav.academy',
         items: [
           ...(owner ? [item('branding', '/a/$slug/settings', 'nav.branding', Palette)] : []),
+          ...(owner
+            ? [item('integrations', '/a/$slug/integrations', 'nav.integrations', Plug)]
+            : []),
           item('levels', '/a/$slug/levels', 'levels.title', Shield),
+          item('rating', '/a/$slug/rating', 'nav.rating', TrendingUp),
           item('locations', '/a/$slug/locations', 'location.title', MapPin),
           item('certificates', '/a/$slug/certificates', 'cert.title', Award),
         ],
@@ -267,8 +273,10 @@ export function findActiveItem(
   return best;
 }
 
-/** Trang tự thu sidebar thành thanh icon: bàn cờ/phân tích, phòng học, ván đấu, simul. */
+/** Trang tự thu sidebar thành thanh icon: bàn cờ/phân tích, phòng học, ván đấu, simul, báo cáo. */
 export function isImmersivePath(pathname: string): boolean {
   if (pathname === '/analysis' || pathname.startsWith('/analysis/')) return true;
+  // Báo cáo: danh sách học viên bên trái + báo cáo chi tiết bên phải cần chiều ngang
+  if (/^\/a\/[^/]+\/reports\/?$/.test(pathname)) return true;
   return /^\/a\/[^/]+\/(classes\/[^/]+\/room|play\/[^/]+|simuls\/[^/]+)\/?$/.test(pathname);
 }

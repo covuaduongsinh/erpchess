@@ -62,6 +62,41 @@ export function sortSchedule(slots: readonly ScheduleSlot[]): ScheduleSlot[] {
   return [...slots].sort((a, b) => order(a.day) - order(b.day) || a.start.localeCompare(b.start));
 }
 
+/** Elo FIDE hợp lệ: 1000–3300 (nhập tay, không gọi API FIDE). */
+const optionalFideElo = z
+  .number()
+  .int('fideElo')
+  .min(1000, 'fideElo')
+  .max(3300, 'fideElo')
+  .nullable();
+
+/**
+ * Mã FIDE và Elo FIDE 3 loại của một học viên. `fideId` rỗng = chưa có; Elo `null` = chưa có.
+ * Lỗi mang mã `fideId` / `fideElo` để giao diện dịch.
+ */
+export const fideInputSchema = z.object({
+  fideId: z
+    .string()
+    .trim()
+    .refine((v) => v === '' || /^[0-9]{3,12}$/.test(v), 'fideId')
+    .default(''),
+  standard: optionalFideElo.default(null),
+  rapid: optionalFideElo.default(null),
+  blitz: optionalFideElo.default(null),
+});
+export type FideInput = z.input<typeof fideInputSchema>;
+export type MemberFide = {
+  id: string | null;
+  standard: number | null;
+  rapid: number | null;
+  blitz: number | null;
+};
+
+/** Học viên có ít nhất một thông tin FIDE (để báo cáo/phiếu in quyết định có hiện dòng FIDE không). */
+export function hasFide(f: MemberFide | null | undefined): f is MemberFide {
+  return !!f && (!!f.id || f.standard !== null || f.rapid !== null || f.blitz !== null);
+}
+
 export const socialKeys = ['facebook', 'youtube', 'tiktok', 'zalo', 'website'] as const;
 export type SocialKey = (typeof socialKeys)[number];
 
@@ -73,6 +108,20 @@ const optionalHttpsUrl = z
   .refine((v) => v === '' || /^https:\/\/[^\s/$.?#][^\s]*$/i.test(v), 'url');
 
 export const contactKeys = ['address', 'phone', 'zalo'] as const;
+
+/** Email hoặc chuỗi rỗng (bỏ trống). Lỗi mang mã `email` để giao diện dịch. */
+const optionalEmail = z
+  .string()
+  .trim()
+  .max(120, 'email')
+  .refine((v) => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v), 'email');
+
+/** Cấu hình người gửi lời mời: tên hiển thị và email trả lời (chưa gửi thật, chỉ lưu). */
+export const inviteSenderSchema = z.object({
+  senderName: z.string().trim().max(80, 'contact').default(''),
+  replyTo: optionalEmail.default(''),
+});
+export type InviteSenderInput = z.input<typeof inviteSenderSchema>;
 
 /** Một mục nội dung trên trang đăng nhập riêng (vd. "Lịch khai giảng", "Học phí"). */
 export const loginSectionSchema = z.object({
@@ -110,8 +159,11 @@ export const academyProfileSchema = z.object({
         .max(30, 'phone')
         .refine((v) => v === '' || /^[+\d][\d .()-]{5,}$/.test(v), 'phone')
         .default(''),
+      // Người gửi lời mời (trang Tích hợp, 26b): lưu cùng `contact` nhưng không hiện ở thẻ liên hệ
+      senderName: z.string().trim().max(80, 'contact').default(''),
+      replyTo: optionalEmail.default(''),
     })
-    .default({ address: '', phone: '', zalo: '' }),
+    .default({ address: '', phone: '', zalo: '', senderName: '', replyTo: '' }),
   // Trang đăng nhập riêng (Giai đoạn 23d)
   loginBackgroundUrl: optionalHttpsUrl.default('').transform((v) => v || null),
   loginSections: z.array(loginSectionSchema).max(4, 'loginSections').default([]),

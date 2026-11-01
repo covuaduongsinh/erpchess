@@ -450,6 +450,210 @@
    "action": "wait_for_timeout"
   },
   {
+   "step_id": "go_bao_cao",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/reports"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_bao_cao",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_bao_cao_hoc_vien",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/reports"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_bao_cao_hoc_vien",
+   "locator": {
+    "selector": "ul[aria-label='Danh sách học viên'] li:first-child button",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_bao_cao_hoc_vien",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_bao_cao_toan_hoc_vien",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/reports?view=academy"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_bao_cao_toan_hoc_vien",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_menu_cuon",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/billing/discounts"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_menu_cuon",
+   "locator": {
+    "selector": "aside nav a[href$='/certificates']",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_menu_cuon",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_rating",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/rating"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_rating",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_tich_hop",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/integrations"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_tich_hop",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_tich_hop_vietqr",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/integrations"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_tich_hop_vietqr",
+   "locator": {
+    "selector": "li:has-text('VietQR') button",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_tich_hop_vietqr",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_tich_hop_nguoi_gui",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/integrations"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_tich_hop_nguoi_gui",
+   "locator": {
+    "selector": "li:has-text('Người gửi lời mời') button",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_tich_hop_nguoi_gui",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_thiet_lap_logo",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/settings?tab=brand"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_thiet_lap_logo",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_thiet_lap_dang_nhap",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/settings?tab=login"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_thiet_lap_dang_nhap",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_thiet_lap_ban_co",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/settings?tab=board"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_thiet_lap_ban_co",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_hoc_phi_cai_dat",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/billing/settings"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_hoc_phi_cai_dat",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
    "step_id": "go_nhom",
    "timeout_ms": 60000,
    "wait_until": "load",

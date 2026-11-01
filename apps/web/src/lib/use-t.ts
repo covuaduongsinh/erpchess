@@ -13,6 +13,9 @@ export function validationKey(message: string): TranslationKey | null {
   if (message === 'url') return 'branding.invalidUrl';
   if (message === 'color') return 'branding.invalidColor';
   if (message === 'phone') return 'branding.invalidPhone';
+  if (message === 'email') return 'integrations.invalidEmail';
+  if (message === 'fideId') return 'fide.invalidId';
+  if (message === 'fideElo') return 'fide.invalidElo';
   if (message === 'contact') return 'branding.invalidContact';
   if (message === 'hours') return 'location.invalidHours';
   if (message === 'workingDays') return 'location.invalidWorkingDays';

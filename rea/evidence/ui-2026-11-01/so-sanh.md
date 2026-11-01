@@ -141,3 +141,40 @@ Chạy lại: `node scripts/seed-ui-demo.mjs`, rồi `python rea/evidence/ui-202
 **Còn lại:** cửa sổ Thách đấu chưa chụp; trang Chơi cờ còn chữ cứng tiếng Việt ("Kiểm soát thời gian", "Màu quân của bạn", "Thách đấu với …") chưa qua i18n.
 
 **Bổ sung (cùng PR chờ áp migration):** Học phí, hàng tab con (Hoá đơn / Gói học phí / Giảm giá / Cài đặt) xuống dòng "Cài đặt" trên mobile → một hàng cuộn ngang, nhãn không xuống dòng (`BillingNav`). Ảnh: `mobile-fix/sau/{mobile-light,mobile-dark}/shot_giam_gia.png`.
+
+## 11. GĐ26b: Trang Tích hợp và Branding chia tab (2026-11-01, lần sáu)
+
+**Ảnh** (`gd26b/{desktop-light,desktop-dark,mobile-light}/shot_*.png`, đã xem từng ảnh; tài khoản thử, VietQR mẫu được seed để thẻ có trạng thái Đã cấu hình): `shot_tich_hop` (hai nhóm thẻ), `shot_tich_hop_vietqr` và `shot_tich_hop_nguoi_gui` (modal), `shot_thiet_lap` (tab Thông tin học viện), `shot_thiet_lap_logo`, `shot_thiet_lap_dang_nhap`, `shot_thiet_lap_ban_co`, `shot_hoc_phi_cai_dat`.
+
+| Trang | Tham chiếu Chesslang (`gd26-2026-11-01/shot_administration_integration.png`, `…_info.png`, chỉ bố cục) | erpchess | Đánh giá |
+| --- | --- | --- | --- |
+| Tích hợp | Hai nhóm thẻ (Liên lạc, Thanh toán), mỗi thẻ có huy hiệu trạng thái và nút cấu hình | Nhóm **Liên lạc** (Người gửi lời mời) và **Thanh toán** (Chuyển khoản/VietQR, PayOS, Stripe); huy hiệu Đã cấu hình / Chưa cấu hình; thẻ đã cấu hình có dòng tóm tắt; PayOS và Stripe chỉ có huy hiệu "Sắp có", không có nút | **Khớp bố cục.** Có chủ đích: không hiện WhatsApp và Razorpay (ngoài phạm vi); người gửi lời mời chỉ lưu cấu hình, chưa gửi email thật |
+| Branding | Nhiều tab ngang (thông tin, logo, đăng nhập…) | 4 tab gạch chân: Thông tin học viện / Logo & màu / Trang đăng nhập / Bàn cờ mặc định, chọn tab qua `?tab=`; một nút Lưu cho ba tab đầu (cùng một biểu mẫu, đổi tab không mất phần đang nhập) | **Khớp.** Chưa có "Thương hiệu ván trực tiếp" và tên miền riêng (không để tab rỗng) |
+| Học phí → Cài đặt | — | Thẻ ngân hàng thay bằng lời nhắn và link sang Tích hợp; lưu phần chung giữ nguyên tài khoản ngân hàng | Một nguồn dữ liệu `academy_billing` |
+
+**Không migration:** tên hiển thị và email trả lời nằm trong `academies.contact` (jsonb có sẵn). Lưu hồ sơ từ tab Thông tin gửi lại hai trường này để không xoá chúng.
+
+**Còn lại:** plan 19 sẽ cập nhật sau khi PR #79 (đưa tệp plan vào main) merge; PayOS và Stripe chờ chủ dự án có khoá API.
+
+## 12. GĐ26c: Báo cáo theo học viên và menu Quản trị cuộn được (2026-11-01, lần bảy)
+
+**Ảnh** (`gd26c/{desktop-light,desktop-dark,mobile-light}/shot_*.png`, đã xem từng ảnh): `shot_bao_cao` (chưa chọn học viên), `shot_bao_cao_hoc_vien` (đã chọn), `shot_bao_cao_toan_hoc_vien` (tab Toàn học viện), `shot_menu_cuon` (desktop: bấm "Chứng chỉ" cuối danh sách Quản trị từ trang Giảm giá; sidebar tự cuộn tới mục đang mở).
+
+| Trang | Tham chiếu Chesslang (`gd26-2026-11-01/shot_reports.png`, chỉ bố cục) | erpchess | Đánh giá |
+| --- | --- | --- | --- |
+| Báo cáo | Chọn bên trái, xem bên phải; cột trái có ô tìm, khoảng ngày, Export, danh sách học viên; chưa chọn thì lời nhắc; sidebar thu thành icon | Hai tab Theo học viên (mặc định) / Toàn học viện. Cột trái: lọc lớp, khoảng ngày (Toàn thời gian/Tháng/Quý/Năm/Tuỳ chỉnh), Xuất CSV toàn học viện, tìm, danh sách có avatar; cột phải: báo cáo chi tiết (thẻ số liệu + tab con, In phiếu điểm, Xuất CSV học viên) hoặc lời nhắc; `?student=` trên URL; sidebar tự thu thành icon; mobile: danh sách trước, chọn thì xem chi tiết + nút quay lại | **Khớp bố cục.** Không có "loại báo cáo" như Chesslang vì erpchess chỉ có một loại (các khối nằm ở tab con của báo cáo chi tiết) |
+| Quyền | — | Học viên vào thẳng báo cáo của mình (không tab, không danh sách); phụ huynh một con vào thẳng báo cáo con, nhiều con thì chọn | Giữ logic quyền cũ |
+
+**Lỗi nặng tìm thấy khi xem ảnh (chưa sửa trong PR này):** tab **Toàn học viện** báo `relation "public.academy_levels" does not exist`. RPC `get_academy_students_report` (migration `20261026000025`) join bảng không tồn tại `public.academy_levels` (bảng đúng là `public.levels`); plpgsql không kiểm tên bảng lúc tạo nên migration vẫn áp được, nhưng hàm lỗi mỗi lần gọi, nghĩa là bảng toàn học viện và Xuất CSV toàn học viện chưa từng chạy được trên cloud. Cần migration `create or replace` đổi sang `public.levels` (PR riêng, nháp, chờ chủ dự án áp).
+
+**Menu Quản trị cuộn được:** vùng menu đã có `overflow-y-auto` nhưng thiếu `min-h-0` và không kéo mục đang mở vào tầm nhìn, nên ở màn 1440×900 các mục cuối ("Cấp độ", "Địa điểm", "Chứng chỉ") nằm ngoài vùng nhìn mà không có dấu hiệu cuộn. Sửa: `min-h-0` + `overscroll-contain` và tự `scrollIntoView` mục đang mở khi đổi trang; đáy (Chat, Hồ sơ, công cụ) vẫn cố định. Ảnh `shot_menu_cuon` cho thấy "Chứng chỉ" nằm trong vùng nhìn sau khi bấm.
+
+## 13. GĐ26a: Trang Rating và FIDE (2026-11-01, lần tám; PR nháp chờ áp migration)
+
+**Ảnh** (`gd26a/{desktop-light,desktop-dark,mobile-light}/shot_rating.png`, đã xem): trang Rating ở **trạng thái FIDE tắt**. Migration `20261101000041_fide_rating.sql` chưa áp lên cloud nên chưa chụp được trạng thái bật, cột FIDE trong bảng/lưới học viên, dòng FIDE ở báo cáo và phiếu in (các phần này được kiểm bằng test; chụp sau khi áp). Không chụp trang Học viên và Báo cáo bản mới vì `fetchMembers` đã đọc cột `fide_*` chưa có trên cloud (sẽ lỗi cho tới khi áp migration, nên **chỉ merge sau khi áp**).
+
+| Trang | Tham chiếu Chesslang (`gd26-2026-11-01/shot_administration_rating.png`, chỉ bố cục) | erpchess | Đánh giá |
+| --- | --- | --- | --- |
+| Rating | Thẻ "Nội bộ học viện" luôn bật (3 loại + mô tả mức thời gian), thẻ FIDE có công tắc (3 loại), thẻ USCF khoá | Thẻ **Nội bộ học viện** (huy hiệu Đã bật, Classical/Rapid/Blitz kèm mô tả mức thời gian đúng ngưỡng của `categoryOf`) và thẻ **FIDE** có công tắc (chủ học viện bật/tắt, HLV chỉ xem kèm giải thích; đếm học viên đã nhập khi bật; link sang danh sách học viên) | **Khớp bố cục.** Có chủ đích: bỏ USCF (chỉ cho học viện ở Mỹ); FIDE nhập tay, không gọi API của FIDE |
+
+**Khi bật FIDE:** bảng học viên có cột FIDE và thẻ lưới có mục FIDE (mã + Standard/Rapid/Blitz, nút Lưu chỉ hiện khi có thay đổi); báo cáo học viên hiện dòng "FIDE: …" và phiếu in có mục FIDE khi học viên có dữ liệu. Mã FIDE 3-12 chữ số, Elo 1000-3300 (kiểm ở cả giao diện, domain và cơ sở dữ liệu).

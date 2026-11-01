@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   academyProfileSchema,
   brandColorVars,
+  fideInputSchema,
+  hasFide,
+  inviteSenderSchema,
   levelForRating,
   levelSchema,
   levelTemplate,
@@ -74,6 +77,62 @@ describe('academyProfileSchema', () => {
   });
 });
 
+describe('người gửi lời mời (26b)', () => {
+  it('email trả lời: rỗng hoặc hợp lệ, sai thì lỗi mã `email`', () => {
+    expect(inviteSenderSchema.parse({}).replyTo).toBe('');
+    expect(inviteSenderSchema.parse({ replyTo: ' Hi@CLB.vn ' }).replyTo).toBe('Hi@CLB.vn');
+    const bad = inviteSenderSchema.safeParse({ replyTo: 'khong-phai-email' });
+    expect(bad.success).toBe(false);
+    expect(bad.error?.issues[0]?.message).toBe('email');
+  });
+
+  it('tên hiển thị tối đa 80 ký tự; hồ sơ học viện cũng nhận hai trường này trong liên hệ', () => {
+    expect(inviteSenderSchema.safeParse({ senderName: 'a'.repeat(81) }).success).toBe(false);
+    const profile = academyProfileSchema.parse({
+      name: 'CLB',
+      contact: { senderName: 'CLB Dương Sinh', replyTo: 'hi@clb.vn' },
+    });
+    expect(profile.contact.senderName).toBe('CLB Dương Sinh');
+    expect(profile.contact.replyTo).toBe('hi@clb.vn');
+    expect(
+      academyProfileSchema.safeParse({ name: 'CLB', contact: { replyTo: 'sai' } }).success,
+    ).toBe(false);
+  });
+});
+
+describe('FIDE (26a)', () => {
+  it('mã FIDE rỗng hoặc 3–12 chữ số; sai thì lỗi mã `fideId`', () => {
+    expect(fideInputSchema.parse({}).fideId).toBe('');
+    expect(fideInputSchema.parse({ fideId: ' 12345678 ' }).fideId).toBe('12345678');
+    for (const bad of ['12', 'abc', '1234567890123', '12 34']) {
+      const r = fideInputSchema.safeParse({ fideId: bad });
+      expect(r.success, bad).toBe(false);
+      expect(r.error?.issues[0]?.message).toBe('fideId');
+    }
+  });
+
+  it('Elo FIDE: null hoặc số nguyên 1000–3300, sai thì lỗi mã `fideElo`', () => {
+    expect(fideInputSchema.parse({}).standard).toBeNull();
+    expect(fideInputSchema.parse({ standard: 1000, rapid: 3300, blitz: null })).toMatchObject({
+      standard: 1000,
+      rapid: 3300,
+      blitz: null,
+    });
+    for (const bad of [999, 3301, 1500.5]) {
+      const r = fideInputSchema.safeParse({ blitz: bad });
+      expect(r.success, String(bad)).toBe(false);
+      expect(r.error?.issues[0]?.message).toBe('fideElo');
+    }
+  });
+
+  it('hasFide: có ít nhất một thông tin', () => {
+    expect(hasFide(null)).toBe(false);
+    expect(hasFide({ id: null, standard: null, rapid: null, blitz: null })).toBe(false);
+    expect(hasFide({ id: '123', standard: null, rapid: null, blitz: null })).toBe(true);
+    expect(hasFide({ id: null, standard: null, rapid: 1500, blitz: null })).toBe(true);
+  });
+});
+
 describe('white-label học viện', () => {
   it('màu thương hiệu: rỗng thành null, chỉ nhận #RRGGBB', () => {
     expect(academyProfileSchema.parse({ name: 'CLB' }).brandColor).toBeNull();
@@ -89,6 +148,8 @@ describe('white-label học viện', () => {
       address: '',
       phone: '',
       zalo: '',
+      senderName: '',
+      replyTo: '',
     });
     expect(
       academyProfileSchema.safeParse({ name: 'CLB', contact: { phone: '+84 912 345 678' } })

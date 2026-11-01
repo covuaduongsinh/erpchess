@@ -1,6 +1,6 @@
 import { useBilling, useBillingMutations } from '@erpchess/api/react';
-import { invoiceNumber, VN_BANKS } from '@erpchess/domain';
-import { createFileRoute } from '@tanstack/react-router';
+import { invoiceNumber } from '@erpchess/domain';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 import { BillingHeader, CurrencySelect } from '../components/billing';
 import { Button, Card, ErrorText, Field, Spinner } from '../components/ui';
@@ -37,9 +37,6 @@ function SettingsForm({ initial }: { initial: ReturnType<typeof useBilling>['dat
   const [currency, setCurrency] = useState(initial?.currency ?? 'VND');
   const [taxId, setTaxId] = useState(initial?.tax_id ?? '');
   const [prefix, setPrefix] = useState(initial?.invoice_prefix ?? 'HD');
-  const [bankBin, setBankBin] = useState(initial?.bank_bin ?? '');
-  const [bankAccount, setBankAccount] = useState(initial?.bank_account ?? '');
-  const [bankHolder, setBankHolder] = useState(initial?.bank_holder ?? '');
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -47,9 +44,10 @@ function SettingsForm({ initial }: { initial: ReturnType<typeof useBilling>['dat
       currency,
       taxId,
       invoicePrefix: prefix,
-      bankBin,
-      bankAccount,
-      bankHolder,
+      // Tài khoản nhận tiền chỉnh ở trang Tích hợp; giữ nguyên khi lưu phần chung
+      bankBin: initial?.bank_bin,
+      bankAccount: initial?.bank_account,
+      bankHolder: initial?.bank_holder,
     });
   }
 
@@ -78,35 +76,14 @@ function SettingsForm({ initial }: { initial: ReturnType<typeof useBilling>['dat
         />
       </Card>
       <Card title={t('bill.bankTitle')}>
-        <p className="text-sm text-text-muted">{t('bill.bankHint')}</p>
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">{t('bill.bank')}</span>
-          <select
-            value={bankBin}
-            onChange={(e) => setBankBin(e.target.value)}
-            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2"
-          >
-            <option value="">{t('bill.pickBank')}</option>
-            {VN_BANKS.map((b) => (
-              <option key={b.bin} value={b.bin}>
-                {b.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <Field
-          label={t('bill.account')}
-          value={bankAccount}
-          onChange={(e) => setBankAccount(e.target.value.replace(/\s/g, ''))}
-          pattern="[0-9A-Za-z]{1,19}"
-          required={!!bankBin}
-        />
-        <Field
-          label={t('bill.holder')}
-          value={bankHolder}
-          onChange={(e) => setBankHolder(e.target.value.toUpperCase())}
-          maxLength={80}
-        />
+        <p className="text-sm text-text-muted">{t('bill.bankMoved')}</p>
+        <Link
+          to="/a/$slug/integrations"
+          params={{ slug: academy.slug }}
+          className="self-start text-sm font-medium text-primary underline"
+        >
+          {t('bill.openIntegrations')}
+        </Link>
       </Card>
       <div className="flex items-center gap-3 lg:col-span-2">
         <Button type="submit" variant="cta" disabled={saveSettings.isPending}>

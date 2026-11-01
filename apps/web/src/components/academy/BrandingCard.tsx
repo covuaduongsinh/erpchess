@@ -13,13 +13,25 @@ const MAX_BACKGROUND_BYTES = 3 * 1024 * 1024;
 const MAX_LOGIN_SECTIONS = 4;
 
 /** Thông tin và thương hiệu học viện (white-label, Giai đoạn 22a): chỉ chủ học viện thấy. */
-export function BrandingCard() {
+export type BrandingSection = 'info' | 'brand' | 'login';
+
+/**
+ * `section` (tuỳ chọn): chỉ hiện nhóm trường của tab đó; các nhóm còn lại vẫn nằm trong cùng `<form>`
+ * (ẩn bằng `hidden`) nên một nút Lưu vẫn lưu đủ mọi thứ. Không truyền = hiện tất cả.
+ */
+export function BrandingCard({ section }: { section?: BrandingSection }) {
   const { t } = useT();
   const { academy } = useAcademy();
   const update = useUpdateAcademyProfile(academy.id);
   const upload = useUploadAcademyBranding(academy.id);
   const socials = (academy.socials ?? {}) as Partial<Record<(typeof socialKeys)[number], string>>;
-  const contact = (academy.contact ?? {}) as Partial<Record<(typeof contactKeys)[number], string>>;
+  const contact = (academy.contact ?? {}) as Partial<
+    Record<(typeof contactKeys)[number], string>
+  > & {
+    senderName?: string;
+    replyTo?: string;
+  };
+  const show = (x: BrandingSection) => !section || section === x;
   const [logoUrl, setLogoUrl] = useState(academy.logo_url ?? '');
   const [faviconUrl, setFaviconUrl] = useState(academy.favicon_url ?? '');
   const [brandColor, setBrandColor] = useState(academy.brand_color ?? '');
@@ -69,6 +81,9 @@ export function BrandingCard() {
         address: text('address'),
         phone: text('phone'),
         zalo: text('contactZalo'),
+        // Người gửi lời mời (trang Tích hợp) nằm cùng `contact`: gửi lại để lưu thẻ này không xoá
+        senderName: contact.senderName ?? '',
+        replyTo: contact.replyTo ?? '',
       },
       // Luôn gửi kèm để lưu thẻ này không xoá cấu hình trang đăng nhập
       loginBackgroundUrl: loginBg,
@@ -77,21 +92,31 @@ export function BrandingCard() {
   }
 
   return (
-    <Card title={t('branding.title')}>
+    <Card
+      title={
+        section === 'brand'
+          ? t('settings.tabBrand')
+          : section === 'login'
+            ? t('settings.tabLogin')
+            : t('branding.title')
+      }
+    >
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <Field label={t('academy.name')} name="name" defaultValue={academy.name} required />
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">{t('branding.description')}</span>
-          <textarea
-            name="description"
-            rows={3}
-            maxLength={2000}
-            defaultValue={academy.description}
-            className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base"
-          />
-        </label>
+        <div hidden={!show('info')} className="flex flex-col gap-4">
+          <Field label={t('academy.name')} name="name" defaultValue={academy.name} required />
+          <label className="flex flex-col gap-1 text-sm">
+            <span className="font-medium">{t('branding.description')}</span>
+            <textarea
+              name="description"
+              rows={3}
+              maxLength={2000}
+              defaultValue={academy.description}
+              className="rounded-md border border-text-muted/30 bg-surface px-3 py-2 text-base"
+            />
+          </label>
+        </div>
 
-        <fieldset className="grid gap-3 sm:grid-cols-2">
+        <fieldset hidden={!show('brand')} className="grid gap-3 sm:grid-cols-2">
           <legend className="mb-2 text-sm font-medium">{t('branding.identity')}</legend>
           {(['logo', 'favicon'] as const).map((kind) => {
             const value = kind === 'logo' ? logoUrl : faviconUrl;
@@ -162,7 +187,7 @@ export function BrandingCard() {
           </div>
         </fieldset>
 
-        <fieldset className="grid gap-3 sm:grid-cols-2">
+        <fieldset hidden={!show('info')} className="grid gap-3 sm:grid-cols-2">
           <legend className="mb-2 text-sm font-medium">{t('branding.contact')}</legend>
           <Field
             label={t('branding.address')}
@@ -186,7 +211,7 @@ export function BrandingCard() {
           />
         </fieldset>
 
-        <fieldset className="flex flex-col gap-3">
+        <fieldset hidden={!show('login')} className="flex flex-col gap-3">
           <legend className="mb-2 text-sm font-medium">{t('loginPage.title')}</legend>
           <p className="text-xs text-text-muted">
             {t('loginPage.hint')}{' '}
@@ -237,7 +262,7 @@ export function BrandingCard() {
           )}
         </fieldset>
 
-        <fieldset className="grid gap-3 sm:grid-cols-2">
+        <fieldset hidden={!show('info')} className="grid gap-3 sm:grid-cols-2">
           <legend className="mb-2 text-sm font-medium">{t('branding.socials')}</legend>
           {socialKeys.map((k) => (
             <Field

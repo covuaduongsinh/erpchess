@@ -27,6 +27,7 @@ export type Database = {
           created_by: string | null
           description: string
           favicon_url: string | null
+          fide_enabled: boolean
           id: string
           leads_enabled: boolean
           login_background_url: string | null
@@ -45,6 +46,7 @@ export type Database = {
           created_by?: string | null
           description?: string
           favicon_url?: string | null
+          fide_enabled?: boolean
           id?: string
           leads_enabled?: boolean
           login_background_url?: string | null
@@ -63,6 +65,7 @@ export type Database = {
           created_by?: string | null
           description?: string
           favicon_url?: string | null
+          fide_enabled?: boolean
           id?: string
           leads_enabled?: boolean
           login_background_url?: string | null
@@ -2113,6 +2116,10 @@ export type Database = {
         Row: {
           academy_id: string
           created_at: string
+          fide_blitz: number | null
+          fide_id: string | null
+          fide_rapid: number | null
+          fide_standard: number | null
           level_id: string | null
           role: Database["public"]["Enums"]["academy_role"]
           user_id: string
@@ -2120,6 +2127,10 @@ export type Database = {
         Insert: {
           academy_id: string
           created_at?: string
+          fide_blitz?: number | null
+          fide_id?: string | null
+          fide_rapid?: number | null
+          fide_standard?: number | null
           level_id?: string | null
           role: Database["public"]["Enums"]["academy_role"]
           user_id: string
@@ -2127,6 +2138,10 @@ export type Database = {
         Update: {
           academy_id?: string
           created_at?: string
+          fide_blitz?: number | null
+          fide_id?: string | null
+          fide_rapid?: number | null
+          fide_standard?: number | null
           level_id?: string | null
           role?: Database["public"]["Enums"]["academy_role"]
           user_id?: string
@@ -4063,7 +4078,22 @@ export type Database = {
           white_elo: number | null
         }[]
       }
+      set_academy_fide_enabled: {
+        Args: { p_academy: string; p_enabled: boolean }
+        Returns: undefined
+      }
       set_main_location: { Args: { p_location: string }; Returns: undefined }
+      set_member_fide: {
+        Args: {
+          p_academy: string
+          p_blitz: number
+          p_fide_id: string
+          p_rapid: number
+          p_standard: number
+          p_student: string
+        }
+        Returns: undefined
+      }
       set_student_level: {
         Args: { p_academy: string; p_level: string; p_student: string }
         Returns: undefined

@@ -17,6 +17,7 @@ export {
   ViewToggle,
 } from './FilterBar';
 export { IconButton } from './IconButton';
+export { Modal } from './Modal';
 export { PageHeader } from './PageHeader';
 export { Pagination, pageCount } from './Pagination';
 export { Spinner } from './Spinner';

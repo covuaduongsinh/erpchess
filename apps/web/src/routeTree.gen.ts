@@ -41,10 +41,12 @@ import { Route as ASlugChatRouteImport } from './routes/a.$slug.chat'
 import { Route as ASlugCoachesRouteImport } from './routes/a.$slug.coaches'
 import { Route as ASlugDatabaseRouteImport } from './routes/a.$slug.database'
 import { Route as ASlugGroupsRouteImport } from './routes/a.$slug.groups'
+import { Route as ASlugIntegrationsRouteImport } from './routes/a.$slug.integrations'
 import { Route as ASlugLeadsRouteImport } from './routes/a.$slug.leads'
 import { Route as ASlugLevelsRouteImport } from './routes/a.$slug.levels'
 import { Route as ASlugLocationsRouteImport } from './routes/a.$slug.locations'
 import { Route as ASlugNotificationsRouteImport } from './routes/a.$slug.notifications'
+import { Route as ASlugRatingRouteImport } from './routes/a.$slug.rating'
 import { Route as ASlugReportsRouteImport } from './routes/a.$slug.reports'
 import { Route as ASlugSettingsRouteImport } from './routes/a.$slug.settings'
 import { Route as ASlugStudentsRouteImport } from './routes/a.$slug.students'
@@ -243,6 +245,11 @@ const ASlugGroupsRoute = ASlugGroupsRouteImport.update({
   path: '/groups',
   getParentRoute: () => ASlugRoute,
 } as any)
+const ASlugIntegrationsRoute = ASlugIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => ASlugRoute,
+} as any)
 const ASlugLeadsRoute = ASlugLeadsRouteImport.update({
   id: '/leads',
   path: '/leads',
@@ -261,6 +268,11 @@ const ASlugLocationsRoute = ASlugLocationsRouteImport.update({
 const ASlugNotificationsRoute = ASlugNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => ASlugRoute,
+} as any)
+const ASlugRatingRoute = ASlugRatingRouteImport.update({
+  id: '/rating',
+  path: '/rating',
   getParentRoute: () => ASlugRoute,
 } as any)
 const ASlugReportsRoute = ASlugReportsRouteImport.update({
@@ -481,10 +493,12 @@ export interface FileRoutesByFullPath {
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/locations': typeof ASlugLocationsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
+  '/a/$slug/rating': typeof ASlugRatingRoute
   '/a/$slug/reports': typeof ASlugReportsRoute
   '/a/$slug/settings': typeof ASlugSettingsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
@@ -555,10 +569,12 @@ export interface FileRoutesByTo {
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/locations': typeof ASlugLocationsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
+  '/a/$slug/rating': typeof ASlugRatingRoute
   '/a/$slug/reports': typeof ASlugReportsRoute
   '/a/$slug/settings': typeof ASlugSettingsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
@@ -631,10 +647,12 @@ export interface FileRoutesById {
   '/a/$slug/coaches': typeof ASlugCoachesRoute
   '/a/$slug/database': typeof ASlugDatabaseRoute
   '/a/$slug/groups': typeof ASlugGroupsRoute
+  '/a/$slug/integrations': typeof ASlugIntegrationsRoute
   '/a/$slug/leads': typeof ASlugLeadsRoute
   '/a/$slug/levels': typeof ASlugLevelsRoute
   '/a/$slug/locations': typeof ASlugLocationsRoute
   '/a/$slug/notifications': typeof ASlugNotificationsRoute
+  '/a/$slug/rating': typeof ASlugRatingRoute
   '/a/$slug/reports': typeof ASlugReportsRoute
   '/a/$slug/settings': typeof ASlugSettingsRoute
   '/a/$slug/students': typeof ASlugStudentsRoute
@@ -708,10 +726,12 @@ export interface FileRouteTypes {
     | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/integrations'
     | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/locations'
     | '/a/$slug/notifications'
+    | '/a/$slug/rating'
     | '/a/$slug/reports'
     | '/a/$slug/settings'
     | '/a/$slug/students'
@@ -782,10 +802,12 @@ export interface FileRouteTypes {
     | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/integrations'
     | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/locations'
     | '/a/$slug/notifications'
+    | '/a/$slug/rating'
     | '/a/$slug/reports'
     | '/a/$slug/settings'
     | '/a/$slug/students'
@@ -857,10 +879,12 @@ export interface FileRouteTypes {
     | '/a/$slug/coaches'
     | '/a/$slug/database'
     | '/a/$slug/groups'
+    | '/a/$slug/integrations'
     | '/a/$slug/leads'
     | '/a/$slug/levels'
     | '/a/$slug/locations'
     | '/a/$slug/notifications'
+    | '/a/$slug/rating'
     | '/a/$slug/reports'
     | '/a/$slug/settings'
     | '/a/$slug/students'
@@ -1153,6 +1177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ASlugGroupsRouteImport
       parentRoute: typeof ASlugRoute
     }
+    '/a/$slug/integrations': {
+      id: '/a/$slug/integrations'
+      path: '/integrations'
+      fullPath: '/a/$slug/integrations'
+      preLoaderRoute: typeof ASlugIntegrationsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
     '/a/$slug/leads': {
       id: '/a/$slug/leads'
       path: '/leads'
@@ -1179,6 +1210,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/a/$slug/notifications'
       preLoaderRoute: typeof ASlugNotificationsRouteImport
+      parentRoute: typeof ASlugRoute
+    }
+    '/a/$slug/rating': {
+      id: '/a/$slug/rating'
+      path: '/rating'
+      fullPath: '/a/$slug/rating'
+      preLoaderRoute: typeof ASlugRatingRouteImport
       parentRoute: typeof ASlugRoute
     }
     '/a/$slug/reports': {
@@ -1464,10 +1502,12 @@ interface ASlugRouteChildren {
   ASlugCoachesRoute: typeof ASlugCoachesRoute
   ASlugDatabaseRoute: typeof ASlugDatabaseRoute
   ASlugGroupsRoute: typeof ASlugGroupsRoute
+  ASlugIntegrationsRoute: typeof ASlugIntegrationsRoute
   ASlugLeadsRoute: typeof ASlugLeadsRoute
   ASlugLevelsRoute: typeof ASlugLevelsRoute
   ASlugLocationsRoute: typeof ASlugLocationsRoute
   ASlugNotificationsRoute: typeof ASlugNotificationsRoute
+  ASlugRatingRoute: typeof ASlugRatingRoute
   ASlugReportsRoute: typeof ASlugReportsRoute
   ASlugSettingsRoute: typeof ASlugSettingsRoute
   ASlugStudentsRoute: typeof ASlugStudentsRoute
@@ -1515,10 +1555,12 @@ const ASlugRouteChildren: ASlugRouteChildren = {
   ASlugCoachesRoute: ASlugCoachesRoute,
   ASlugDatabaseRoute: ASlugDatabaseRoute,
   ASlugGroupsRoute: ASlugGroupsRoute,
+  ASlugIntegrationsRoute: ASlugIntegrationsRoute,
   ASlugLeadsRoute: ASlugLeadsRoute,
   ASlugLevelsRoute: ASlugLevelsRoute,
   ASlugLocationsRoute: ASlugLocationsRoute,
   ASlugNotificationsRoute: ASlugNotificationsRoute,
+  ASlugRatingRoute: ASlugRatingRoute,
   ASlugReportsRoute: ASlugReportsRoute,
   ASlugSettingsRoute: ASlugSettingsRoute,
   ASlugStudentsRoute: ASlugStudentsRoute,

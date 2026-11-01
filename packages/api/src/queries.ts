@@ -17,14 +17,19 @@ import {
   createAcademySchema,
   createAssignmentSchema,
   createStudentSchema,
+  type FideInput,
+  fideInputSchema,
   type GroupKind,
   groupNameSchema,
+  type InviteSenderInput,
   initialRatingSchema,
+  inviteSenderSchema,
   type LevelInput,
   type LoginSection,
   levelSchema,
   levelTemplate,
   loginSectionSchema,
+  type MemberFide,
   modeNeedsLocation,
   pinSchema,
   type RatingCategory,
@@ -43,7 +48,13 @@ export type Academy = Tables<'academies'>;
 export type Group = Tables<'groups'>;
 export type Profile = Tables<'profiles'>;
 export type MyAcademy = Academy & { role: AcademyRole };
-export type Member = { role: AcademyRole; levelId: string | null; profile: Profile };
+export type Member = {
+  role: AcademyRole;
+  levelId: string | null;
+  profile: Profile;
+  /** Mã và Elo FIDE nhập tay (chỉ học viên có); thiếu = chưa có. */
+  fide?: MemberFide;
+};
 export type GroupWithCount = Group & { studentCount: number };
 export type PuzzleRow = Tables<'puzzles'>;
 export type Assignment = Tables<'assignments'>;
@@ -137,12 +148,26 @@ export async function fetchMembers(client: ErpClient, academyId: string): Promis
   const rows = unwrap(
     await client
       .from('memberships')
-      .select('role, level_id, profile:profiles(*)')
+      .select('role, level_id, fide_id, fide_standard, fide_rapid, fide_blitz, profile:profiles(*)')
       .eq('academy_id', academyId)
       .order('created_at'),
   );
   return rows.flatMap((r) =>
-    r.profile ? [{ role: r.role, levelId: r.level_id, profile: r.profile }] : [],
+    r.profile
+      ? [
+          {
+            role: r.role,
+            levelId: r.level_id,
+            profile: r.profile,
+            fide: {
+              id: r.fide_id,
+              standard: r.fide_standard,
+              rapid: r.fide_rapid,
+              blitz: r.fide_blitz,
+            },
+          },
+        ]
+      : [],
   );
 }
 
@@ -641,6 +666,59 @@ export async function updateAcademyProfile(
         login_sections: v.loginSections,
       })
       .eq('id', academyId),
+  );
+}
+
+/**
+ * Lưu người gửi lời mời (tên hiển thị + email trả lời) vào `academies.contact`, giữ nguyên địa chỉ,
+ * điện thoại, Zalo đang có: đọc lại `contact` mới nhất rồi ghi gộp. Chưa gửi email thật.
+ */
+export async function updateAcademyInviteSender(
+  client: ErpClient,
+  academyId: string,
+  input: InviteSenderInput,
+) {
+  const v = inviteSenderSchema.parse(input);
+  const row = unwrap(await client.from('academies').select('contact').eq('id', academyId).single());
+  const current = (row.contact ?? {}) as Record<string, unknown>;
+  const { senderName: _s, replyTo: _r, ...rest } = current;
+  const contact = {
+    ...rest,
+    ...(v.senderName ? { senderName: v.senderName } : {}),
+    ...(v.replyTo ? { replyTo: v.replyTo } : {}),
+  };
+  unwrap(await client.from('academies').update({ contact }).eq('id', academyId));
+}
+
+/** Chủ học viện bật/tắt phần FIDE; dữ liệu đã nhập được giữ lại khi tắt. */
+export async function setAcademyFideEnabled(
+  client: ErpClient,
+  academyId: string,
+  enabled: boolean,
+) {
+  unwrap(
+    await client.rpc('set_academy_fide_enabled', { p_academy: academyId, p_enabled: enabled }),
+  );
+}
+
+/** Nhân sự nhập mã FIDE và Elo FIDE của một học viên (nhập tay); giá trị trống = xoá. */
+export async function setMemberFide(
+  client: ErpClient,
+  academyId: string,
+  studentId: string,
+  input: FideInput,
+) {
+  const v = fideInputSchema.parse(input);
+  unwrap(
+    await client.rpc('set_member_fide', {
+      p_academy: academyId,
+      p_student: studentId,
+      // Hàm SQL nhận null để xoá; kiểu sinh tự động không thể hiện tham số nullable
+      p_fide_id: v.fideId as string,
+      p_standard: v.standard as number,
+      p_rapid: v.rapid as number,
+      p_blitz: v.blitz as number,
+    }),
   );
 }
 
