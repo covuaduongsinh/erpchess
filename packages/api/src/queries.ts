@@ -19,7 +19,9 @@ import {
   createStudentSchema,
   type GroupKind,
   groupNameSchema,
+  type InviteSenderInput,
   initialRatingSchema,
+  inviteSenderSchema,
   type LevelInput,
   type LoginSection,
   levelSchema,
@@ -642,6 +644,27 @@ export async function updateAcademyProfile(
       })
       .eq('id', academyId),
   );
+}
+
+/**
+ * Lưu người gửi lời mời (tên hiển thị + email trả lời) vào `academies.contact`, giữ nguyên địa chỉ,
+ * điện thoại, Zalo đang có: đọc lại `contact` mới nhất rồi ghi gộp. Chưa gửi email thật.
+ */
+export async function updateAcademyInviteSender(
+  client: ErpClient,
+  academyId: string,
+  input: InviteSenderInput,
+) {
+  const v = inviteSenderSchema.parse(input);
+  const row = unwrap(await client.from('academies').select('contact').eq('id', academyId).single());
+  const current = (row.contact ?? {}) as Record<string, unknown>;
+  const { senderName: _s, replyTo: _r, ...rest } = current;
+  const contact = {
+    ...rest,
+    ...(v.senderName ? { senderName: v.senderName } : {}),
+    ...(v.replyTo ? { replyTo: v.replyTo } : {}),
+  };
+  unwrap(await client.from('academies').update({ contact }).eq('id', academyId));
 }
 
 /** Tải logo/favicon lên bucket công khai `academy-branding`, trả link https để lưu vào hồ sơ. */

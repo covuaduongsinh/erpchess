@@ -24,6 +24,7 @@ import {
   MapPin,
   Palette,
   Percent,
+  Plug,
   Puzzle,
   Receipt,
   School,
@@ -143,6 +144,9 @@ export function buildNavGroups(role: AcademyRole | null, academy?: NavAcademy | 
         labelKey: 'nav.academy',
         items: [
           ...(owner ? [item('branding', '/a/$slug/settings', 'nav.branding', Palette)] : []),
+          ...(owner
+            ? [item('integrations', '/a/$slug/integrations', 'nav.integrations', Plug)]
+            : []),
           item('levels', '/a/$slug/levels', 'levels.title', Shield),
           item('locations', '/a/$slug/locations', 'location.title', MapPin),
           item('certificates', '/a/$slug/certificates', 'cert.title', Award),

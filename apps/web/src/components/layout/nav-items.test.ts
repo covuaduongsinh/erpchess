@@ -23,6 +23,7 @@ describe('buildNavGroups', () => {
       'students',
       'coaches',
       'branding',
+      'integrations',
       'groups',
       'batches',
       'leads',
@@ -44,7 +45,15 @@ describe('buildNavGroups', () => {
 
   it('HLV: ẩn học phí, gói, giảm giá, thông báo; Lead theo leads_enabled', () => {
     const off = ids('coach', false);
-    for (const id of ['billing', 'plans', 'discounts', 'notifications', 'branding', 'leads'])
+    for (const id of [
+      'billing',
+      'plans',
+      'discounts',
+      'notifications',
+      'branding',
+      'integrations',
+      'leads',
+    ])
       expect(off, id).not.toContain(id);
     for (const id of ['students', 'coaches', 'calendar', 'levels', 'locations', 'database'])
       expect(off, id).toContain(id);
@@ -66,6 +75,7 @@ describe('buildNavGroups', () => {
       'students',
       'coaches',
       'branding',
+      'integrations',
       'calendar',
       'levels',
       'locations',

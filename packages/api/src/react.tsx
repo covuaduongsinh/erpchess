@@ -10,6 +10,7 @@ import type {
   ClassroomInput,
   CourseInput,
   ExerciseInput,
+  InviteSenderInput,
   LevelInput,
   LocationInput,
   PracticePositionInput,
@@ -709,6 +710,17 @@ export function useUpdateAcademyProfile(academyId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: AcademyProfileInput) => api.updateAcademyProfile(client, academyId, input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
+  });
+}
+
+/** Người gửi lời mời (tên hiển thị + email trả lời) của học viện (Giai đoạn 26b). */
+export function useUpdateInviteSender(academyId: string) {
+  const client = useErpClient();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: InviteSenderInput) =>
+      api.updateAcademyInviteSender(client, academyId, input),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
   });
 }

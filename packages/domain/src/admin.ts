@@ -74,6 +74,20 @@ const optionalHttpsUrl = z
 
 export const contactKeys = ['address', 'phone', 'zalo'] as const;
 
+/** Email hoặc chuỗi rỗng (bỏ trống). Lỗi mang mã `email` để giao diện dịch. */
+const optionalEmail = z
+  .string()
+  .trim()
+  .max(120, 'email')
+  .refine((v) => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v), 'email');
+
+/** Cấu hình người gửi lời mời: tên hiển thị và email trả lời (chưa gửi thật, chỉ lưu). */
+export const inviteSenderSchema = z.object({
+  senderName: z.string().trim().max(80, 'contact').default(''),
+  replyTo: optionalEmail.default(''),
+});
+export type InviteSenderInput = z.input<typeof inviteSenderSchema>;
+
 /** Một mục nội dung trên trang đăng nhập riêng (vd. "Lịch khai giảng", "Học phí"). */
 export const loginSectionSchema = z.object({
   title: z.string().trim().min(1, 'loginSection').max(80, 'loginSection'),
@@ -110,8 +124,11 @@ export const academyProfileSchema = z.object({
         .max(30, 'phone')
         .refine((v) => v === '' || /^[+\d][\d .()-]{5,}$/.test(v), 'phone')
         .default(''),
+      // Người gửi lời mời (trang Tích hợp, 26b): lưu cùng `contact` nhưng không hiện ở thẻ liên hệ
+      senderName: z.string().trim().max(80, 'contact').default(''),
+      replyTo: optionalEmail.default(''),
     })
-    .default({ address: '', phone: '', zalo: '' }),
+    .default({ address: '', phone: '', zalo: '', senderName: '', replyTo: '' }),
   // Trang đăng nhập riêng (Giai đoạn 23d)
   loginBackgroundUrl: optionalHttpsUrl.default('').transform((v) => v || null),
   loginSections: z.array(loginSectionSchema).max(4, 'loginSections').default([]),

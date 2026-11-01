@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   academyProfileSchema,
   brandColorVars,
+  inviteSenderSchema,
   levelForRating,
   levelSchema,
   levelTemplate,
@@ -74,6 +75,29 @@ describe('academyProfileSchema', () => {
   });
 });
 
+describe('người gửi lời mời (26b)', () => {
+  it('email trả lời: rỗng hoặc hợp lệ, sai thì lỗi mã `email`', () => {
+    expect(inviteSenderSchema.parse({}).replyTo).toBe('');
+    expect(inviteSenderSchema.parse({ replyTo: ' Hi@CLB.vn ' }).replyTo).toBe('Hi@CLB.vn');
+    const bad = inviteSenderSchema.safeParse({ replyTo: 'khong-phai-email' });
+    expect(bad.success).toBe(false);
+    expect(bad.error?.issues[0]?.message).toBe('email');
+  });
+
+  it('tên hiển thị tối đa 80 ký tự; hồ sơ học viện cũng nhận hai trường này trong liên hệ', () => {
+    expect(inviteSenderSchema.safeParse({ senderName: 'a'.repeat(81) }).success).toBe(false);
+    const profile = academyProfileSchema.parse({
+      name: 'CLB',
+      contact: { senderName: 'CLB Dương Sinh', replyTo: 'hi@clb.vn' },
+    });
+    expect(profile.contact.senderName).toBe('CLB Dương Sinh');
+    expect(profile.contact.replyTo).toBe('hi@clb.vn');
+    expect(
+      academyProfileSchema.safeParse({ name: 'CLB', contact: { replyTo: 'sai' } }).success,
+    ).toBe(false);
+  });
+});
+
 describe('white-label học viện', () => {
   it('màu thương hiệu: rỗng thành null, chỉ nhận #RRGGBB', () => {
     expect(academyProfileSchema.parse({ name: 'CLB' }).brandColor).toBeNull();
@@ -89,6 +113,8 @@ describe('white-label học viện', () => {
       address: '',
       phone: '',
       zalo: '',
+      senderName: '',
+      replyTo: '',
     });
     expect(
       academyProfileSchema.safeParse({ name: 'CLB', contact: { phone: '+84 912 345 678' } })

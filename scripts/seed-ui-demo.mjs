@@ -517,5 +517,25 @@ await ensure(
   },
   'giảm giá đã tắt',
 );
+// --- Tích hợp: tài khoản nhận chuyển khoản (VietQR) để thẻ Tích hợp có trạng thái "Đã cấu hình" ---
+const { data: bill } = await c
+  .from('academy_billing')
+  .select('*')
+  .eq('academy_id', A)
+  .maybeSingle();
+if (!bill?.bank_bin) {
+  note(
+    'tài khoản VietQR mẫu',
+    await c.from('academy_billing').upsert({
+      academy_id: A,
+      currency: bill?.currency ?? 'VND',
+      invoice_prefix: bill?.invoice_prefix ?? 'HD',
+      tax_id: bill?.tax_id ?? null,
+      bank_bin: '970436',
+      bank_account: '0123456789',
+      bank_holder: 'HOC VIEN THU NGHIEM UI',
+    }),
+  );
+}
 console.log('xong');
 process.exit(0);
