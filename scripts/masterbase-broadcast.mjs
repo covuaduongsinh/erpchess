@@ -42,19 +42,16 @@
 //   -- sau 1.e4 c5:
 //   select * from public.search_masterbase('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq', null, null, 5, 0);
 //   Rồi mở trang Bàn cờ → tab Masterbase: ván hiện ra khi đặt thế tương ứng.
-import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'node:fs';
-import { rename } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
-import { Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
+import { statSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   consumeGames,
   createWriter,
-  decompressZstd,
-  linesOf,
+  downloadToCache,
   newStats,
   splitGames,
+  textLines,
 } from '../packages/chess-core/scripts/masterbase-lib.mjs';
 
 const BASE_URL = 'https://database.lichess.org/broadcast';
@@ -111,37 +108,9 @@ export function parseArgs(argv) {
 }
 
 async function download(month, cacheDir) {
-  const name = `lichess_db_broadcast_${month}.pgn.zst`;
-  const url = `${BASE_URL}/${name}`;
-  const target = join(cacheDir, name);
-  mkdirSync(cacheDir, { recursive: true });
-  const head = await fetch(url, { method: 'HEAD' });
-  if (!head.ok) {
-    const hint =
-      head.status === 404 ? ' (tháng này có thể chưa được Lichess công bố; thử tháng trước)' : '';
-    throw new Error(`Không tải được ${url}: HTTP ${head.status}${hint}`);
-  }
-  const size = Number(head.headers.get('content-length') ?? 0);
-  if (existsSync(target) && size > 0 && statSync(target).size === size) {
-    console.log(`  đã có trong cache: ${name} (${(size / MB).toFixed(1)} MB)`);
-    return { path: target, bytes: size };
-  }
-  console.log(`  tải ${name} (${(size / MB).toFixed(1)} MB)…`);
-  const res = await fetch(url);
-  if (!res.ok || !res.body) throw new Error(`Không tải được ${url}: HTTP ${res.status}`);
-  await pipeline(Readable.fromWeb(res.body), createWriteStream(`${target}.part`));
-  await rename(`${target}.part`, target);
-  return { path: target, bytes: statSync(target).size };
-}
-
-/** Luồng dòng PGN từ tệp .pgn hoặc .pgn.zst (giải nén stream, không nạp cả tệp vào RAM). */
-function pgnLines(path) {
-  const raw = createReadStream(path);
-  if (!path.endsWith('.zst')) return linesOf(raw.setEncoding('utf8'));
-  const text = Readable.from(decompressZstd(raw));
-  text.setEncoding('utf8');
-  raw.on('error', (e) => text.destroy(e));
-  return linesOf(text);
+  return downloadToCache(`${BASE_URL}/lichess_db_broadcast_${month}.pgn.zst`, cacheDir, {
+    hint404: ' (tháng này có thể chưa được Lichess công bố; thử tháng trước)',
+  });
 }
 
 async function main() {
@@ -173,7 +142,7 @@ async function main() {
     const source = `Lichess broadcast database (CC0) ${opts.file ? 'tệp cục bộ' : month}`;
     const before = { ...total, rejected: { ...total.rejected } };
     const tm = Date.now();
-    await consumeGames(splitGames(pgnLines(src.path)), {
+    await consumeGames(splitGames(textLines(src.path)), {
       minElo: opts.minElo,
       minMoves: opts.minMoves,
       seen,

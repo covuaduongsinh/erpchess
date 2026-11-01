@@ -16,6 +16,7 @@ export * from './notifications';
 export * from './practice';
 export * from './presence';
 export * from './profile';
+export * from './puzzle-bank';
 export * from './queries';
 export * from './quiz-schedules';
 export * from './quizzes';

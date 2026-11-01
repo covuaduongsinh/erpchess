@@ -104,6 +104,7 @@ export * from './money';
 export * from './periods';
 export * from './practice';
 export * from './profile';
+export * from './puzzle-bank';
 export * from './quiz';
 export * from './quiz-schedule';
 export * from './reports';

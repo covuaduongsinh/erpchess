@@ -44,6 +44,7 @@ export {
   puzzleFenAt,
   puzzleSideToMove,
 } from './puzzle';
+export { lichessToStudyPuzzle, MAX_PUZZLE_MOVES, type StudyPuzzle } from './puzzle-bank';
 export {
   type PuzzleSession,
   playPuzzleMove,

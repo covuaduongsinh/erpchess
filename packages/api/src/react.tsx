@@ -15,6 +15,7 @@ import type {
   LevelInput,
   LocationInput,
   PracticePositionInput,
+  PuzzleBankFilter,
   QuizInput,
   QuizScheduleInput,
   RatingCategory,
@@ -25,6 +26,7 @@ import type {
 } from '@erpchess/domain';
 import type { Session } from '@supabase/supabase-js';
 import {
+  keepPreviousData,
   QueryClient,
   QueryClientProvider,
   useMutation,
@@ -57,6 +59,7 @@ import * as notifications from './notifications';
 import * as practice from './practice';
 import * as presence from './presence';
 import * as profile from './profile';
+import * as puzzleBankApi from './puzzle-bank';
 import * as api from './queries';
 import { ApiError } from './queries';
 import * as quizSchedules from './quiz-schedules';
@@ -713,6 +716,24 @@ export function useUpdateAcademyProfile(academyId: string) {
     mutationFn: (input: AcademyProfileInput) => api.updateAcademyProfile(client, academyId, input),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['academies'] }),
   });
+}
+
+/** Tìm puzzle trong kho Lichess (Giai đoạn 27c); giữ trang cũ khi đổi bộ lọc để danh sách không nhấp nháy. */
+export function usePuzzleBankSearch(filter: PuzzleBankFilter, enabled = true) {
+  const client = useErpClient();
+  return useQuery({
+    queryKey: ['puzzle-bank', filter] as const,
+    queryFn: () => puzzleBankApi.searchPuzzleBank(client, filter),
+    enabled,
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+  });
+}
+
+/** Hàm tìm tức thì trong kho puzzle (không qua cache), dùng cho "chọn ngẫu nhiên trải đều". */
+export function useSearchPuzzleBankNow() {
+  const client = useErpClient();
+  return (filter: PuzzleBankFilter) => puzzleBankApi.searchPuzzleBank(client, filter);
 }
 
 /** Chủ học viện bật/tắt phần FIDE (Giai đoạn 26a). */

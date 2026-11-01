@@ -552,6 +552,43 @@
    "action": "wait_for_timeout"
   },
   {
+   "step_id": "go_hoc_lieu_soan",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/studies/9bbff211-be09-460e-8b3b-f6cb6a7c4580/edit"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "shot_hoc_lieu_soan",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
+   "step_id": "go_kho_puzzle",
+   "timeout_ms": 60000,
+   "wait_until": "load",
+   "destination": {
+    "url": "http://localhost:4173/a/thu-nghiem-ui/studies/9bbff211-be09-460e-8b3b-f6cb6a7c4580/edit"
+   },
+   "action": "goto"
+  },
+  {
+   "step_id": "click_kho_puzzle",
+   "locator": {
+    "selector": "button:text-is('Thêm từ kho puzzle')",
+    "kind": "css"
+   },
+   "timeout_ms": 15000,
+   "action": "click"
+  },
+  {
+   "step_id": "shot_kho_puzzle",
+   "duration_ms": 6000,
+   "action": "wait_for_timeout"
+  },
+  {
    "step_id": "go_tich_hop_vietqr",
    "timeout_ms": 60000,
    "wait_until": "load",
