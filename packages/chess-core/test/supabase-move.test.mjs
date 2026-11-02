@@ -346,7 +346,9 @@ describe('schema --dry-run chỉ đọc và kiểm extension chặn', { timeout:
     const gone = { name: 'foo', installed: false, available: false, needsSuperuser: false };
     const b = extensionBlockers([cron, trgm, net, gone], false);
     expect(b.map((x) => x.name)).toEqual(['pg_cron', 'foo']);
-    expect(b[0].fix).toMatch(/create extension if not exists "pg_cron"/);
+    expect(b[0].fix).toMatch(
+      /docker exec .*psql -U supabase_admin -d postgres -c .*create extension if not exists .*pg_cron/,
+    );
     expect(b[0].fix).toMatch(/supabase_admin/);
     expect(b[1].fix).toBeNull();
     // superuser thì pg_cron tự bật được → không chặn

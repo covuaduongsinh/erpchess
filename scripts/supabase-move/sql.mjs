@@ -81,7 +81,7 @@ export function extensionBlockers(statuses, superuser) {
         name: e.name,
         reason:
           'chưa bật, là extension không-trusted đòi superuser mà role hiện tại không phải superuser',
-        fix: `create extension if not exists "${e.name}";  -- chạy bằng superuser (vd. supabase_admin: psql -U supabase_admin -d postgres)`,
+        fix: `docker exec <container-db> psql -U supabase_admin -d postgres -c "create extension if not exists ${e.name};" (cần superuser; tên container xem trong Dokploy)`,
       });
     }
   }
