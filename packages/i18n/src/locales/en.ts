@@ -1781,6 +1781,7 @@ export const en: Resource = {
     byPosition: 'Board position',
     under20: '< 20 moves',
     elo2500: '🏆 Elo > 2500',
+    includeEngines: 'Include engine games',
     none: 'No matching games. The master database may not be loaded yet.',
     count: '{{count}} games',
     white: 'White',

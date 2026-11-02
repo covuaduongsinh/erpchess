@@ -20,9 +20,10 @@
 //   --min-moves 10          số nước đầy đủ tối thiểu (ceil(nửa nước / 2))
 //   --max-mb 300            trần dung lượng ước tính trong DB; chạm trần thì dừng (vừa gói Free của Supabase)
 //   --start-id 1            id đầu tiên của masterbase_games (đặt lớn hơn id lớn nhất hiện có nếu nạp thêm đợt)
+//   --include-engines       giữ cả ván engine (mặc định BỎ: "tcec" ở Event/Site hoặc Elo một bên > 3000)
 //   --dry-run               chỉ in thống kê, không ghi CSV
 //
-// Lọc: có kết quả (1-0, 0-1, 1/2-1/2), Elo hai bên ≥ min-elo, ≥ min-moves nước, đọc được; bỏ ván trùng
+// Lọc: có kết quả (1-0, 0-1, 1/2-1/2), không phải ván engine, Elo hai bên ≥ min-elo, ≥ min-moves nước, đọc được; bỏ ván trùng
 // (khoá: tên hai bên + ngày + giải + vòng). Cột `source` = "Lichess broadcast database (CC0) YYYY-MM".
 //
 // ── Nạp vào Supabase (chủ dự án hoặc agent Supabase chạy; cần chuỗi kết nối Postgres, KHÔNG dùng khoá publishable)
@@ -103,6 +104,7 @@ export function parseArgs(argv) {
     minMoves: num('--min-moves', 10),
     maxMb: num('--max-mb', 300),
     startId: num('--start-id', 1),
+    includeEngines: argv.includes('--include-engines'),
     dryRun: argv.includes('--dry-run'),
   };
 }
@@ -125,7 +127,7 @@ async function main() {
   let capped = false;
 
   console.log(
-    `${opts.dryRun ? '[dry-run] ' : ''}Lọc: Elo cả hai bên ≥ ${opts.minElo}, ≥ ${opts.minMoves} nước, có kết quả, bỏ trùng; trần ${opts.maxMb} MB`,
+    `${opts.dryRun ? '[dry-run] ' : ''}Lọc: Elo cả hai bên ≥ ${opts.minElo}, ≥ ${opts.minMoves} nước, có kết quả, ${opts.includeEngines ? 'gồm cả' : 'bỏ'} ván engine, bỏ trùng; trần ${opts.maxMb} MB`,
   );
   for (const month of opts.months) {
     if (total.estimatedBytes >= cap) {
@@ -145,6 +147,7 @@ async function main() {
     await consumeGames(splitGames(textLines(src.path)), {
       minElo: opts.minElo,
       minMoves: opts.minMoves,
+      includeEngines: opts.includeEngines,
       seen,
       stats: total,
       stop: () => total.estimatedBytes >= cap,
@@ -171,7 +174,7 @@ async function main() {
   console.log(`Tháng xử lý: ${perMonth.map((m) => m.month).join(', ')}`);
   console.log(`Ván đọc: ${total.seen}; ván đạt: ${total.accepted}`);
   console.log(
-    `Loại: không kết quả ${total.rejected.result}, Elo thấp/thiếu ${total.rejected.elo}, ngắn (< ${opts.minMoves} nước) ${total.rejected.short}, trùng ${total.rejected.duplicate}, lỗi PGN ${total.rejected.invalid}`,
+    `Loại: không kết quả ${total.rejected.result}, ván engine ${total.rejected.engine}, Elo thấp/thiếu ${total.rejected.elo}, ngắn (< ${opts.minMoves} nước) ${total.rejected.short}, trùng ${total.rejected.duplicate}, lỗi PGN ${total.rejected.invalid}`,
   );
   if (total.minYear !== null) console.log(`Dải năm: ${total.minYear}–${total.maxYear}`);
   console.log(

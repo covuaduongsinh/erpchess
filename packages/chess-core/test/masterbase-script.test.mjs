@@ -157,7 +157,14 @@ describe('consumeGames', () => {
     });
     expect(stats.seen).toBe(7);
     expect(stats.accepted).toBe(2);
-    expect(stats.rejected).toEqual({ result: 1, elo: 1, short: 1, invalid: 1, duplicate: 1 });
+    expect(stats.rejected).toEqual({
+      result: 1,
+      engine: 0,
+      elo: 1,
+      short: 1,
+      invalid: 1,
+      duplicate: 1,
+    });
     expect(accepted).toHaveLength(2);
     expect(stats.minYear).toBe(2026);
     expect(stats.estimatedBytes).toBeGreaterThan(0);

@@ -21,6 +21,8 @@ export type MasterbaseQuery = {
   position: string | null;
   maxPlies: number | null;
   minElo: number | null;
+  /** Gồm ván engine (TCEC…); mặc định false = ẩn. */
+  includeEngines?: boolean;
   page: number;
 };
 
@@ -33,6 +35,7 @@ export async function searchMasterbase(
       p_position: q.position,
       p_max_plies: q.maxPlies,
       p_min_elo: q.minElo,
+      p_include_engines: q.includeEngines ?? false,
       p_limit: MASTERBASE_PAGE_SIZE,
       p_offset: Math.max(0, q.page) * MASTERBASE_PAGE_SIZE,
     }),
