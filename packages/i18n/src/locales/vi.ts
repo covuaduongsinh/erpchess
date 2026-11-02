@@ -1775,6 +1775,7 @@ export const vi = {
     byPosition: 'Thế cờ trên bàn',
     under20: '< 20 nước',
     elo2500: '🏆 Elo > 2500',
+    includeEngines: 'Gồm ván engine',
     none: 'Chưa có ván nào khớp. Kho ván cao thủ có thể chưa được nạp dữ liệu.',
     count: '{{count}} ván',
     white: 'Trắng',

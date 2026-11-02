@@ -59,6 +59,7 @@ describe('MasterbasePanel', () => {
       position: null,
       maxPlies: null,
       minElo: null,
+      includeEngines: false,
       page: 0,
     });
 
@@ -82,6 +83,23 @@ describe('MasterbasePanel', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'masterbase.under20' }));
     expect(useMasterbase).toHaveBeenLastCalledWith(expect.objectContaining({ maxPlies: 39 }));
+  });
+
+  it('hides engine games by default; the switch includes them and goes back to page 0', () => {
+    render(<MasterbasePanel fen={AFTER_E4} onLoadPgn={vi.fn()} />);
+    expect(useMasterbase).toHaveBeenLastCalledWith(
+      expect.objectContaining({ includeEngines: false }),
+    );
+    fireEvent.click(screen.getByRole('button', { name: '▶' }));
+    fireEvent.click(screen.getByRole('button', { name: 'masterbase.includeEngines' }));
+    expect(useMasterbase).toHaveBeenLastCalledWith(
+      expect.objectContaining({ includeEngines: true, page: 0 }),
+    );
+    expect(
+      screen
+        .getByRole('button', { name: 'masterbase.includeEngines' })
+        .getAttribute('aria-pressed'),
+    ).toBe('true');
   });
 
   it('loads the chosen game into the analysis board', async () => {

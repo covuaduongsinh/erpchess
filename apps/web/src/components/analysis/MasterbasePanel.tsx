@@ -21,16 +21,18 @@ export function MasterbasePanel({
   const [byPosition, setByPosition] = useState(true);
   const [under20Moves, setUnder20Moves] = useState(false);
   const [elo2500, setElo2500] = useState(false);
+  // Mặc định ẩn ván engine (TCEC…): không phải ván cao thủ
+  const [includeEngines, setIncludeEngines] = useState(false);
   const [page, setPage] = useState(0);
   const [loadingId, setLoadingId] = useState<number | null>(null);
   const [loadError, setLoadError] = useState<unknown>(null);
 
   const filter = masterbaseFilter({ fen, byPosition, under20Moves, elo2500 });
-  const query = useMasterbase({ ...filter, page });
+  const query = useMasterbase({ ...filter, includeEngines, page });
   const total = query.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / MASTERBASE_PAGE_SIZE));
   // Đổi thế cờ hoặc bộ lọc thì về trang đầu
-  const filterKey = `${filter.position}|${filter.maxPlies}|${filter.minElo}`;
+  const filterKey = `${filter.position}|${filter.maxPlies}|${filter.minElo}|${includeEngines}`;
   const [lastKey, setLastKey] = useState(filterKey);
   if (lastKey !== filterKey) {
     setLastKey(filterKey);
@@ -53,6 +55,7 @@ export function MasterbasePanel({
     [t('masterbase.byPosition'), byPosition, setByPosition],
     [t('masterbase.under20'), under20Moves, setUnder20Moves],
     [t('masterbase.elo2500'), elo2500, setElo2500],
+    [t('masterbase.includeEngines'), includeEngines, setIncludeEngines],
   ];
 
   return (

@@ -2111,6 +2111,7 @@ export type Database = {
           event: string
           id: number
           imported_at: string
+          is_engine: boolean
           pgn: string
           ply_count: number
           result: string
@@ -2127,6 +2128,7 @@ export type Database = {
           event?: string
           id: number
           imported_at?: string
+          is_engine?: never
           pgn: string
           ply_count?: number
           result?: string
@@ -2143,6 +2145,7 @@ export type Database = {
           event?: string
           id?: number
           imported_at?: string
+          is_engine?: never
           pgn?: string
           ply_count?: number
           result?: string
@@ -4190,6 +4193,7 @@ export type Database = {
       }
       search_masterbase: {
         Args: {
+          p_include_engines?: boolean
           p_limit?: number
           p_max_plies?: number | null
           p_min_elo?: number | null

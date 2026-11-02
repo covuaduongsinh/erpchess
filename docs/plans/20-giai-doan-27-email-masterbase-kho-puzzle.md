@@ -117,6 +117,12 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 >
 > **Mã hoá:** 408 ván (1,7%) có `event`/tên hỏng (vd. `2026å¹´…`, `1� Divis�o`). Nguồn PGN của Lichess đã chứa sẵn chữ mã hoá kép (UTF-8 đọc thành Latin-1 rồi mã hoá lại) hoặc byte Latin-1 (loader giải mã UTF-8 đúng); có thể sửa khi xuất bằng `Buffer.from(s, 'latin1').toString('utf8')` khi kết quả không có ký tự thay thế.
 
+> **PR 27e (chờ chủ dự án áp migration 44; chủ dự án chọn phương án (a) và có sửa mã hoá):**
+> - Migration `20261102000044_masterbase_is_engine.sql`: cột sinh `is_engine` (TCEC ở `event`/`site`, hoặc Elo > 3000; không UPDATE/DELETE), chỉ mục một phần `masterbase_games_human_idx`, `search_masterbase` thêm `p_include_engines` (mặc định false = ẩn ván engine; lời gọi 5 tham số cũ vẫn chạy). pgTAP 24 thêm 6 ca (engine ẩn/hiện, null, Elo, cột sinh không ghi được).
+> - `masterbase-broadcast.mjs` bỏ ván engine khi lọc (`--include-engines` để giữ) và sửa chữ mã hoá kép bằng `fixMojibake`; đọc nguồn theo từng dòng (UTF-8 nghiêm ngặt, sai thì Latin-1) nên không còn tạo ký tự U+FFFD cho lần nạp sau.
+> - `scripts/supabase-move/fix-masterbase-mojibake.mjs`: sửa 292 ván đã nạp (white/black/event/site), mặc định chỉ đọc, `--apply` trong một giao dịch có sao lưu, `--restore`. 110 ván đã mất byte (U+FFFD) không sửa được từ DB, cần nạp lại từ nguồn.
+> - Web: công tắc "Gồm ván engine" ở tab Masterbase, mặc định tắt.
+
 ### Để sau (ghi lại, không làm trong GĐ27)
 
 - **PayOS:** chờ chủ dự án có tài khoản. Thẻ ở trang Tích hợp giữ "Sắp có".

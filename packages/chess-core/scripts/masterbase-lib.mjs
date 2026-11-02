@@ -77,12 +77,26 @@ export function dedupeKey(h) {
   return [h.White, h.Black, h.Date ?? h.UTCDate, h.Event, h.Round].map(n).join('|');
 }
 
+/** Ngưỡng Elo trên mức người chơi thật (cao nhất lịch sử ~2880); engine TCEC đều > 3000 hoặc có "tcec" ở Event/Site. */
+export const ENGINE_ELO = 3000;
+
+/**
+ * Ván engine (TCEC…): "tcec" ở Event/Site hoặc Elo một bên > 3000. Cùng quy tắc với cột sinh `is_engine` của
+ * `masterbase_games` (migration 20261102000044) để dữ liệu nạp sau không đưa ván engine vào DB.
+ */
+export function isEngineGame(h) {
+  if (/tcec/i.test(h.Event ?? '') || /tcec/i.test(h.Site ?? '')) return true;
+  return (elo(h.WhiteElo) ?? 0) > ENGINE_ELO || (elo(h.BlackElo) ?? 0) > ENGINE_ELO;
+}
+
 /**
  * Bộ lọc bước đầu theo tag (rẻ, chạy trước khi dựng bàn cờ): có kết quả, Elo của CẢ HAI bên đều
- * ≥ minElo. Trả `null` nếu đạt, hoặc lý do loại ('result' | 'elo').
+ * ≥ minElo, và (trừ khi includeEngines) không phải ván engine. Trả `null` nếu đạt, hoặc lý do loại
+ * ('result' | 'engine' | 'elo').
  */
-export function rejectByHeaders(h, { minElo }) {
+export function rejectByHeaders(h, { minElo, includeEngines = false }) {
   if (!DECIDED.has(h.Result)) return 'result';
+  if (!includeEngines && isEngineGame(h)) return 'engine';
   const w = elo(h.WhiteElo);
   const b = elo(h.BlackElo);
   if (w === null || b === null || w < minElo || b < minElo) return 'elo';
@@ -178,7 +192,7 @@ export function createWriter(outDir, startId = 1) {
 export const newStats = () => ({
   seen: 0,
   accepted: 0,
-  rejected: { result: 0, elo: 0, short: 0, invalid: 0, duplicate: 0 },
+  rejected: { result: 0, engine: 0, elo: 0, short: 0, invalid: 0, duplicate: 0 },
   minYear: null,
   maxYear: null,
   estimatedBytes: 0,
@@ -192,13 +206,17 @@ export const estimateBytes = (parsed) => parsed.pgn.length + 350 + parsed.keys.s
  * chung giữa các tháng), đọc được. Mỗi ván đạt gọi `onAccept(parsed)`; dừng sớm khi `stop()` trả true
  * (vd. chạm trần dung lượng). Trả về thống kê cộng dồn vào `stats`.
  */
-export async function consumeGames(games, { minElo, minMoves, seen, stats, onAccept, stop }) {
-  for await (const text of games) {
-    if (!text.trim()) continue;
+export async function consumeGames(
+  games,
+  { minElo, minMoves, seen, stats, onAccept, stop, includeEngines = false },
+) {
+  for await (const raw of games) {
+    if (!raw.trim()) continue;
+    const text = fixMojibake(raw);
     if (stop?.()) break;
     stats.seen++;
     const h = quickHeaders(text);
-    const reason = rejectByHeaders(h, { minElo });
+    const reason = rejectByHeaders(h, { minElo, includeEngines });
     if (reason) {
       stats.rejected[reason]++;
       continue;
@@ -338,12 +356,59 @@ export async function downloadToCache(url, cacheDir, { hint404 = '', log = conso
   return { path: target, bytes: statSync(target).size };
 }
 
+// ── Mã hoá ─────────────────────────────────────────────────────────────────────────────────────────────────
+// Nguồn PGN của Lichess lẫn hai lỗi mã hoá: (1) chữ UTF-8 bị đọc thành Latin-1 rồi mã hoá lại ("2026å¹´…" thay vì
+// "2026年…") và (2) byte Latin-1 thô (0xAA, 0xE3 trong "1ª Divisão") không phải UTF-8 hợp lệ.
+
+// Dấu hiệu mã hoá kép: ký tự mở đầu chuỗi UTF-8 (U+00C2–U+00F4) liền sau là ký tự tiếp nối (U+0080–U+00BF)
+const MOJIBAKE = /[Â-ô][\u0080-¿]/;
+
+function fixMojibakeLine(line) {
+  if (!MOJIBAKE.test(line)) return line;
+  // Có ký tự ngoài Latin-1 thì dòng này không phải kết quả của mã hoá kép
+  for (let i = 0; i < line.length; i++) if (line.charCodeAt(i) > 0xff) return line;
+  const fixed = Buffer.from(line, 'latin1').toString('utf8');
+  return fixed.includes('�') || fixed.length >= line.length ? line : fixed;
+}
+
+/**
+ * Sửa chữ mã hoá kép theo từng dòng: chỉ khi dòng có dấu hiệu (xem MOJIBAKE), mọi ký tự ≤ U+00FF, và giải mã lại
+ * bằng UTF-8 hợp lệ (không có U+FFFD) cho chuỗi ngắn hơn. Dòng không đạt các điều kiện này được giữ nguyên.
+ */
+export function fixMojibake(text) {
+  if (!MOJIBAKE.test(text)) return text;
+  return text.split('\n').map(fixMojibakeLine).join('\n');
+}
+/**
+ * Dòng văn bản từ luồng Buffer: mỗi dòng giải mã UTF-8 nghiêm ngặt, nếu không hợp lệ thì coi là Latin-1
+ * (không để lại ký tự thay thế U+FFFD làm mất chữ). Bỏ CR cuối dòng.
+ */
+export async function* decodeLines(chunks) {
+  const utf8 = new TextDecoder('utf-8', { fatal: true });
+  const decode = (b) => {
+    try {
+      return utf8.decode(b);
+    } catch {
+      return b.toString('latin1');
+    }
+  };
+  let rest = Buffer.alloc(0);
+  for await (const chunk of chunks) {
+    const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+    rest = rest.length ? Buffer.concat([rest, buf]) : buf;
+    let start = 0;
+    for (let nl = rest.indexOf(10, start); nl !== -1; nl = rest.indexOf(10, start)) {
+      const end = nl > start && rest[nl - 1] === 13 ? nl - 1 : nl;
+      yield decode(rest.subarray(start, end));
+      start = nl + 1;
+    }
+    rest = rest.subarray(start);
+  }
+  if (rest.length) yield decode(rest);
+}
+
 /** Luồng dòng văn bản từ tệp thường hoặc `.zst` (giải nén stream theo frame, không nạp cả tệp vào RAM). */
 export function textLines(path) {
   const raw = createReadStream(path);
-  if (!path.endsWith('.zst')) return linesOf(raw.setEncoding('utf8'));
-  const text = Readable.from(decompressZstd(raw));
-  text.setEncoding('utf8');
-  raw.on('error', (e) => text.destroy(e));
-  return linesOf(text);
+  return decodeLines(path.endsWith('.zst') ? decompressZstd(raw) : raw);
 }
