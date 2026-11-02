@@ -38,14 +38,67 @@ export function requiredExtensions(migrations) {
 
 export async function extensionStatus(db, wanted) {
   const inst = new Set((await db.query('select extname from pg_extension')).map((r) => r.extname));
-  const avail = new Set(
-    (await db.query('select name from pg_available_extensions')).map((r) => r.name),
+  const avail = new Map(
+    (
+      await db.query(
+        'select name, bool_or(trusted) as trusted, bool_or(superuser) as superuser from pg_available_extension_versions group by name',
+      )
+    ).map((r) => [r.name, r]),
   );
-  return wanted.map((name) => ({
-    name,
-    installed: inst.has(name),
-    available: avail.has(name),
-  }));
+  return wanted.map((name) => {
+    const a = avail.get(name);
+    return {
+      name,
+      installed: inst.has(name),
+      available: !!a,
+      // Extension "không trusted" mà đòi superuser (vd. pg_cron) thì role thường không tự `create extension` được.
+      needsSuperuser: !!a && a.superuser === true && a.trusted !== true,
+    };
+  });
+}
+
+export async function isSuperuser(db) {
+  const r = await db.query('select rolsuper from pg_roles where rolname = current_user');
+  return r[0]?.rolsuper === true;
+}
+
+/**
+ * Extension mà migration cần nhưng KHÔNG thể tự bật bằng role hiện tại:
+ * thiếu hẳn trong instance, hoặc chưa bật + không trusted + role không phải superuser.
+ */
+export function extensionBlockers(statuses, superuser) {
+  const out = [];
+  for (const e of statuses) {
+    if (e.installed) continue;
+    if (!e.available) {
+      out.push({
+        name: e.name,
+        reason: 'instance không có gói extension này (cần cài vào image Postgres)',
+        fix: null,
+      });
+    } else if (e.needsSuperuser && !superuser) {
+      out.push({
+        name: e.name,
+        reason:
+          'chưa bật, là extension không-trusted đòi superuser mà role hiện tại không phải superuser',
+        fix: `create extension if not exists "${e.name}";  -- chạy bằng superuser (vd. supabase_admin: psql -U supabase_admin -d postgres)`,
+      });
+    }
+  }
+  return out;
+}
+
+/** Kiểm trước khi áp schema: trạng thái extension cần + lỗi chặn. Chỉ đọc. */
+export async function preflightExtensions(db, migrations) {
+  const statuses = await extensionStatus(db, requiredExtensions(migrations));
+  const superuser = await isSuperuser(db);
+  return { statuses, superuser, blockers: extensionBlockers(statuses, superuser) };
+}
+
+export function formatBlockers(blockers) {
+  return blockers
+    .map((b) => `  - ${b.name}: ${b.reason}${b.fix ? `\n      chạy: ${b.fix}` : ''}`)
+    .join('\n');
 }
 
 export class MigrationError extends Error {
@@ -75,11 +128,20 @@ create table if not exists supabase_migrations.schema_migrations (
  * Mỗi tệp chạy như một chuỗi nhiều câu lệnh (một giao dịch ngầm), thành công mới ghi lịch sử.
  */
 export async function applyMigrations(db, migrations, { dryRun = false, log = () => {} } = {}) {
-  await db.exec(HISTORY_DDL);
+  // --dry-run phải HOÀN TOÀN chỉ đọc: chưa có bảng lịch sử nghĩa là chưa áp gì, không tạo gì cả.
+  const hasHistory =
+    (
+      await db.query(
+        "select to_regclass('supabase_migrations.schema_migrations') is not null as ok",
+      )
+    )[0].ok === true;
+  if (!hasHistory && !dryRun) await db.exec(HISTORY_DDL);
   const done = new Set(
-    (await db.query('select version from supabase_migrations.schema_migrations')).map(
-      (r) => r.version,
-    ),
+    hasHistory
+      ? (await db.query('select version from supabase_migrations.schema_migrations')).map(
+          (r) => r.version,
+        )
+      : [],
   );
   const pending = migrations.filter((m) => !done.has(m.version));
   log(
