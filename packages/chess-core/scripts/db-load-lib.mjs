@@ -53,6 +53,8 @@ export const LOAD_TARGETS = {
           'source',
         ],
         conflict: '(id)',
+        // Ô rỗng trong CSV mặc định thành NULL, nhưng các cột text này là `not null default ''`.
+        forceNotNull: ['white', 'black', 'event', 'site', 'date', 'eco'],
       },
       {
         table: 'public.masterbase_positions',
@@ -140,7 +142,10 @@ export async function loadStep(db, step, path, { maxBytes = 8 << 20, log = () =>
       await tx.query(
         `create temp table _stg on commit drop as select ${cols} from ${step.table} with no data`,
       );
-      await tx.copyIn(`copy _stg (${cols}) from stdin with (format csv)`, b.text);
+      const fnn = step.forceNotNull?.length
+        ? `, force_not_null (${step.forceNotNull.join(', ')})`
+        : '';
+      await tx.copyIn(`copy _stg (${cols}) from stdin with (format csv${fnn})`, b.text);
       const r = await tx.query(
         `with ins as (insert into ${step.table} (${cols}) select ${cols} from _stg on conflict ${step.conflict} do nothing returning 1) select count(*)::int as n from ins`,
       );

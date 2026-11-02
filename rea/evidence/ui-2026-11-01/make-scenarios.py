@@ -95,6 +95,7 @@ DATA_PAGES = [
     ('tich_hop', f'{A}/integrations', None),
     ('hoc_lieu_soan', f'{A}/studies/9bbff211-be09-460e-8b3b-f6cb6a7c4580/edit', None),
     ('kho_puzzle', f'{A}/studies/9bbff211-be09-460e-8b3b-f6cb6a7c4580/edit', "button:text-is('Thêm từ kho puzzle')"),
+    ('masterbase', '/analysis', "[role=tab]:has-text('Masterbase'), button:text-is('Masterbase')"),
     ('tich_hop_vietqr', f'{A}/integrations', "li:has-text('VietQR') button"),
     ('tich_hop_nguoi_gui', f'{A}/integrations', "li:has-text('Người gửi lời mời') button"),
     ('thiet_lap_logo', f'{A}/settings?tab=brand', None),

@@ -239,4 +239,4 @@ Chủ dự án đã áp migration `20261101000039`, `…040`, `…041` lên `erp
 
 **Quyết định:** nạp bằng `scripts/db-load-csv.mjs` (không cần `psql`), idempotent, mật khẩu chỉ qua `DATABASE_URL`.
 
-**Việc kế tiếp:** chủ dự án chạy hai lệnh nạp (xem plan 20, mục 27d); sau đó chụp lại REA tab Masterbase và modal kho puzzle có dữ liệu, rồi đóng claim trong ledger.
+**Đã nạp và chụp lại (2026-11-02, Supabase self-host):** kho puzzle 149.680 dòng, Masterbase 23.815 ván / 960.404 thế, DB 339 MB. **Ảnh** (`gd27d/{desktop-light,desktop-dark,mobile-light}/`, đã xem): `shot_masterbase` (tab Masterbase ở Bàn phân tích: bảng 23.815 ván, cột Trắng/Đen/Kết quả/Ngày/ECO) và `shot_kho_puzzle` (modal có lưới bàn cờ, rating, chủ đề, thanh chọn). Ảnh phát hiện thanh chân sticky của modal để lộ thẻ bàn cờ ở dải padding 24px; đã sửa (`-bottom-6 -mx-6 -mb-6 px-6 pb-6`) và chụp lại, hết lỗi. Loader có lỗi ô rỗng → NULL (xem plan 20); đã sửa. Hai claim `db.masterbase` và `study.puzzle.bank` chuyển ✅.
