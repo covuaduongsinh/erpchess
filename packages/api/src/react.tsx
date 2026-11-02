@@ -571,7 +571,7 @@ export function useLoginBranding(slug: string) {
 export function useMasterbase(q: masterbase.MasterbaseQuery, enabled = true) {
   const client = useErpClient();
   return useQuery({
-    queryKey: ['masterbase', q.position, q.maxPlies, q.minElo, q.page],
+    queryKey: masterbase.masterbaseQueryKey(q),
     queryFn: () => masterbase.searchMasterbase(client, q),
     enabled,
     placeholderData: (prev) => prev,

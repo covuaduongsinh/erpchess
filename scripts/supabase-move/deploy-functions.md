@@ -86,6 +86,8 @@ select status_code, left(content, 80) from net._http_response order by id desc l
 
 ## 6. Auth (GoTrue)
 
+> **Đã áp 2026-11-02:** `ENABLE_ANONYMOUS_USERS`, `ENABLE_PHONE_SIGNUP`, `ENABLE_PHONE_AUTOCONFIRM` = `false` (cột "Khuyến nghị" bên dưới); mirror cùng 3 biến vào Dokploy → Environment để bền qua Deploy. `SITE_URL` và redirect chưa đổi.
+
 Cấu hình Auth đặt trong **Environment** của stack ở Dokploy (compose đã ánh xạ sang `GOTRUE_*`). Hiện trạng kiểm bằng `GET /auth/v1/settings` ngày 2026-11-02 so với cloud cũ:
 
 | Mục                                          | Cloud cũ            | Self-host                                                                 | Khuyến nghị                                                                             |
