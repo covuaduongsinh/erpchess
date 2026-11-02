@@ -78,6 +78,14 @@ Cần lưu các giá trị từ Supabase API Settings:
 - `SUPABASE_ANON_KEY`: Khóa công khai cho client (Web, Mobile, Desktop).
 - `SUPABASE_SERVICE_ROLE_KEY`: Khóa đặc quyền cao dành riêng cho backend webhook/worker (không bao giờ đưa vào client).
 
+### 2.5. Supabase tự dựng (self-host) — hiện hành từ 2026-11-02
+
+Backend của ERPChess nay chạy trên Supabase tự dựng (Dokploy) tại `https://supabaseerpchess.dsc.edu.vn`; cloud `erpchess-dev` chỉ còn chạy song song để dự phòng (không xoá, tạm dừng khi chủ dự án xác nhận). Mọi chỗ ở trên có `<project-ref>.supabase.co` đọc là địa chỉ này; khoá `anon` lấy từ biến môi trường của stack trong Dokploy.
+- Chuyển dữ liệu, schema, storage: `scripts/supabase-move/` (xem `README.md`).
+- Edge Functions, secret, cron, cấu hình Auth: `scripts/supabase-move/deploy-functions.md`.
+- Migration mới vẫn áp bằng `supabase db push` hoặc `node scripts/supabase-move/index.mjs schema` (chuỗi kết nối Postgres của stack, cổng `54325`). Dữ liệu lớn nạp bằng `scripts/db-load-csv.mjs`.
+- Web (Vercel) cần đặt `VITE_SUPABASE_URL` và `VITE_SUPABASE_PUBLISHABLE_KEY`; mobile `EXPO_PUBLIC_SUPABASE_URL`/`EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; site `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_KEY`. Tên biến `VITE_SUPABASE_ANON_KEY` cũ ở mục 3.1 là nhầm: mã dùng `VITE_SUPABASE_PUBLISHABLE_KEY`.
+
 ---
 
 ## 3. Triển khai Ứng dụng Web & Landing Site (Vercel)
@@ -92,7 +100,7 @@ Cần lưu các giá trị từ Supabase API Settings:
    - **Output Directory:** `dist`
 3. Biến môi trường:
    - `VITE_SUPABASE_URL`: `<SUPABASE_URL>`
-   - `VITE_SUPABASE_ANON_KEY`: `<SUPABASE_ANON_KEY>`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY`: `<SUPABASE_ANON_KEY>` (khoá anon/publishable)
    - `VITE_LIVEKIT_WS_URL`: `wss://your-livekit-domain.livekit.cloud`
 4. Cấu hình `vercel.json`: Đã bao gồm tiêu đề `Cross-Origin-Opener-Policy: same-origin` và `Cross-Origin-Embedder-Policy: require-corp` để hỗ trợ Web Worker chạy Arasan Chess Engine (WASM + SharedArrayBuffer).
 
