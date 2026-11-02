@@ -80,10 +80,11 @@ insert into quizzes (id, academy_id, title) values
 insert into quiz_targets (quiz_id, group_id) values
   ('50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000001');
 select is(
-  (select count(*)::int from notifications where category = 'quiz'), 3,
+  -- Lọc theo học viện của bài test: DB có dữ liệu thật thì không được đếm toàn cục
+  (select count(*)::int from notifications where category = 'quiz' and academy_id = '10000000-0000-0000-0000-00000000000a'), 3,
   'quiz giao cho lớp báo 2 học viên + phụ huynh của HV 1');
 select is(
-  (select link from notifications where category = 'quiz' limit 1),
+  (select link from notifications where category = 'quiz' and academy_id = '10000000-0000-0000-0000-00000000000a' limit 1),
   '/a/hv-a/quizzes/50000000-0000-0000-0000-000000000001', 'link tới trang quiz');
 
 -- ── Tắt loại thì không gửi ──
