@@ -115,18 +115,25 @@ describe('loadStep (PGlite)', { timeout: 60_000 }, () => {
     const pgn = '[Event "x"]\n\n1. e4 e5 1-0';
     const g = (id) =>
       `${id},Alice,Bob,2500,2400,1-0,Open,Site,2026.01.01,C20,2,"${pgn.replaceAll('"', '""')}",Lichess broadcast database (CC0) 2026-01\n`;
-    const pg1 = tmpCsv('g.csv', `${GAME_HEADER}\n${g(1)}${g(2)}`);
+    // Ván 3: eco/event/site rỗng (không có dấu ngoặc kép) và Elo rỗng, như CSV do masterbase-broadcast ghi
+    const gEmpty = `3,Alice,Bob,,,1-0,,,2026.01.01,,2,"${pgn.replaceAll('"', '""')}",Lichess broadcast database (CC0) 2026-01\n`;
+    const pg1 = tmpCsv('g.csv', `${GAME_HEADER}\n${g(1)}${g(2)}${gEmpty}`);
     const ps1 = tmpCsv(
       's.csv',
       `${POS_HEADER}\n"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq",1\n"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq",2\n`,
     );
-    expect(await loadStep(db, games, pg1, { maxBytes: 60 })).toEqual({ read: 2, inserted: 2 });
+    expect(await loadStep(db, games, pg1, { maxBytes: 60 })).toEqual({ read: 3, inserted: 3 });
+    // eco/event rỗng thành chuỗi rỗng (không phải NULL); Elo rỗng vẫn là NULL
+    const e = (
+      await pg.query('select eco, event, white_elo from public.masterbase_games where id = 3')
+    ).rows[0];
+    expect(e).toEqual({ eco: '', event: '', white_elo: null });
     expect(await loadStep(db, pos, ps1)).toEqual({ read: 2, inserted: 2 });
     expect(await loadStep(db, pos, ps1)).toEqual({ read: 2, inserted: 0 });
     const r = (await pg.query('select pgn from public.masterbase_games where id = 1')).rows[0];
     expect(r.pgn).toBe(pgn);
     const rep = await tableReport(db, ['public.masterbase_games', 'public.masterbase_positions']);
-    expect(rep.map((x) => x.rows)).toEqual([2, 2]);
+    expect(rep.map((x) => x.rows)).toEqual([3, 2]);
   });
 
   it('dòng vi phạm ràng buộc làm lô đó lùi lại (không nạp một nửa)', async () => {

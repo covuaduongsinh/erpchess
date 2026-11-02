@@ -348,7 +348,7 @@ export function PuzzleBankModal({
         </>
       )}
 
-      <div className="sticky bottom-0 flex flex-col gap-2 border-t border-border bg-surface pt-3">
+      <div className="sticky -bottom-6 -mx-6 -mb-6 flex flex-col gap-2 border-t border-border bg-surface px-6 pb-6 pt-3">
         <ErrorText error={error} />
         {result && (
           <p role="status" className="text-sm text-green">

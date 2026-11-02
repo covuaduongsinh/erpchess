@@ -1,6 +1,6 @@
 # Chuyển Supabase từ cloud `erpchess-dev` sang self-host `supabaseerpchess.dsc.edu.vn`
 
-> **Trạng thái (2026-11-02):** B1 xong (#90–#92). Schema, dữ liệu, storage đã chuyển và `verify` khớp (75 bảng, `auth.users` 13, 2 bucket 0 tệp). **B2 xong** (9 Edge Functions chạy, cron trỏ URL mới, secret qua `env_file`). **B3:** pgTAP đạt toàn bộ, REA chụp trên DB mới; còn nạp kho puzzle/Masterbase. **B4:** PR này đổi mẫu `.env.example` và tài liệu; bước đổi nơi deploy (Vercel) và cấu hình Auth chờ chủ dự án.
+> **Trạng thái (2026-11-02):** B1 xong (#90–#92). Schema, dữ liệu, storage đã chuyển và `verify` khớp (75 bảng, `auth.users` 13, 2 bucket 0 tệp). **B2 xong** (9 Edge Functions chạy, cron trỏ URL mới, secret qua `env_file`). **B3:** pgTAP đạt toàn bộ, REA chụp trên DB mới; kho puzzle/Masterbase đã nạp. **B4:** PR này đổi mẫu `.env.example` và tài liệu; bước đổi nơi deploy (Vercel) và cấu hình Auth chờ chủ dự án.
 > **Yêu cầu của chủ dự án:** Supabase đã dựng sẵn ở `supabaseerpchess.dsc.edu.vn` (IP `217.15.160.118`). Cần chuyển dữ liệu sang đó và trỏ app tới địa chỉ mới.
 
 ## 1. Hiện trạng máy chủ mới (kiểm 2026-11-02 từ máy dev)
@@ -74,7 +74,7 @@ Thư mục `scripts/supabase-move/`, Node, dùng thư viện `postgres` đã có
 - Trỏ bản build web cục bộ sang instance mới, chụp REA bằng tài khoản thử `thu-nghiem-ui` các trang chính: đăng nhập, Tổng quan, Học viên, Báo cáo, Bàn cờ, Masterbase, kho puzzle, Email gửi thử, ván đấu (`game-move`).
 - Nạp kho puzzle và Masterbase (27d) thẳng vào DB mới bằng `db-load-csv.mjs`. Không còn giới hạn 500 MB nên có thể nạp đủ 12 tháng.
 
-> **Đã làm (2026-11-02):** pgTAP chạy trên DB mới bằng `psql` trong container db (mỗi tệp `begin … rollback`): 35 tệp đạt. Lưu ý: (a) tệp 15 đếm thông báo toàn cục nên lệch khi DB có dữ liệu thật (8 thông báo quiz sẵn, giống hệt ở cloud cũ), đạt 16/16 khi xoá chúng trong giao dịch rồi rollback; (b) tệp 17, 19, 23, 27, 29 dùng `col_default_is(..., '''x''::kiểu')`, bản pgTAP trên self-host so theo kiểu nên báo lệch/lỗi, đạt khi bỏ phần ép kiểu của đối số; (c) tệp 17–29 cần `create extension pgtap` trước (cài trong giao dịch rồi rollback). REA trên DB mới (đăng nhập, Tổng quan, Học viên, Báo cáo, Email, Học liệu, kho puzzle): `rea/evidence/gd-move/`. Kho puzzle và Masterbase trên DB mới vẫn trống (chưa nạp).
+> **Đã làm (2026-11-02):** pgTAP chạy trên DB mới bằng `psql` trong container db (mỗi tệp `begin … rollback`): 35 tệp đạt. Lưu ý: (a) tệp 15 đếm thông báo toàn cục nên lệch khi DB có dữ liệu thật (8 thông báo quiz sẵn, giống hệt ở cloud cũ), đạt 16/16 khi xoá chúng trong giao dịch rồi rollback; (b) tệp 17, 19, 23, 27, 29 dùng `col_default_is(..., '''x''::kiểu')`, bản pgTAP trên self-host so theo kiểu nên báo lệch/lỗi, đạt khi bỏ phần ép kiểu của đối số; (c) tệp 17–29 cần `create extension pgtap` trước (cài trong giao dịch rồi rollback). REA trên DB mới (đăng nhập, Tổng quan, Học viên, Báo cáo, Email, Học liệu, kho puzzle): `rea/evidence/gd-move/`. Kho puzzle và Masterbase đã nạp vào DB mới (xem mục 27d ở plan 20): DB 339 MB; REA có dữ liệu ở `rea/evidence/gd27d/`.
 
 ### B4. Chuyển app (PR)
 

@@ -1,6 +1,6 @@
 # Giai đoạn 27: Gửi email (Resend), nạp Masterbase từ broadcast Lichess, kho puzzle tìm và thêm hàng loạt
 
-> **Trạng thái (2026-11-02):** code xong cả ba PR. 27a ✅ #86 (migration 42 đã áp). 27b ✅ script #87, dữ liệu chờ nạp. 27c ✅ #88 (migration 43 đã áp, pgTAP 35 đạt 18/18), dữ liệu chờ nạp. 27d: script `scripts/db-load-csv.mjs` để nạp CSV bằng `DATABASE_URL` (máy không có `psql`). Sau khi nạp: chụp REA Masterbase và kho puzzle có dữ liệu.
+> **Trạng thái (2026-11-02):** code xong cả ba PR. 27a ✅ #86 (migration 42 đã áp). 27b ✅ script #87, dữ liệu đã nạp (2026-11-02). 27c ✅ #88 (migration 43 đã áp, pgTAP 35 đạt 18/18), dữ liệu đã nạp. 27d: script `scripts/db-load-csv.mjs` để nạp CSV bằng `DATABASE_URL` (máy không có `psql`). Dữ liệu đã nạp vào Supabase self-host và đã chụp REA có dữ liệu (`rea/evidence/gd27d/`).
 > **Tiếp nối:** Giai đoạn 26 (`19-giai-doan-26-quan-tri-hoc-vien-theo-chesslang.md`): 26a–26c xong, PR #78–#84.
 > **Quyết định của chủ dự án (2026-11-02):**
 > - Gửi email dùng **Resend**.
@@ -108,6 +108,8 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
   node scripts/db-load-csv.mjs puzzle-bank
   node scripts/db-load-csv.mjs masterbase
   ```
+
+> **Đã nạp (2026-11-02, vào Supabase self-host, không nạp vào cloud cũ):** kho puzzle 149.680 dòng (56 MB); Masterbase 23.815 ván + 960.404 thế (46 MB + 215 MB); DB tổng 339 MB. Khi nạp phát hiện lỗi của loader: ô rỗng trong CSV thành NULL làm `eco`/`event`… (`not null default ''`) bị từ chối (cũng sẽ làm `\copy` của psql hỏng); đã sửa bằng `force_not_null` cho các cột text của `masterbase_games`, có test tái hiện.
 
 ### Để sau (ghi lại, không làm trong GĐ27)
 
