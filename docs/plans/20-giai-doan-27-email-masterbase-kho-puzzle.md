@@ -117,11 +117,11 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 >
 > **Mã hoá:** 408 ván (1,7%) có `event`/tên hỏng (vd. `2026å¹´…`, `1� Divis�o`). Nguồn PGN của Lichess đã chứa sẵn chữ mã hoá kép (UTF-8 đọc thành Latin-1 rồi mã hoá lại) hoặc byte Latin-1 (loader giải mã UTF-8 đúng); có thể sửa khi xuất bằng `Buffer.from(s, 'latin1').toString('utf8')` khi kết quả không có ký tự thay thế.
 
-> **PR 27e (chờ chủ dự án áp migration 44; chủ dự án chọn phương án (a) và có sửa mã hoá):**
+> **PR 27e (ĐÃ ÁP 2026-11-02: migration 44, pgTAP 24 đạt 12/12, sửa 292 ván; chủ dự án chọn phương án (a) và có sửa mã hoá):**
 > - Migration `20261102000044_masterbase_is_engine.sql`: cột sinh `is_engine` (TCEC ở `event`/`site`, hoặc Elo > 3000; không UPDATE/DELETE), chỉ mục một phần `masterbase_games_human_idx`, `search_masterbase` thêm `p_include_engines` (mặc định false = ẩn ván engine; lời gọi 5 tham số cũ vẫn chạy). pgTAP 24 thêm 6 ca (engine ẩn/hiện, null, Elo, cột sinh không ghi được).
 > - `masterbase-broadcast.mjs` bỏ ván engine khi lọc (`--include-engines` để giữ) và sửa chữ mã hoá kép bằng `fixMojibake`; đọc nguồn theo từng dòng (UTF-8 nghiêm ngặt, sai thì Latin-1) nên không còn tạo ký tự U+FFFD cho lần nạp sau.
 > - `scripts/supabase-move/fix-masterbase-mojibake.mjs`: sửa 292 ván đã nạp (white/black/event/site), mặc định chỉ đọc, `--apply` trong một giao dịch có sao lưu, `--restore`. 110 ván đã mất byte (U+FFFD) không sửa được từ DB, cần nạp lại từ nguồn.
-> - Web: công tắc "Gồm ván engine" ở tab Masterbase, mặc định tắt.
+> - Web: công tắc "Gồm ván engine" ở tab Masterbase, mặc định tắt. Kết quả trên Supabase self-host: 23.815 ván = 22.566 người + 1.249 engine; RPC mặc định trả 22.566, `p_include_engines = true` trả 23.815; không còn chữ mã hoá kép; còn 110 ván có U+FFFD (không sửa được từ DB). REA (`rea/evidence/gd27e/`) phát hiện lỗi cache: khoá `useMasterbase` thiếu `includeEngines` nên bật công tắc vẫn ra dữ liệu cũ; đã sửa (`masterbaseQueryKey` + test).
 
 ### Để sau (ghi lại, không làm trong GĐ27)
 

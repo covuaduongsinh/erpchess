@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { ErpClient } from './client';
-import { searchMasterbase } from './masterbase';
+import { masterbaseQueryKey, searchMasterbase } from './masterbase';
 
 function client() {
   const rpc = vi.fn().mockResolvedValue({ data: [], error: null });
@@ -8,6 +8,22 @@ function client() {
 }
 
 const q = { position: null, maxPlies: null, minElo: null, page: 0 };
+
+describe('masterbaseQueryKey', () => {
+  it('mỗi trường ảnh hưởng kết quả làm khoá đổi (nhất là includeEngines: thiếu thì bật công tắc vẫn ra dữ liệu cũ)', () => {
+    const base = masterbaseQueryKey(q);
+    const variants = [
+      { ...q, position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq' },
+      { ...q, maxPlies: 39 },
+      { ...q, minElo: 2500 },
+      { ...q, includeEngines: true },
+      { ...q, page: 1 },
+    ];
+    for (const v of variants) expect(masterbaseQueryKey(v)).not.toEqual(base);
+    // mặc định không gồm engine: bỏ trống và false là cùng một khoá
+    expect(masterbaseQueryKey({ ...q, includeEngines: false })).toEqual(base);
+  });
+});
 
 describe('searchMasterbase', () => {
   it('mặc định ẩn ván engine (p_include_engines = false)', async () => {

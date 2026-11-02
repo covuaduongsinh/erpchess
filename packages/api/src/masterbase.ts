@@ -26,6 +26,18 @@ export type MasterbaseQuery = {
   page: number;
 };
 
+/** Khoá cache TanStack Query: mọi trường ảnh hưởng kết quả phải có mặt (thiếu thì đổi bộ lọc vẫn trả dữ liệu cũ). */
+export function masterbaseQueryKey(q: MasterbaseQuery) {
+  return [
+    'masterbase',
+    q.position,
+    q.maxPlies,
+    q.minElo,
+    q.includeEngines ?? false,
+    q.page,
+  ] as const;
+}
+
 export async function searchMasterbase(
   client: ErpClient,
   q: MasterbaseQuery,

@@ -96,6 +96,7 @@ DATA_PAGES = [
     ('hoc_lieu_soan', f'{A}/studies/9bbff211-be09-460e-8b3b-f6cb6a7c4580/edit', None),
     ('kho_puzzle', f'{A}/studies/9bbff211-be09-460e-8b3b-f6cb6a7c4580/edit', "button:text-is('Thêm từ kho puzzle')"),
     ('masterbase', '/analysis', "[role=tab]:has-text('Masterbase'), button:text-is('Masterbase')"),
+    ('masterbase_engine', '/analysis', ["[role=tab]:has-text('Masterbase'), button:text-is('Masterbase')", "button:text-is('Gồm ván engine')"]),
     ('tich_hop_vietqr', f'{A}/integrations', "li:has-text('VietQR') button"),
     ('tich_hop_nguoi_gui', f'{A}/integrations', "li:has-text('Người gửi lời mời') button"),
     ('thiet_lap_logo', f'{A}/settings?tab=brand', None),
@@ -124,8 +125,10 @@ def build(name: str, width: int, height: int, scheme: str, mobile: bool) -> None
     pages = [(k, p, None) for k, p in PAGES] if not DATA else DATA_PAGES
     for key, path, click in pages:
         acts.append({"step_id": f"go_{key}", "timeout_ms": 60000, "wait_until": "load", "destination": {"url": base + path}, "action": "goto"})
-        if click:
-            acts.append({"step_id": f"click_{key}", "locator": {"selector": click, "kind": "css"}, "timeout_ms": 15000, "action": "click"})
+        # `click` là một bộ chọn hoặc danh sách bộ chọn (bấm lần lượt)
+        for n, sel in enumerate([click] if isinstance(click, str) else (click or [])):
+            acts.append({"step_id": f"click_{key}_{n}", "locator": {"selector": sel, "kind": "css"}, "timeout_ms": 15000, "action": "click"})
+            acts.append({"step_id": f"pause_{key}_{n}", "duration_ms": 3000, "action": "wait_for_timeout"})
         acts.append({"step_id": f"shot_{key}", "duration_ms": 6000, "action": "wait_for_timeout"})
         if mobile and key == 'tong_quan':
             # Ảnh drawer của sidebar trên màn hẹp

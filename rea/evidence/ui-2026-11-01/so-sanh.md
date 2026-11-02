@@ -240,3 +240,9 @@ Chủ dự án đã áp migration `20261101000039`, `…040`, `…041` lên `erp
 **Quyết định:** nạp bằng `scripts/db-load-csv.mjs` (không cần `psql`), idempotent, mật khẩu chỉ qua `DATABASE_URL`.
 
 **Đã nạp và chụp lại (2026-11-02, Supabase self-host):** kho puzzle 149.680 dòng, Masterbase 23.815 ván / 960.404 thế, DB 339 MB. **Ảnh** (`gd27d/{desktop-light,desktop-dark,mobile-light}/`, đã xem): `shot_masterbase` (tab Masterbase ở Bàn phân tích: bảng 23.815 ván, cột Trắng/Đen/Kết quả/Ngày/ECO) và `shot_kho_puzzle` (modal có lưới bàn cờ, rating, chủ đề, thanh chọn). Ảnh phát hiện thanh chân sticky của modal để lộ thẻ bàn cờ ở dải padding 24px; đã sửa (`-bottom-6 -mx-6 -mb-6 px-6 pb-6`) và chụp lại, hết lỗi. Loader có lỗi ô rỗng → NULL (xem plan 20); đã sửa. Hai claim `db.masterbase` và `study.puzzle.bank` chuyển ✅.
+
+## 18. GĐ27e: Masterbase lọc ván engine (2026-11-02, đã áp migration 44)
+
+**Ảnh** (`gd27e/{desktop-light,desktop-dark,mobile-light}/`, đã xem): `shot_masterbase` (mặc định: "22.566 ván", chỉ ván người, chip "Gồm ván engine" tắt) và `shot_masterbase_engine` (bật công tắc: "23.815 ván", Stash/Patricia/Lynx… trở lại). Lần chụp đầu thấy công tắc bật nhưng số ván vẫn 22.566: khoá cache của `useMasterbase` thiếu `includeEngines`; đã sửa (`masterbaseQueryKey`, có test) và chụp lại, đúng. Bảng không có cột giải đấu nên tên giải đã sửa mã hoá được kiểm bằng truy vấn: ván #3249 "2026年全国国际象棋棋协大师赛（吉安站）", #17019 "2026年全国国际象棋锦标赛（个人）", #3372 "Domingo Nuñez, Ruben", #4059 "Jesús"; không còn chữ mã hoá kép, còn 110 ván U+FFFD.
+
+**Auth self-host:** đã tắt đăng nhập ẩn danh và đăng ký điện thoại như cloud cũ (xem plan 21).
