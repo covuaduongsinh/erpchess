@@ -111,6 +111,12 @@ Mỗi PR một nhánh riêng từ `main`. Cổng kiểm thử giống kế hoạ
 
 > **Đã nạp (2026-11-02, vào Supabase self-host, không nạp vào cloud cũ):** kho puzzle 149.680 dòng (56 MB); Masterbase 23.815 ván + 960.404 thế (46 MB + 215 MB); DB tổng 339 MB. Khi nạp phát hiện lỗi của loader: ô rỗng trong CSV thành NULL làm `eco`/`event`… (`not null default ''`) bị từ chối (cũng sẽ làm `\copy` của psql hỏng); đã sửa bằng `force_not_null` cho các cột text của `masterbase_games`, có test tái hiện.
 
+> **Masterbase lẫn ván engine (kiểm chỉ đọc 2026-11-02, chưa sửa):** broadcast Lichess có giải TCEC (engine đấu engine). Trong 23.815 ván đã nạp có **1.249 ván (5,2%) thuộc TCEC** (`event`/`site` chứa "tcec"; 1.139 ván có `site = tcec-chess.com`), kèm 51.149 thế (5,3%). Mọi ván Elo > 3000 (1.235 ván) đều thuộc TCEC; 14 ván TCEC khác có Elo ≤ 3000 (engine 4k). Không có ván người nào Elo > 3000; người thật Elo cao nhất 2.800–2.998 là 185 ván (Carlsen 2840…), nên quy tắc `Elo > 3000` không bắt nhầm họ, nhưng `Elo > 2800` thì có. Tên có số phiên bản/hash (`9.15.1`, `dev-1f2a3f16`) chỉ trùng với TCEC, không bắt người. Ngưỡng "CCC/Computer/Bot" bằng chuỗi con bắt nhầm (`VCCCSSaq` trong URL), nên chỉ dùng "tcec". Còn lại 22.566 ván người (94,8%): Elo cao nhất mỗi ván 2.300–2.499 là 9.477, 2.500–2.699 là 11.206, 2.700–2.799 là 1.698, từ 2.800 là 185. Lưu ý khi kiểm: server self-host đặt `standard_conforming_strings = off` nên `\d`, `\.`, `\m` trong chuỗi SQL bị nuốt; dùng `[0-9]`, `[.]`, `[[:<:]]`.
+>
+> **Đề xuất:** (a) lọc ở `masterbase-broadcast.mjs` (bỏ ván có "tcec" trong event/site hoặc Elo > 3000) cho các lần nạp sau, và cột sinh `is_engine boolean generated always as (event ~* 'tcec' or site ~* 'tcec' or coalesce(white_elo,0) > 3000 or coalesce(black_elo,0) > 3000) stored` (migration nhỏ, không UPDATE/DELETE, tự đúng cho dữ liệu nạp sau) cùng `search_masterbase` lọc `not is_engine` theo mặc định; (b) chỉ lọc trong RPC theo quy tắc (không đổi bảng, nhưng vẫn là một migration `create or replace function`, chạy regex trên mỗi dòng khớp và các lần nạp sau vẫn đưa ván engine vào DB). Khuyến nghị (a).
+>
+> **Mã hoá:** 408 ván (1,7%) có `event`/tên hỏng (vd. `2026å¹´…`, `1� Divis�o`). Nguồn PGN của Lichess đã chứa sẵn chữ mã hoá kép (UTF-8 đọc thành Latin-1 rồi mã hoá lại) hoặc byte Latin-1 (loader giải mã UTF-8 đúng); có thể sửa khi xuất bằng `Buffer.from(s, 'latin1').toString('utf8')` khi kết quả không có ký tự thay thế.
+
 ### Để sau (ghi lại, không làm trong GĐ27)
 
 - **PayOS:** chờ chủ dự án có tài khoản. Thẻ ở trang Tích hợp giữ "Sắp có".

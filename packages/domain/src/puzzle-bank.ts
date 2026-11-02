@@ -54,7 +54,50 @@ export const PUZZLE_THEMES: readonly PuzzleThemeLabel[] = [
   { key: 'equality', vi: 'Gỡ hoà', en: 'Equality' },
 ];
 
-const BY_KEY = new Map(PUZZLE_THEMES.map((t) => [t.key, t]));
+/**
+ * Chủ đề còn lại của kho Lichess (gặp trong dữ liệu đã nạp) chỉ cần nhãn để hiện trên thẻ puzzle; KHÔNG đưa vào
+ * `PUZZLE_THEMES` vì đó là danh sách chip lọc (thêm hết sẽ làm bộ lọc rối).
+ */
+const EXTRA_THEME_LABELS: readonly PuzzleThemeLabel[] = [
+  { key: 'master', vi: 'Ván cao thủ', en: 'Master game' },
+  { key: 'masterVsMaster', vi: 'Cao thủ đấu cao thủ', en: 'Master vs master' },
+  { key: 'superGM', vi: 'Siêu đại kiện tướng', en: 'Super GM game' },
+  { key: 'veryLong', vi: 'Rất dài', en: 'Very long' },
+  { key: 'kingsideAttack', vi: 'Tấn công cánh vua', en: 'Kingside attack' },
+  { key: 'queensideAttack', vi: 'Tấn công cánh hậu', en: 'Queenside attack' },
+  { key: 'discoveredCheck', vi: 'Chiếu lộ (có chiếu)', en: 'Discovered check' },
+  { key: 'attackingF2F7', vi: 'Tấn công f2/f7', en: 'Attacking f2/f7' },
+  { key: 'enPassant', vi: 'Bắt tốt qua đường (en passant)', en: 'En passant' },
+  { key: 'collinearMove', vi: 'Nước đi thẳng hàng', en: 'Collinear move' },
+  { key: 'castling', vi: 'Nhập thành', en: 'Castling' },
+  { key: 'underPromotion', vi: 'Phong cấp thấp (underpromotion)', en: 'Underpromotion' },
+  { key: 'queenRookEndgame', vi: 'Tàn cuộc hậu và xe', en: 'Queen and rook endgame' },
+  { key: 'mateIn4', vi: 'Chiếu hết 4 nước', en: 'Mate in 4' },
+  { key: 'mateIn5', vi: 'Chiếu hết 5 nước', en: 'Mate in 5' },
+  { key: 'pillsburysMate', vi: 'Chiếu hết Pillsbury', en: "Pillsbury's mate" },
+  { key: 'operaMate', vi: 'Chiếu hết Opera', en: 'Opera mate' },
+  { key: 'epauletteMate', vi: 'Chiếu hết quân hàm (epaulette)', en: 'Epaulette mate' },
+  { key: 'hookMate', vi: 'Chiếu hết móc câu (hook)', en: 'Hook mate' },
+  { key: 'cornerMate', vi: 'Chiếu hết ở góc', en: 'Corner mate' },
+  { key: 'morphysMate', vi: 'Chiếu hết Morphy', en: "Morphy's mate" },
+  { key: 'anastasiaMate', vi: 'Chiếu hết Anastasia', en: "Anastasia's mate" },
+  {
+    key: 'swallowstailMate',
+    vi: 'Chiếu hết đuôi nhạn (swallow’s tail)',
+    en: "Swallow's tail mate",
+  },
+  { key: 'arabianMate', vi: 'Chiếu hết kiểu Ả Rập', en: 'Arabian mate' },
+  { key: 'triangleMate', vi: 'Chiếu hết hình tam giác', en: 'Triangle mate' },
+  { key: 'killBoxMate', vi: 'Chiếu hết hộp kín (kill box)', en: 'Kill box mate' },
+  { key: 'blindSwineMate', vi: 'Chiếu hết hai xe (blind swine)', en: 'Blind swine mate' },
+  { key: 'vukovicMate', vi: 'Chiếu hết Vukovic', en: 'Vukovic mate' },
+  { key: 'dovetailMate', vi: 'Chiếu hết đuôi én (dovetail)', en: 'Dovetail mate' },
+  { key: 'bodenMate', vi: 'Chiếu hết Boden', en: "Boden's mate" },
+  { key: 'doubleBishopMate', vi: 'Chiếu hết hai tượng', en: 'Double bishop mate' },
+  { key: 'balestraMate', vi: 'Chiếu hết Balestra', en: 'Balestra mate' },
+];
+
+const BY_KEY = new Map([...PUZZLE_THEMES, ...EXTRA_THEME_LABELS].map((t) => [t.key, t]));
 
 /** Nhãn theo ngôn ngữ; chủ đề chưa có nhãn thì hiện nguyên khoá. */
 export function puzzleThemeLabel(key: string, locale: 'vi' | 'en'): string {

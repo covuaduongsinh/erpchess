@@ -79,3 +79,31 @@ describe('pickSpread: chọn trải đều rating', () => {
     expect(pickSpread(same, 4, seeded())).toHaveLength(4);
   });
 });
+
+describe('nhãn chủ đề đủ cho dữ liệu đã nạp', () => {
+  // Toàn bộ chủ đề gặp trong kho 149.680 puzzle đã nạp (73 khoá, 2026-11-02)
+  const DATA_THEMES =
+    `master veryLong kingsideAttack discoveredCheck masterVsMaster mateIn4 queensideAttack
+    pillsburysMate operaMate queenRookEndgame attackingF2F7 mateIn5 epauletteMate enPassant collinearMove hookMate
+    cornerMate morphysMate anastasiaMate swallowstailMate superGM arabianMate triangleMate killBoxMate blindSwineMate
+    vukovicMate dovetailMate castling bodenMate doubleBishopMate balestraMate underPromotion`.split(
+      /\s+/,
+    );
+
+  it('mọi chủ đề trong dữ liệu có nhãn tiếng Việt và tiếng Anh khác khoá', () => {
+    for (const key of DATA_THEMES) {
+      expect(puzzleThemeLabel(key, 'vi'), key).not.toBe(key);
+      expect(puzzleThemeLabel(key, 'en'), key).not.toBe(key);
+    }
+    expect(puzzleThemeLabel('master', 'vi')).toBe('Ván cao thủ');
+  });
+
+  it('chip lọc không bị phình: các chủ đề phụ không nằm trong PUZZLE_THEMES', () => {
+    const chips = new Set(PUZZLE_THEMES.map((t) => t.key));
+    for (const key of DATA_THEMES) expect(chips.has(key), key).toBe(false);
+  });
+
+  it('chủ đề lạ vẫn hiện nguyên khoá', () => {
+    expect(puzzleThemeLabel('chuaCoNhan', 'vi')).toBe('chuaCoNhan');
+  });
+});
