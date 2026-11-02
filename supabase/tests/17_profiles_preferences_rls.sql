@@ -14,8 +14,19 @@ select has_column('public', 'profiles', 'country', 'profiles có cột country')
 select has_column('public', 'profiles', 'bio', 'profiles có cột bio');
 
 -- 5. Giá trị mặc định
-select col_default_is('public', 'profiles', 'timezone', '''Asia/Ho_Chi_Minh''::text', 'timezone mặc định Asia/Ho_Chi_Minh');
-select col_default_is('public', 'profiles', 'move_notation', '''letters''::text', 'move_notation mặc định letters');
+-- matches() thay col_default_is: bản pgTAP khác nhau so khớp đối số ép kiểu khác nhau (cloud và self-host)
+select matches(
+  (select column_default from information_schema.columns
+    where table_schema = 'public' and table_name = 'profiles' and column_name = 'timezone'),
+  '^''Asia/Ho_Chi_Minh''(::[a-z ]+)?$',
+  'timezone mặc định Asia/Ho_Chi_Minh'
+);
+select matches(
+  (select column_default from information_schema.columns
+    where table_schema = 'public' and table_name = 'profiles' and column_name = 'move_notation'),
+  '^''letters''(::[a-z ]+)?$',
+  'move_notation mặc định letters'
+);
 
 -- 6. Check constraint không cho phép move_notation sai
 select throws_ok(

@@ -4,7 +4,12 @@ select plan(8);
 select has_table('public', 'academy_locations', 'có bảng academy_locations');
 select has_column('public', 'groups', 'mode', 'groups có cột mode');
 select has_column('public', 'groups', 'location_id', 'groups có cột location_id');
-select col_default_is('public', 'groups', 'mode', '''online''::text', 'mode mặc định online');
+select matches(
+  (select column_default from information_schema.columns
+    where table_schema = 'public' and table_name = 'groups' and column_name = 'mode'),
+  '^''online''(::[a-z ]+)?$',
+  'mode mặc định online'
+);
 select has_function('public', 'set_main_location', array['uuid'], 'có hàm set_main_location');
 select ok(
   not has_function_privilege('anon', 'public.set_main_location(uuid)', 'execute'),

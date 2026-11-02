@@ -5,8 +5,11 @@ select plan(4);
 select has_column('public', 'profiles', 'board_preferences', 'profiles có cột board_preferences');
 
 -- 2. Mặc định là object rỗng
-select col_default_is(
-  'public', 'profiles', 'board_preferences', '''{}''::jsonb',
+-- matches() thay col_default_is: bản pgTAP khác nhau so khớp đối số ép kiểu khác nhau (cloud và self-host)
+select matches(
+  (select column_default from information_schema.columns
+    where table_schema = 'public' and table_name = 'profiles' and column_name = 'board_preferences'),
+  '^''[{][}]''(::jsonb)?$',
   'board_preferences mặc định là {}'
 );
 

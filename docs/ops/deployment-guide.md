@@ -53,6 +53,7 @@ flowchart TD
 
 Tất cả các bản migration nằm trong thư mục `supabase/migrations/`:
 - Dự án tuân thủ nghiêm ngặt **nguyên tắc kế toán REA** và **chỉ append-only** (không bao giờ dùng `DROP` hay `DELETE` trong migration).
+- Mỗi PR chạy job CI **pgTAP**: áp toàn bộ migration lên Postgres kiểu Supabase rồi chạy `supabase/tests/*.sql`. Cách chạy cục bộ và quy ước viết test: `supabase/tests/README.md`.
 - Sử dụng Supabase CLI để đồng bộ schema:
 ```bash
 # Đăng nhập Supabase CLI
