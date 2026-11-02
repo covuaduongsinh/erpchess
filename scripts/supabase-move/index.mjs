@@ -17,9 +17,13 @@ import {
   compareCounts,
   copyData,
   countRows,
+  extensionBlockers,
   extensionStatus,
+  formatBlockers,
+  isSuperuser,
   listTables,
   planData,
+  preflightExtensions,
   readMigrations,
   requiredExtensions,
   syncSequences,
@@ -92,10 +96,24 @@ async function cmdCheck(env) {
     const db = await openDb(env[key]);
     try {
       say(`Phiên bản: ${shortVersion((await db.query('select version() as v'))[0].v)}`);
-      for (const e of await extensionStatus(db, wanted)) {
-        const st = e.installed ? 'đã cài' : e.available ? 'có sẵn (chưa bật)' : 'THIẾU';
-        if (!e.installed && !e.available) bad = true;
+      const statuses = await extensionStatus(db, wanted);
+      const superuser = await isSuperuser(db);
+      say(`Role kết nối là superuser: ${superuser ? 'có' : 'không'}`);
+      for (const e of statuses) {
+        const st = e.installed
+          ? 'đã cài'
+          : e.available
+            ? `có sẵn (chưa bật${e.needsSuperuser ? ', cần superuser' : ''})`
+            : 'THIẾU';
         say(`  extension ${e.name}: ${st}`);
+      }
+      if (label === 'MỚI') {
+        const blockers = extensionBlockers(statuses, superuser);
+        if (blockers.length) {
+          bad = true;
+          say(`LỖI CHẶN: lệnh "schema" sẽ vỡ nếu không xử lý trước:
+${formatBlockers(blockers)}`);
+        }
       }
       if (label === 'MỚI') {
         const r = await canUseReplica(db);
@@ -121,12 +139,11 @@ async function cmdSchema(env, o) {
   const migrations = readMigrations(MIGRATIONS_DIR);
   const db = await openDb(env.NEW_DATABASE_URL);
   try {
-    const missing = (await extensionStatus(db, requiredExtensions(migrations))).filter(
-      (e) => !e.installed && !e.available,
-    );
-    if (missing.length) {
+    const { blockers } = await preflightExtensions(db, migrations);
+    if (blockers.length) {
       throw new Error(
-        `Instance mới thiếu extension: ${missing.map((e) => e.name).join(', ')} — chưa áp migration nào.`,
+        `Chưa thể áp schema, extension chưa sẵn sàng (chưa áp migration nào):
+${formatBlockers(blockers)}`,
       );
     }
     await applyMigrations(db, migrations, { dryRun: o.dryRun, log: say });

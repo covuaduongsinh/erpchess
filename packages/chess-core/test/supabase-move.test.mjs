@@ -10,9 +10,13 @@ import {
   applyMigrations,
   compareCounts,
   copyData,
+  extensionBlockers,
+  extensionStatus,
+  isSuperuser,
   MigrationError,
   orderTables,
   planData,
+  preflightExtensions,
   readMigrations,
   requiredExtensions,
   syncSequences,
@@ -267,6 +271,97 @@ describe('schema (migration)', { timeout: 60_000 }, () => {
     const r = await applyMigrations(pgliteDb(pg), readMigrations(dir), { dryRun: true });
     expect(r.pending).toEqual(['1_a.sql']);
     expect((await pg.query("select to_regclass('a') as t")).rows[0].t).toBeNull();
+  });
+});
+
+describe('schema --dry-run chỉ đọc và kiểm extension chặn', { timeout: 60_000 }, () => {
+  const dirOf = (files) => {
+    const dir = mkdtempSync(join(tmpdir(), 'mig2-'));
+    for (const [f, sql] of Object.entries(files)) writeFileSync(join(dir, f), sql);
+    return dir;
+  };
+  const footprint = async (pg) => ({
+    schemas: (
+      await pg.query("select nspname from pg_namespace where nspname !~ '^pg_' order by 1")
+    ).rows.map((r) => r.nspname),
+    tables: (
+      await pg.query(
+        "select n.nspname || '.' || c.relname as t from pg_class c join pg_namespace n on n.oid = c.relnamespace where c.relkind in ('r','v','S','i') and n.nspname not in ('pg_catalog','information_schema','pg_toast') order by 1",
+      )
+    ).rows.map((r) => r.t),
+  });
+
+  it('DB trống: dry-run không tạo schema/bảng nào (kể cả bảng lịch sử)', async () => {
+    const pg = new PGlite();
+    const before = await footprint(pg);
+    const migs = readMigrations(
+      dirOf({ '1_a.sql': 'create table a (id int);', '2_b.sql': 'create table b (id int);' }),
+    );
+    const r = await applyMigrations(pgliteDb(pg), migs, { dryRun: true });
+    expect(r.pending).toEqual(['1_a.sql', '2_b.sql']);
+    expect(r.applied).toEqual([]);
+    expect(await footprint(pg)).toEqual(before);
+    expect(before.schemas).not.toContain('supabase_migrations');
+    expect(
+      (await pg.query("select to_regclass('supabase_migrations.schema_migrations') as t")).rows[0]
+        .t,
+    ).toBeNull();
+  });
+
+  it('đã áp một phần: dry-run chỉ liệt kê phần còn lại và không đổi gì (kể cả lịch sử)', async () => {
+    const pg = new PGlite();
+    const db = pgliteDb(pg);
+    const dir = dirOf({
+      '1_a.sql': 'create table a (id int);',
+      '2_b.sql': 'create table b (id int);',
+    });
+    const [first, second] = readMigrations(dir);
+    await applyMigrations(db, [first]);
+    const before = await footprint(pg);
+    const histBefore = (await pg.query('select * from supabase_migrations.schema_migrations')).rows;
+    const r = await applyMigrations(db, [first, second], { dryRun: true });
+    expect(r.pending).toEqual(['2_b.sql']);
+    expect(await footprint(pg)).toEqual(before);
+    expect((await pg.query('select * from supabase_migrations.schema_migrations')).rows).toEqual(
+      histBefore,
+    );
+  });
+
+  it('extensionStatus: cờ installed/available/needsSuperuser; isSuperuser đọc rolsuper', async () => {
+    const pg = new PGlite();
+    const st = await extensionStatus(pgliteDb(pg), ['plpgsql', 'khong_co_extension_nay']);
+    expect(st[0]).toMatchObject({ name: 'plpgsql', installed: true, available: true });
+    expect(st[1]).toMatchObject({
+      name: 'khong_co_extension_nay',
+      installed: false,
+      available: false,
+    });
+    expect(await isSuperuser(pgliteDb(pg))).toBe(true);
+  });
+
+  it('extensionBlockers: pg_cron chưa bật + không trusted + role thường → LỖI CHẶN kèm lệnh', () => {
+    const cron = { name: 'pg_cron', installed: false, available: true, needsSuperuser: true };
+    const trgm = { name: 'pg_trgm', installed: false, available: true, needsSuperuser: false };
+    const net = { name: 'pg_net', installed: true, available: true, needsSuperuser: true };
+    const gone = { name: 'foo', installed: false, available: false, needsSuperuser: false };
+    const b = extensionBlockers([cron, trgm, net, gone], false);
+    expect(b.map((x) => x.name)).toEqual(['pg_cron', 'foo']);
+    expect(b[0].fix).toMatch(/create extension if not exists "pg_cron"/);
+    expect(b[0].fix).toMatch(/supabase_admin/);
+    expect(b[1].fix).toBeNull();
+    // superuser thì pg_cron tự bật được → không chặn
+    expect(extensionBlockers([cron], true)).toEqual([]);
+    // đã bật rồi → không chặn dù không phải superuser
+    expect(extensionBlockers([{ ...cron, installed: true }], false)).toEqual([]);
+  });
+
+  it('preflightExtensions: migration cần extension không có → blocker (chạy trên PGlite)', async () => {
+    const migs = readMigrations(
+      dirOf({ '1_x.sql': 'create extension if not exists khong_co_extension_nay;' }),
+    );
+    const r = await preflightExtensions(pgliteDb(new PGlite()), migs);
+    expect(r.blockers.map((b) => b.name)).toEqual(['khong_co_extension_nay']);
+    expect(r.superuser).toBe(true);
   });
 });
 
